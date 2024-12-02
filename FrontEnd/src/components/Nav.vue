@@ -1,10 +1,10 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg bg-primary navbar-dark sticky-top"
+    class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top"
     :class="{ 'nav-shadow': setShadow, 'navbar-shrink': setShadow }"
   >
     <div class="container">
-      <router-link class="navbar-brand text-secondary" to="/index">BistroRestaurant</router-link>
+      <router-link class="navbar-brand text-primary" to="/index">BistroRestaurant</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -35,7 +35,7 @@
             <router-link class="nav-link position-relative" to="/cart"
               ><i class="bi bi-cart fs-5"></i
               ><span
-                class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-secondary text-dark"
+                class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-primary text-dark"
               >
                 3
                 <span class="visually-hidden">unread messages</span>
@@ -77,7 +77,7 @@ export default {
 
 <style>
 .nav-shadow {
-  box-shadow: 0 0 12px var(--bs-secondary) !important;
+  box-shadow: 0 0 12px var(--bs-primary) !important;
 }
 
 .navbar {
@@ -115,7 +115,7 @@ export default {
   position: absolute;
   width: 0;
   height: 2px;
-  background: var(--bs-secondary);
+  background: var(--bs-primary);
   left: 50%;
   bottom: 0;
   transition: all 0.3s ease;
@@ -129,7 +129,7 @@ export default {
 
 .nav-link:hover,
 .nav-link.active {
-  color: var(--bs-secondary) !important;
+  color: var(--bs-primary) !important;
 }
 
 .navbar-toggler {
@@ -143,8 +143,8 @@ export default {
 }
 
 .btn-login {
-  background-color: var(--bs-secondary);
-  color: var(--bs-primary);
+  background-color: var(--bs-primary);
+  color: var(--bs-dark);
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
   transition: all 0.3s ease;
@@ -153,8 +153,8 @@ export default {
 .btn-login:hover,
 .btn-login.active {
   background-color: transparent;
-  color: var(--bs-secondary);
-  border: 1px solid var(--bs-secondary);
+  color: var(--bs-primary);
+  border: 1px solid var(--bs-primary);
 }
 
 @media (max-width: 992px) {

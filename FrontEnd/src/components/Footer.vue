@@ -1,7 +1,7 @@
 <template>
-  <div class="mt-5 border-top border-secondary">
+  <div class="mt-5 border-top border-primary">
     <div class="container">
-      <footer class="py-5 text-secondary">
+      <footer class="py-5 text-primary">
         <div class="row">
           <div class="col-2">
             <h5>Section</h5>
@@ -54,27 +54,27 @@
                   class="form-control"
                   placeholder="Email address"
                 />
-                <button class="btn btn-outline-secondary" type="button">Subscribe</button>
+                <button class="btn btn-outline-primary" type="button">Subscribe</button>
               </div>
             </form>
           </div>
         </div>
 
-        <div class="d-flex justify-content-between py-4 my-4 border-top border-secondary">
+        <div class="d-flex justify-content-between py-4 my-4 border-top border-primary">
           <p>&copy; 2024 Bistro, Inc. All rights reserved.</p>
           <ul class="list-unstyled d-flex">
             <li class="ms-4">
-              <a class="link-secondary" target="_blank" href="https://www.facebook.com/"
+              <a class="link-primary" target="_blank" href="https://www.facebook.com/"
                 ><i class="bi bi-facebook fs-4"></i
               ></a>
             </li>
             <li class="ms-4">
-              <a class="link-secondary" target="_blank" href="https://www.instagram.com/"
+              <a class="link-primary" target="_blank" href="https://www.instagram.com/"
                 ><i class="bi bi-instagram fs-4"></i
               ></a>
             </li>
             <li class="ms-4">
-              <a class="link-secondary" target="_blank" href="https://www.threads.net/"
+              <a class="link-primary" target="_blank" href="https://www.threads.net/"
                 ><i class="bi bi-threads fs-4"></i
               ></a>
             </li>
