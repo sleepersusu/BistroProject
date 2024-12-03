@@ -29,21 +29,21 @@
             return response.json(); // 解析 JSON
           })
           .then((data) => {
-            let remainingTime = parseInt(data / 1000);
-            document.getElementById("showLogoutTime").innerText =
-              remainingTime + " 秒";
+            //let remainingTime = parseInt(data / 10000);
+            // document.getElementById("showLogoutTime").innerText =
+            //   remainingTime + " 秒";
 
-            if (remainingTime == 0) {
-              alert("超過時間無操作，系統即將登出");
-              window.location.href = '/';
-              clearInterval(countdownTimer);
-            }
+            // if (remainingTime == 0) {
+            //   alert("超過時間無操作，系統即將登出");
+            //   window.location.href = '/';
+            //   clearInterval(countdownTimer);
+            // }
           })
           .catch((error) => {
             console.error("錯誤:", error);
           });
       }
-      let countdownTimer = setInterval(getRemainingTime, 10000);
+      let countdownTimer = setInterval(getRemainingTime, 1000);
       let logoutBtn =document.getElementById('logout') 
       logoutBtn.addEventListener('click',function(){
         window.location.href = '/logout';
