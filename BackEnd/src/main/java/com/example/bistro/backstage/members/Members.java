@@ -67,9 +67,7 @@ public class Members {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 	
-    // 一對一：每個會員只有一個購物車
-    @OneToOne(mappedBy = "members", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Cart cart;  // 每個會員只有一個購物車
+
 
 	// 一對多：一個會員可以有很多訂單
     @JsonIgnore

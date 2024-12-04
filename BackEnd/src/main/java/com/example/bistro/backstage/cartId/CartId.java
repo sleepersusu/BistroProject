@@ -1,27 +1,26 @@
 package com.example.bistro.backstage.cartId;
 
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Embeddable
 public class CartId implements Serializable {
 
-    private Integer memberId;
+    // 參考: https://docs.jboss.org/hibernate/orm/5.6/userguide/html_single/Hibernate_User_Guide.html#identifiers-composite-aggregated
+
+    private Integer membersId;
+
     private Integer menuId;
-
-    public CartId() {}
-
-    public CartId(Integer memberId, Integer menuId) {
-        super();
-        this.memberId = memberId;
-        this.menuId = menuId;
-    }
 
     // hashCode 和 equals 方法，用於確保主鍵比較正確
 
@@ -30,11 +29,11 @@ public class CartId implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         CartId cartId = (CartId) o;
-        return Objects.equals(memberId, cartId.memberId) && Objects.equals(menuId, cartId.menuId);
+        return Objects.equals(membersId, cartId.membersId) && Objects.equals(menuId, cartId.menuId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(memberId, menuId);
+        return Objects.hash(membersId, menuId);
     }
 }

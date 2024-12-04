@@ -3,24 +3,14 @@ package com.example.bistro.backstage.cart;
 import java.util.Date;
 import java.util.Objects;
 
+import com.example.bistro.backstage.cartId.CartId;
+import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.menu.Menu;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,11 +20,9 @@ import lombok.Setter;
 @Table(name = "Cart", uniqueConstraints = @UniqueConstraint(columnNames = {"membersId", "menuId"}))
 public class Cart {
 
-//PK
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "ID")
-        private Integer ID;
+//序列化欄位，不是Pk
+        @EmbeddedId
+        private CartId cartId;
 
 
 //欄位
@@ -48,31 +36,17 @@ public class Cart {
         private Date createdAt;
 
 
-//FK
-    // 一對一：一個會員只會有一台購物車
-        @OneToOne
-        @JoinColumn(name = "membersId", referencedColumnName = "ID", nullable = true , unique = true)
+//FK+PK雙主鍵
+    // 多對一：一個會員只會有一台購物車
+        @ManyToOne(fetch = FetchType.LAZY)
+        @MapsId("membersId")
         private Members members;  // 與 Member 表的多對一關係，允許為 NULL
     //多對一：多個產品可以同時出現在一台購物車中
-        @ManyToOne
-        @JoinColumn(name = "menuId", referencedColumnName = "ID", nullable = false)
+        @ManyToOne(fetch = FetchType.LAZY)
+        @MapsId("menuId")
         private Menu menu;  // 與 Menu 表的多對一關係，不允許為 NULL
 
 
-// hashCode 和 equals 方法，用於確保主鍵比較正確
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Cart cart = (Cart) o;
-            return Objects.equals(members, cart.members) && Objects.equals(menu, cart.menu);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(members, menu);
-        }
-
-
+        public Cart() {}
 
 }
