@@ -1,9 +1,8 @@
-package com.example.bistro.backstage.cart;
+package com.example.bistro.frontstage.cart;
 
 import java.util.Date;
-import java.util.Objects;
 
-import com.example.bistro.backstage.cartId.CartId;
+import com.example.bistro.frontstage.cartId.CartId;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Cart", uniqueConstraints = @UniqueConstraint(columnNames = {"membersId", "menuId"}))
+@Table(name = "Cart")
 public class Cart {
 
 //序列化欄位，不是Pk
@@ -27,7 +26,7 @@ public class Cart {
 
 //欄位
         @Column(name = "cartCount", nullable = false)
-        private Integer cartCount;
+        private Integer cartCount;  //商品數量
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -37,10 +36,10 @@ public class Cart {
 
 
 //FK+PK雙主鍵
-    // 多對一：一個會員只會有一台購物車
+    // 多對一：多台購物車可能來自同一個會員，不允許null，因為pk，所以如果是非會員要幫他新增一筆資料
         @ManyToOne(fetch = FetchType.LAZY)
         @MapsId("membersId")
-        private Members members;  // 與 Member 表的多對一關係，允許為 NULL
+        private Members members;
     //多對一：多個產品可以同時出現在一台購物車中
         @ManyToOne(fetch = FetchType.LAZY)
         @MapsId("menuId")
@@ -49,4 +48,11 @@ public class Cart {
 
         public Cart() {}
 
+        public Cart(CartId cartId, Integer cartCount, Date createdAt, Members members, Menu menu) {
+            this.cartId = cartId;
+            this.cartCount = cartCount;
+            this.createdAt = createdAt;
+            this.members = members;
+            this.menu = menu;
+        }
 }

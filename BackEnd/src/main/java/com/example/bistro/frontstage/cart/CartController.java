@@ -1,4 +1,4 @@
-package com.example.bistro.backstage.cart;
+package com.example.bistro.frontstage.cart;
 
 import org.springframework.web.bind.annotation.RestController;
 

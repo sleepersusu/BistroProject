@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.example.bistro.backstage.cart.Cart;
 import com.example.bistro.backstage.comment.Comment;
 import com.example.bistro.backstage.orders.Orders;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,7 +21,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -46,7 +44,7 @@ public class Members {
 	private String memberName;
 	private Short memberAge;
 	private Short memberSex;
-	private String membership;
+	private String membership; //會員or非會員
 	
     @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
