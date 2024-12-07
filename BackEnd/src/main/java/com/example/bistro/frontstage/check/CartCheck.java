@@ -4,9 +4,12 @@ import com.example.bistro.frontstage.check.linepay.vo.CheckoutPaymentRequestForm
 import com.example.bistro.frontstage.check.linepay.vo.ProductForm;
 import com.example.bistro.frontstage.check.linepay.vo.ProductPackageForm;
 import com.example.bistro.frontstage.check.linepay.vo.RedirectUrls;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -14,10 +17,12 @@ import java.util.UUID;
 
 public class CartCheck {
 
+    private CartCheck() {}
+
     public static String encrypt(final String keys, final String data) {
         return toBase64String(HmacUtils.getInitializedMac(HmacAlgorithms.HMAC_SHA_256, keys.getBytes()).doFinal(data.getBytes()));
     }
-//
+
     public static String toBase64String(byte[] bytes) {
         // 使用 Base64 進行編碼
         byte[] byteArray = Base64.encodeBase64(bytes);
@@ -28,7 +33,6 @@ public class CartCheck {
     public static void main(String[] args) {
 
         CheckoutPaymentRequestForm form = new CheckoutPaymentRequestForm();
-
 
         form.setAmount(new BigDecimal("100"));
         form.setCurrency("JPY");
@@ -52,13 +56,15 @@ public class CartCheck {
         redirectUrls.setConfirmUrl("");
         form.setRedirectUrls(redirectUrls);
 
-        String ChannelSecret = "a917ab6a2367b536f8e5a6e2977e06f4";
+        Gson gson = new GsonBuilder().create();
+        //https://pay.line.me/tw/center/payment/interlockKey?locale=zh_TW#
+        String ChannelSecret = "49ddab45fef813d93579bda5d6f7a8cd";
+        //2024
         String requestUri = "/v3/payments/request";
         String nonce = UUID.randomUUID().toString();
-        String signature = encrypt(ChannelSecret, ChannelSecret + requestUri + toJson(form) + nonce);
+        String signature = encrypt(ChannelSecret, ChannelSecret + requestUri + gson.toJson(form) + nonce);
+
+        // 打印簽名結果以驗證
+        System.out.println("Signature: " + signature);
     }
-}
-
-
-
 }

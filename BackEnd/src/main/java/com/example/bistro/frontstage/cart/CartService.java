@@ -8,8 +8,10 @@ import com.example.bistro.frontstage.cartId.CartId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CartService {
@@ -31,26 +33,42 @@ public class CartService {
                 this.membersRepository = membersRepository;
                 this.menuRepository = menuRepository;
             }
+
+            private String generateGuestAccount() {
+                // 生成 UUID 並取前 10 個字
+                String uuid = UUID.randomUUID().toString().replace("-", ""); // 去掉 "-" 符號
+                return uuid.substring(0, 10) + "@guest.com";
+            }
+
+
+
         //打開交易
-            public Cart addToCart(String memberName, String memberPhone, Integer menuId, Integer cartCount, Integer membersId) {
-                //檢查會員是否存在
+            public Cart addToCart(String memberName, String memberPhone, Integer menuId, Integer cartCount) {
+                //檢查會員是否存在，根據電話去找
                     Members members = membersRepository.findByMemberPhone(memberPhone)
                             .orElseGet(() -> {
-                                // 如果不存在，新增非會員紀錄，請他填寫姓名和電話(起碼)
+                            // 如果不存在，新增非會員紀錄，請他填寫姓名和電話(起碼)
                                 Members newMembers = new Members();
                                 newMembers.setMemberName(memberName);
                                 newMembers.setMemberPhone(memberPhone);
-                                newMembers.setMembership("非會員"); //給他非會員的註記
+                                newMembers.setMembership("非會員");                    //給他非會員的註記
+                                String generatedAccount = generateGuestAccount();   //自動生成 memberAccount
+                                newMembers.setMemberAccount(generatedAccount);
+                                newMembers.setMemberStatus("啟用");
+                                newMembers.setCreatedAt(new java.util.Date());
                                 return membersRepository.save(newMembers);
                             });
 
+                    Integer membersId = members.getId();
+
+
                     // 要先判斷該配對有沒有已經存在
-                        Cart dbCart = cartRepository.findByMembersIdAndMenuId(membersId, menuId);
+                        Cart dbCart = cartRepository.findByMemberIdAndMenuId(membersId, menuId);
 
                     // 如果存在
                         if(dbCart != null) {
                             dbCart.setCartCount(dbCart.getCartCount() +1 );
-                            return dbCart;
+                            return cartRepository.save(dbCart);  // 保存更新后的购物车
                         }
 
                     // 如果不存在
@@ -72,7 +90,7 @@ public class CartService {
         //購物車減一或是當購物車扣到為0的時候，要刪除這項產品
             @Transactional
             public void minusOneCount(Integer membersId, Integer menuId) {
-                Cart dbCart = cartRepository.findByMembersIdAndMenuId(membersId, menuId);
+                Cart dbCart = cartRepository.findByMemberIdAndMenuId(membersId, menuId);
 
                 if(dbCart.getCartCount() == 1) {
                     cartRepository.delete(dbCart);
@@ -84,7 +102,7 @@ public class CartService {
 
 
             public List<Cart> findMembersCart(Integer membersId) {
-                return cartRepository.findCartByMembers(membersId);
+                return cartRepository.findCartByMember(membersId);
             }
 
 

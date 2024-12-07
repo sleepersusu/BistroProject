@@ -11,13 +11,14 @@ public interface CartRepository extends JpaRepository<Cart, CartId> {
 
 
     @Query("from Cart c where c.members.id = :mm and c.menu.ID = :pp")
-    Cart findByMembersIdAndMenuId(@Param("mm") Integer membersId, @Param("pp") Integer menuId);
+    Cart findByMemberIdAndMenuId(@Param("mm") Integer membersId, @Param("pp") Integer menuId);
 
-//	Cart findByUsersIdAndPhotosId(Integer usersId, Integer photosId);
 
     @Query("from Cart c where c.members.id = :mid")
-    List<Cart> findCartByMembers(@Param("mid") Integer usersId);
+    List<Cart> findCartByMember(@Param("mid") Integer usersId);
 
-    List<Cart> findByMembersId(Integer membersId);
+
+    @Query("SELECT c FROM Cart c WHERE c.cartId.membersId = :membersId")
+    List<Cart> findCartsByMemberId(@Param("membersId") Integer membersId);
 
     }

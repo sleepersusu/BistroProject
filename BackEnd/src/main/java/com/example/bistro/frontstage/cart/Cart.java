@@ -34,15 +34,24 @@ public class Cart {
         @Column(name = "createdAt", nullable = false)
         private Date createdAt;
 
+        //後面就不用set時間
+        @PrePersist
+        public void onCreate() {
+            if(createdAt == null) {
+                createdAt = new Date();
+            }
+        }
 
 //FK+PK雙主鍵
     // 多對一：多台購物車可能來自同一個會員，不允許null，因為pk，所以如果是非會員要幫他新增一筆資料
         @ManyToOne(fetch = FetchType.LAZY)
         @MapsId("membersId")
+        @JoinColumn(name = "membersId", referencedColumnName = "ID", nullable = false)
         private Members members;
     //多對一：多個產品可以同時出現在一台購物車中
         @ManyToOne(fetch = FetchType.LAZY)
         @MapsId("menuId")
+        @JoinColumn(name = "menuId", referencedColumnName = "ID", nullable = false)
         private Menu menu;  // 與 Menu 表的多對一關係，不允許為 NULL
 
 

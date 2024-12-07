@@ -12,7 +12,7 @@ public interface MembersRepository extends JpaRepository<Members, Integer> {
     Optional<Members> findByMemberPhone(String memberPhone);
 
     //根據資料查詢會員姓名和電話查詢
-    Optional<Members> findByNameAndPhone(String memberName, String memberPhone);
+    Optional<Members> findByMemberNameAndMemberPhone(String memberName, String memberPhone);
 
     //
 
