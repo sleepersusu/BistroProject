@@ -101,11 +101,24 @@ public class CartService {
 
 
 
-            public List<Cart> findMembersCart(Integer membersId) {
-                return cartRepository.findCartByMember(membersId);
+            public List<Cart> findMemberCart(Integer membersId) {
+                return cartRepository.findCartByMemberId(membersId);
             }
 
 
+            // 根據手機號碼查找會員的所有購物車
+                public List<Cart> findCartByPhone(String memberPhone,Integer loginUserId) {
+                // 根據手機號碼查找會員，如果存在
+                    Members member = membersRepository.findByMemberPhone(memberPhone).orElse(null);
+                        if (member != null) {
+                            // 如果會員存在，根據會員id去找購物車
+                                return cartRepository.findCartByMemberId(member.getId());
+                        }
+                        else {
+                            // 如果會員不存在，就根據電話號碼去找購物車
+                                throw new IllegalArgumentException("此電話沒有紀錄，請重新輸入電話號碼");
+                        }
+            }
 
 
 

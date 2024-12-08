@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MembersRepository extends JpaRepository<Members, Integer> {
+
     // 根據會員姓名查詢
     Optional<Members> findByMemberName(String memberName);
 
