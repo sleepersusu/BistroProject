@@ -8,15 +8,21 @@ import org.springframework.data.jpa.repository.Query;
 public interface LotteryChanceRepository extends JpaRepository<LotteryChance, Integer> {
 
 	@Query(value = "SELECT " +
-            "    l.ID AS '抽獎ID', " +
-            "    o.memberId AS '會員編號', " +
-            "    o.ID AS '訂單編號', " +            
-            "    SUM(l.lotteryChances) AS '獲得抽獎次數', " +
-            "    SUM(SUM(l.lotteryChances)) OVER (PARTITION BY o.memberId) AS '總抽獎次數', " +
-            "    l.status AS '使用期限' " +
-            "FROM lotteryChance l " +
-            "JOIN Orders o ON o.ID = l.orderId " +
-            "GROUP BY o.memberId, o.ID, l.ID, l.status", nativeQuery = true)
-List<Object[]> findMembersAllChance();
+			"lc.ID, "+
+		    "m.ID AS MemberId, " +
+		    "m.memberName, " +
+		    "c.campaignTitle, " +
+		    "lc.lotteryChances, " +
+		    "lc.usedChances, " +
+		    "lc.remainingChances, " +
+		    "CASE " +
+		        "WHEN c.endDate < GETDATE() THEN '已過期' " +
+		        "ELSE '可使用' " +
+		    "END AS status " +
+		    "FROM Members m " +
+		    "INNER JOIN LotteryChance lc ON m.ID = lc.memberId " +
+		    "INNER JOIN Campaign c ON lc.campaignId = c.ID", 
+		    nativeQuery = true)
+		List<Object[]> findMembersAllChance();
 
 }

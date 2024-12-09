@@ -7,14 +7,21 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface LotteryWinnersRepository extends JpaRepository<LotteryWinners, Integer> {
 	
-	@Query(value = "SELECT lw.ID, lc.orderId AS '訂單編號', " +
-            "m.Id AS '會員ID', m.memberName AS '會員姓名', " +
-            "c.campaignTitle, p.prizeName, lw.createdAt " +
-            "FROM [LotteryWinners] lw " +
-            "JOIN Campaign c ON c.ID = lw.campaignId " +
-            "JOIN CampaignPrizes p ON p.ID = lw.prizeId " +
-            "JOIN LotteryChance lc ON lc.ID = lw.lotteryChanceId " +
-            "JOIN Orders o ON lc.orderId = o.ID " +
-            "JOIN Members m ON o.memberId = m.ID", nativeQuery = true)
-	List<Object[]> findAllWinners();
+	@Query(value = "SELECT " +
+			   "lw.ID AS winnerId, " +
+			   "m.memberName as memberName, " +
+			   "c.campaignTitle as campaignTitle, " +
+			   "cp.prizeName as prizeName, " +
+			   "lw.createdAt AS winningTime, " +
+			   "CASE " +
+			       "WHEN c.endDate < GETDATE() THEN '已過期' " +
+			       "ELSE '進行中' " +
+			   "END AS campaignStatus " +
+			   "FROM LotteryWinners lw " +
+			   "INNER JOIN Members m ON lw.memberId = m.ID " +
+			   "INNER JOIN Campaign c ON lw.campaignId = c.ID " +
+			   "INNER JOIN CampaignPrizes cp ON lw.prizeId = cp.ID " +
+			   "ORDER BY lw.createdAt DESC", 
+			   nativeQuery = true)
+			List<Object[]> findAllWinners();
 }

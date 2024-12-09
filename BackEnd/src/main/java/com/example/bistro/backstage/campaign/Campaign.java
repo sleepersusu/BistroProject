@@ -9,11 +9,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity 
 @Table(name = "Campaign")
 public class Campaign {
@@ -25,6 +31,10 @@ public class Campaign {
 	
 	@Column(name = "campaignTitle")
 	private String campaignTitle;
+	
+	@Lob
+	@Column(name = "campaignImg")
+	private byte[] campaignImg;
 	
 	@Column(name = "campaignDescription")
 	private String campaignDescription;
@@ -59,80 +69,43 @@ public class Campaign {
 			createdAt = new Date();
 		}		
 	}
+	
+	public enum CampaignStatus {
+        NOT_STARTED("未開始"),
+        IN_PROGRESS("進行中"),
+        EXPIRED("已結束");
+
+        private String description;
+
+        CampaignStatus(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
+
+    
+    @Transient  
+    public CampaignStatus getCampaignStatus() {
+        Date now = new Date();
+        
+        if (now.before(startDate)) {
+            return CampaignStatus.NOT_STARTED;
+        } else if (now.after(endDate)) {
+            return CampaignStatus.EXPIRED;
+        } else {
+            return CampaignStatus.IN_PROGRESS;
+        }
+    }
+
+    @Transient
+    public boolean isActive() {
+        return getCampaignStatus() == CampaignStatus.IN_PROGRESS;
+    }
 
 	public Campaign() {
-	}
-
-	public Integer getMinOrderAmount() {
-		return minOrderAmount;
-	}
-
-	public void setMinOrderAmount(Integer minOrderAmount) {
-		this.minOrderAmount = minOrderAmount;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getCampaignTitle() {
-		return campaignTitle;
-	}
-
-	public void setCampaignTitle(String campaignTitle) {
-		this.campaignTitle = campaignTitle;
-	}
-
-	public String getCampaignDescription() {
-		return campaignDescription;
-	}
-
-	public void setCampaignDescription(String campaignDescription) {
-		this.campaignDescription = campaignDescription;
-	}
-
-	public String getCampaignType() {
-		return campaignType;
-	}
-
-	public void setCampaignType(String campaignType) {
-		this.campaignType = campaignType;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
 	}
 
 	

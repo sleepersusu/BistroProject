@@ -59,7 +59,7 @@ public class CampaignPrizesController {
 		return "redirect:/Bistro/campaign/prize/findAll";
 	}
 
-	@GetMapping("/images/download")
+	@GetMapping("/campaignPrize/download")
 	public ResponseEntity<byte[]> downloadPhotos(@RequestParam Integer id) {
 		CampaignPrizes prize = campaignPrizeService.findPrizeById(id);
 

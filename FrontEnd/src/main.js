@@ -6,6 +6,8 @@ import App from './App.vue'
 import router from './router'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import Swal from 'sweetalert2'
+window.Swal = Swal
 
 const app = createApp(App)
 

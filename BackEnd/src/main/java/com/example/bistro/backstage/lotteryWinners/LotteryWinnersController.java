@@ -1,6 +1,7 @@
 package com.example.bistro.backstage.lotteryWinners;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import com.example.bistro.backstage.campaignPrize.CampaignPrizeService;
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 import com.example.bistro.backstage.lotteryChance.LotteryChance;
 import com.example.bistro.backstage.lotteryChance.LotteryChanceService;
+import com.example.bistro.backstage.members.MemberRepository;
+import com.example.bistro.backstage.members.Members;
 
 @Controller
 public class LotteryWinnersController {
@@ -23,7 +26,7 @@ public class LotteryWinnersController {
 	private LotteryWinnersService lotteryWinnersService;
 	
 	@Autowired
-	private LotteryChanceService lotteryChanceService;
+	private MemberRepository memberRepo;
 	
 	@Autowired
 	private CampaignService campaignService;
@@ -35,11 +38,9 @@ public class LotteryWinnersController {
 	@GetMapping("/Bistro/campaign/winner/findAll")
 	public String findAllWinner(Model model) {		
 		List<Object[]> results = lotteryWinnersService.findAllWinner();
-		List<LotteryChance> allChance = lotteryChanceService.findAllChance();
 		List<CampaignPrizes> allCampaignPrizes = campaignPrizeService.findAllCampaignPrizes();
 		
 		model.addAttribute("allWinners", results);
-		model.addAttribute("allChance", allChance);
 		model.addAttribute("allCampaignPrizes", allCampaignPrizes);
 		return "campaign/lotteryWinnersView";
 	}
@@ -47,15 +48,15 @@ public class LotteryWinnersController {
 	@PostMapping("/Bistro/campaign/winner/create")
 	public String insertWinner(@RequestParam Integer campaignId,
 								@RequestParam Integer prizeId,
-								@RequestParam Integer chanceId) {
+								@RequestParam Integer memberId) {
 		Campaign campaign = campaignService.findCampaignById(campaignId);
 		CampaignPrizes prize = campaignPrizeService.findPrizeById(prizeId);
-		LotteryChance chance = lotteryChanceService.findById(chanceId);
+		Optional<Members> member = memberRepo.findById(memberId);
 		
 		LotteryWinners lotteryWinner = new LotteryWinners();
 		lotteryWinner.setCampaign(campaign);
 		lotteryWinner.setCampaignPrizes(prize);
-		lotteryWinner.setLotteryChance(chance);
+		lotteryWinner.setMember(member.get());
 		
 		lotteryWinnersService.insertLotteryChance(lotteryWinner);
 		

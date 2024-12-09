@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.example.bistro.backstage.campaign.Campaign;
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 import com.example.bistro.backstage.lotteryChance.LotteryChance;
+import com.example.bistro.backstage.members.Members;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,12 +15,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "LotteryWinners")
 public class LotteryWinners {
@@ -29,11 +35,15 @@ public class LotteryWinners {
 	@Column(name = "ID")
 	private Integer id;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "campaignId")
 	private Campaign campaign;
 	
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "memberId")
+	private Members member;
+	
+	@ManyToOne
 	@JoinColumn(name = "prizeId")
 	private CampaignPrizes campaignPrizes;
 	
@@ -54,46 +64,6 @@ public class LotteryWinners {
 	}
 
 	public LotteryWinners() {
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Campaign getCampaign() {
-		return campaign;
-	}
-
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
-	}
-
-	public CampaignPrizes getCampaignPrizes() {
-		return campaignPrizes;
-	}
-
-	public void setCampaignPrizes(CampaignPrizes campaignPrizes) {
-		this.campaignPrizes = campaignPrizes;
-	}
-
-	public LotteryChance getLotteryChance() {
-		return lotteryChance;
-	}
-
-	public void setLotteryChance(LotteryChance lotteryChance) {
-		this.lotteryChance = lotteryChance;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
 	}
 
 }

@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.bistro.backstage.cartId.CartId;
+
 import java.util.List;
 
-public interface CartRepositoryDao extends JpaRepository<Cart, Integer> {
+public interface CartRepositoryDao extends JpaRepository<Cart, CartId> {
 
 
     @Query("SELECT c FROM Cart c WHERE c.members.id = :memberId")

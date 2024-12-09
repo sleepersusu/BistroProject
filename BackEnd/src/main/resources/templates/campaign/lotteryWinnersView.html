@@ -146,25 +146,24 @@ body .modal .modal-content form textarea {
 						<table id="table" class="display">
 							<thead>
 								<tr>
-									<th>ID</th>
-									<th>訂單編號</th>
-									<th>會員ID</th>
 									<th>會員姓名</th>
 									<th>活動名稱</th>
 									<th>獎品名稱</th>
-									<th>獲獎日期</th>
+									<th>中獎時間</th>
+									<th>活動狀態</th>
 									<th>操作</th>
 								</tr>
 							</thead>
 							<tbody id="event-list">
 								<tr th:each="result : ${allWinners}">
-									<td th:text="${result[0]}"></td>
 									<td th:text="${result[1]}"></td>
 									<td th:text="${result[2]}"></td>
 									<td th:text="${result[3]}"></td>
 									<td th:text="${result[4]}"></td>
-									<td th:text="${result[5]}"></td>
-									<td th:text="${result[6]}"></td>
+									<td>
+							            <span th:if="${result[5] == '進行中'}" style="color: blue">[[${result[5]}]]</span>
+							            <span th:if="${result[5] == '已過期'}" style="color: red">[[${result[5]}]]</span>
+							        </td>
 									<td>
 
 										<form th:action="@{/Bistro/campaign/winner/delete}"
@@ -192,7 +191,12 @@ body .modal .modal-content form textarea {
 					<form th:action="@{/Bistro/campaign/winner/create}"
 						enctype="multipart/form-data" method="post" id="dataForm">
 						<fieldset>
-							<legend style="margin-bottom: 1rem; font-weight: bold">得獎者資訊</legend>							
+							<legend style="margin-bottom: 1rem; font-weight: bold">得獎者資訊</legend>	
+							
+							<div class="question">
+							    <span class="title">會員ID</span>
+							    <input type="number" min="1"  name="memberId" placeholder="請輸入會員ID"/>
+							</div>						
 
 							<div class="question">
 							    <span class="title">選擇獎品</span>
@@ -212,15 +216,8 @@ body .modal .modal-content form textarea {
 							    <span class="title">活動名稱</span>
 							    <input type="text" id="campaignInput" name="campaignName" readonly placeholder="請先選擇獎品">
 							    <input type="hidden" id="campaignIdInput" name="campaignId"> 
-							</div>
-
-							<div class="question">
-								<span class="title">得獎訂單</span> <select name="chanceId" required>
-									<option value="">請選擇得獎訂單</option>
-									<option th:each="chance : ${allChance}" th:value="${chance.id}"
-										th:text="${chance.orders.ID}"></option>
-								</select>
-							</div>
+							</div>							
+							
 						</fieldset>
 
 						<div id="buttonbox">
