@@ -1,4 +1,4 @@
-package com.example.bistro.backstage.cartId;
+package com.example.bistro.frontstage.cartId;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Objects;
 public class CartId implements Serializable {
 
     // 參考: https://docs.jboss.org/hibernate/orm/5.6/userguide/html_single/Hibernate_User_Guide.html#identifiers-composite-aggregated
-
+    // Example 132. @EmbeddedId with @ManyToOne
     private Integer membersId;
 
     private Integer menuId;
