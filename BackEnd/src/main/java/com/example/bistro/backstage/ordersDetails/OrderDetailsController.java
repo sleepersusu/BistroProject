@@ -15,7 +15,7 @@ public class OrderDetailsController {
     @Autowired
     private OrdersDetailsService ordersDetailsService;
     @Autowired
-    private OrdersDetailsRepositoryDao ordersDetailsRepositoryDao;
+    private OrdersDetailsRepository ordersDetailsRepository;
     @Autowired
     private OrdersService ordersService;
     @Autowired

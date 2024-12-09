@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.bistro.backstage.employee.EmployeeRepository;
-import com.example.bistro.backstage.members.MemberRepository;
+import com.example.bistro.backstage.members.MembersRepository;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.menu.MenuRepositoryDao;
 import com.example.bistro.backstage.payment.Payment;
 import com.example.bistro.backstage.seats.Seats;
-import com.example.bistro.backstage.seats.SeatsRepositoryDao;
+import com.example.bistro.backstage.seats.SeatsRepository;
 
 @Controller
 public class OrdersController {
@@ -25,9 +25,9 @@ public class OrdersController {
     @Autowired
     private OrdersRepository ordersRepository;
     @Autowired
-    private MemberRepository membersRepositoryDao;
+    private MembersRepository membersRepositoryDao;
     @Autowired
-    private SeatsRepositoryDao seatsRepositoryDao;
+    private SeatsRepository seatsRepository;
     @Autowired
     private EmployeeRepository employeeRepositoryDao;
     @Autowired
@@ -89,7 +89,7 @@ public class OrdersController {
                 orders.setMembers(null);
             }
         // 座位設置關聯
-            Seats seat = seatsRepositoryDao.findById(seatsId).orElse(null);
+            Seats seat = seatsRepository.findById(seatsId).orElse(null);
             orders.setSeats(seat);
         // 付款資訊植入
             for (int i = 0; i < paymentStatus.size(); i++) {

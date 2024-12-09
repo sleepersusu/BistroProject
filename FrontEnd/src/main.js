@@ -6,6 +6,10 @@ import App from './App.vue'
 import router from './router'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+//import { Input, initTWE } from "tw-elements";
+//initTWE({ Input }, { allowReinits: true });
+
+//import "@/assets/tailwind.css";
 
 const app = createApp(App)
 
