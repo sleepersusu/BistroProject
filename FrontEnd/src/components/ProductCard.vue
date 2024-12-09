@@ -1,5 +1,5 @@
 <template>
-  <div class="row row-cols-3 my-5 mx-4">
+  <div class="row row-cols-3 my-5 mx-4" data-aos="fade-up">
     <div class="col mt-4">
       <div class="card bg-dark">
         <img
