@@ -16,8 +16,8 @@ import com.example.bistro.backstage.campaignPrize.CampaignPrizeService;
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 import com.example.bistro.backstage.lotteryChance.LotteryChance;
 import com.example.bistro.backstage.lotteryChance.LotteryChanceService;
-import com.example.bistro.backstage.members.MemberRepository;
 import com.example.bistro.backstage.members.Members;
+import com.example.bistro.backstage.members.MembersRepository;
 
 @Controller
 public class LotteryWinnersController {
@@ -26,7 +26,7 @@ public class LotteryWinnersController {
 	private LotteryWinnersService lotteryWinnersService;
 	
 	@Autowired
-	private MemberRepository memberRepo;
+	private MembersRepository memberRepo;
 	
 	@Autowired
 	private CampaignService campaignService;

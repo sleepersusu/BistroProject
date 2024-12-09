@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.bistro.backstage.campaign.Campaign;
 import com.example.bistro.backstage.campaign.CampaignService;
-import com.example.bistro.backstage.members.MemberRepository;
 import com.example.bistro.backstage.members.Members;
+import com.example.bistro.backstage.members.MembersRepository;
 import com.example.bistro.backstage.orders.Orders;
 import com.example.bistro.backstage.orders.OrdersRepository;
 
@@ -27,7 +27,7 @@ public class LotteryChanceController {
 	CampaignService campaignService;
 	
 	@Autowired
-	MemberRepository memberRepo;
+	MembersRepository memberRepo;
 	
 	@GetMapping("/Bistro/campaign/chance/findAll")
 	public String findAll(Model model) {
