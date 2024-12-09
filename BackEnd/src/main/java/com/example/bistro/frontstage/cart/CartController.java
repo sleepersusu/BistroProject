@@ -20,6 +20,79 @@ public class CartController {
     private CartService cartService;
 
 
+    //列出會員所擁有的購物車
+        @GetMapping("/list")
+        public ResponseEntity<String>shoppingCart(HttpSession httpSession) {
+
+            Integer loginUserId = (Integer) httpSession.getAttribute("loginUserId");
+
+            // 如果是空的，請他先登入
+            if (loginUserId == null) {
+                return ResponseEntity.status(401).body("Please log in first.");
+            }
+            List<Cart> shoppingCart = cartService.findMemberCart(loginUserId);
+            return ResponseEntity.ok(shoppingCart.toString());
+
+        }
+    //會員新增購物車
+        //1.確定有沒有會員，沒有要請他登入(可以在controller做)
+        //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
+            //如果存在    就將購物車加一
+            //如果不存在   就set cardId(複合主鍵給他)，建立一筆新的資料
+        @PostMapping("/add/{menuId}")
+        public ResponseEntity<String> addCart(@PathVariable Integer menuId,HttpSession httpSession) {
+            Integer loginUserId = (Integer) httpSession.getAttribute("loginUserId");
+            // 如果是空的，請他先登入
+                if (loginUserId == null) {
+                    return ResponseEntity.status(401).body("Please log in first.");
+                }
+            cartService.addCartNew(loginUserId,menuId);
+            List<Cart> shoppingCart = cartService.findMemberCart(loginUserId);
+            return ResponseEntity.ok("Added cart successfully.");
+        }
+
+    //會員減少購物車
+        //1.確定有沒有會員，沒有要請他登入
+        //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
+            //如果存在    就將購物車加一
+            //如果不存在   就set cardId(複合主鍵給他)，建立一筆新的資料
+        @PostMapping("/minusCart/{menuId}")
+        public ResponseEntity<String> minusCart(@PathVariable Integer menuId,HttpSession httpSession) {
+            Integer loginUserId = (Integer) httpSession.getAttribute("loginUserId");
+            // 如果是空的，請他先登入
+                if (loginUserId == null) {
+                    return ResponseEntity.status(401).body("Please log in first.");
+                }
+            cartService.minusOneCount(loginUserId,menuId);
+            List<Cart> shoppingCart = cartService.findMemberCart(loginUserId);
+            return ResponseEntity.ok("minus cart successfully.");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //shoppingCartAll
     // 查看購物車
@@ -28,7 +101,6 @@ public class CartController {
         public ResponseEntity<Map<String, Object>> shoppingCart(@RequestParam String memberPhone,HttpSession httpSession) {
 
             Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
-
 
         // 查詢購物車所有資料，根據findCartByPhone的方法
             List<Cart> shoppingCart = cartService.findCartByPhone(memberPhone,loginUserId);

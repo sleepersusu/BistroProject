@@ -87,24 +87,6 @@ public class CartService {
 
             }
 
-        //購物車減一或是當購物車扣到為0的時候，要刪除這項產品
-            @Transactional
-            public void minusOneCount(Integer membersId, Integer menuId) {
-                Cart dbCart = cartRepository.findByMemberIdAndMenuId(membersId, menuId);
-
-                if(dbCart.getCartCount() == 1) {
-                    cartRepository.delete(dbCart);
-                }else {
-                    dbCart.setCartCount(dbCart.getCartCount() - 1);
-                }
-            }
-
-
-
-            public List<Cart> findMemberCart(Integer membersId) {
-                return cartRepository.findCartByMemberId(membersId);
-            }
-
 
             // 根據手機號碼查找會員的所有購物車
                 public List<Cart> findCartByPhone(String memberPhone,Integer loginUserId) {
@@ -118,7 +100,65 @@ public class CartService {
                             // 如果會員不存在，就根據電話號碼去找購物車
                                 throw new IllegalArgumentException("此電話沒有紀錄，請重新輸入電話號碼");
                         }
-            }
+                }
+
+//-----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+                //會員新增購物車
+                    //1.確定有沒有會員，沒有要請他登入(可以在controller做)
+                    //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
+                        //如果存在    就將購物車加一
+                        //如果不存在   就set cardId(複合主鍵給他)，建立一筆新的資料
+                @Transactional
+                public Cart addCartNew(Integer membersId, Integer menuId) {
+                    Cart dbCart = cartRepository.findByMemberIdAndMenuId(membersId, menuId);
+                    // 如果存在
+                        if(dbCart != null) {
+                            dbCart.setCartCount(dbCart.getCartCount() +1 );
+                            return cartRepository.save(dbCart);  // 保存更新後的購物車
+                        }
+                    // 如果不存在
+                        CartId cartId = new CartId(membersId,menuId);
+                        Optional<Members> optionalMembers = membersRepository.findById(membersId);
+                        Optional<Menu> optionalMenu = menuRepository.findById(menuId);
+                        Cart cart = new Cart();
+                        cart.setCartId(cartId);
+                        cart.setCartCount(1);
+                        cart.setMembers(optionalMembers.get());
+                        cart.setMenu(optionalMenu.get());
+                    //返回新的賦值
+                        return cartRepository.save(cart);
+                }
+
+
+
+                //查找所有會員的購物車
+
+                public List<Cart> findMemberCart(Integer membersId) {
+                    return cartRepository.findCartByMemberId(membersId);
+                }
+
+                //會員減少購物車
+                    //1.確定有沒有會員，沒有要請他登入
+                    //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
+                        //如果存在    就將購物車加一
+                        //如果不存在   就set cardId(複合主鍵給他)，建立一筆新的資料
+
+                @Transactional
+                public void minusOneCount(Integer membersId, Integer menuId) {
+                    Cart dbCart = cartRepository.findByMemberIdAndMenuId(membersId, menuId);
+                    //如果已經是1扣到剩0就刪除
+                    if(dbCart.getCartCount() == 1) {
+                        cartRepository.delete(dbCart);
+                        //如果不是1，就直接扣1就好，先植入count數字然後，取得目前數字，然後進行-1
+                    }else {
+                        dbCart.setCartCount(dbCart.getCartCount() - 1);
+                    }
+                }
 
 
 
