@@ -17,5 +17,5 @@ public interface MembersRepository extends JpaRepository<Members, Integer> {
 
     //根據會員帳號查詢會員資料
     Optional<Members> findByMemberAccount(String account);
-
+    
 }

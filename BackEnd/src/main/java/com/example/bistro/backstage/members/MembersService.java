@@ -26,4 +26,11 @@ public class MembersService {
 		}
 		return Optional.empty();
 	}
+
+    //findById
+    public Members findMembersById(Integer id) {
+        Optional<Members> op = memberRepo.findById(id);
+        return op.isPresent() ? op.get() : null;
+    }
+
 }

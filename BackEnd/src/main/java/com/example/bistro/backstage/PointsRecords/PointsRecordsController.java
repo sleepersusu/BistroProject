@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.bistro.members.MembersService;
-import com.example.bistro.pointPrizes.PointPrizesService;
-
+import com.example.bistro.backstage.members.MembersService;
+import com.example.bistro.backstage.pointPrizes.PointPrizesService;
 
 
 @Controller
