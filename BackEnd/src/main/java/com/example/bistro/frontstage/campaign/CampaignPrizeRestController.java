@@ -18,7 +18,7 @@ import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 public class CampaignPrizeRestController {
 	
 	@Autowired
-	CampaignPrizeService prizeService;
+	CampaignPrizeFrontService prizeService;
 	
 	@GetMapping("/api/campaignPrize")
 	public ResponseEntity<?> getCampaignPrizes() {
@@ -30,7 +30,7 @@ public class CampaignPrizeRestController {
 	public ResponseEntity<?> getCampaignPrize(@PathVariable Integer id) {
 		CampaignPrizes prize = prizeService.findPrizeById(id);
 		if(prize == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到活動");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到獎品");
 		}
 		return ResponseEntity.ok(prize);
 	}

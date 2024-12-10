@@ -15,7 +15,7 @@ import com.example.bistro.backstage.campaign.CampaignService;
 public class CampaignRestController {
 	
 	@Autowired 
-	CampaignService campaignService;
+	CampaignFrontService campaignService;
 	
 	@GetMapping("/api/campaign")
 	public ResponseEntity<List<Campaign>> getCampaigns() {
