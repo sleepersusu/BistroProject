@@ -55,7 +55,7 @@ public class CommentController {
 
 		Integer memberId = Integer.parseInt(requestData.get("memberId").toString());
 		Integer menuSelect = Integer.parseInt(requestData.get("menuSelect").toString());
-		Integer commentRating = Integer.parseInt(requestData.get("commentRating").toString());
+		Short commentRating = Short.parseShort(requestData.get("commentRating").toString());
 		String commentMessage = requestData.get("commentMessage").toString();
 		
 		

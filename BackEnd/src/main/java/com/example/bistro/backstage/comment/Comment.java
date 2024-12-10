@@ -41,7 +41,7 @@ public class Comment {
 	private String  commentProduct;
 	
 
-	private Integer commentRating;
+	private Short commentRating;
 	
 	
 	private String  commentMessage;
@@ -104,12 +104,12 @@ public class Comment {
 	}
 
 
-	public Integer getCommentRating() {
+	public Short getCommentRating() {
 		return commentRating;
 	}
 
 
-	public void setCommentRating(Integer commentRating) {
+	public void setCommentRating(Short commentRating) {
 		this.commentRating = commentRating;
 	}
 

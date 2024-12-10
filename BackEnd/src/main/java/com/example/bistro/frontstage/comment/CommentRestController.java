@@ -20,7 +20,6 @@ import com.example.bistro.backstage.comment.Comment;
 import com.example.bistro.backstage.comment.CommentService;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.members.MembersRepository;
-import com.example.bistro.backstage.members.MembersService;
 import com.example.bistro.backstage.menu.Menu;
 import com.example.bistro.backstage.menu.MenuService;
 
@@ -55,7 +54,7 @@ public class CommentRestController {
 	    try {
 
 	        Integer menuId = Integer.parseInt(requestData.get("menuId").toString());
-	        Integer commentRating = Integer.parseInt(requestData.get("commentRating").toString());
+	        Short commentRating = Short.parseShort(requestData.get("commentRating").toString());
 	        String commentMessage = requestData.get("commentMessage").toString();
 
 	        // 查詢會員與菜單
@@ -133,24 +132,7 @@ public class CommentRestController {
 	
 	
 	
-	@GetMapping("/api/members/{memberId}/comment")//還沒從session取id
-	public ResponseEntity<List<Comment>> findAllCommentByMember(@PathVariable Integer memberId) {
-		// 檢查會員 ID 是否有效
-		if (memberId == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
-
-		// 獲取會員評論
-		List<Comment> comments = commentService.findCommentByMemberId(memberId);
-
-		// 如果無評論
-		if (comments.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		}
-
-		// 成功返回評論列表
-		return ResponseEntity.ok(comments);
-	}
+	
 	
 	
 	

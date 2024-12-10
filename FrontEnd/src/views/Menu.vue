@@ -19,17 +19,20 @@
     
     </div>
 </div>
-
-<div class="row mt-3" v-for="menu in menus" :key="menu.ID" :menu="menu">
-  <MenuCard></MenuCard>
+<div class="container">
+  <div class="row mt-3">
+    <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id">
+      <MenuCard :menu="menu"></MenuCard>
+    </div>
+  </div>
 </div>
-
 
 </template>
 
 
-<script>
+<script >
 import MenuCard from '@/components/MenuCard.vue';
+import axios from "axios";
 
 
 export default {
@@ -53,7 +56,7 @@ export default {
       let API_URL = `http://localhost:8085/api/menu/${productCategory}`;
 
       this.axios.get(API_URL).then((response)=>{
-        alert(response.data)
+        alert(JSON.stringify(response.data));
         console.log('API response:', response.data)
         this.menus=response.data;
       }).catch((error) => {
@@ -61,7 +64,14 @@ export default {
         // 顯示錯誤提示給用戶（例如使用 Vue 的狀態管理或 UI 組件庫）
         alert("無法獲取菜單，請稍後再試！");
       });
-  }
+  },
+
+
+
+
+
+
+
 },
 
 
