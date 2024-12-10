@@ -51,7 +51,7 @@ public class CartService {
                                 Members newMembers = new Members();
                                 newMembers.setMemberName(memberName);
                                 newMembers.setMemberPhone(memberPhone);
-                                newMembers.setMembership("非會員");                    //給他非會員的註記
+                                newMembers.setMemberShip("非會員");                    //給他非會員的註記
                                 String generatedAccount = generateGuestAccount();   //自動生成 memberAccount
                                 newMembers.setMemberAccount(generatedAccount);
                                 newMembers.setMemberStatus("啟用");
