@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -219,14 +219,7 @@ public class MenuController {
 
 	}
 
-	@GetMapping("/Bistro/findMenuIsSold")
-	@ResponseBody
-	public ResponseEntity<List<Menu>> findMenuByStatusIsSold() {
-		List<Menu> menuIsSold = menuService.findMenuByStatusIsSold();
-		return ResponseEntity.ok(menuIsSold);
-	}
 
-	
 
 
 }

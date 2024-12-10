@@ -1,3 +1,4 @@
+
 package com.example.bistro.frontstage.cart;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,7 +25,7 @@ public class CartController {
         @GetMapping("/list")
         public ResponseEntity<String>shoppingCart(HttpSession httpSession) {
 
-            Integer loginUserId = (Integer) httpSession.getAttribute("loginUserId");
+            Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
 
             // 如果是空的，請他先登入
             if (loginUserId == null) {
@@ -41,7 +42,7 @@ public class CartController {
             //如果不存在   就set cardId(複合主鍵給他)，建立一筆新的資料
         @PostMapping("/add/{menuId}")
         public ResponseEntity<String> addCart(@PathVariable Integer menuId,HttpSession httpSession) {
-            Integer loginUserId = (Integer) httpSession.getAttribute("loginUserId");
+            Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
             // 如果是空的，請他先登入
                 if (loginUserId == null) {
                     return ResponseEntity.status(401).body("Please log in first.");
@@ -58,7 +59,7 @@ public class CartController {
             //如果不存在   就set cardId(複合主鍵給他)，建立一筆新的資料
         @PostMapping("/minusCart/{menuId}")
         public ResponseEntity<String> minusCart(@PathVariable Integer menuId,HttpSession httpSession) {
-            Integer loginUserId = (Integer) httpSession.getAttribute("loginUserId");
+            Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
             // 如果是空的，請他先登入
                 if (loginUserId == null) {
                     return ResponseEntity.status(401).body("Please log in first.");

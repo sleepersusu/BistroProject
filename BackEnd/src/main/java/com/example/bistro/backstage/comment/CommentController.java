@@ -46,7 +46,7 @@ public class CommentController {
 
 	@GetMapping("/api/menus/{category}")
 	public ResponseEntity<List<Menu>> getMenusByCategory(@PathVariable String category) {
-		List<Menu> menus = menuService.findMenusByCategory(category);
+		List<Menu> menus = menuService.findMenuByCategoryAndIsSold(category);
 		return ResponseEntity.ok(menus);
 	}
 
