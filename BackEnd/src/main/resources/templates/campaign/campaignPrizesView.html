@@ -162,7 +162,7 @@ body .modal .modal-content form textarea {
 									<td th:text="${prize.id}"></td>
 									<td th:text="${prize.prizeName}"></td>
 									<td><img th:if="${prize.prizeImg != null}"
-										th:src="@{/images/download(id=${prize.id})}"
+										th:src="@{/campaignPrize/download(id=${prize.id})}"
 										style="max-width: 100px;" /></td>
 									<td th:text="${prize.prizeQuantity}"></td>
 									<td th:text="${prize.prizeDescription}"></td>

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.bistro.backstage.campaign.Campaign;
+import com.example.bistro.backstage.campaign.CampaignService;
+import com.example.bistro.backstage.members.Members;
+import com.example.bistro.backstage.members.MembersRepository;
 import com.example.bistro.backstage.orders.Orders;
 import com.example.bistro.backstage.orders.OrdersRepository;
 
@@ -20,7 +24,10 @@ public class LotteryChanceController {
 	LotteryChanceService lotteryChanceService;
 	
 	@Autowired
-	OrdersRepository ordersRepo;
+	CampaignService campaignService;
+	
+	@Autowired
+	MembersRepository memberRepo;
 	
 	@GetMapping("/Bistro/campaign/chance/findAll")
 	public String findAll(Model model) {
@@ -31,30 +38,28 @@ public class LotteryChanceController {
 	}
 	
 	@PostMapping("/Bistro/campaign/chance/create")
-	public String insertChanceInfo(@RequestParam Integer ordersId,
-								@RequestParam Integer lotteryChance,
-								@RequestParam String status ) {
-		LotteryChance lotteryChanceBean = new LotteryChance();
-		Optional<Orders> orders = ordersRepo.findById(ordersId);
-		
-		lotteryChanceBean.setOrders(orders.get());
-		lotteryChanceBean.setLotteryChances(lotteryChance);
-		lotteryChanceBean.setStatus(status);
-		
-		lotteryChanceService.insertLotteryChance(lotteryChanceBean);
+	public String insertChance(@RequestParam Integer memberId,
+								@RequestParam Integer campaignId,
+								@RequestParam Integer lotteryChance ) {
+		LotteryChance chance = new LotteryChance();
+		Campaign campaign = campaignService.findCampaignById(campaignId);
+		Optional<Members> member = memberRepo.findById(memberId);
+		chance.setMember(member.get());
+		chance.setCampaign(campaign);
+		chance.setLotteryChances(lotteryChance);
+		lotteryChanceService.insertLotteryChance(chance);
 		
 		return "redirect:/Bistro/campaign/chance/findAll";
 	}
 	
 	@PostMapping("/Bistro/campaign/chance/update")
-	public String updateChanceInfo(@RequestParam Integer lotteryChance,
-									@RequestParam String status,
+	public String updateChance(@RequestParam Integer lotteryChance,
 									@RequestParam Integer id) {
-		LotteryChance lotteryChanceBean = lotteryChanceService.findById(id);
-		lotteryChanceBean.setStatus(status);
-		lotteryChanceBean.setLotteryChances(lotteryChance);
+		LotteryChance chance = lotteryChanceService.findById(id);
+		chance.setLotteryChances(lotteryChance);
+		chance.setRemainingChances(lotteryChance - chance.getUsedChances());
 		
-		lotteryChanceService.updateLotteryChance(lotteryChanceBean);
+		lotteryChanceService.updateLotteryChance(chance);
 		
 		return "redirect:/Bistro/campaign/chance/findAll";
 	}

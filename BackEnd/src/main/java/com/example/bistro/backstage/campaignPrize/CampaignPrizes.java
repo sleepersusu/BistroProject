@@ -19,7 +19,11 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "CampaignPrizes")
 public class CampaignPrizes {
@@ -64,68 +68,6 @@ public class CampaignPrizes {
 	public CampaignPrizes() {
 	}
 
-	public BigDecimal getProbability() {
-		return probability;
-	}
-
-	public void setProbability(BigDecimal probability) {
-		this.probability = probability;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getPrizeName() {
-		return prizeName;
-	}
-
-	public void setPrizeName(String prizeName) {
-		this.prizeName = prizeName;
-	}
-
-	public byte[] getPrizeImg() {
-		return prizeImg;
-	}
-
-	public void setPrizeImg(byte[] prizeImg) {
-		this.prizeImg = prizeImg;
-	}
-
-	public Integer getPrizeQuantity() {
-		return prizeQuantity;
-	}
-
-	public void setPrizeQuantity(Integer prizeQuantity) {
-		this.prizeQuantity = prizeQuantity;
-	}
-
-	public String getPrizeDescription() {
-		return prizeDescription;
-	}
-
-	public void setPrizeDescription(String prizeDescription) {
-		this.prizeDescription = prizeDescription;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Campaign getCampaign() {
-		return campaign;
-	}
-
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
-	}
+	
 
 }

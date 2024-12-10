@@ -11,9 +11,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.3",
     "pinia": "^2.2.6",
+    "sweetalert2": "^11.14.5",
     "vue": "^3.5.13",
     "vue-axios": "^3.5.2",
     "vue-router": "^4.4.5"
@@ -22,10 +24,14 @@
     "@eslint/js": "^9.14.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/eslint-config-prettier": "^10.1.0",
+    "autoprefixer": "^10.4.20",
+    "daisyui": "^4.12.20",
     "eslint": "^9.14.0",
     "eslint-plugin-vue": "^9.30.0",
+    "postcss": "^8.4.49",
     "prettier": "^3.3.3",
     "sass-embedded": "^1.81.0",
+    "tailwindcss": "^3.4.16",
     "vite": "^6.0.1",
     "vite-plugin-vue-devtools": "^7.6.5"
   }
