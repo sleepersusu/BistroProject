@@ -1,4 +1,4 @@
-package com.example.bistro.PointsRecords;
+package com.example.bistro.backstage.PointsRecords;
 
 import java.io.IOException;
 import java.util.Date;
