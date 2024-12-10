@@ -1,4 +1,4 @@
-package com.example.bistro.PointsRecords;
+package com.example.bistro.backstage.PointsRecords;
 
 import java.util.List;
 
@@ -15,12 +15,6 @@ public class PointsRecordsService {
 		return PRRepo.findMembersAllPointRecord();
 	}
 	
-	public PointsRecordsBean createPointsRecords(PointsRecordsBean PointsRecords) {
-		return PRRepo.save(PointsRecords);
-	}
 	
-	public void deletPointsRecords(Integer id) {
-		PRRepo.deleteById(id);
-	}
 	
 }
