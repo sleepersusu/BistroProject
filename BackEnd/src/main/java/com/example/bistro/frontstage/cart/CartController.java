@@ -24,7 +24,7 @@ public class CartController {
         @GetMapping("/list")
         public ResponseEntity<String>shoppingCart(HttpSession httpSession) {
 
-            Integer loginUserId = (Integer) httpSession.getAttribute("loginUserId");
+            Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
 
             // 如果是空的，請他先登入
             if (loginUserId == null) {
