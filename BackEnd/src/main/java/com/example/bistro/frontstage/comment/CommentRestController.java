@@ -139,8 +139,15 @@ public class CommentRestController {
 	
 	@Transactional
 	@DeleteMapping("/api/Bistro/deleteComment/{ID}")
-	public ResponseEntity<String> deleteComment(@PathVariable Integer ID) {
-
+	public ResponseEntity<String> deleteComment(@PathVariable Integer ID,HttpSession httpSession) {
+		
+		Integer memberId = (Integer) httpSession.getAttribute("membersId");
+		
+		if (memberId == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("請先登入以刪除您的評論。");
+		}
+		
+		
 		if (ID == null) {
 			ResponseEntity.badRequest().body("評論ID無效");
 		}

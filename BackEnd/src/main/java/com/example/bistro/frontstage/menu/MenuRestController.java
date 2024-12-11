@@ -26,7 +26,7 @@ public class MenuRestController {
 	private MenuRepository menuRepo;
 	
 	
-	@GetMapping("api/menu/soldmenu")
+	@GetMapping("api/menu/")
 	public ResponseEntity<List<Menu>> findMenuByStatusIsSold() {
 		List<Menu> menuIsSold = menuService.findMenuByStatusIsSold();
 		return ResponseEntity.ok(menuIsSold);
@@ -46,7 +46,8 @@ public class MenuRestController {
 	@GetMapping("/api/menu/{productCategory}") // 依照分類找尋正在賣的商品
 	public ResponseEntity<List<Menu>> findMenuByCategoryAndIsSold(@PathVariable String productCategory) {
 		List<Menu> menuIsSold = menuService.findMenuByCategoryAndIsSold(productCategory);
-
+		
+		
 		if (menuIsSold.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

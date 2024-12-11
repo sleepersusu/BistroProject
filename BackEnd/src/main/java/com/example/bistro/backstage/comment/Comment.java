@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.menu.Menu;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,12 +30,12 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ID;
 	
-	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="memberId",referencedColumnName = "ID")
 	private Members members;
 	
-	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="menuId",referencedColumnName = "ID")
 	private Menu menu;
@@ -60,8 +62,13 @@ public class Comment {
 		}
 		
 	}
-
-
+	
+	@JsonProperty("memberName")
+	public String fetchMemberName() {
+		return members.getMemberName();
+	}
+	
+	
 	public Integer getID() {
 		return ID;
 	}
