@@ -1,6 +1,6 @@
 <template>
   <div>Cart</div>
-  <h1 class="mt-8 text-6xl text-center">Hello Vue</h1>
+  <h1 class="mt-8 text-6xl text-center">Hello ShoppingCart</h1>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
 
   <div class="container py-5">
