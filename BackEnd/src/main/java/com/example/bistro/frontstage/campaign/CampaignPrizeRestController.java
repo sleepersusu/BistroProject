@@ -57,5 +57,13 @@ public class CampaignPrizeRestController {
 	    }
 	}
 	
+	@GetMapping("/api/campaignPrize/prizeByCampaign/{campaignId}")
+	public ResponseEntity<?> getPrizesByCampaign(@PathVariable Integer campaignId) {
+		List<CampaignPrizes> prizes = prizeService.findPrizesByCampaignId(campaignId);
+		if(prizes == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("該活動還沒有設定產品");
+		}
+		return ResponseEntity.ok(prizes);
+	}	
 
 }

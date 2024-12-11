@@ -80,13 +80,18 @@ public class LotteryChancesFrontService {
 
 	}
 
-	public void useChance(LotteryChance chance) {
+	public LotteryChance useChance(Integer id) {
+		Optional<LotteryChance> op = lotteryChanceRepo.findById(id);
+		if(op.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到抽獎機會");
+		}
+		LotteryChance chance = op.get();
 		if (chance.getRemainingChances() <= 0) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "已無剩餘抽獎機會");
 		}
 
 		chance.setUsedChances(chance.getUsedChances() + 1);
 		chance.setRemainingChances(chance.getLotteryChances() - chance.getUsedChances());
-		lotteryChanceRepo.save(chance);
+		return lotteryChanceRepo.save(chance);
 	}
 }

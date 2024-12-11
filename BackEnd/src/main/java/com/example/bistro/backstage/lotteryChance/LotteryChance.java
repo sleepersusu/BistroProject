@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.example.bistro.backstage.campaign.Campaign;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.orders.Orders;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,10 +48,12 @@ public class LotteryChance {
 	@Column(name = "createdAt")	
 	private Date createdAt;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Members member;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "campaignId")
 	private Campaign campaign;

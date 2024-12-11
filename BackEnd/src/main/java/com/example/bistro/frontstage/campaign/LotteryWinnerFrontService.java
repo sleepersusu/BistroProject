@@ -39,7 +39,12 @@ public class LotteryWinnerFrontService {
 	}
 	
 	
-	public Map<String, Object> drawPrize(LotteryChance chance) {
+	public Map<String, Object> drawPrize(Integer id) {
+		LotteryChance chance = lotteryChanceService.findChanceById(id);
+		if(chance == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到抽獎機會..");
+		}
+		
 	    if(chance.getRemainingChances() <= 0) {
 	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "已經用完剩餘的抽獎機會..");
 	    }
@@ -49,7 +54,7 @@ public class LotteryWinnerFrontService {
 	    CampaignPrizes winnerPrize = drawPrizeByProbability(prizes);
 
 	   
-	    lotteryChanceService.useChance(chance);
+	    lotteryChanceService.useChance(chance.getId());
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("isWin", winnerPrize != null);
