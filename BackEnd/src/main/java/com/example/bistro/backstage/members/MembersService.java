@@ -27,7 +27,7 @@ public class MembersService {
 		return Optional.empty();
 	}
 
-    //findById
+    //findById 獎品會用到
     public Members findMembersById(Integer id) {
         Optional<Members> op = memberRepo.findById(id);
         return op.isPresent() ? op.get() : null;

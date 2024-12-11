@@ -1,26 +1,71 @@
 package com.example.bistro.backstage.PointsRecords;
 
+
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.example.bistro.backstage.members.Members;
+import com.example.bistro.backstage.members.MembersRepository;
+import com.example.bistro.backstage.pointPrizes.PointPrizesBean;
+import com.example.bistro.backstage.pointPrizes.PointPrizesRepository;
+
 
 @Service
 public class PointsRecordsService {
 
 	@Autowired
-	private PointsRecordsRepository PRRepo;
+	private PointsRecordsRepository pointsRecordsRepository;
+	
+	@Autowired
+	private MembersRepository membersRepository;
+	
+	@Autowired
+	private PointPrizesRepository pointPrizesRepository;
 	
 	public List<Object[]> findAllPointsRecords(){
-		return PRRepo.findMembersAllPointRecord();
+		return pointsRecordsRepository.findMembersAllPointRecord();
 	}
 	
 	public PointsRecordsBean createPointsRecords(PointsRecordsBean PointsRecords) {
-		return PRRepo.save(PointsRecords);
+		return pointsRecordsRepository.save(PointsRecords);
 	}
 	
 	public void deletPointsRecords(Integer id) {
-		PRRepo.deleteById(id);
+		pointsRecordsRepository.deleteById(id);
 	}
+
 	
+    public Map<String, Boolean> createPointsRecords(Integer memberId, Integer pointPrizesId, Date recordsDate) {
+    	Optional<Members> op = membersRepository.findById(memberId);
+    	Optional<PointPrizesBean> op2 = pointPrizesRepository.findById(pointPrizesId);
+    	
+    	if(op.isEmpty()) {
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到會員資料");
+    	}
+    	if(op2.isEmpty()) {
+    		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到獎品資料");
+    	}
+    	
+    	PointsRecordsBean pointsRecordsBean = new PointsRecordsBean();
+    	pointsRecordsBean.setMembers(op.get());
+    	pointsRecordsBean.setPointPrizes(op2.get());
+    	pointsRecordsBean.setRecordsDate(recordsDate);
+    	
+    	pointsRecordsRepository.save(pointsRecordsBean);
+    	
+    	Map<String, Boolean> map = new HashMap<String, Boolean>();
+    	map.put("兌換狀態", true);
+    	return map;
+    		
+    }
+    
+       
 }
