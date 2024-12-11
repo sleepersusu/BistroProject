@@ -28,7 +28,7 @@ public class MemberLoginController {
 		if (checkResult.isPresent()) {
 			long currentTime = System.currentTimeMillis();
 			System.out.println("登入成功，建立Session");
-			httpSession.setMaxInactiveInterval(60);//session存活時間sec
+			httpSession.setMaxInactiveInterval(3600);//session存活時間sec
 			httpSession.setAttribute("lastAccessTime", currentTime);
 			httpSession.setAttribute("membersId", checkResult.get().getId());
 			//Session紀錄資訊
