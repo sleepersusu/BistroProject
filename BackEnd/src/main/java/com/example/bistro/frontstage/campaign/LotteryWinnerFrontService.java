@@ -35,7 +35,12 @@ public class LotteryWinnerFrontService {
 	
 	
 	public LotteryWinners findWinnerById(Integer id) {
-		return lotteryWinnersService.findById(id);
+		LotteryWinners winner = lotteryWinnersService.findById(id);
+		if(winner == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到得獎者");
+		}
+		
+		return winner;
 	}
 	
 	
