@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <button class="btn btn-secondary">lorem</button>
-    <button class="btn btn-outline-secondary">lorem</button>
-    <div class="text-light">Lorem, ipsum.</div>
-    <div class="text-muted">Lorem, ipsum.</div>
+  <div class="d-flex justify-content-center">
+    <LuckyDraw></LuckyDraw>
   </div>
 </template>
 
 <script>
+import LuckyDraw from '@/components/LuckyDraw.vue'
+
 export default {
   data() {
     return {
@@ -34,10 +33,11 @@ export default {
       }
     },
   },
-  computed: {},
-  watch: {},
   created() {
     this.getCampaigns()
+  },
+  components: {
+    LuckyDraw,
   },
 }
 </script>

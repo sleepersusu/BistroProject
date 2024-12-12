@@ -25,7 +25,7 @@ public class LotteryChanceRestController {
 	LotteryChancesFrontService chancesFrontService;
 	
 	@GetMapping("/api/lotteryChance/{id}")
-	public ResponseEntity<?> getMethodName(@PathVariable Integer id) {
+	public ResponseEntity<?> findChanceById(@PathVariable Integer id) {
 		LotteryChance chance = chancesFrontService.findChanceById(id);
 		if(chance == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到該會員抽獎機會");
@@ -34,7 +34,7 @@ public class LotteryChanceRestController {
 	}
 	
 	@GetMapping("/api/lotteryChance/{memberId}/campaign/{campaignId}")
-	public ResponseEntity<?> getMethodName(@PathVariable Integer memberId,@PathVariable Integer campaignId){
+	public ResponseEntity<?> findMemberChanceByCampaign(@PathVariable Integer memberId,@PathVariable Integer campaignId){
 		Optional<LotteryChance> chance = chancesFrontService.findMemberChanceByCampaign(memberId, campaignId);
 		if(chance.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("此活動中找不到抽獎機會");
@@ -53,7 +53,7 @@ public class LotteryChanceRestController {
 	}
 	
 	@PutMapping("/api/lotteryChance/{id}")
-	public ResponseEntity<Map<String, Object>> putMethodName(@PathVariable Integer id) {
+	public ResponseEntity<Map<String, Object>> useChance(@PathVariable Integer id) {
 	    LotteryChance remainingChance = chancesFrontService.useChance(id);
 	    
 	    Map<String, Object> response = new HashMap<>();

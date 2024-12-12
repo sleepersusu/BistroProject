@@ -62,15 +62,15 @@ public class LotteryWinnerFrontService {
 	    lotteryChanceService.useChance(chance.getId());
 
 	    Map<String, Object> result = new HashMap<>();
-	    result.put("isWin", winnerPrize != null);
+	    result.put("isWin", winnerPrize.getPrizeName().equals("銘謝惠顧") ? false : true);
 	    result.put("remainingChances", chance.getRemainingChances());
 	    
 	    if (winnerPrize != null) {
 	        LotteryWinners winner = new LotteryWinners();
 	        winner.setCampaign(chance.getCampaign());
 	        winner.setCampaignPrizes(winnerPrize);
-	        winner.setLotteryChance(chance);
 	        winner.setMember(chance.getMember());
+	        campaignPrizeFrontService.reducePrize(winnerPrize.getId());
 	        
 	        result.put("prize", lotteryWinnersRepo.save(winner));
 	    }
@@ -83,6 +83,9 @@ public class LotteryWinnerFrontService {
 	    double cumulative = 0.00;
 	    
 	    for (CampaignPrizes prize : prizes) {
+	    	if(prize.getProbability() == null) {
+	    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品機率設定錯誤");
+	    	}
 	        cumulative += prize.getProbability().doubleValue();
 	        if (random <= cumulative) {
 	            return prize;
@@ -92,7 +95,11 @@ public class LotteryWinnerFrontService {
 	    return null;
 	}
 	
-	public List<LotteryWinners> findByMemberId(Integer memberId){
-		return lotteryWinnersRepo.findByMemberId(memberId);
+	public LotteryWinners findByMemberId(Integer memberId){
+		LotteryWinners winner = lotteryWinnersRepo.findByMemberId(memberId);
+		if(winner == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到此會員的中獎紀錄");
+		}
+		return winner;
 	}
 }

@@ -53,10 +53,6 @@ public class LotteryWinners {
 	@JoinColumn(name = "prizeId")
 	private CampaignPrizes campaignPrizes;
 	
-	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lotteryChanceId")
-	private LotteryChance lotteryChance;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") 
 	@Temporal(TemporalType.TIMESTAMP)

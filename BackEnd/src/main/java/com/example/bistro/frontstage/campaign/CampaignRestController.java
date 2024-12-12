@@ -38,7 +38,7 @@ public class CampaignRestController {
 	}
 
 	@GetMapping("/api/campaign/image/{id}")
-	public ResponseEntity<?> getMethodName(@PathVariable Integer id) {
+	public ResponseEntity<?> getCampaignImage(@PathVariable Integer id) {
 		try {
 			Campaign campaign = campaignService.findCampaignById(id);
 			if (campaign == null || campaign.getCampaignImg() == null) {

@@ -53,5 +53,11 @@ public class CampaignPrizeFrontService {
 
 		return prizes;
 	}
+	
+	public CampaignPrizes reducePrize(Integer id) {
+		CampaignPrizes prize = campaignPrizeService.findPrizeById(id);
+		prize.setPrizeQuantity(prize.getPrizeQuantity() - 1);
+		return campaignPrizeService.updatePrize(prize);
+	}
 
 }

@@ -27,5 +27,7 @@ public interface LotteryWinnersRepository extends JpaRepository<LotteryWinners, 
 			   nativeQuery = true)
 			List<Object[]> findAllWinners();
 			
-			List<LotteryWinners> findByMemberId(Integer memberId);
+			@Query("from LotteryWinners where member.id = :memberId")
+			LotteryWinners findByMemberId(Integer memberId);
+			
 }

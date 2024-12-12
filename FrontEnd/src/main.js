@@ -11,6 +11,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import Swal from 'sweetalert2'
 import 'aos/dist/aos.css'
 import AOS from 'aos'
+import VueLuckyCanvas from '@lucky-canvas/vue'
 
 window.Swal = Swal
 
@@ -20,6 +21,7 @@ AOS.init()
 app.use(createPinia())
 app.use(router)
 app.use(VueAxios, axios)
+app.use(VueLuckyCanvas)
 
 app.component('Loading', Loading)
 
