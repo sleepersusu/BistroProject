@@ -32,7 +32,7 @@ public class Members {
 	private String memberName;
 	private Short memberAge;
 	private Short memberSex;
-	private String membership; //會員or非會員
+	private String memberShip; //會員or非會員
 	
     @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

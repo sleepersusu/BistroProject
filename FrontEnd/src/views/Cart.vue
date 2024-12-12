@@ -5,6 +5,12 @@
 
   <div class="container py-5">
     <h1 class="mb-5">Your Shopping Cart</h1>
+    <div>
+      <font-awesome-icon v-bind:icon="['fas','search']" class="mr-3"/>
+      <span><span class="text-brand-green-1">1653 </span>jobs matched</span>
+      <div></div>
+      <font-awesome-icon v-bind:icon="['fas','user']" class="mr-3"/>
+    </div>
     <div class="row">
       <div class="col-lg-8">
         <!-- Cart Items -->
@@ -92,7 +98,7 @@
 
           </div>
         </div>
-        <!-- Promo Code
+        Promo Code
             <div class="card mt-4">
               <div class="card-body">
                 <h5 class="card-title mb-3">Apply Promo Code</h5>
@@ -102,7 +108,6 @@
                   </div>
               </div>
             </div>
-         -->
       </div>
     </div>
   </div>
@@ -110,12 +115,30 @@
 </template>
 
 <script>
+//import { mapState, mapActions } from 'pinia'
+//import cartStore from "/@..."
+import CartButton from '@/components/CartButton.vue'
+import CartTable from '@/components/CartTable.vue'
+import CartTitle from '@/components/CartTitle.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 export default {
+  name:"Cart",
+  components:{
+    FontAwesomeIcon,
+      CartTitle,
+      CartTable,
+      CartButton,
+  },
   data() {
     return {}
   },
-  methods: {},
-  computed: {},
+  methods: {
+    //...mapActions(cartStore, ["addToCart"])
+  },
+  computed: {
+    //...mapState(cartStore, ["carts"])
+  },
   watch: {},
   created() {},
 }
