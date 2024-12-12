@@ -82,13 +82,16 @@ export default {
   methods: {
     handleClick(time) {
     console.log("按鈕點擊時間:", time);  // 確認時間是否正確傳遞
-    this.selectTime(time);  // 呼叫原來的選擇時間方法
+    this.reservations.selectedTime = time;
+    // this.$set(this.reservations, 'selectedTime', time); 
+    // this.selectTime(time);  // 呼叫原來的選擇時間方法
+
   },
 
-  selectTime(time) {
-    this.$set(this.reservations, 'selectedTime', time);   // 更新選中的時間段
-    console.log("選擇的時間:", this.reservations.selectedTime);  // 確認這裡的值
-  },
+  // selectTime(time) {
+  //     // 更新選中的時間段
+  //   console.log("選擇的時間:", this.reservations.selectedTime);  // 確認這裡的值
+  // },
     formatDate(date) {
       if (!date) return '';
       const d = new Date(date);
@@ -117,7 +120,7 @@ export default {
         this.availableTimeslots = res.data || []; 
       
       } catch (e) {
-        console.error('錯誤:', e);
+        console.error('這是錯的:', e);
         this.availableTimeslots = [];
       }
       
