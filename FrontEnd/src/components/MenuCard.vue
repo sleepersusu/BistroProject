@@ -32,7 +32,7 @@
             aria-label="Example number with button addon"
             aria-describedby="button-addon1"
             min="0" :max="menu.productCount"
-            id="count"
+            
           />
           <button
             class="btn btn-outline-secondary btn-border-none"
@@ -49,11 +49,56 @@
           <i class="bi bi-cart-plus"></i>加入購物車
         </button>
 
-        <button class="btn btn-outline-primary w-100">
+        <button class="btn btn-outline-primary w-100" v-on:click.prevent="viewComment"
+        data-bs-toggle="modal" data-bs-target="#exampleModal">
           <i class="bi bi-chat-left-text"></i>觀看評論
         </button>
       </div>
     </div>
+
+
+
+
+<div class="modal fade modal-dialog-scrollable" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" v-if="showComment">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-2" id="exampleModalLabel">{{ menu.productName }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>    
+      </div>
+      <h6 class="modal-header">{{ menu.productDescribe }}</h6>
+
+      <div class="modal-body">
+
+        <div>
+          <div>
+            <section>
+              
+
+            </section><!--頭像-->
+            <section></section><!--會員名字-->
+
+          </div>
+        </div><!--左側頭像區-->
+
+
+        <div>
+          <section></section><!--星星 分數-->
+          <section></section><!--評論文字-->
+
+
+        </div><!--右側評論區-->
+
+
+
+
+        
+      </div>
+
+    
+    </div>
+  </div>
+</div>
 
 
 
@@ -83,10 +128,11 @@ props: {
         imageSrc: '',
         isLoading:false,
         count:0,
+        showComment:false
         } 
     },
 methods: {
-    loadPicture(id){
+    async loadPicture(id){
     this.isLoading = true;
     
     let API_URL = `${import.meta.env.VITE_API}/api/${id}/menuphoto`;
@@ -106,7 +152,7 @@ methods: {
         
     },
 
-    minusOne(){
+    async minusOne(){
       if(this.count>0){
         this.count-=1;
         this.$emit("update-count", this.count); 
@@ -114,20 +160,57 @@ methods: {
       
     },
 
-    addOne(){
+    async addOne(){
       if(this.count<this.menu.productCount){
         this.count+=1;
         this.$emit("update-count", this.count); 
       }else{
         this.count=this.menu.productCount
-        this.$emit("update-count", this.count); 
-        alert("已達上限")
+        this.$emit("update-count", this.count);
+
+        Swal.fire({
+          title: "已到達庫存上限",
+          text: "請重新選擇數量",
+          icon: "error"
+        });
       }      
               
+    },
+    async viewComment(){
+      this.showComment=true
+      try {
+        const api = `${import.meta.env.VITE_API}/api/campaign`
+        let res = await this.axios.get(api)
+      console.log(res.data)
+      }catch (e) {
+        console.log(e)
+      }
+      
+
+
     }
   },
   created(){
     this.loadPicture(this.menu.id)
+  },
+  watched(){
+    if(this.count==0){
+      document.getElementById("button-addon1").disabled=true
+    }else{
+      document.getElementById("button-addon1").disabled=false
+    }
+
+    if(this.count>this.menu.productCount){
+      
+      Swal.fire({
+          title: "已到達庫存上限",
+          text: "請重新選擇數量",
+          icon: "error"
+        });
+      
+    }
+
+    
   }
 };
 
@@ -145,5 +228,8 @@ methods: {
     margin-bottom: 5px;
   }
 
+  .modal-header,.modal-body{
+    color: black;
+  }
   
 </style>

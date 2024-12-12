@@ -68,6 +68,13 @@ public class Comment {
 		return members.getMemberName();
 	}
 	
+	@JsonProperty("memberImg")
+	public byte[] fetchMemberImg() {
+		return members.getMemberImg();
+	}
+	
+	
+	
 	
 	public Integer getID() {
 		return ID;

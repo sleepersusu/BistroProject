@@ -163,11 +163,14 @@ public class MenuController {
 		return "redirect:/Bistro/findAllMenu";
 
 	}
+	
+	
+	
 
 	@PostMapping("/Bistro/updateMenuPost")
 	@Transactional
-	public String updateMenuPost(@ModelAttribute Menu menu, @RequestParam("productImage") MultipartFile file,
-			Model model) {
+	public String updateMenuPost(@ModelAttribute Menu menu, @RequestParam("productImage") MultipartFile file
+			) {
 
 		try {
 			if (file.isEmpty()) {
@@ -188,7 +191,7 @@ public class MenuController {
 
 			Menu updateMenu = menuService.updateMenu(menu);
 
-			model.addAttribute("updateMenu", updateMenu);
+			
 
 			return "redirect:/Bistro/findAllMenu";
 

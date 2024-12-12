@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -127,8 +129,37 @@ public class CommentRestController {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("該會員目前無任何評論。");
 		}
 
-		return ResponseEntity.ok(comments);
+		return ResponseEntity.ok(comments);		
 	}
+	
+	
+	
+	
+	@GetMapping("/api/member/{memberId}/avatar")
+	public ResponseEntity<byte[]> downloadAvaterByMemberId(@PathVariable Integer memberId) {
+		
+		Optional<Members> op = membersRepo.findById(memberId);
+		
+		if(op.isPresent()) {
+			Members member = op.get();
+			byte[] memberImg = member.getMemberImg();
+			
+				if(memberImg!=null) {			
+						HttpHeaders httpHeaders = new HttpHeaders();
+							httpHeaders.setContentType(MediaType.IMAGE_JPEG);
+							httpHeaders.setContentLength(memberImg.length);			
+								return new ResponseEntity<byte[]>(memberImg, httpHeaders, HttpStatus.OK);			
+			
+				}else {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+				}		
+		}
+				
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			
+	}
+	
+	
 	
 	
 	

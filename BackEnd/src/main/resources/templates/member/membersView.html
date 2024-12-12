@@ -171,7 +171,7 @@ body .modal .modal-content form textarea {
 										<td th:text="${members.memberAddress}"></td>
 										<td th:text="${members.memberPhone}"></td>
 										<td th:text="${members.memberEmail}"></td>
-										<td th:text="${members.memberImg}"></td>
+										<td th:src="@{/Bistro/downloadMembersImg(id=${members.id})}"></td>
 										<td th:text="${members.memberPoint}"></td>
 										<td th:text="${members.memberStatus}" th:style="'color:'+(${members.memberStatus} == '啟用' ? '#0072E3' : 'red')"></td>
 
@@ -309,12 +309,12 @@ body .modal .modal-content form textarea {
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h1>編輯會員</h1>
-					<form action="UpdateMembersServlet.do" method="post" id="dataForm"
+					<form th:action="@{/Bistro/member/updateMemers}" method="post" id="dataForm"
 						enctype="multipart/form-data">
 						<fieldset>
 							<legend style="margin-bottom: 1rem; font-weight: bold">
 								會員基本資料 </legend>
-							<input type="hidden" name="edituserid" id="edituserid" value="">
+							<input type="hidden" name="id" id="edituserid" value="">
 								<div class="question">
 									<span class="title">會員帳號</span> <input type="text"
 										id="edituseraccount" name="edituseraccount" value=""

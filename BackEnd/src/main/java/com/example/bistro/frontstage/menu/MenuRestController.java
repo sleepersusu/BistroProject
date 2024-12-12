@@ -70,7 +70,7 @@ public class MenuRestController {
 	
 	
 	@GetMapping("/api/{ID}/menuphoto")
-	public ResponseEntity<byte[]> downloadMenu(@PathVariable Integer ID) {
+	public ResponseEntity<byte[]> downloadMenuPhoto(@PathVariable Integer ID) {
 		Optional<Menu> op = menuRepo.findById(ID);
 
 		if (op.isPresent()) {

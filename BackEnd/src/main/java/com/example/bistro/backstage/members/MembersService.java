@@ -1,10 +1,13 @@
 package com.example.bistro.backstage.members;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+
 
 @Service
 public class MembersService {
@@ -28,4 +31,43 @@ public class MembersService {
 		}
 		return Optional.empty();
 	}
+	
+	
+	
+	//以下自己寫測試用，以大哥寫為主
+	public List<Members> findAllMembers(){
+		
+		List<Members> members = memberRepo.findAll();
+		
+		return members;
+	}
+	
+	
+	
+	public Members findMemberbyId(Integer memberId){
+		
+		Optional<Members> op = memberRepo.findById(memberId);
+		
+		if(op.isPresent()) {
+			return op.get();
+			
+		}
+		
+		return null;
+				
+	}
+	
+	
+	public Members updateMember(Members member) {
+		return memberRepo.save(member);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
