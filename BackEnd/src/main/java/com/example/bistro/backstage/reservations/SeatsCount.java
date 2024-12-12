@@ -1,6 +1,5 @@
 package com.example.bistro.backstage.reservations;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,16 +11,16 @@ import jakarta.persistence.Table;
 public class SeatsCount {
 	
 	@Id
-	@Column(name="seatsTimeId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer seatsTimeId;
 	private String seatType;
 	private Integer seatCount;
-	public Integer getId() {
-		return id;
+
+	public Integer getSeatsTimeId() {
+		return seatsTimeId;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setSeatsTimeId(Integer seatsTimeId) {
+		this.seatsTimeId = seatsTimeId;
 	}
 	public String getSeatType() {
 		return seatType;

@@ -1,10 +1,11 @@
 package com.example.bistro.backstage.reservations;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,9 @@ public class ReservationsService {
 	@Autowired
 	private ReservationsRepository ReservationsRepo;
 	
-	
-	
-	
+	@Autowired
+	private  SeatsCountRepository SeatsCountRepo;
+		
 	public Reservations createReservations(String customerName,
 			String customerGender,String contactPhone,
 			Date reservationDate,Timestamp startTime,
@@ -31,40 +32,31 @@ public class ReservationsService {
 			reservations.setStartTime(startTime);
 			reservations.setNumberPeople(numberPeople);
 			reservations.setNotes(notes);
-			if(reservationStatus==null) {
-				
+			if(reservationStatus==null) {			
 				reservations.setReservationStatus("已確認");
 			}
-			
-			
-		
+					
 		return ReservationsRepo.save(reservations);
-
 	}
-
 	
 	public Reservations findReservationsById(Integer id) {
 		Optional<Reservations> op = ReservationsRepo.findById(id);
-		if(op.isPresent()) {
-			
+		if(op.isPresent()) {		
 			return op.get();		
 		}
-
 		return null;
 	}
-
-
 
 	public void deleteReservations(Integer id) {
 		ReservationsRepo.deleteById(id);
 	}
+	
 	@Transactional
 	public Reservations updateReservations(Integer id,String customerName,
 			String customerGender,String contactPhone,
 			Date reservationDate,Timestamp startTime,
 			Integer numberPeople,String notes,String reservationStatus) {
-		
-		
+			
 		Optional<Reservations> op=ReservationsRepo.findById(id);
 		
 		if(op.isPresent()) {
@@ -86,8 +78,22 @@ public class ReservationsService {
 		return ReservationsRepo.findAll();
 	}
 	
+	public Reservations insert(Reservations reservations) {
+		return ReservationsRepo.save(reservations);	
+		
+	}
+
+	public List<Reservations> findCount(Date reservationDate, String string) throws ParseException {	        
+	        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+			Date parsedDate = sdf.parse(string);
+	        Timestamp startTime = new Timestamp(parsedDate.getTime());	        
+		
+		return ReservationsRepo.findByReservationDateAndStartTime(reservationDate, startTime);
+	}
 	
-	
+	public int findSeatTypeCount(int id,String type) {
+		return SeatsCountRepo.findBySeatsTimeIdAndSeatType(id, type);
+	}
 	
 	
 }
