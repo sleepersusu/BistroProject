@@ -47,47 +47,80 @@ export default {
     },
 
     async redeemPrize(prize) {
-  const memberId = 12;  // 假資料，會員 ID 為 9
-  const pointPrizesId = prize.id;  // 商品 ID 來自按下的商品
-  const recordsDate = new Date().toISOString();  // 使用當前時間作為兌換日期
+      const memberId = 5;  // 假資料，會員 ID 為 9
+      if(memberId){
+        const pointPrizesId = prize.id;  // 商品 ID 來自按下的商品
+        const recordsDate = new Date().toISOString();  // 使用當前時間作為兌換日期
 
-  const requestData = {
-    memberId,
-    pointPrizesId,
-    recordsDate,
-  };
+        const requestData = {
+          memberId,
+          pointPrizesId,
+          recordsDate,
+        };
 
-  // 顯示兌換成功的彈窗
-  window.Swal.fire({
-    toast: true,
-    position: 'top-end',
-    icon: 'success',
-    title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
-    timer: 1500,
-    showConfirmButton: false,
-    timerProgressBar: true,
-  });
+      // 顯示兌換成功的彈窗
+      window.Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
+        timer: 1500,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
 
-  try {
-    const api = `${import.meta.env.VITE_API}/api/pointRecord`;
-    const response = await fetch(api, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestData),  // 將資料轉換為 JSON 格式發送
-    });
+      try {
+        const api = `${import.meta.env.VITE_API}/api/pointRecord`;
+        const response = await fetch(api, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),  // 將資料轉換為 JSON 格式發送
+        });
 
-    if (response.ok) {
-      console.log('兌換紀錄成功');
-    } else {
-      console.error('Failed to record point:', response.status);
+            if (response.ok) {
+              console.log('兌換紀錄成功');
+
+              const api2 = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`;
+              const response2 = await fetch(api2, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestData),  // 將資料轉換為 JSON 格式發送
+            });
+                if (response2.ok) {
+                  console.log('減少商品數量成功');
+                }else {
+                  console.error('Failed to decrease prize count:', response2.status, await response2.text());
+                }
+
+        } else {
+          console.error('Failed to record point:', response.status);
+        }
+      } catch (error) {
+        console.error('Error sending request:', error);
+      }
+    }else {
+      window.Swal.fire({
+        title: '兌換商品需要點數',
+        text: '請先登入會員，才能進行兌換。',
+        icon: 'warning',
+        showCancelButton: true, // 顯示取消按鈕
+        confirmButtonText: '跳轉至登入',
+        cancelButtonText: '取消',
+        reverseButtons: true, // 反轉按鈕的顯示順序
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.$router.push({ path: 'Login' });
+        } else {
+          console.log('User canceled the action');
+        }
+      });
     }
-  } catch (error) {
-    console.error('Error sending request:', error);
-  }
-}
 
+      }
 
   },
   computed: {},
