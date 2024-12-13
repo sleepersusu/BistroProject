@@ -4,8 +4,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.bistro.backstage.employee.Employee;
-
 public interface MembersRepository extends JpaRepository<Members, Integer> {
 
     // 根據會員姓名查詢
