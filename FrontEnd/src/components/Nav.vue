@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg bg-primary navbar-dark sticky-top"
+    class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top"
     :class="{ 'nav-shadow': setShadow, 'navbar-shrink': setShadow }"
   >
     <div class="container">
@@ -81,6 +81,9 @@ export default {
 .nav-shadow {
   box-shadow: 0 0 12px #f5e6d3 !important;
 }
+.nav-item{
+  font-size: 1.25rem !important;
+}
 
 .navbar {
   padding: 1rem 0;
@@ -94,7 +97,7 @@ export default {
 }
 
 .navbar-brand {
-  font-family: 'Dancing Script', cursive !important;
+  font-family: "Chakra Petch", sans-serif !important;
   font-size: 2rem;
   font-weight: 600;
   letter-spacing: 1px;
