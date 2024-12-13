@@ -64,7 +64,7 @@
 
 
 
-<div class="modal fade modal-dialog-scrollable" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" v-if="showComment">
+<div class="modal fade modal-dialog-scrollable" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" v-if="showComment" >
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
@@ -74,14 +74,18 @@
       <h6 class="modal-header">{{ menu.productDescribe }}</h6>
 
       <div class="modal-body">
+      
+      <div>
 
-        <div>
+        <div><!--左側頭像區-->
           <div>
-            <section>
+            <section><!--頭像-->
               
 
             </section><!--頭像-->
-            <section></section><!--會員名字-->
+            <section><!--會員名字-->
+
+            </section><!--會員名字-->
 
           </div>
         </div><!--左側頭像區-->
@@ -94,7 +98,7 @@
 
         </div><!--右側評論區-->
 
-
+      </div>
 
 
         
@@ -113,13 +117,9 @@
 
 
 
-  
-
-
-
-
 <script>
 import axios from "axios";
+import { comment } from "postcss";
 import StarRating from 'vue-star-rating'
 
 export default {
@@ -141,8 +141,16 @@ props: {
         isLoading:false,
         count:0,
         showComment:false,
-
-        } 
+    comment:{
+        commentMessage: "",
+        commentProduct: "",
+        commentRating: "",
+        commentTime: "",
+        id: "",
+        memberImg: "",
+        memberName: ""
+      }
+      } 
     },
 methods: {
     async loadPicture(ID){
@@ -192,16 +200,34 @@ methods: {
     async viewComment(){
       this.showComment=true
       try {
-        const api = `${import.meta.env.VITE_API}/api/campaign`
+        const api = `${import.meta.env.VITE_API}/api/${this.menu.productName}/comment`
         let res = await this.axios.get(api)
+        // loadMemberAvatar(this.comment.id)
       console.log(res.data)
       }catch (e) {
         console.log(e)
       }
       
+    },
+
+    // async loadMemberAvatar(id){
+    //   this.showComment=true
+    //   try {
+    //     const api = `${import.meta.env.VITE_API}/api/member/${id}/avatar`
+    //     let res = await this.axios.get(api)
+    //   console.log(res.data)
+    //   }catch (e) {
+    //     console.log(e)
+    //   }
+      
+    // },
+
+    
 
 
-    }
+
+
+
   },
   created(){
     this.loadPicture(this.menu.id)

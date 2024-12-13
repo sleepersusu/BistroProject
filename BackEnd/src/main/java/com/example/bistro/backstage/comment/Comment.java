@@ -63,16 +63,30 @@ public class Comment {
 		
 	}
 	
+
+	
+	
 	@JsonProperty("memberName")
 	public String fetchMemberName() {
 		return members.getMemberName();
 	}
+	
+	@JsonProperty("memberSex")
+	public Short fetchMemberGender() {
+		return members.getMemberSex();
+	}
+	
+	
 	
 	@JsonProperty("memberImg")
 	public byte[] fetchMemberImg() {
 		return members.getMemberImg();
 	}
 	
+	@JsonProperty("memberid")
+	public Integer fetchMemberId() {
+		return members.getId();
+	}
 	
 	
 	
@@ -146,8 +160,8 @@ public class Comment {
 	public void setCommentTime(Date commentTime) {
 		this.commentTime = commentTime;
 	}
-	
-	
+
+
 	
 	
 	
