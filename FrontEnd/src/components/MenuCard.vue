@@ -140,14 +140,15 @@ props: {
         imageSrc: '',
         isLoading:false,
         count:0,
-        showComment:false
+        showComment:false,
+
         } 
     },
 methods: {
-    async loadPicture(id){
+    async loadPicture(ID){
     this.isLoading = true;
     
-    let API_URL = `${import.meta.env.VITE_API}/api/${id}/menuphoto`;
+    let API_URL = `${import.meta.env.VITE_API}/api/menu/photo/${ID}`;
 
     axios.get(API_URL,{ responseType: 'blob' })
         .then(async(response) => { 

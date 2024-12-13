@@ -69,33 +69,6 @@ public class MenuRestController {
 	}
 	
 	
-	@GetMapping("/api/{ID}/menuphoto")
-	public ResponseEntity<byte[]> downloadMenuPhoto(@PathVariable Integer ID) {
-		Optional<Menu> op = menuRepo.findById(ID);
-
-		if (op.isPresent()) {
-
-			Menu menu = op.get();
-			byte[] menubyte = menu.getProductImg();
-			String originalFilename = menu.getProductImgUrl();
-
-			String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-
-			MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM; // 默認為通用二進位流
-			
-			if (fileExtension.equalsIgnoreCase("png")) {
-				mediaType = MediaType.IMAGE_PNG;
-			} else if (fileExtension.equalsIgnoreCase("jpg") || fileExtension.equalsIgnoreCase("jpeg")) {
-				mediaType = MediaType.IMAGE_JPEG;
-			}
-
-			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setContentType(mediaType);
-
-			return new ResponseEntity<byte[]>(menubyte, httpHeaders, HttpStatus.OK);
-
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
+	
 	
 }
