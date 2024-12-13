@@ -25,21 +25,21 @@
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img
-          src="https://images.pexels.com/photos/2387566/pexels-photo-2387566.jpeg"
+          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           class="d-block w-100"
           alt="..."
         />
       </div>
       <div class="carousel-item">
         <img
-          src="https://images.pexels.com/photos/2796105/pexels-photo-2796105.jpeg"
+          src="https://images.unsplash.com/photo-1489209909448-8926a2640f1f?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           class="d-block w-100"
           alt="..."
         />
       </div>
       <div class="carousel-item">
         <img
-          src="https://images.pexels.com/photos/261043/pexels-photo-261043.jpeg"
+          src="https://images.unsplash.com/photo-1484156818044-c040038b0719?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           class="d-block w-100"
           alt="..."
         />
@@ -65,7 +65,12 @@
     </button>
   </div>
   <div class="container">
-    <h2 class="text-center mt-5">人氣菜色</h2>
+    <h2
+      class="text-center text-secondary mt-5"
+      style="font-family: 'Dancing Script', cursive !important"
+    >
+      Popular Dishes
+    </h2>
     <ProductCard></ProductCard>
     <ZigzagSection></ZigzagSection>
   </div>

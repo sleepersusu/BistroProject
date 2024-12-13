@@ -1,44 +1,44 @@
 <template>
-  <div class="mt-5 border-top border-primary">
+  <div class="mt-5 border-top border-0 bg-primary">
     <div class="container">
-      <footer class="py-5 text-primary">
+      <footer class="py-5 text-light">
         <div class="row">
           <div class="col-2">
             <h5>Section</h5>
             <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Home</a></li>
               <li class="nav-item mb-2">
-                <a href="#" class="nav-link p-0 text-muted">Features</a>
+                <a href="#" class="nav-link p-0 text-light">Features</a>
               </li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Pricing</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">FAQs</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">About</a></li>
             </ul>
           </div>
 
           <div class="col-2">
             <h5>Section</h5>
             <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Home</a></li>
               <li class="nav-item mb-2">
-                <a href="#" class="nav-link p-0 text-muted">Features</a>
+                <a href="#" class="nav-link p-0 text-light">Features</a>
               </li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Pricing</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">FAQs</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">About</a></li>
             </ul>
           </div>
 
           <div class="col-2">
             <h5>Section</h5>
             <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Home</a></li>
               <li class="nav-item mb-2">
-                <a href="#" class="nav-link p-0 text-muted">Features</a>
+                <a href="#" class="nav-link p-0 text-light">Features</a>
               </li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Pricing</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">FAQs</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">About</a></li>
             </ul>
           </div>
 
@@ -54,7 +54,7 @@
                   class="form-control"
                   placeholder="Email address"
                 />
-                <button class="btn btn-outline-primary" type="button">Subscribe</button>
+                <button class="btn btn-outline-light" type="button">Subscribe</button>
               </div>
             </form>
           </div>
