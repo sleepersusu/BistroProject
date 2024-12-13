@@ -52,7 +52,12 @@
         <button class="btn btn-outline-primary w-100" v-on:click.prevent="viewComment"
         data-bs-toggle="modal" data-bs-target="#exampleModal">
           <i class="bi bi-chat-left-text"></i>觀看評論
+          
         </button>
+          <div style="display: flex; justify-content: center; margin: 5px 0 0 0;">
+            <star-rating :rating="menu.avgScore" :read-only="true" :increment="0.1" :star-size="20" style="font-size: 15px;"></star-rating>
+          </div>
+      
       </div>
     </div>
 
@@ -115,14 +120,21 @@
 
 <script>
 import axios from "axios";
+import StarRating from 'vue-star-rating'
 
 export default {
+  components:{
+      StarRating
+  },
+
 props: {
     menu: {
         type: Object, // menu 應該是一個物件
         required: true, // 如果 menu 是必需的
         },
     },
+    
+
     data() { 
         return {                 
         imageSrc: '',
