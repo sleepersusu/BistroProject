@@ -89,10 +89,22 @@ public class MenuService {
 		return menuRepo.findAllCategories();
 	}
 
-	public List<Menu> findMenusByCategory(String category) {
-		return menuRepo.findMenusByCategory(category);
+	public List<Menu> findMenuByCategoryAndIsSold(String category) {
+		return menuRepo.findMenuByCategoryAndIsSold(category);
 	}
 
+	public List<Menu>  findTopThreeMenu(){
+		return menuRepo.findTopThreeMenu();
+	}
+	
+	public Double countOneMenuAvgScore(String productName){
+		Double countOneMenuAvgScore = menuRepo.countOneMenuAvgScore(productName);
+	
+		Double OneMenuAvgScore = (double) Math.round((countOneMenuAvgScore * 10.0)/ 10.0);
+		
+		return OneMenuAvgScore;
+
+	}
 	
 
 }

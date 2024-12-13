@@ -46,7 +46,7 @@ public class CommentController {
 
 	@GetMapping("/api/menus/{category}")
 	public ResponseEntity<List<Menu>> getMenusByCategory(@PathVariable String category) {
-		List<Menu> menus = menuService.findMenusByCategory(category);
+		List<Menu> menus = menuService.findMenuByCategoryAndIsSold(category);
 		return ResponseEntity.ok(menus);
 	}
 
@@ -55,7 +55,7 @@ public class CommentController {
 
 		Integer memberId = Integer.parseInt(requestData.get("memberId").toString());
 		Integer menuSelect = Integer.parseInt(requestData.get("menuSelect").toString());
-		Integer commentRating = Integer.parseInt(requestData.get("commentRating").toString());
+		Short commentRating = Short.parseShort(requestData.get("commentRating").toString());
 		String commentMessage = requestData.get("commentMessage").toString();
 		
 		
