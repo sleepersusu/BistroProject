@@ -82,7 +82,7 @@ export default {
   box-shadow: 0 0 12px #f5e6d3 !important;
 }
 .nav-item {
-  font-size: 1.1rem !important;
+  font-size: 1rem !important;
 }
 
 .navbar {
@@ -98,14 +98,14 @@ export default {
 
 .navbar-brand {
   font-family: 'Chakra Petch', sans-serif !important;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: 1px;
   transition: all 0.3s ease;
 }
 
 .navbar-shrink .navbar-brand {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 .nav-link {
