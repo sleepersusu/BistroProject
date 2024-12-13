@@ -2,7 +2,6 @@ package com.example.bistro.backstage.menu;
 
 
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.bistro.backstage.comment.Comment;
-import com.example.bistro.backstage.orderDetails.OrderDetails;
+import com.example.bistro.backstage.ordersDetails.OrdersDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -54,13 +53,13 @@ public class Menu {
 	private String menuStatus;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd") // 前端輸入輸出時的格式對應，若須強制轉換格式，el 須使用雙層大括號
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "createdAt")
 	private Date createdAt;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
-	private List<OrderDetails> menuId; // 用於映射 OrderDetails 實體中的 menu
+	private List<OrdersDetails> menuId; // 用於映射 OrderDetails 實體中的 menu
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
@@ -82,6 +81,9 @@ public class Menu {
 	public Menu() {
 
 	}
+	
+	
+	
 
 	public Integer getID() {
 		return ID;
@@ -182,11 +184,11 @@ public class Menu {
 		this.createdAt = createdAt;
 	}
 
-	public List<OrderDetails> getMenuId() {
+	public List<OrdersDetails> getMenuId() {
 		return menuId;
 	}
 
-	public void setMenuId(List<OrderDetails> menuId) {
+	public void setMenuId(List<OrdersDetails> menuId) {
 		this.menuId = menuId;
 	}
 
