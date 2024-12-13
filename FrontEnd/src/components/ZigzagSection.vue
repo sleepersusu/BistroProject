@@ -60,12 +60,11 @@ export default {
 
 .primary-section {
   background-color: rgba(80, 121, 127, 0.1);
-  border-left: 4px solid #50797f;
+
 }
 
 .secondary-section {
   background-color: rgba(143, 118, 98, 0.1);
-  border-right: 4px solid #8f7662;
 }
 
 .section-title {
@@ -83,7 +82,7 @@ export default {
   left: 0;
   width: 60px;
   height: 3px;
-  background-color: #50797f;
+  background-color: #000000;
 }
 
 .subtitle {

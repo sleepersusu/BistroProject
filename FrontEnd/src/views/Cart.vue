@@ -1,10 +1,9 @@
 <template>
-  <div>Cart</div>
-  <h1 class="mt-8 text-6xl text-center">Hello Vue</h1>
+  <h1 class="mt-5 text-6xl text-center">Hello ShoppingCart</h1>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
 
   <div class="container py-5">
-    <h1 class="mb-5">Your Shopping Cart</h1>
+    <h2 class="h3">Your Shopping Cart</h2>
     <div class="row">
       <div class="col-lg-8">
         <!-- Cart Items -->
@@ -88,21 +87,20 @@
               <strong>$229.97</strong>
             </div>
 
-            <button class="btn btn-success w-100">Proceed to Checkout</button>
+            <button class="btn btn-dark w-100">Proceed to Checkout</button>
 
           </div>
         </div>
-        <!-- Promo Code
-            <div class="card mt-4">
-              <div class="card-body">
-                <h5 class="card-title mb-3">Apply Promo Code</h5>
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Enter promo code">
-                    <button class="btn btn-outline-secondary" type="button">Apply</button>
-                  </div>
-              </div>
-            </div>
-         -->
+<!--        Promo Code-->
+<!--            <div class="card mt-4">-->
+<!--              <div class="card-body">-->
+<!--                <h5 class="card-title mb-3">Apply Promo Code</h5>-->
+<!--                  <div class="input-group mb-3">-->
+<!--                    <input type="text" class="form-control" placeholder="Enter promo code">-->
+<!--                    <button class="btn btn-outline-secondary" type="button">Apply</button>-->
+<!--                  </div>-->
+<!--              </div>-->
+<!--            </div>-->
       </div>
     </div>
   </div>
@@ -110,12 +108,30 @@
 </template>
 
 <script>
+//import { mapState, mapActions } from 'pinia'
+//import cartStore from "/@..."
+import CartButton from '@/components/CartButton.vue'
+import CartTable from '@/components/CartTable.vue'
+import CartTitle from '@/components/CartTitle.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 export default {
+  name:"Cart",
+  components:{
+    FontAwesomeIcon,
+      CartTitle,
+      CartTable,
+      CartButton,
+  },
   data() {
     return {}
   },
-  methods: {},
-  computed: {},
+  methods: {
+    //...mapActions(cartStore, ["addToCart"])
+  },
+  computed: {
+    //...mapState(cartStore, ["carts"])
+  },
   watch: {},
   created() {},
 }

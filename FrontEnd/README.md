@@ -42,16 +42,14 @@ window.Swal.fire({
 
 ```scss
 $theme-colors: (
-  'primary': #eed9c4,
-  // 主色
-  'secondary': #9b8174,
-  // 副色
-  'success': #20c997,
-  'info': $info,
-  'warning': $warning,
-  'danger': $danger,
-  'light': $light,
-  'dark': #1a1a1a, // 背景色
+        'primary': #494544, //深棕色按鈕
+        'secondary': #8f7662,//點綴淺棕色
+        'success': #20c997,//成功綠色
+        'info': $info,
+        'warning': $warning,//提示or輕度警告
+        'danger': $danger, //刪除or警告
+        'light': #f9f9f9, //背景色or文字
+        'dark': #000, //底色or文字
 ) !default;
 ```
 

@@ -39,7 +39,7 @@
       </div>
       <div class="carousel-item">
         <img
-          src="https://images.unsplash.com/photo-1484156818044-c040038b0719?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src="/images/DSC_9550-1.jpg"
           class="d-block w-100"
           alt="..."
         />
@@ -66,8 +66,8 @@
   </div>
   <div class="container">
     <h2
-      class="text-center text-secondary mt-5"
-      style="font-family: 'Dancing Script', cursive !important"
+      class="text-center text-dark mt-5"
+      style="font-family: 'Chakra Petch', cursive !important"
     >
       Popular Dishes
     </h2>
@@ -90,7 +90,7 @@ export default {
 <style>
 @media (min-width: 992px) {
   .carousel-inner {
-    height: 800px;
+    height: 900px;
   }
 }
 
