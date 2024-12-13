@@ -22,9 +22,12 @@ public class MemberLoginController {
 	private MembersService membersService;
 	
     @PostMapping("/login")
-    public ResponseEntity<String> loginPost(@RequestParam String memberAccount,
-    		@RequestParam String memberPassword,HttpSession httpSession) {
-    	Optional<Members> checkResult = membersService.checkLogin(memberAccount,memberPassword);//撈這筆資料
+
+
+
+    public ResponseEntity<String> loginPost(@RequestParam String memberAccount,@RequestParam String memberPassword,HttpSession httpSession) {
+    	Optional<Members> checkResult = membersService.checkLogin(memberAccount, memberPassword);//撈這筆資料
+
 
 		if (checkResult.isPresent()) {
 			long currentTime = System.currentTimeMillis();
@@ -41,4 +44,6 @@ public class MemberLoginController {
 			return ResponseEntity.status(404).body("Users Not Found.");
 		}
     }		
+
 }
+
