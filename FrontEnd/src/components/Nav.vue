@@ -1,10 +1,10 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top"
+    class="navbar navbar-expand-lg bg-primary navbar-dark sticky-top"
     :class="{ 'nav-shadow': setShadow, 'navbar-shrink': setShadow }"
   >
     <div class="container">
-      <router-link class="navbar-brand text-primary" to="/index">BistroRestaurant</router-link>
+      <router-link class="navbar-brand text-light" to="/index">Nightly Sips</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -35,7 +35,7 @@
             <router-link class="nav-link position-relative" to="/cart"
               ><i class="bi bi-cart fs-5"></i
               ><span
-                class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-primary text-dark"
+                class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary"
               >
                 3
                 <span class="visually-hidden">unread messages</span>
@@ -43,7 +43,9 @@
             >
           </li>
           <li class="nav-item ms-lg-5">
-            <router-link class="btn btn-login" to="/login">登入 / 註冊</router-link>
+            <router-link class="btn btn-outline-light px-4 py-2" to="/login"
+              >登入 / 註冊</router-link
+            >
           </li>
         </ul>
       </div>
@@ -77,7 +79,7 @@ export default {
 
 <style>
 .nav-shadow {
-  box-shadow: 0 0 12px var(--bs-primary) !important;
+  box-shadow: 0 0 12px #f5e6d3 !important;
 }
 
 .navbar {
@@ -92,7 +94,8 @@ export default {
 }
 
 .navbar-brand {
-  font-size: 1.75rem;
+  font-family: 'Dancing Script', cursive !important;
+  font-size: 2rem;
   font-weight: 600;
   letter-spacing: 1px;
   transition: all 0.3s ease;
@@ -115,7 +118,7 @@ export default {
   position: absolute;
   width: 0;
   height: 2px;
-  background: var(--bs-primary);
+  background: #f5e6d3;
   left: 50%;
   bottom: 0;
   transition: all 0.3s ease;
@@ -129,7 +132,7 @@ export default {
 
 .nav-link:hover,
 .nav-link.active {
-  color: var(--bs-primary) !important;
+  color: #f5e6d3 !important;
 }
 
 .navbar-toggler {
@@ -140,21 +143,6 @@ export default {
 .navbar-toggler:focus {
   box-shadow: none;
   outline: none;
-}
-
-.btn-login {
-  background-color: var(--bs-primary);
-  color: var(--bs-dark);
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-.btn-login:hover,
-.btn-login.active {
-  background-color: transparent;
-  color: var(--bs-primary);
-  border: 1px solid var(--bs-primary);
 }
 
 @media (max-width: 992px) {
