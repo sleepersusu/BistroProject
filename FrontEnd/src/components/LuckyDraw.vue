@@ -1,4 +1,5 @@
 <template>
+  <Loading :active="isLoading"></Loading>
   <div
     class="modal fade"
     id="exampleModal"
@@ -6,11 +7,14 @@
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content bg-dark">
-        <div class="modal-header border-secondary">
-          <h3 class="modal-title text-secondary fw-bold text-center w-100" id="exampleModalLabel">
-            命運九宮格
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content bg-primary">
+        <div class="modal-header border-accent">
+          <h3
+            class="modal-title text-accent fw-bold text-center w-100 display-6"
+            id="exampleModalLabel"
+          >
+            Lucky Draw
           </h3>
           <button
             type="button"
@@ -33,22 +37,37 @@
               @end="endCallBack"
             />
           </div>
+          <p class="text-center text-light">
+            剩餘抽獎次數：<strong class="mx-2 text-accent">{{ count }}</strong>
+          </p>
         </div>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+        <button type="button" class="btn btn-dark text-light rounded-0" data-bs-dismiss="modal">
+          關閉
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onUnmounted, defineProps } from 'vue'
+import { onUnmounted, defineProps, computed } from 'vue'
 import { campaignPrizeStore } from '@/stores/campaignPrizeStore'
+import { statusStore } from '@/stores/statusStore'
+import { lotteryStore } from '@/stores/lotteryStore'
 import { storeToRefs } from 'pinia'
+import { useLuckyCanvas } from '@/mixins/luckyCanvasMixin'
 
+const { buttons, blocks, activeStyle, myLucky } = useLuckyCanvas()
 const prizeStore = campaignPrizeStore()
-
+const status = statusStore()
+const lottery = lotteryStore()
+const { isLoading } = storeToRefs(status)
 const { prizes } = storeToRefs(prizeStore)
 const { getPrizesByCampaign, clearPrizeImages } = prizeStore
+const { chance, winner } = storeToRefs(lottery)
+const { drawPrize } = lottery
+
+const count = computed(() => lottery.chanceCount(props.id))
 
 const props = defineProps({
   id: {
@@ -56,52 +75,48 @@ const props = defineProps({
     required: true,
   },
 })
-
 getPrizesByCampaign(props.id)
 
 onUnmounted(() => {
   clearPrizeImages()
 })
 
-const myLucky = ref(null)
-const buttons = ref([
-  {
-    x: 1,
-    y: 1,
-    background: 'salmon',
-    fonts: [
-      {
-        text: '開始抽獎',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        fontColor: 'MistyRose',
-        top: '40px',
-      },
-    ],
-  },
-])
-const blocks = ref([
-  { padding: '15px', background: '#eed9c4' },
-  { padding: '15px', background: 'black' },
-])
-const activeStyle = {
-  background: '#fdd156',
-  shadow: '0 0 10px rgba(253, 209, 86, 0.5)',
-}
-
-const startCallBack = () => {
-  const index = Math.floor(Math.random() * 8)
+const startCallBack = async () => {
   myLucky.value.play()
-  setTimeout(() => {
-    myLucky.value.stop(index)
-  }, 3000)
+  handleDraw()
+  const prizeIndex = blocks.value.findIndex(
+    (block) => block.fonts?.[0]?.text === winner.value?.prize?.prizeName,
+  )
+  if (prizeIndex !== -1) {
+    setTimeout(() => {
+      myLucky.value.stop(prizeIndex)
+    }, 3000)
+  } else {
+  }
 }
 
-const endCallBack = (prize) => {
-  window.Swal.fire({
+const emits = defineEmits(['update-chance'])
+const endCallBack = async (prize) => {
+  await window.Swal.fire({
     title: '恭喜中獎!',
     text: `獲得：${prize.fonts[0].text}！`,
+    confirmButtonColor: 'black',
+    confirmButtonText: '確定',
   })
+  emits('update-chance')
+}
+
+const handleDraw = () => {
+  const chanceId = chance.value?.[props.id]?.id
+  if (!chanceId) {
+    console.error('找不到抽獎機會 ID')
+    return
+  }
+  if (count.value <= 0) {
+    console.error('沒有剩餘抽獎次數')
+    return
+  }
+  drawPrize(chanceId)
 }
 </script>
 
@@ -120,5 +135,9 @@ const endCallBack = (prize) => {
 :deep(.lucky-grid) {
   border-radius: 10px;
   overflow: hidden;
+}
+
+.modal-title {
+  font-family: 'Dancing Script', cursive !important;
 }
 </style>

@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
+import { statusStore } from './statusStore'
 import axios from 'axios'
+
+const status = statusStore()
 
 export const campaignPrizeStore = defineStore('prize', {
   state: () => ({
@@ -8,6 +11,7 @@ export const campaignPrizeStore = defineStore('prize', {
   actions: {
     async getPrizesByCampaign(campaignId) {
       try {
+        status.isLoading = true
         const res = await axios.get(
           `${import.meta.env.VITE_API}/api/campaignPrize/prizeByCampaign/${campaignId}`,
         )
@@ -30,7 +34,7 @@ export const campaignPrizeStore = defineStore('prize', {
             return {
               x: Math.floor(index / 3),
               y: index % 3,
-              background: index % 2 === 0 ? '#FFD700' : '#1C1C1C',
+              background: index % 2 === 0 ? '#DAA520' : '#1C1C1C',
               fonts: [
                 {
                   text: prize.prizeName,
@@ -57,6 +61,8 @@ export const campaignPrizeStore = defineStore('prize', {
         this.prizes = prizesWithImages
       } catch (error) {
         console.error('獲取獎品失敗:', error)
+      } finally {
+        status.isLoading = false
       }
     },
 

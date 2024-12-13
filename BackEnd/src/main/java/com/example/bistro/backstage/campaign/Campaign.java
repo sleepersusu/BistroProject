@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +34,7 @@ public class Campaign {
 	@Column(name = "campaignTitle")
 	private String campaignTitle;
 	
+	@JsonIgnore
 	@Lob
 	@Column(name = "campaignImg")
 	private byte[] campaignImg;
