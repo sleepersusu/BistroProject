@@ -1,4 +1,4 @@
-package com.example.bistro.config;
+package com.example.bistro.backstage.config;
 
 import java.util.Optional;
 

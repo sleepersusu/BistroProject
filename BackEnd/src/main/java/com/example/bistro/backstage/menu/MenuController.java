@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.bistro.config.ImageService;
+import com.example.bistro.backstage.config.ImageService;
 
 @Controller
 public class MenuController {
