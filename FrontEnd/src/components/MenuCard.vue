@@ -65,6 +65,12 @@
     </div>
 
 
+    <div v-else style="width: 100%; height: 100%;">
+
+
+    </div>
+
+
 
 
 <div class="modal fade modal-dialog-scrollable" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" v-if="showComment" >
@@ -122,7 +128,6 @@
 
 <script>
 import axios from "axios";
-import { comment } from "postcss";
 import StarRating from 'vue-star-rating'
 import LoadingVue from "vue3-loading-overlay";
 export default {
@@ -248,18 +253,7 @@ methods: {
   created(){
     this.loadPicture(this.menu.id)
   },
-  watch: { 
-    count(newCount) {
-      if (newCount > this.menu.productCount) { 
-        Swal.fire({
-          title: "已到達庫存上限", 
-          text: "請重新選擇數量", 
-          icon: "error"
-      }); 
-        this.count = this.menu.productCount; 
-      } 
-    } 
-  },
+  
 
     
   
