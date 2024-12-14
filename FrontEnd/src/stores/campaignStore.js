@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia'
-import { statusStore } from './statusStore'
 import axios from 'axios'
-
-const status = statusStore()
 
 export const campaignStore = defineStore('campaign', {
   state: () => ({
@@ -10,7 +7,6 @@ export const campaignStore = defineStore('campaign', {
   }),
   actions: {
     async getCampaigns() {
-      status.isLoading = true
       const api = `${import.meta.env.VITE_API}/api/campaign`
       try {
         const res = await axios.get(api)
@@ -26,9 +22,8 @@ export const campaignStore = defineStore('campaign', {
           }),
         )
       } catch (e) {
-        console.log(e)
+        console.error(e)
       } finally {
-        status.isLoading = false
       }
     },
 
@@ -40,7 +35,7 @@ export const campaignStore = defineStore('campaign', {
         })
         return URL.createObjectURL(res.data)
       } catch (e) {
-        console.log(e)
+        console.error(e)
         return ''
       }
     },

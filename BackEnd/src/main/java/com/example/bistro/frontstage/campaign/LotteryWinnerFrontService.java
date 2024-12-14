@@ -55,14 +55,20 @@ public class LotteryWinnerFrontService {
 	    }
 
 	    List<CampaignPrizes> prizes = campaignPrizeFrontService.findPrizesByCampaignId(chance.getCampaign().getId());
+	    if(prizes == null || prizes.isEmpty()) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到活動獎品..");
+	    }
 
 	    CampaignPrizes winnerPrize = drawPrizeByProbability(prizes);
+	    if(winnerPrize == null) {
+	        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "抽獎過程發生錯誤..");
+	    }
 
 	   
 	    lotteryChanceService.useChance(chance.getId());
 
 	    Map<String, Object> result = new HashMap<>();
-	    result.put("isWin", winnerPrize.getPrizeName().equals("銘謝惠顧") ? false : true);
+	    result.put("isWin", !winnerPrize.getPrizeName().equals("銘謝惠顧"));
 	    result.put("remainingChances", chance.getRemainingChances());
 	    
 	    if (winnerPrize != null) {
@@ -79,6 +85,13 @@ public class LotteryWinnerFrontService {
 	}
 
 	private CampaignPrizes drawPrizeByProbability(List<CampaignPrizes> prizes) {
+		if (prizes == null || prizes.isEmpty()) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品列表為空");
+	    }
+		if(prizes.size() != 9) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品數量不足!");
+		}
+		
 	    double random = Math.random() * 100;
 	    double cumulative = 0.00;
 	    
@@ -92,7 +105,7 @@ public class LotteryWinnerFrontService {
 	        }
 	    }
 	    
-	    return null;
+	    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "抽獎過程發生錯誤");
 	}
 	
 	public LotteryWinners findByMemberId(Integer memberId){

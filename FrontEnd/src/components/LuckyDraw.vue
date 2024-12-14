@@ -1,11 +1,10 @@
 <template>
-  <Loading :active="isLoading"></Loading>
   <div
     class="modal fade"
-    id="exampleModal"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
+    ref="modalRef"
   >
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content bg-primary">
@@ -50,64 +49,95 @@
 </template>
 
 <script setup>
-import { onUnmounted, defineProps, computed } from 'vue'
+import { onUnmounted, computed, defineExpose, ref } from 'vue'
 import { campaignPrizeStore } from '@/stores/campaignPrizeStore'
-import { statusStore } from '@/stores/statusStore'
 import { lotteryStore } from '@/stores/lotteryStore'
 import { storeToRefs } from 'pinia'
 import { useLuckyCanvas } from '@/mixins/luckyCanvasMixin'
+import { useModal } from '@/mixins/modalMixin'
 
 const { buttons, blocks, activeStyle, myLucky } = useLuckyCanvas()
+const { modalRef, showModal, hideModal } = useModal()
+
 const prizeStore = campaignPrizeStore()
-const status = statusStore()
 const lottery = lotteryStore()
-const { isLoading } = storeToRefs(status)
 const { prizes } = storeToRefs(prizeStore)
-const { getPrizesByCampaign, clearPrizeImages } = prizeStore
+const { clearPrizeImages } = prizeStore
 const { chance, winner } = storeToRefs(lottery)
 const { drawPrize } = lottery
 
-const count = computed(() => lottery.chanceCount(props.id))
+const currentCampaignId = ref(null)
 
-const props = defineProps({
-  id: {
-    type: Number,
-    required: true,
-  },
+const setCurrentCampaignId = (id) => {
+  currentCampaignId.value = id
+}
+
+const count = computed(() => lottery.chanceCount(currentCampaignId.value))
+
+defineExpose({
+  showModal,
+  hideModal,
+  setCurrentCampaignId,
 })
-getPrizesByCampaign(props.id)
 
 onUnmounted(() => {
   clearPrizeImages()
 })
 
 const startCallBack = async () => {
+  if (count.value < 1) {
+    window.Swal.fire({
+      title: '你已經沒有抽獎機會',
+      icon: 'warning',
+      confirmButtonColor: 'black',
+      confirmButtonText: '確定',
+    })
+    return
+  }
+
   myLucky.value.play()
-  handleDraw()
-  const prizeIndex = blocks.value.findIndex(
-    (block) => block.fonts?.[0]?.text === winner.value?.prize?.prizeName,
-  )
-  if (prizeIndex !== -1) {
-    setTimeout(() => {
-      myLucky.value.stop(prizeIndex)
-    }, 3000)
-  } else {
+
+  try {
+    await handleDraw()
+
+    const prizeIndex = prizes.value.findIndex(
+      (prize) => prize.fonts[0].text === winner.value?.prize?.prizeName,
+    )
+    if (prizeIndex !== -1) {
+      setTimeout(() => {
+        myLucky.value.stop(prizeIndex)
+      }, 3000)
+    }
+  } catch (e) {
+    if (e.response?.data?.message) {
+      window.Swal.fire({
+        title: '錯誤',
+        text: e.response.data.message,
+        icon: 'error',
+        confirmButtonColor: 'black',
+        confirmButtonText: '確定',
+      })
+    }
   }
 }
 
 const emits = defineEmits(['update-chance'])
 const endCallBack = async (prize) => {
   await window.Swal.fire({
-    title: '恭喜中獎!',
+    title: `${prize.fonts[0].text === '銘謝惠顧' ? '再接再厲' : '恭喜中獎!'}`,
     text: `獲得：${prize.fonts[0].text}！`,
+    imageUrl: `${prize.imgs[0].src}`,
+    imageWidth: 200,
+    imageHeight: 200,
+    imageAlt: `${prize.fonts[0].text}`,
     confirmButtonColor: 'black',
     confirmButtonText: '確定',
   })
   emits('update-chance')
 }
 
-const handleDraw = () => {
-  const chanceId = chance.value?.[props.id]?.id
+const handleDraw = async () => {
+  const chanceId = chance.value?.[currentCampaignId.value]?.id
   if (!chanceId) {
     console.error('找不到抽獎機會 ID')
     return
@@ -116,7 +146,7 @@ const handleDraw = () => {
     console.error('沒有剩餘抽獎次數')
     return
   }
-  drawPrize(chanceId)
+  return await drawPrize(chanceId)
 }
 </script>
 
