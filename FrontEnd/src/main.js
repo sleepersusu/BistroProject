@@ -13,6 +13,8 @@ import 'aos/dist/aos.css'
 import AOS from 'aos'
 import VueLuckyCanvas from '@lucky-canvas/vue'
 
+// 使用環境變量
+const apiUrl = import.meta.env.VITE_API;
 window.Swal = Swal
 
 const app = createApp(App)
