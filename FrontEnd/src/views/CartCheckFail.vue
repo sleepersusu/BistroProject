@@ -1,4 +1,7 @@
 <template>
+  <div>
+    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'"></PageTop>
+  </div>
   <div class="text-center">
     <i class="bi bi-x-circle-fill" style="font-size: 5rem"></i>
   </div>
@@ -20,17 +23,23 @@
       <div class="d-flex justify-content-center">
         <p style="text-align: center">
           訂購失敗
+          <br />很抱歉，我們未能處理您的訂單。
+          <br />請重新嘗試訂購或聯繫我們的客戶服務以獲得進一步幫助。
         </p>
       </div>
+      <br />
       <a href="#" class="btn btn-primary cta-btn mt-5 mb-5">Back to Cart</a>
     </div>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
   </section>
 </template>
 <script>
 import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
+import PageTop from '@/components/PageTop.vue'
 
 export default defineComponent({
+  components: { PageTop, BannerTop },
 })
 </script>
 <style scoped>

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'"></PageTop>
     <BannerTop v-bind:title="'Check Out'"></BannerTop>
   </div>
   <!-- Step Indicator -->
@@ -25,11 +26,13 @@
                 <div class="col-lg-6">
                   <div class="checkout__input">
                     <p>Fist Name<span>*</span></p>
+                    <input type="text" placeholder="名字" />
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="checkout__input">
                     <p>Last Name<span>*</span></p>
+                    <input type="text" placeholder="姓" />
                   </div>
                 </div>
               </div>
@@ -38,21 +41,25 @@
                 <div class="col-lg-6">
                   <div class="checkout__input">
                     <p>Phone<span>*</span></p>
+                    <input type="text" placeholder="+886 " />
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="checkout__input">
                     <p>Email<span>*</span></p>
+                    <input type="text" placeholder="exexex@gmail.com" />
                   </div>
                 </div>
               </div>
 
               <div class="checkout__input">
                 <p>Order notes<span>*</span></p>
+                <input type="text" placeholder="特殊要求" />
               </div>
               <div class="checkout__input__checkbox">
                 <label for="acc">
                   Create an account?
+                  <input type="checkbox" id="acc" />
                   <span class="checkmark"></span>
                 </label>
               </div>
@@ -81,6 +88,7 @@
                   <div class="checkout__order__cash">PaymentWay</div>
                   <label for="payment">
                     Cash
+                    <input type="radio" id="payment" name="paymentMethod" />
                     <span class="checkmark"></span>
                   </label>
                 </div>
@@ -88,6 +96,7 @@
                 <div class="checkout__input__checkbox">
                   <label for="paypal">
                     綠界支付
+                    <input type="radio" id="paypal" name="paymentMethod" />
                     <span class="checkmark"></span>
                   </label>
                 </div>
@@ -95,11 +104,13 @@
                 <div class="checkout__input__checkbox">
                   <label for="linePay">
                     LinePay
+                    <input type="radio" id="linePay" name="paymentMethod" />
                     <span class="checkmark"></span>
                   </label>
                 </div>
 
                 <div>
+                  <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -123,7 +134,9 @@
 import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import PageTop from '@/components/PageTop.vue'
 export default defineComponent({
+  components: { PageTop, BannerTop },
 })
 </script>
 
@@ -269,6 +282,7 @@ export default defineComponent({
   height: 16px;
   width: 14px;
   border: 1px solid #a6a6a6;
+  content: '';
   border-radius: 4px;
 }
 
@@ -283,6 +297,7 @@ export default defineComponent({
   -webkit-transform: rotate(127deg);
   -ms-transform: rotate(127deg);
   transform: rotate(127deg);
+  content: '';
   opacity: 0;
 }
 
