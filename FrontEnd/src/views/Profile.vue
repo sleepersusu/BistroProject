@@ -16,9 +16,9 @@
           <h1 class="display-1 text-primary mb-0" style="font-weight: bold; font-size: 8rem;">10</h1>
           <p class="text-primary mb-4" >Year of Experience</p>
           <h1 class="display-5 mb-4">
-            <span style="font-weight: bold">「 酌夜語 Night Sips」</span>
+            <span style="font-weight: bold">「 酌夜語 Night Sips 」</span>
           </h1>
-          <span class="mb-4 pt-5" style="line-height: 1.8">
+          <span class="mb-4 pt-5" style="line-height: 1.8"  >
             酌夜語，寓意在夜晚中「小酌一杯，輕語心聲」。
             這裡是一個舒適的避風港，讓顧客在繁忙的日常生活中找到一個放鬆的角落，與朋友、家人或獨自與自己對話，享受一段沉浸於美食、美酒與情感交流的美好時光。
             <br>
@@ -34,7 +34,7 @@
         <div class="col-lg-3 col-md-12" >
           <div class="row g-5">
             <div class="col-12 col-sm-6 col-lg-12">
-              <div class="border-start ps-4">
+              <div class="border-start ps-4" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="800" >
                 <i class="fa fa-3x text-primary mb-3"></i>
                 <h4 class="mb-3">酌</h4>
                 <span>
@@ -42,7 +42,7 @@
                 </span>
               </div>
             </div>
-            <div class="col-12 col-sm-6 col-lg-12">
+            <div class="col-12 col-sm-6 col-lg-12" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="1300">
               <div class="border-start ps-4">
                 <i class="fa  fa-3x text-primary mb-3"></i>
                 <h4 class="mb-3">夜</h4>
@@ -52,7 +52,7 @@
               </div>
             </div>
             <div class="col-12 col-sm-6 col-lg-12">
-              <div class="border-start ps-4">
+              <div class="border-start ps-4" data-aos="fade-right" data-aos-duration="2000" data-aos-delay="1800">
                 <i class="fa fa-3x text-primary mb-3"></i>
                 <h4 class="mb-3">語</h4>
                 <span>
