@@ -40,23 +40,47 @@
               </span></router-link
             >
           </li>
-          <li class="nav-item ms-lg-5">
-            <router-link class="btn btn-outline-light px-4 py-2" to="/login"
-              >登入 / 註冊</router-link
-            >
-          </li>
+          <login></login>
         </ul>
       </div>
     </div>
   </nav>
+
+      <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">登入</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form v-on:submit.prevent="submitLogin">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">帳號</label>
+                            <input type="text" class="form-control" id="username" v-model="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密碼</label>
+                            <input type="password" class="form-control" id="password" v-model="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">登入</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
+import Login from './login.vue';
+
 export default {
   data() {
     return {
       setShadow: false,
     }
+  },components: {
+    Login
   },
   methods: {
     navShadow() {
