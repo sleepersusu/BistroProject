@@ -2,19 +2,19 @@ import { onMounted, ref } from 'vue'
 import Modal from 'bootstrap/js/dist/modal'
 
 export const useModal = () => {
-  const modal = ref(null)
+  let modal
   const modalRef = ref(null)
 
   const showModal = () => {
-    modal.value.show()
+    modal.show()
   }
 
   const hideModal = () => {
-    modal.value.hide()
+    modal.hide()
   }
 
   onMounted(() => {
-    modal.value = new Modal(modalRef.value)
+    modal = new Modal(modalRef.value)
   })
 
   return {

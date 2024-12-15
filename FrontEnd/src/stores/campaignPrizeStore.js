@@ -9,25 +9,13 @@ export const campaignPrizeStore = defineStore('prize', {
     async getPrizesByCampaign(campaignId) {
       try {
         this.prizes = []
-        const res = await axios.get(
-          `${import.meta.env.VITE_API}/api/campaignPrize/prizeByCampaign/${campaignId}`,
-        )
+        const api = `${import.meta.env.VITE_API}/api/campaignPrize/prizeByCampaign/${campaignId}`
+        const res = await axios.get(api)
         const prizeData = res.data
 
         const prizesWithImages = await Promise.all(
           prizeData.map(async (prize, index) => {
-            let imgUrl = null
-
-            if (prize.prizeImg) {
-              const imageRes = await axios.get(
-                `${import.meta.env.VITE_API}/api/campaignPrize/image/${prize.id}`,
-                {
-                  responseType: 'blob',
-                },
-              )
-              imgUrl = URL.createObjectURL(imageRes.data)
-            }
-
+            const imageUrl = await this.getPrizeImage(prize.id)
             return {
               x: Math.floor(index / 3),
               y: index % 3,
@@ -37,14 +25,20 @@ export const campaignPrizeStore = defineStore('prize', {
                   text: prize.prizeName,
                   fontSize: '12px',
                   fontColor: '#fff',
-                  top: '70%',
+                  top: '65%',
+                },
+                {
+                  text: `剩餘: ${prize.prizeQuantity}`,
+                  fontSize: '12px',
+                  fontColor: prize.prizeQuantity === 0 ? '#666' : '#fff',
+                  top: '80%',
                 },
               ],
               id: prize.id,
-              ...(imgUrl && {
+              ...(imageUrl && {
                 imgs: [
                   {
-                    src: imgUrl,
+                    src: imageUrl,
                     width: '60px',
                     height: '60px',
                     top: '10px',
@@ -58,6 +52,16 @@ export const campaignPrizeStore = defineStore('prize', {
         this.prizes = prizesWithImages
       } catch (e) {
         console.error('獲取獎品失敗:', e)
+      }
+    },
+
+    async getPrizeImage(id) {
+      try {
+        const api = `${import.meta.env.VITE_API}/api/campaignPrize/image/${id}`
+        const res = await axios.get(api, { responseType: 'blob' })
+        return URL.createObjectURL(res.data)
+      } catch (e) {
+        console.error(e)
       }
     },
 

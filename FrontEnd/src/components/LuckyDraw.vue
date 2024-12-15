@@ -15,15 +15,9 @@
           >
             Lucky Draw
           </h3>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
         </div>
         <div class="modal-body">
-          <div class="lottery-container">
+          <div class="lottery-container" :class="{ disabled: isDisabled }">
             <lucky-grid
               ref="myLucky"
               width="400px"
@@ -55,7 +49,6 @@ import { lotteryStore } from '@/stores/lotteryStore'
 import { storeToRefs } from 'pinia'
 import { useLuckyCanvas } from '@/mixins/luckyCanvasMixin'
 import { useModal } from '@/mixins/modalMixin'
-
 const { buttons, blocks, activeStyle, myLucky } = useLuckyCanvas()
 const { modalRef, showModal, hideModal } = useModal()
 
@@ -73,6 +66,7 @@ const setCurrentCampaignId = (id) => {
 }
 
 const count = computed(() => lottery.chanceCount(currentCampaignId.value))
+const isDisabled = computed(() => prizes.value.every((prize) => prize.fonts[1].text === '剩餘: 0'))
 
 defineExpose({
   showModal,
@@ -123,6 +117,8 @@ const startCallBack = async () => {
 
 const emits = defineEmits(['update-chance'])
 const endCallBack = async (prize) => {
+  const currentQuantity = Number(prize.fonts[1].text.split(': ')[1])
+  prize.fonts[1].text = `剩餘: ${currentQuantity - 1}`
   await window.Swal.fire({
     title: `${prize.fonts[0].text === '銘謝惠顧' ? '再接再厲' : '恭喜中獎!'}`,
     text: `獲得：${prize.fonts[0].text}！`,
@@ -133,7 +129,7 @@ const endCallBack = async (prize) => {
     confirmButtonColor: 'black',
     confirmButtonText: '確定',
   })
-  emits('update-chance')
+  emits('update-chance', currentCampaignId.value)
 }
 
 const handleDraw = async () => {
@@ -160,6 +156,7 @@ const handleDraw = async () => {
   box-shadow:
     5px 5px 10px #fdd156,
     -5px -5px 10px #fdd156;
+  cursor: pointer;
 }
 
 :deep(.lucky-grid) {
@@ -169,5 +166,11 @@ const handleDraw = async () => {
 
 .modal-title {
   font-family: 'Dancing Script', cursive !important;
+}
+
+.lottery-container.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 </style>

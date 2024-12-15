@@ -18,10 +18,12 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity 
 @Table(name = "Campaign")
 public class Campaign {
@@ -107,9 +109,6 @@ public class Campaign {
     public boolean isActive() {
         return getCampaignStatus() == CampaignStatus.IN_PROGRESS;
     }
-
-	public Campaign() {
-	}
 
 	
 	

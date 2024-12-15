@@ -1,10 +1,16 @@
 <template>
-  <div class="card">
-    <img :src="props.campaign.imageUrl" class="card-img-top" alt="活動圖片" />
+  <div class="card" style="cursor: pointer" @click.prevent.stop="openCampaign">
+    <div class="overflow-hidden">
+      <img :src="props.campaign.imageUrl" class="card-img-top" alt="活動圖片" />
+    </div>
     <div class="card-body">
       <span class="badge bg-primary mb-2">{{ props.campaign.campaignType }}</span>
-      <h5 class="card-title">{{ props.campaign.campaignTitle }}</h5>
-      <p class="card-text text-truncate">{{ props.campaign.campaignDescription }}</p>
+      <h5 class="card-title">
+        {{ props.campaign.campaignTitle }}
+      </h5>
+      <p class="card-text text-truncate">
+        {{ props.campaign.campaignDescription }}
+      </p>
       <ul class="list-unstyled">
         <li>💰 消費門檻：${{ props.campaign.minOrderAmount }}</li>
         <li class="text-truncate">⏰ 截止日期：{{ formatDate(props.campaign.endDate) }}</li>
@@ -14,9 +20,15 @@
         type="button"
         class="btn btn-primary w-100"
         :disabled="!props.campaign.active"
-        @click="startDraw"
+        @click.prevent.stop="startDraw"
       >
-        {{ props.campaign.active ? '立即抽獎' : '活動已結束' }}
+        {{
+          campaignStatus === 'IN_PROGRESS'
+            ? '立即抽獎'
+            : campaignStatus === 'EXPIRED'
+              ? '活動已結束'
+              : '活動未開始'
+        }}
         <span v-if="count > 0 && props.campaign.active" class="badge bg-danger">
           {{ count }}
         </span>
@@ -31,18 +43,17 @@ import { lotteryStore } from '@/stores/lotteryStore'
 const lottery = lotteryStore()
 
 const count = computed(() => lottery.chanceCount(props.campaign.id))
-
 const props = defineProps({
   campaign: {
     type: {},
     required: true,
   },
 })
+const { campaignStatus } = props.campaign
 
-const emits = defineEmits(['open-drawmodal'])
-const startDraw = () => {
-  emits('open-drawmodal', props.campaign.id)
-}
+const emits = defineEmits(['open-drawmodal', 'open-detailmodal'])
+const startDraw = () => emits('open-drawmodal', props.campaign.id)
+const openCampaign = () => emits('open-detailmodal', props.campaign)
 
 const formatDate = (dateString) => {
   const date = new Date(dateString)
@@ -56,5 +67,9 @@ const formatDate = (dateString) => {
   width: 100%;
   object-fit: cover;
   overflow: hidden;
+  transition: all 0.5s ease;
+}
+.card-img-top:hover {
+  transform: scale(1.2);
 }
 </style>

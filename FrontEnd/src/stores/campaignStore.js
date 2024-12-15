@@ -10,7 +10,7 @@ export const campaignStore = defineStore('campaign', {
       const api = `${import.meta.env.VITE_API}/api/campaign`
       try {
         const res = await axios.get(api)
-        this.campaigns = res.data
+        this.campaigns = res.data.sort((a, b) => b.id - a.id)
 
         this.campaigns = await Promise.all(
           this.campaigns.map(async (campaign) => {

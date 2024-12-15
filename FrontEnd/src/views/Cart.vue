@@ -128,9 +128,10 @@
 <script>
 //import { mapState, mapActions } from 'pinia'
 //import cartStore from "/@..."
-import CartButton from '@/components/CartButton.vue'
-import CartTable from '@/components/CartTable.vue'
-import CartTitle from '@/components/CartTitle.vue'
+import CartButton from '@/components/cart/CartButton.vue'
+import CartTable from '@/components/cart/CartTable.vue'
+import CartTitle from '@/components/cart/CartTitle.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 export default {
   name: 'Cart',

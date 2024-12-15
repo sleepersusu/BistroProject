@@ -21,10 +21,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "CampaignPrizes")
 public class CampaignPrizes {
@@ -37,6 +39,7 @@ public class CampaignPrizes {
 	@Column(name = "prizeName")
 	private String prizeName;
 	
+	@JsonIgnore
 	@Lob
 	@Column(name = "prizeImg")
 	private byte[] prizeImg;
@@ -65,9 +68,6 @@ public class CampaignPrizes {
 		if(createdAt == null) {
 			createdAt = new Date();
 		}		
-	}
-	
-	public CampaignPrizes() {
 	}
 
 	

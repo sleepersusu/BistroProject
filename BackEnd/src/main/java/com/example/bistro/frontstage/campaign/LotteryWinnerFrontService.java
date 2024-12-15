@@ -3,6 +3,7 @@ package com.example.bistro.frontstage.campaign;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,9 +61,6 @@ public class LotteryWinnerFrontService {
 	    }
 
 	    CampaignPrizes winnerPrize = drawPrizeByProbability(prizes);
-	    if(winnerPrize == null) {
-	        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "抽獎過程發生錯誤..");
-	    }
 
 	   
 	    lotteryChanceService.useChance(chance.getId());
@@ -85,27 +83,35 @@ public class LotteryWinnerFrontService {
 	}
 
 	private CampaignPrizes drawPrizeByProbability(List<CampaignPrizes> prizes) {
-		if (prizes == null || prizes.isEmpty()) {
+	    if (prizes == null || prizes.isEmpty()) {
 	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品列表為空");
 	    }
-		if(prizes.size() != 9) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品數量不足!");
-		}
-		
+	    
+	    List<CampaignPrizes> availablePrizes = prizes.stream()
+	        .filter(prize -> prize.getPrizeQuantity() > 0)
+	        .collect(Collectors.toList());
+
+	    if (availablePrizes.isEmpty()) {
+	        return prizes.stream()
+	            .filter(prize -> prize.getPrizeName().equals("銘謝惠顧"))
+	            .findFirst()
+	            .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "抽獎過程發生錯誤"));
+	    }
+
 	    double random = Math.random() * 100;
 	    double cumulative = 0.00;
-	    
-	    for (CampaignPrizes prize : prizes) {
-	    	if(prize.getProbability() == null) {
-	    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品機率設定錯誤");
-	    	}
+
+	    for (CampaignPrizes prize : availablePrizes) {
+	        if(prize.getProbability() == null) {
+	            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品機率設定錯誤");
+	        }
 	        cumulative += prize.getProbability().doubleValue();
 	        if (random <= cumulative) {
 	            return prize;
 	        }
 	    }
-	    
-	    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "抽獎過程發生錯誤");
+
+	    return availablePrizes.get(availablePrizes.size() - 1);
 	}
 	
 	public LotteryWinners findByMemberId(Integer memberId){

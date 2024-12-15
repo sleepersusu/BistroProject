@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item">
-            <a class="nav-link" href="#">關於我們</a>
+            <router-link class="nav-link" to="/profile">關於我們</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/order">立即點餐</router-link>
@@ -32,11 +32,9 @@
           </li>
 
           <li class="nav-item">
-            <router-link class="nav-link position-relative" to="/cart"
-              ><i class="bi bi-cart fs-5"></i
-              ><span
-                class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary"
-              >
+            <router-link class="nav-link position-relative" to="/cart">
+              <i class="bi bi-cart fs-5"></i>
+              <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary">
                 3
                 <span class="visually-hidden">unread messages</span>
               </span></router-link
