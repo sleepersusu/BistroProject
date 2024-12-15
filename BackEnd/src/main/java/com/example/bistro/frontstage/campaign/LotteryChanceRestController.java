@@ -1,7 +1,5 @@
 package com.example.bistro.frontstage.campaign;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.bistro.backstage.lotteryChance.LotteryChance;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 
 
 
@@ -33,7 +30,7 @@ public class LotteryChanceRestController {
 		return ResponseEntity.ok(chance);
 	}
 	
-	@GetMapping("/api/lotteryChance/{memberId}/campaign/{campaignId}")
+	@GetMapping("/api/lotteryChance/{memberId}/{campaignId}")
 	public ResponseEntity<?> findMemberChanceByCampaign(@PathVariable Integer memberId,@PathVariable Integer campaignId){
 		Optional<LotteryChance> chance = chancesFrontService.findMemberChanceByCampaign(memberId, campaignId);
 		if(chance.isEmpty()) {
@@ -46,21 +43,9 @@ public class LotteryChanceRestController {
 	public ResponseEntity<?> addChances(@RequestBody LotteryChanceDTO chance) {
 		LotteryChance successChance = chancesFrontService.calculateAndAddChances(chance.getMemberId(), 
 													chance.getCampaignId(), 
-													chance.getOrderAmount());
-		
+													chance.getOrderAmount());		
 		
 		return ResponseEntity.ok().body(successChance);
-	}
-	
-	@PutMapping("/api/lotteryChance/{id}")
-	public ResponseEntity<Map<String, Object>> useChance(@PathVariable Integer id) {
-	    LotteryChance remainingChance = chancesFrontService.useChance(id);
-	    
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("使用狀態", true);
-	    response.put("remainingChance", remainingChance);
-	    
-	    return ResponseEntity.ok(response);
 	}
 	
 	

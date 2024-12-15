@@ -1,8 +1,4 @@
 <template>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
-    rel="stylesheet"
-  />
   <div>
     <BannerTop v-bind:title="'Shopping Cart'"></BannerTop>
   </div>
@@ -118,11 +114,9 @@
               <strong>Total</strong>
               <strong>$229.97</strong>
             </div>
-
             <button class="btn btn-dark w-100">
               <router-link class="nav-link" to="/cartCheckout">Proceed to Checkout</router-link>
             </button>
-
           </div>
         </div>
         <!--        Promo Code-->
@@ -138,9 +132,6 @@
       </div>
     </div>
   </div>
-
-
-
 </template>
 
 <script>
