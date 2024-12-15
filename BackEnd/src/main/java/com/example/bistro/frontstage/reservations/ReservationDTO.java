@@ -1,4 +1,4 @@
-package com.example.bistro.backstage.reservations;
+package com.example.bistro.frontstage.reservations;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -13,8 +13,7 @@ public class ReservationDTO {
 	private String contactPhone;	
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date reservationDate;
-	@JsonFormat(pattern = "HH:mm")
-	private Timestamp startTime;	
+	private String startTime;	
 	private Integer numberPeople;
 	private String notes;
 	private String reservationStatus="已確認";
@@ -50,10 +49,10 @@ public class ReservationDTO {
 	public void setReservationDate(Date reservationDate) {
 		this.reservationDate = reservationDate;
 	}
-	public Timestamp getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Timestamp startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 	public Integer getNumberPeople() {
