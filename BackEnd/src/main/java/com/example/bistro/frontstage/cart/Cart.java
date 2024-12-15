@@ -3,6 +3,9 @@ package com.example.bistro.frontstage.cart;
 import java.util.Date;
 
 import com.example.bistro.frontstage.cartId.CartId;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -48,12 +51,14 @@ public class Cart {
         @ManyToOne(fetch = FetchType.LAZY)
         @MapsId("membersId")
         @JoinColumn(name = "membersId", referencedColumnName = "ID", nullable = false)
+        @JsonIgnore
         private Members members;
     //多對一：多個產品可以同時出現在一台購物車中
         @ManyToOne(fetch = FetchType.LAZY)
         @MapsId("menuId")
         @JoinColumn(name = "menuId", referencedColumnName = "ID", nullable = false)
-        @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+        @JsonIgnore
         private Menu menu;  // 與 Menu 表的多對一關係，不允許為 NULL
 
 

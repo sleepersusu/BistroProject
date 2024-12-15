@@ -37,7 +37,16 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 	List<String> findAllCategories();
 
 	@Query("FROM Menu WHERE productCategory = :category AND menuStatus = '上架'")
-	List<Menu> findMenusByCategory(String category);
+	List<Menu> findMenuByCategoryAndIsSold(String category);
+	
+	
+	@Query("FROM Menu  WHERE menuStatus = '上架' ORDER BY avgScore DESC")
+	List<Menu> findTopThreeMenu();
+	
+	
+	@Query("SELECT COALESCE(AVG(c.commentRating), 0.0) AS avgScore "
+			+ "FROM Comment c  where commentProduct= :productName")
+	Double countOneMenuAvgScore(String productName); 
 
 	
 	

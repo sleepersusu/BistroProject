@@ -1,6 +1,7 @@
 package com.example.bistro.backstage.lotteryChance;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,5 +25,8 @@ public interface LotteryChanceRepository extends JpaRepository<LotteryChance, In
 		    "INNER JOIN Campaign c ON lc.campaignId = c.ID", 
 		    nativeQuery = true)
 		List<Object[]> findMembersAllChance();
+		
+		Optional<LotteryChance> findByMemberIdAndCampaignId(Integer memberId,Integer campaignId);
+
 
 }

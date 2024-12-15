@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.bistro.backstage.config.ImageService;
 
 @Controller
 public class MenuController {
@@ -31,6 +33,10 @@ public class MenuController {
 	@Autowired
 	private MenuRepository menuRepo;
 	
+	
+	@Autowired
+	private ImageService imageService;
+	
 
 	@PostMapping("/Bistro/postMenu")
 	public String postMenu(@RequestParam String productCategory, @RequestParam String productName,
@@ -38,6 +44,9 @@ public class MenuController {
 			@RequestParam String productDescribe, @RequestParam Integer productCount,
 			@RequestParam Integer minproductCount, @RequestParam(defaultValue = "0.0") Double avgScore,
 			@RequestParam String menuStatus) throws IOException {
+		
+		
+		String type = "menu";
 
 		byte[] fileBytes = productImage.getBytes();
 		String originalFilename = productImage.getOriginalFilename();
@@ -45,7 +54,10 @@ public class MenuController {
 		Menu newMenu = new Menu();
 		newMenu.setProductCategory(productCategory);
 		newMenu.setProductName(productName);
-		newMenu.setProductImg(fileBytes);
+//		newMenu.setProductImg(fileBytes);
+		
+		
+		
 		newMenu.setProductPrice(productPrice);
 		newMenu.setProductDescribe(productDescribe);
 		newMenu.setProductImgUrl(originalFilename);
@@ -61,40 +73,45 @@ public class MenuController {
 		}
 
 		newMenu.setMenuStatus(menuStatus);
+		
 
 		menuService.createMenu(newMenu);
+		
+		imageService.imageUpload(type,newMenu.getID(),fileBytes);
+		
+		
 		return "redirect:/Bistro/findAllMenu";
 
 	}
 
-	@GetMapping("/Bistro/download")
-	public ResponseEntity<byte[]> downloadMenu(@RequestParam Integer ID) {
-		Optional<Menu> op = menuRepo.findById(ID);
-
-		if (op.isPresent()) {
-
-			Menu menu = op.get();
-			byte[] menubyte = menu.getProductImg();
-			String originalFilename = menu.getProductImgUrl();
-
-			String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-
-			MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM; // 默認為通用二進位流
-			if (fileExtension.equalsIgnoreCase("png")) {
-				mediaType = MediaType.IMAGE_PNG;
-			} else if (fileExtension.equalsIgnoreCase("jpg") || fileExtension.equalsIgnoreCase("jpeg")) {
-				mediaType = MediaType.IMAGE_JPEG;
-			}
-
-			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setContentType(mediaType);
-
-			return new ResponseEntity<byte[]>(menubyte, httpHeaders, HttpStatus.OK);
-
-		}
-
-		return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
-	}
+//	@GetMapping("/Bistro/download/0")
+//	public ResponseEntity<byte[]> downloadMenu(@RequestParam Integer ID) {
+//		Optional<Menu> op = menuRepo.findById(ID);
+//
+//		if (op.isPresent()) {
+//
+//			Menu menu = op.get();
+//			byte[] menubyte = menu.getProductImg();
+//			String originalFilename = menu.getProductImgUrl();
+//
+//			String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+//
+//			MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM; // 默認為通用二進位流
+//			if (fileExtension.equalsIgnoreCase("png")) {
+//				mediaType = MediaType.IMAGE_PNG;
+//			} else if (fileExtension.equalsIgnoreCase("jpg") || fileExtension.equalsIgnoreCase("jpeg")) {
+//				mediaType = MediaType.IMAGE_JPEG;
+//			}
+//
+//			HttpHeaders httpHeaders = new HttpHeaders();
+//			httpHeaders.setContentType(mediaType);
+//
+//			return new ResponseEntity<byte[]>(menubyte, httpHeaders, HttpStatus.OK);
+//
+//		}
+//
+//		return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+//	}
 
 	@GetMapping("/Bistro/findAllMenu")
 	public String findAllMenu(Model model) {
@@ -163,11 +180,14 @@ public class MenuController {
 		return "redirect:/Bistro/findAllMenu";
 
 	}
+	
+	
+	
 
 	@PostMapping("/Bistro/updateMenuPost")
 	@Transactional
-	public String updateMenuPost(@ModelAttribute Menu menu, @RequestParam("productImage") MultipartFile file,
-			Model model) {
+	public String updateMenuPost(@ModelAttribute Menu menu, @RequestParam("productImage") MultipartFile file
+			) {
 
 		try {
 			if (file.isEmpty()) {
@@ -188,7 +208,7 @@ public class MenuController {
 
 			Menu updateMenu = menuService.updateMenu(menu);
 
-			model.addAttribute("updateMenu", updateMenu);
+			
 
 			return "redirect:/Bistro/findAllMenu";
 
@@ -219,14 +239,7 @@ public class MenuController {
 
 	}
 
-	@GetMapping("/Bistro/findMenuIsSold")
-	@ResponseBody
-	public ResponseEntity<List<Menu>> findMenuByStatusIsSold() {
-		List<Menu> menuIsSold = menuService.findMenuByStatusIsSold();
-		return ResponseEntity.ok(menuIsSold);
-	}
 
-	
 
 
 }
