@@ -57,9 +57,13 @@ public class CommentService {
 
 	}
 	@Transactional
-	public List<Comment> findCommentByMenuId(Integer menuId) {
-
-		return commentRepo.findCommentByMenuId(menuId);
+	public List<Comment> findCommentByProductName(String productName) {
+		
+		List<Comment> commentByProductName = commentRepo.findCommentByProductName(productName);
+		
+		return commentByProductName;
+		
+		
 
 	}
 }

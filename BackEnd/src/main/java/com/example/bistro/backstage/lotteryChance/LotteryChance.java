@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.example.bistro.backstage.campaign.Campaign;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.orders.Orders;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,10 +21,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "LotteryChance")
 public class LotteryChance {
@@ -47,10 +50,12 @@ public class LotteryChance {
 	@Column(name = "createdAt")	
 	private Date createdAt;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Members member;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "campaignId")
 	private Campaign campaign;
@@ -68,10 +73,6 @@ public class LotteryChance {
 	    if(usedChances == null) {
 	        usedChances = 0;
 	    }
-	}
-	
-
-	public LotteryChance() {
 	}
 	
 

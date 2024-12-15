@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   linkActiveClass: 'active',
+  scrollBehavior () {
+    return {top:0}
+  },
   routes: [
     {
       path: '/',
@@ -45,6 +48,19 @@ const router = createRouter({
           path: '/campaign',
           component: () => import('../views/Campaign.vue'),
         },
+        {
+          path: '/cartCheckout',
+          component: () => import('../views/CartCheckout.vue'),
+        },
+        {
+          path: '/cartCheckSuc',
+          component: () => import('../views/CartCheckSuc.vue'),
+        },
+        {
+          path: '/cartCheckFail',
+          component: () => import('../views/CartCheckFail.vue'),
+        },
+
       ],
     },
   ],
