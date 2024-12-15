@@ -240,6 +240,69 @@
                       00:00
                     </td>
                   </tr>
+
+                  <!-- 4 -->
+                  <tr>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div class="d-flex flex-column justify-content-center ms-1">
+                          <h6 class="mb-0 text-sm font-weight-semibold text-primary">O789635631</h6>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <p class="text-sm text-dark font-weight-semibold mb-0">$2,800</p>
+                    </td>
+
+                    <td class="align-middle text-center text-sm">
+                      <span
+                        class="badge badge-sm border border-danger text-danger"
+                        style="background-color: white"
+                      >
+                        <svg
+                          width="12"
+                          height="12"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="me-1"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                        已取消
+                      </span>
+                    </td>
+
+                    <td class="align-middle text-center">
+                      <span class="text-primary text-sm font-weight-normal">23/04/18</span>
+                    </td>
+
+                    <td class="align-middle">
+                      <a
+                        href="javascript:;"
+                        class="text-secondary font-weight-bold text-xs"
+                        data-bs-toggle="tooltip"
+                        data-bs-title="Edit user"
+                      >
+                        <button class="btn btn-sm btn-outline-danger disabled">
+                          <i class="bi bi-trash" id="trashButton"></i>
+                        </button>
+                      </a>
+                    </td>
+                    <!-- 倒計時顯示 -->
+                    <td class="align-middle" id="countdown">
+                      00:00
+                    </td>
+                  </tr>
+
+
                 </tbody>
               </table>
             </div>
