@@ -100,13 +100,13 @@
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-                ><i class="bi bi-github fs-4"></i
+              ><i class="bi bi-github fs-4"></i
               ></a>
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-                ><i class="bi bi-linkedin fs-4"></i
+              ><i class="bi bi-linkedin fs-4"></i
               ></a>
             </div>
           </div>
@@ -122,35 +122,13 @@
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-                ><i class="bi bi-github fs-4"></i
+              ><i class="bi bi-github fs-4"></i
               ></a>
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-                ><i class="bi bi-linkedin fs-4"></i
-              ></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-          <div class="team-item rounded p-4">
-            <img class="img-fluid rounded mb-4" src="..." alt="" />
-            <h5>Jack Dawson</h5>
-            <p class="text-primary">Member</p>
-            <div class="d-flex justify-content-center pt-1">
-              <a
-                class="btn btn-square btn-outline-primary rounded-circle mx-1"
-                target="_blank"
-                href="https://www.facebook.com/"
-                ><i class="bi bi-github fs-4"></i
-              ></a>
-              <a
-                class="btn btn-square btn-outline-primary rounded-circle mx-1"
-                target="_blank"
-                href="https://www.facebook.com/"
-                ><i class="bi bi-linkedin fs-4"></i
+              ><i class="bi bi-linkedin fs-4"></i
               ></a>
             </div>
           </div>
@@ -166,35 +144,13 @@
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-                ><i class="bi bi-github fs-4"></i
+              ><i class="bi bi-github fs-4"></i
               ></a>
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-                ><i class="bi bi-linkedin fs-4"></i
-              ></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-          <div class="team-item rounded p-4">
-            <img class="img-fluid rounded mb-4" src="..." alt="" />
-            <h5>Jack Dawson</h5>
-            <p class="text-primary">Member</p>
-            <div class="d-flex justify-content-center pt-1">
-              <a
-                class="btn btn-square btn-outline-primary rounded-circle mx-1"
-                target="_blank"
-                href="https://www.facebook.com/"
-                ><i class="bi bi-github fs-4"></i
-              ></a>
-              <a
-                class="btn btn-square btn-outline-primary rounded-circle mx-1"
-                target="_blank"
-                href="https://www.facebook.com/"
-                ><i class="bi bi-linkedin fs-4"></i
+              ><i class="bi bi-linkedin fs-4"></i
               ></a>
             </div>
           </div>
@@ -210,13 +166,57 @@
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-                ><i class="bi bi-github fs-4"></i
+              ><i class="bi bi-github fs-4"></i
               ></a>
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-                ><i class="bi bi-linkedin fs-4"></i
+              ><i class="bi bi-linkedin fs-4"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+          <div class="team-item rounded p-4">
+            <img class="img-fluid rounded mb-4" src="..." alt="" />
+            <h5>Jack Dawson</h5>
+            <p class="text-primary">Member</p>
+            <div class="d-flex justify-content-center pt-1">
+              <a
+                class="btn btn-square btn-outline-primary rounded-circle mx-1"
+                target="_blank"
+                href="https://www.facebook.com/"
+              ><i class="bi bi-github fs-4"></i
+              ></a>
+              <a
+                class="btn btn-square btn-outline-primary rounded-circle mx-1"
+                target="_blank"
+                href="https://www.facebook.com/"
+              ><i class="bi bi-linkedin fs-4"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+          <div class="team-item rounded p-4">
+            <img class="img-fluid rounded mb-4" src="..." alt="" />
+            <h5>Jack Dawson</h5>
+            <p class="text-primary">Member</p>
+            <div class="d-flex justify-content-center pt-1">
+              <a
+                class="btn btn-square btn-outline-primary rounded-circle mx-1"
+                target="_blank"
+                href="https://www.facebook.com/"
+              ><i class="bi bi-github fs-4"></i
+              ></a>
+              <a
+                class="btn btn-square btn-outline-primary rounded-circle mx-1"
+                target="_blank"
+                href="https://www.facebook.com/"
+              ><i class="bi bi-linkedin fs-4"></i
               ></a>
             </div>
           </div>

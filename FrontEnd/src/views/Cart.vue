@@ -170,7 +170,8 @@ export default {
     //...mapState(cartStore, ["carts"])
   },
   watch: {},
-  created() {},
+  created() {
+  },
 }
 </script>
 
