@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.bistro.backstage.pointPrizes.PointPrizesBean;
 import com.example.bistro.backstage.pointPrizes.PointPrizesRepository;
-import com.example.bistro.backstage.pointPrizes.PointPrizesService;
 
 @Service
 public class PointPrizesFrontService {
@@ -37,5 +36,9 @@ public class PointPrizesFrontService {
 	
 	public PointPrizesBean findById(int id) {
 	    return PPRepo.findById(id).orElse(null);
+	}
+	
+	public void deletePointPrizeCount(int memberId) {
+		PPRepo.deletePointPrizeCount(memberId);
 	}
 }

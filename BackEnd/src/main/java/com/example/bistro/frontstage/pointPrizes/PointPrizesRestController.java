@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bistro.backstage.pointPrizes.PointPrizesBean;
-import com.example.bistro.backstage.pointPrizes.PointPrizesService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class PointPrizesRestController {
 
 	@Autowired
-	PointPrizesService pointPrizesService;
+	PointPrizesFrontService pointPrizesService;
 	
 	
 	@GetMapping("/api/pointPrizes")

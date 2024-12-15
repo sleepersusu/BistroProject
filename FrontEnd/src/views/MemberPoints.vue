@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import coco from '@/components/PointTotal.vue';
+
 export default {
   data() {
     return {

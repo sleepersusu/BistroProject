@@ -1,4 +1,4 @@
-package com.example.bistro.frontstage.pointPrizes;
+package com.example.bistro.frontstage.pointRecord;
 
 import java.util.Date;
 

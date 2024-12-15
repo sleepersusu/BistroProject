@@ -30,6 +30,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/reservations">馬上訂位</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/memberPoints">會員獎品</router-link>
+          </li>
 
           <li class="nav-item">
             <router-link class="nav-link position-relative" to="/cart">
