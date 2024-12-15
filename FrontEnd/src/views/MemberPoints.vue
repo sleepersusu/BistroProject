@@ -5,12 +5,15 @@
 <div class="container">
   <ul class="d-flex flex-wrap">
     <li v-for="prize in pointPrizes" :key="prize.id" class="d-flex flex-column" style="width: 18rem; margin: 10px;">
-      <div class="card" style="height: 490px; position: relative;">
+      <div v-if="prize.rewardsStatus=='上架中'" class="card" style="height: 490px; position: relative;">
         <!-- 動態綁定圖片的 Base64 編碼 -->
         <img :src="'data:image/jpeg;base64,' + prize.base64Image" class="card-img-top w-100" alt="Prize Image"
         style="height: 300px; object-fit: cover;">
         <div class="card-body" style="overflow-y: auto; height: calc(100% - 300px);">
-          <h5 class="card-title">{{ prize.pointPrizesName }}</h5>
+          <div class="d-flex justify-content-between">
+            <h5 class="card-title">{{ prize.pointPrizesName }}</h5>
+            <h5 class="card-text" style="color: red">{{ prize.pointPrizesPoints }} 點</h5>
+          </div>
           <p class="card-text">{{ prize.pointPrizesDescription }}</p>
           <a href="#" class="btn btn-primary mt-auto" style="position: absolute; bottom: 16px;" @click="redeemPrize(prize)">兌換商品</a>
         </div>
@@ -46,8 +49,22 @@ export default {
       }
     },
 
+
     async redeemPrize(prize) {
-      const memberId = 5;  // 假資料，會員 ID 為 9
+
+      const result = await Swal.fire({
+        icon: 'question',
+        title: `確定要兌換${prize.pointPrizesName}嗎?`,
+        html: `<p>將會扣除 <span style="color: lightblue; font-size: 20px; font-weight: bold;">${prize.pointPrizesPoints}</span> 點，兌換後無法返還</p>`,
+        showCancelButton: true,
+        confirmButtonText: '兌換',
+        cancelButtonText: '在想一下',
+        reverseButtons: true,
+      });
+
+      if (result.isConfirmed) {
+        console.log('User confirmed redemption');///////////////
+        const memberId = 1;  // 假資料，會員 ID 為 9
       if(memberId){
         const pointPrizesId = prize.id;  // 商品 ID 來自按下的商品
         const recordsDate = new Date().toISOString();  // 使用當前時間作為兌換日期
@@ -58,26 +75,25 @@ export default {
           recordsDate,
         };
 
-      // 顯示兌換成功的彈窗
-      window.Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
-        timer: 1500,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
+          window.Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
+            timer: 1500,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          });
 
-      try {
-        const api = `${import.meta.env.VITE_API}/api/pointRecord`;
-        const response = await fetch(api, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData),  // 將資料轉換為 JSON 格式發送
-        });
+          try {
+            const api = `${import.meta.env.VITE_API}/api/pointRecord`;
+            const response = await fetch(api, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestData),  // 將資料轉換為 JSON 格式發送
+            });
 
             if (response.ok) {
               console.log('兌換紀錄成功');
@@ -90,11 +106,12 @@ export default {
               },
               body: JSON.stringify(requestData),  // 將資料轉換為 JSON 格式發送
             });
-                if (response2.ok) {
-                  console.log('減少商品數量成功');
-                }else {
-                  console.error('Failed to decrease prize count:', response2.status, await response2.text());
-                }
+
+            if (response2.ok) {
+              console.log('減少商品數量成功');
+            }else {
+              console.error('減少商品數量失敗:', response2.status, await response2.text());
+            }
 
         } else {
           console.error('Failed to record point:', response.status);
@@ -102,6 +119,7 @@ export default {
       } catch (error) {
         console.error('Error sending request:', error);
       }
+
     }else {
       window.Swal.fire({
         title: '兌換商品需要點數',
@@ -119,8 +137,11 @@ export default {
         }
       });
     }
-
+      } else {
+        console.log('User canceled redemption');////////////////
       }
+
+  }
 
   },
   computed: {},
@@ -131,7 +152,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .card-body::-webkit-scrollbar {
   display: none;
 }

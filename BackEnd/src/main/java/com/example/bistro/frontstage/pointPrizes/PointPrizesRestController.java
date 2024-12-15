@@ -21,6 +21,7 @@ public class PointPrizesRestController {
 	@Autowired
 	PointPrizesService pointPrizesService;
 	
+	
 	@GetMapping("/api/pointPrizes")
 	public ResponseEntity <List<PointPrizesBean>> getPointPrizes() {
 		List<PointPrizesBean> pointPrizesBean = pointPrizesService.findAllPointPrizes();
@@ -34,10 +35,7 @@ public class PointPrizesRestController {
 	        Integer pointPrizesId = Integer.valueOf(requestData.get("pointPrizesId").toString());
 	        System.out.println("收到的獎品ID: " + pointPrizesId);
 	        
-	        PointPrizesBean pointPrizesBean = new PointPrizesBean();
-	        int pointPrizesCount = pointPrizesBean.getPointPrizesCount();
-	        pointPrizesBean.setPointPrizesPoints(pointPrizesCount--);
-	        System.out.println("獎品庫存已減一");
+	        pointPrizesService.deletePointPrizeCount(pointPrizesId);
 	        
 	    } catch (NumberFormatException e) {
 	        System.out.println("無效的獎品ID");
