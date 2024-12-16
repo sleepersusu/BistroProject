@@ -306,18 +306,20 @@ $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-100 !default;
 $dark: $gray-900 !default;
+$accent: #fdd156 !default;
 // scss-docs-end theme-color-variables
 
 // scss-docs-start theme-colors-map
 $theme-colors: (
-  'primary': #eed9c4,
-  'secondary': #9b8174,
+  'primary': #000,
+  'secondary': #8f7662,
   'success': #20c997,
   'info': $info,
   'warning': $warning,
   'danger': $danger,
-  'light': $light,
-  'dark': #1a1a1a,
+  'light': #f9f9f9,
+  'dark': #272424,
+  'accent': #fdd156,
 ) !default;
 // scss-docs-end theme-colors-map
 

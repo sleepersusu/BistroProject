@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,16 +21,16 @@ public class CartController {
 
     //列出會員所擁有的購物車
         @GetMapping("/list")
-        public ResponseEntity<String>shoppingCart(HttpSession httpSession) {
+        public ResponseEntity<List<Cart>>shoppingCart(HttpSession httpSession) {
 
             Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
 
             // 如果是空的，請他先登入
             if (loginUserId == null) {
-                return ResponseEntity.status(401).body("Please log in first.");
+                return ResponseEntity.status(401).body(null);
             }
             List<Cart> shoppingCart = cartService.findMemberCart(loginUserId);
-            return ResponseEntity.ok(shoppingCart.toString());
+            return ResponseEntity.ok(shoppingCart);
 
         }
     //會員新增購物車

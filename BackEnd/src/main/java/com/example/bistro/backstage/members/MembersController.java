@@ -1,5 +1,6 @@
 package com.example.bistro.backstage.members;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,12 +20,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.bistro.backstage.menu.Menu;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
+
+
+
 @Controller
 public class MembersController {
 
 	@Autowired
 	private MembersService membersService;
-	
+
 	@Autowired
 	private MembersService membersRepo;
 
@@ -38,6 +48,7 @@ public class MembersController {
 
 		return "member/membersView";
 	}
+
 
 	// 以下自己寫測試用，以大哥寫為主
 	@Transactional
@@ -82,29 +93,6 @@ public class MembersController {
 
 	}
 	
-	
-	// 以下自己寫測試用，以大哥寫為主
-	@GetMapping("/Bistro/downloadMembersImg")
-	public ResponseEntity<byte[]> downloadMembersImg(@RequestParam Integer id) {
-		Members memberbyId = membersService.findMemberbyId(id);
-		
-		byte[] memberImg = memberbyId.getMemberImg();
-		
-		if(memberImg!=null) {
-			MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM; // 默認為通用二進位流
-			
-
-			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setContentType(mediaType);
-
-			return new ResponseEntity<byte[]>(memberImg, httpHeaders, HttpStatus.OK);
-		
-		}
-		
-
-		return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
-	
-	}
 	
 
 }

@@ -25,6 +25,10 @@ import com.example.bistro.backstage.members.MembersRepository;
 import com.example.bistro.backstage.menu.Menu;
 import com.example.bistro.backstage.menu.MenuService;
 
+import com.example.bistro.backstage.ordersDetails.OrdersDetails;
+import com.example.bistro.backstage.ordersDetails.OrdersDetailsRepository;
+
+
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
@@ -33,15 +37,30 @@ public class CommentRestController {
 	@Autowired
 	private CommentService commentService;
 
+	
+	@Autowired
+	private CommentFrontService commentFrontService;
+	
+
+
 	@Autowired
 	private MenuService menuService;
 
 	@Autowired
 	private MembersRepository membersRepo;
 
-	@PostMapping("/api/Bistro/postComment") // 新增評論
+
+
+
+	
+	@Autowired
+	private OrdersDetailsRepository orderDetailsRepo;
+
+	@PostMapping("/api/Bistro/postComment/{orderDetailsId}") // 新增評論
 	public ResponseEntity<Map<String, Object>> postComment(HttpSession httpSession,
-			@RequestBody Map<String, Object> requestData) {
+			@RequestBody Map<String, Object> requestData
+			,@PathVariable Integer orderDetailsId) {
+
 
 		// 從 Session 獲取會員 ID
 		Integer membersId = (Integer) httpSession.getAttribute("membersId");
@@ -50,6 +69,13 @@ public class CommentRestController {
 		}
 
 		try {
+
+			Optional<OrdersDetails> op = orderDetailsRepo.findById(orderDetailsId);
+			if(op.isPresent()) {
+				OrdersDetails ordersDetails = op.get();			
+				
+			}
+
 
 			Integer menuId = Integer.parseInt(requestData.get("menuId").toString());
 			Short commentRating = Short.parseShort(requestData.get("commentRating").toString());
@@ -250,5 +276,23 @@ public class CommentRestController {
 					.body(Map.of("success", false, "message", "更新失敗", "error", e.getMessage()));
 		}
 	}
+
+	
+	
+
+
+	@GetMapping("/api/{productName}/comment/people")
+	public ResponseEntity<?> countCommentPeopleByProductName(@PathVariable String productName) {
+
+		// 根據商品找評論
+		String commentPeople = commentFrontService.countCommentPeopleByProductName(productName);
+
+		
+		return ResponseEntity.ok(commentPeople);
+	}
+
+	
+	
+
 
 }

@@ -8,9 +8,12 @@ import com.example.bistro.backstage.campaign.Campaign;
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 import com.example.bistro.backstage.lotteryChance.LotteryChance;
 import com.example.bistro.backstage.members.Members;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,10 +25,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "LotteryWinners")
 public class LotteryWinners {
@@ -35,21 +40,21 @@ public class LotteryWinners {
 	@Column(name = "ID")
 	private Integer id;
 	
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "campaignId")
 	private Campaign campaign;
 	
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "memberId")
 	private Members member;
 	
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "prizeId")
 	private CampaignPrizes campaignPrizes;
 	
-	@OneToOne
-	@JoinColumn(name = "lotteryChanceId")
-	private LotteryChance lotteryChance;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -62,8 +67,21 @@ public class LotteryWinners {
 			createdAt = new Date();
 		}		
 	}
-
-	public LotteryWinners() {
+	
+	@JsonProperty("memberName")
+	public String fetchMemberName() {
+	    return member.getMemberName();
 	}
+	
+	@JsonProperty("memberId")
+	public Integer fetchMemberId() {
+	    return member.getId();
+	}
+	
+	@JsonProperty("prizeName")
+	public String fetchPrizeName() {
+	    return campaignPrizes.getPrizeName();
+	}
+	
 
 }
