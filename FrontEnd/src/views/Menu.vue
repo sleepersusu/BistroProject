@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     loadAllMenu() {
-      let API_URL = `${import.meta.env.VITE_API}/api/menu`
+      let API_URL = `http://localhost:8085/api/menu`
 
       axios.get(API_URL).then((response) => {
         this.menus = response.data
@@ -165,22 +165,6 @@ export default {
           this.isLoading = false
         })
     },
-    // async countCommentPeople(productName) {
-    //   console.log(productName)
-    //   let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
-
-    //   axios
-    //     .get(API_URL)
-    //     .then(async (response) =>{
-    //       this.commentPeople=response.data
-    //       console.log(this.commentPeople)
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error fetching commentPeople:', error)
-    //     })
-    // },
-
-    
     openModal(menu) {
       this.currentProduct=menu.productName
       let api = `${import.meta.env.VITE_API}/api/${menu.productName}/comment`
