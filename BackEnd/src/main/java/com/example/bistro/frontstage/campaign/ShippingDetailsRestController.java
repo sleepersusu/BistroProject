@@ -26,6 +26,9 @@ public class ShippingDetailsRestController {
 	@Autowired
 	LotteryWinnersRepository lotteryWinnersRepo;
 	
+	@Autowired
+    private EmailService emailService;
+	
 	@GetMapping("/api/shippingDetails/{winnerId}")
 	public ResponseEntity<?> getMethodName(@PathVariable Integer winnerId) {
 		Optional<ShippingDetails> op = shippingDetailsRepo.findByLotteryWinnerId(winnerId);
@@ -52,6 +55,23 @@ public class ShippingDetailsRestController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("已經填寫過了");
 		
 	}
+	
+	@PostMapping("api/shippingDetails/{id}/ship")
+    public ResponseEntity<?> shipOrder(@PathVariable Integer id) {
+        try {
+            Optional<ShippingDetails> op = shippingDetailsRepo.findById(id);
+            
+            if(op.isEmpty()) {
+            	throw new RuntimeException("找不到配送資訊");
+            }
+            
+            emailService.sendShippingNotification(op.get());
+            
+            return ResponseEntity.ok("郵件發送成功");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 	
 	
 

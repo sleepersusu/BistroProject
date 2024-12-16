@@ -17,7 +17,7 @@
             aria-label="Close"
           ></button>
         </div>
-        <Form v-slot="{ errors }" @submit.prevent="handleSubmit">
+        <Form v-slot="{ errors }" @submit="handleSubmit">
           <div class="modal-body">
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>

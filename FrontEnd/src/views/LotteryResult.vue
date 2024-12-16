@@ -1,7 +1,15 @@
 <template>
   <Loading :active="isLoading"></Loading>
   <BannerTop :title="'Lottery Result'"></BannerTop>
-  <div class="container py-4 px-5">
+  <div
+    class="d-flex justify-content-center align-items-center flex-column my-5"
+    v-if="lotteryResults?.length === 0"
+  >
+    <i class="bi bi-emoji-frown display-1 mb-3"></i>
+    <h3 class="mb-5">目前還沒有抽獎紀錄!</h3>
+    <router-link to="/campaign" class="btn btn-primary btn-lg py-3 px-5">來試試手氣吧!</router-link>
+  </div>
+  <div class="container py-4 px-5" v-else>
     <div class="row">
       <div class="col-12">
         <div class="card border shadow-xs mb-4">
@@ -25,17 +33,17 @@
 
                 <tbody>
                   <tr v-for="result in lotteryResults" :key="result.id">
-                    <td>
+                    <td class="align-middle">
                       <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center ms-1">
-                          <h6 class="mb-0 font-weight-semibold text-primary">
+                          <h6 class="align-middle mb-0 font-weight-semibold text-primary">
                             {{ result.memberName }}
                           </h6>
                         </div>
                       </div>
                     </td>
 
-                    <td>
+                    <td class="align-middle">
                       <p class="text-sm text-dark font-weight-semibold mb-0">
                         {{ result.campaignName }}
                       </p>
@@ -115,12 +123,22 @@ const handleSubmitShipping = async (shippingDetails) => {
   try {
     status.start()
     await axios.post(api, shippingDetails)
+    window.Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: `我們已收到您填寫的資訊`,
+      timer: 2500,
+      showConfirmButton: false,
+      timerProgressBar: true,
+    })
     await getResults()
     shippingModal.value.hideModal()
   } catch (e) {
+    const errorMessage = e.response?.data || '發生錯誤，請稍後再試'
     window.Swal.fire({
       title: '錯誤',
-      text: e.response.data,
+      text: errorMessage,
       icon: 'error',
       confirmButtonColor: 'black',
       confirmButtonText: '確定',

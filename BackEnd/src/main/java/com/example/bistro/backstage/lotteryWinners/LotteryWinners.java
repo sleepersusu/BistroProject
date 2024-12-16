@@ -9,10 +9,11 @@ import com.example.bistro.backstage.campaign.Campaign.CampaignStatus;
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 import com.example.bistro.backstage.lotteryChance.LotteryChance;
 import com.example.bistro.backstage.members.Members;
-
+import com.example.bistro.backstage.shippingDetails.ShippingDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,6 +45,9 @@ public class LotteryWinners {
 	
 	@Column(nullable = false, columnDefinition = "BIT DEFAULT 0")
 	private boolean shippingCompleted = false;
+	
+	@OneToOne(mappedBy = "lotteryWinner", cascade = CascadeType.ALL, orphanRemoval = true)
+	private ShippingDetails shippingDetails;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)

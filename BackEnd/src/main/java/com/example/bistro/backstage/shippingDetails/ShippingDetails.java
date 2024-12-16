@@ -1,6 +1,10 @@
 package com.example.bistro.backstage.shippingDetails;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.example.bistro.backstage.lotteryWinners.LotteryWinners;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +32,8 @@ public class ShippingDetails {
     
     @OneToOne
     @JoinColumn(name = "lotteryWinnerId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private LotteryWinners lotteryWinner;
     
     @Column(nullable = false)
