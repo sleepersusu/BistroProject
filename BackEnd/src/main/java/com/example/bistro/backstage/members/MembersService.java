@@ -25,9 +25,12 @@ public class MembersService {
 		 Optional<Members> dbMember = memberRepo.findByMemberAccount(loginAccount);
 		if (dbMember.isPresent()) {
 			String encodedPwd = dbMember.get().getMemberPassword();
+			System.out.println("Member密碼還未加密，之後處理");
 			boolean result = pwdEncoder.matches(loginPassword, encodedPwd);
 			
-			if (true) {//result
+			if(result) {
+				return dbMember;
+			}else if(encodedPwd.equals(loginPassword)) {
 				return dbMember;
 			}
 		}
