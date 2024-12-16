@@ -45,7 +45,7 @@
             <use xlink:href="#star-solid"> </use>
           </svg>{{ menu.avgScore }}
         </span>
-        <span style="padding-left: 5px;">(0)</span>
+        <span style="padding-left: 5px;">({{ commentPeople }})</span>
       </div>
 
       <li
@@ -160,10 +160,6 @@ export default {
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
     },
-    commentPeople:{
-      type: String, // menu 應該是一個物件
-      required: true,
-    }
   },
   emits: ['update-count', 'addToCart','image-loaded','viewComment'],
 
@@ -218,26 +214,26 @@ export default {
           icon: 'error',
         })
       }
+    },    
+    async countCommentPeople(productName) {
+      console.log(productName)
+      let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
+      axios
+        .get(API_URL)
+        .then(async (response) =>{
+          this.commentPeople=response.data
+          console.log(this.commentPeople)
+        })
+        .catch((error) => {
+          console.error('Error fetching commentPeople:', error)
+        })
     },
     async viewComment(menu) {
 
       this.$emit("view-comment",menu)
       
     },
-    // async countCommentPeople(productName) {
-    //   let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
 
-    //   axios
-    //     .get(API_URL)
-    //     .then(async (response) =>{
-          
-    //       this.commentPeople=response.data
-    //       console.log(this.commentPeople)
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error fetching commentPeople:', error)
-    //     })
-    // },
 
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
@@ -259,7 +255,7 @@ export default {
   },
   created() {
       this.loadPicture(this.menu.id)
-      
+      this.countCommentPeople(this.menu.productName) 
     },
 }
 </script>
