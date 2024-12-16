@@ -1,12 +1,15 @@
-package com.example.bistro.backstage.pointPrizes;
+package com.example.bistro.frontstage.pointPrizes;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.bistro.backstage.pointPrizes.PointPrizesBean;
+import com.example.bistro.backstage.pointPrizes.PointPrizesRepository;
+
 @Service
-public class PointPrizesService {
+public class PointPrizesFrontService {
 
     @Autowired
     private PointPrizesRepository PPRepo;
@@ -38,5 +41,4 @@ public class PointPrizesService {
 	public void deletePointPrizeCount(int memberId) {
 		PPRepo.deletePointPrizeCount(memberId);
 	}
-	
 }

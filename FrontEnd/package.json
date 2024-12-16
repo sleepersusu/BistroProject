@@ -41,4 +41,5 @@
     "vite": "^6.0.1",
     "vite-plugin-vue-devtools": "^7.6.5"
   }
+  
 }

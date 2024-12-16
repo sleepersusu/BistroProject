@@ -3,7 +3,9 @@ package com.example.bistro.frontstage.cart;
 import java.util.Date;
 
 import com.example.bistro.frontstage.cartId.CartId;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -56,6 +58,7 @@ public class Cart {
 	@JoinColumn(name = "menuId", referencedColumnName = "ID", nullable = false)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Menu menu; // 與 Menu 表的多對一關係，不允許為 NULL
+
 
 
 	public Cart() {

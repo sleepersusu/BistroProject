@@ -2,6 +2,7 @@
   
     
       <div class="col card bg-light">
+
         <img
           :src="menuSrc"
           class="card-img-top img-fixed"
