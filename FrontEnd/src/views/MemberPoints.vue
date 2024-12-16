@@ -82,6 +82,7 @@ export default {
       } catch (error) {
         console.error('Error fetching point prizes:', error)
       }
+
     },
 
     async redeemPrize(prize) {
@@ -121,15 +122,17 @@ export default {
 
           try {
             const api = `${import.meta.env.VITE_API}/api/pointRecord`
-            const response = await fetch(api, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(requestData),
-            })
+            // const response = await fetch(api, {
+            //   method: 'POST',
+            //   headers: {
+            //     'Content-Type': 'application/json',
+            //   },
+            //   body: JSON.stringify(requestData),
+            // })
+            // console.log(response)
 
-            const res = await this.axios.post(api, requestData)
+            const response = await this.axios.post(api, requestData)
+            console.log(response)
 
             const api3 = `${import.meta.env.VITE_API}/api/promoCode`
             const response3 = await fetch(api3, {
@@ -140,7 +143,9 @@ export default {
               body: JSON.stringify(promoData),
             })
 
-            if (response.ok) {
+
+
+            if (response.data.兌換狀態) {
               window.Swal.fire({
                 toast: true,
                 // position: 'top-end',
