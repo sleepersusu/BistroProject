@@ -22,7 +22,8 @@ public interface PointsRecordsRepository extends JpaRepository<PointsRecordsBean
 
 
 	// 添加根據 promoCode 查詢的方法
-	PointsRecordsBean findByPromoCode(String promoCode);
+	
+//	PointsRecordsBean findByPromoCode(String promoCode);
 	
 	
 }

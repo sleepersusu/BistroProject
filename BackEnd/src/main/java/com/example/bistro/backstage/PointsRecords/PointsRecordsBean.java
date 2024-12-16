@@ -36,18 +36,7 @@ public class PointsRecordsBean {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
     private Date recordsDate;
-	
-	private String promoCode;//獎品兌換碼
-	
-	public String getPromoCode() {
-		return promoCode;
-	}
-
-	public void setPromoCode(String promoCode) {
-		this.promoCode = promoCode;
-	}
-
-
+		
 	public Integer getID() {
 		return ID;
 	}

@@ -15,6 +15,10 @@
               <p class="card-text">
                 優惠碼：<strong>{{ redeemedPrize.promoCode }}</strong>
               </p>
+              <hr>
+              <p class="card-text">
+                目前擁有的兌換卷
+              </p>
             </div>
 
           </div>
@@ -24,21 +28,10 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-// 使用 ref 來存儲兌換的商品信息
-const redeemedPrize = ref(null)
-// 提供一個方法來更新兌換商品信息
-const updateRedeemedPrize = (prizeName, promoCode) => {
-  redeemedPrize.value = {
-    name: prizeName,
-    promoCode: promoCode
-  }
+<script >
+export default{
+  props: ['redeemedPrize']
 }
-// 將方法暴露出去，讓父組件可以調用
-defineExpose({
-  updateRedeemedPrize
-})
 </script>
 
 <style scoped>

@@ -27,18 +27,18 @@ public class PointRecordRestController {
 	    return ResponseEntity.ok(map);
 	}
 	
-	@PostMapping("/api/validatePromoCode")
-	public ResponseEntity<?> validatePromoCode(@RequestBody PointRecordDTO request) {
-	    PointsRecordsBean record = PointsRecordsRepository.findByPromoCode(request.getPromoCode());
-	    
-	    if (record != null) {
-	        return ResponseEntity.ok(Map.of(
-	            "valid", true, 
-	            "prize", record.getPrize()
-	        ));
-	    }
-	    
-	    return ResponseEntity.ok(Map.of("valid", false));
-	}
-	
+//	@PostMapping("/api/validatePromoCode")
+//	public ResponseEntity<?> validatePromoCode(@RequestBody PointRecordDTO request) {
+//	    PointsRecordsBean record = PointsRecordsRepository.findByPromoCode(request.getPromoCode());
+//	    
+//	    if (record != null) {
+//	        return ResponseEntity.ok(Map.of(
+//	            "valid", true, 
+//	            "prize", record.getPrize()
+//	        ));
+//	    }
+//	    
+//	    return ResponseEntity.ok(Map.of("valid", false));
+//	}
+//	
 }

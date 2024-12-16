@@ -11,5 +11,4 @@ public class PointRecordDTO {
     private Integer memberId;
     private Integer pointPrizesId;
     private Date recordsDate;
-    private Date promoCode;
 }
