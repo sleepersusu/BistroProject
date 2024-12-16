@@ -1,249 +1,213 @@
 <template>
-
-<div class="container">
-  <div class="d-flex justify-content-start">
-
-    <button class="btn btn-link" @click="loadAllMenu()">
-    <h2>商品菜單</h2>
-  </button>
-  </div>
-</div>
-<div class="container">
-
-
-  <section class="py-5 overflow-hidden">
+  <div class="container">
+    <section class="py-5 overflow-hidden">
       <div class="container-lg">
         <div class="row">
           <div class="col-md-12">
-
             <div class="section-header d-flex flex-wrap justify-content-between mb-5">
               <h2 class="section-title">Category</h2>
-
-              <div class="d-flex align-items-center">
-                <a href="#" class="btn btn-primary me-2">View All</a>
-                <div class="swiper-buttons">
-                  <button class="swiper-prev category-carousel-prev btn btn-yellow"
-                  >❮</button>
-                  <button class="swiper-next category-carousel-next btn btn-yellow" 
-                  v-on:click.prevent="scrollRight">❯</button>
-                </div>
-              </div>
             </div>
-            
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-12">
-
-            <div class="category-carousel swiper " refs="carousel">
-              <div class="swiper-wrapper d-flex justify-content-around" style="overflow-x:auto;">
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('開胃菜')">
-                  <img src="/public/images/餐點/開胃菜.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >開胃菜</h4>
+            <div class="category-carousel swiper" refs="carousel">
+              <div class="swiper-wrapper d-flex justify-content-around" style="overflow-x: auto">
+                <button
+                  class="nav-link swiper-slide text-center"
+                  v-on:click.prevent="clickCategory('開胃菜')"
+                >
+                  <img
+                    src="/public/images/餐點/開胃菜.jpg"
+                    class="rounded-circle button-image"
+                    alt=""
+                  />
+                  <h4 class="fs-6 mt-3 fw-normal category-title">開胃菜</h4>
                 </button>
 
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('主菜')">
-                  <img src="/public/images/餐點/主菜.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >主菜</h4>
+                <button
+                  class="nav-link swiper-slide text-center"
+                  v-on:click.prevent="clickCategory('主菜')"
+                >
+                  <img
+                    src="/public/images/餐點/主菜.jpg"
+                    class="rounded-circle button-image"
+                    alt=""
+                  />
+                  <h4 class="fs-6 mt-3 fw-normal category-title">主菜</h4>
                 </button>
 
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('飲品')">
-                  <img src="/public/images/餐點/飲品.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >飲品</h4>
+                <button
+                  class="nav-link swiper-slide text-center"
+                  v-on:click.prevent="clickCategory('飲品')"
+                >
+                  <img
+                    src="/public/images/餐點/飲品.jpg"
+                    class="rounded-circle button-image"
+                    alt=""
+                  />
+                  <h4 class="fs-6 mt-3 fw-normal category-title">飲品</h4>
                 </button>
 
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                <button
+                  class="nav-link swiper-slide text-center"
+                  v-on:click.prevent="clickCategory('甜點')"
+                >
+                  <img
+                    src="/public/images/餐點/甜點.jpg"
+                    class="rounded-circle button-image"
+                    alt=""
+                  />
+                  <h4 class="fs-6 mt-3 fw-normal category-title">甜點</h4>
                 </button>
 
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                <button
+                  class="nav-link swiper-slide text-center"
+                  v-on:click.prevent="clickCategory('甜點')"
+                >
+                  <img
+                    src="/public/images/餐點/甜點.jpg"
+                    class="rounded-circle button-image"
+                    alt=""
+                  />
+                  <h4 class="fs-6 mt-3 fw-normal category-title">甜點</h4>
                 </button>
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
-                </button>
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
-                </button>
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
-                </button>
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
-                </button>
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
-                </button>
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
-                </button>
-
-                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
-                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
-                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
-                </button>
-                
-                
               </div>
             </div>
-
           </div>
         </div>
       </div>
-    </section>       
+    </section>
 
-    
-
-</div>
-<div class="container">
-  <div class="row mt-3">
-
-    <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id" >
-
-    <MenuCard :menu="menu" 
-      @update-count="updateCount" 
-      @add-to-cart="handleAddToCart">
-    </MenuCard>
+    <div class="container">
+      <div class="d-flex justify-content-start">
+        <button class="btn btn-link" @click="loadAllMenu()">
+          <h2>商品菜單</h2>
+        </button>
+      </div>
     </div>
-
-
   </div>
-</div>
 
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id">
+        <MenuCard
+          :menu="menu"
+          :commentPeople="commentPeople"
+          @view-comment="openModal"
+          @update-count="updateCount"
+          @add-to-cart="handleAddToCart"
+        >
+        </MenuCard>
+      </div>
+
+      <MenuCommentModal ref="commentMoal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
+    </div>
+  </div>
 </template>
 
-
-<script >
-import MenuCard from '@/components/MenuCard.vue';
-
-
+<script>
+import MenuCard from '@/components/MenuCard.vue'
+import MenuCommentModal from '@/components/MenuCommentModal.vue'
+import axios from 'axios'
 
 export default {
-  components:{
-
+  components: {
     MenuCard,
-
+    MenuCommentModal,
   },
 
   data() {
     return {
-      menus:[],
-
-      comment: {},
-
-      menuCount: 0, 
-
-      
+      menus: [],
+      currentProduct:'',
+      comments: [],
+      // commentPeople:'',
+      menuCount: 0,
     }
   },
   methods: {
+    loadAllMenu() {
+      let API_URL = `${import.meta.env.VITE_API}/api/menu`
 
-
-    loadAllMenu(){
-
-      let API_URL = `${import.meta.env.VITE_API}/api/menu/`;
-
-      this.axios.get(API_URL)
-      .then((response)=>{
-        this.menus=response.data
+      axios.get(API_URL).then((response) => {
+        this.menus = response.data
+        console.log(response.data)
       })
-
     },
 
-  
-
-
-
-
-
-    
     updateCount(newCount) {
-
-      this.menuCount = newCount;
-      console.log("Updated count:", this.menuCount);
-
+      this.menuCount = newCount
+      console.log('Updated count:', this.menuCount)
     },
 
     handleAddToCart({ id, count }) {
-      console.log(`Added to cart: ID=${id}, Count=${count}`);
+      console.log(`Added to cart: ID=${id}, Count=${count}`)
     },
 
     // 按分類加載菜單數據
     clickCategory(category) {
-      this.isLoading = true;
+      this.isLoading = true
 
-      let API_URL = `${import.meta.env.VITE_API}/api/menu/${category}`;
-
+      let API_URL = `${import.meta.env.VITE_API}/api/menu/${category}`
 
       this.axios
         .get(API_URL)
         .then((response) => {
-          this.menus = response.data; // 假設 API 返回的數據是菜單數組
+          this.menus = response.data // 假設 API 返回的數據是菜單數組
         })
         .catch((error) => {
-          console.error("Error loading menus:", error);
+          console.error('Error loading menus:', error)
         })
         .finally(() => {
-          this.isLoading = false;
-        });
+          this.isLoading = false
+        })
     },
+    // async countCommentPeople(productName) {
+    //   let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
 
+    //   axios
+    //     .get(API_URL)
+    //     .then(async (response) =>{
+    //       this.commentPeople=response.data
+    //       console.log(this.commentPeople)
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error fetching commentPeople:', error)
+    //     })
+    // },
 
-     // 向左滾動
-     scrollLeft() {
-      const carousel = this.$refs.carousel;
-      carousel.scrollBy({
-        left: -200,
-        behavior: "smooth",
-      });
-      this.checkScrollPosition();
+    
+    openModal(menu) {
+      this.currentProduct=menu.productName
+      let api = `${import.meta.env.VITE_API}/api/${menu.productName}/comment`
+      this.axios
+        .get(api)
+        .then((response) => {
+          console.log(response.data)
+          this.comments = response.data
+        })
+        .catch((error) => {
+          console.error('Error loading menus:', error)
+        })
+
+      this.$refs.commentMoal.showModal()
     },
-
-    // 向右滾動
-    scrollRight() {
-      const carousel = this.$refs.carousel;
-      carousel.scrollBy({
-        left: 200,
-        behavior: "smooth",
-      });
-      this.checkScrollPosition();
-    },
-
   },
 
-
-  
-  computed: {},
-  watch: {},
   created() {
-    this.loadAllMenu();
-
-  },
+    this.loadAllMenu()
+    
+  }
 }
 </script>
 
 <style scoped>
-  .btn-link{
-    text-decoration:none ;
-    color: black;
-  }
+.btn-link {
+  text-decoration: none;
+  color: black;
+}
 
 /* Swiper carousel */
 .swiper-prev,
@@ -251,7 +215,7 @@ export default {
   width: 38px;
   height: 38px;
   line-height: 38px;
-  background: #F1F1F1;
+  background: #f1f1f1;
   color: #222222;
   padding: 0;
   text-align: center;
@@ -263,7 +227,7 @@ export default {
   --bs-btn-hover-border-color: transparent;
   --bs-btn-disabled-color: #ccc;
   --bs-btn-disabled-bg: #eaeaea;
-  --bs-btn-disabled-border-color: #eaeaea
+  --bs-btn-disabled-border-color: #eaeaea;
 }
 .swiper-prev:hover,
 .swiper-next:hover {
@@ -272,17 +236,19 @@ export default {
 
 /* category carousel */
 .category-carousel .category-item {
-  background: #FFFFFF;
-  border: 1px solid #FBFBFB;
+  background: #ffffff;
+  border: 1px solid #fbfbfb;
   box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.04);
   border-radius: 16px;
   text-align: center;
   padding: 60px 20px;
   margin: 20px 0;
-  transition: box-shadow 0.3s ease-out, transform 0.3s ease-out;
+  transition:
+    box-shadow 0.3s ease-out,
+    transform 0.3s ease-out;
 }
 .category-carousel .category-item:hover {
-  transform: translate3d(0,-10px,0);
+  transform: translate3d(0, -10px, 0);
   box-shadow: 0px 21px 44px rgba(0, 0, 0, 0.08);
 }
 .category-carousel .category-item .category-title {
@@ -295,12 +261,11 @@ export default {
   margin-top: 20px;
 }
 
-
-.button-image { 
-  width:150px;
-  height: 150px; 
-  margin-right: 8px; 
-  object-fit: cover; 
-  border-radius: 50%; 
+.button-image {
+  width: 150px;
+  height: 150px;
+  margin-right: 8px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 </style>
