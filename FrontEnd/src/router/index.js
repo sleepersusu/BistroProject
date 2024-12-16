@@ -49,6 +49,7 @@ const router = createRouter({
           component: () => import('../views/Campaign.vue'),
         },
         {
+
           path: '/cartCheckout',
           component: () => import('../views/CartCheckout.vue'),
         },
@@ -60,6 +61,7 @@ const router = createRouter({
           path: '/cartCheckFail',
           component: () => import('../views/CartCheckFail.vue'),
         },
+
 
       ],
     },
