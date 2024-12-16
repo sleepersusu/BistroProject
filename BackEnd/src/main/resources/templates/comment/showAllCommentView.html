@@ -64,7 +64,7 @@
 										<td th:text="${comment.ID}"></td>
 										<td th:text="${comment.members.memberName}"></td>
 										<td th:text="${comment.commentProduct}"></td>
-										<td th:text="${comment. commentRating}"></td>
+										<td th:text="${comment. commentRating}+'分'"></td>
 										<td th:text="${comment.commentMessage}"></td>
 										<td th:text="${{comment.commentTime}}"></td>
 										
@@ -76,14 +76,10 @@
 				</section>
 			</main>
 
-
-			
-
-
-
 			<footer> &copy; Made by TeamWork </footer>
 		</div>
 	</div>
+
 
 
 
@@ -95,19 +91,8 @@
 		scrollY : "500px",
 	})
 
-	
-
-	    
-	    
-
-      	
-
 
 	</script>
-
-
-
-
 
 </body>
 </html>

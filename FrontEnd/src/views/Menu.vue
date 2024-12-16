@@ -2,6 +2,7 @@
 
 <div class="container">
   <div class="d-flex justify-content-start">
+
     <button class="btn btn-link" @click="loadAllMenu()">
     <h2>商品菜單</h2>
   </button>
@@ -109,19 +110,19 @@
     </section>       
 
     
+
 </div>
 <div class="container">
   <div class="row mt-3">
 
     <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id" >
 
-      <MenuCard :menu="menu" 
-        @update-count="updateCount" 
-        @add-to-cart="handleAddToCart">
-      </MenuCard>
+    <MenuCard :menu="menu" 
+      @update-count="updateCount" 
+      @add-to-cart="handleAddToCart">
+    </MenuCard>
+    </div>
 
-      
-      </div>
 
   </div>
 </div>
@@ -136,15 +137,19 @@ import MenuCard from '@/components/MenuCard.vue';
 
 export default {
   components:{
+
     MenuCard,
+
   },
 
   data() {
     return {
       menus:[],
+
       comment: {},
 
       menuCount: 0, 
+
       
     }
   },
@@ -161,15 +166,19 @@ export default {
       })
 
     },
+
   
+
 
 
 
 
     
     updateCount(newCount) {
+
       this.menuCount = newCount;
       console.log("Updated count:", this.menuCount);
+
     },
 
     handleAddToCart({ id, count }) {
@@ -179,7 +188,9 @@ export default {
     // 按分類加載菜單數據
     clickCategory(category) {
       this.isLoading = true;
+
       let API_URL = `${import.meta.env.VITE_API}/api/menu/${category}`;
+
 
       this.axios
         .get(API_URL)
@@ -193,6 +204,8 @@ export default {
           this.isLoading = false;
         });
     },
+
+
      // 向左滾動
      scrollLeft() {
       const carousel = this.$refs.carousel;
@@ -212,6 +225,7 @@ export default {
       });
       this.checkScrollPosition();
     },
+
   },
 
 
@@ -220,6 +234,7 @@ export default {
   watch: {},
   created() {
     this.loadAllMenu();
+
   },
 }
 </script>

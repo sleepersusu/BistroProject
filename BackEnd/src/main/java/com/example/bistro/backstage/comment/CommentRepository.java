@@ -17,6 +17,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 	@Query("FROM Comment c WHERE c.menu.productName= :productName")
 	List<Comment> findCommentByProductName(String productName);
 
+
 	@Query("SELECT COUNT(c) FROM Comment c WHERE c.menu.productName= :productName")
 	Integer countCommentPeopleByProductName(String productName);
+
 }
