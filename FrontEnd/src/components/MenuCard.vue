@@ -28,7 +28,7 @@
     </svg>
 
 
-  <div class="col">
+  <div class="col" v-if="!isLoading">
     <div class="product-item">
       <figure>
         
@@ -39,18 +39,18 @@
       <h3>{{ menu.productName }}</h3>
       
     <div class="d-flex align-items-bottom justify-content-between">
-      <span class="rating">
-        <svg width="24" height="24" class="text-primary">
-          <use xlink:href="#star-solid"> </use>
-        </svg>{{ menu.avgScore }}
-      </span>
-    
+      <div>
+        <span class="rating">
+          <svg width="24" height="24" class="text-primary">
+            <use xlink:href="#star-solid"> </use>
+          </svg>{{ menu.avgScore }}
+        </span>
+        <span style="padding-left: 5px;">(0)</span>
+      </div>
 
       <li
         class="lookComment"
         v-on:click.prevent="viewComment(menu)"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
         style="list-style-type: none;"
       >
         <i class="bi bi-chat-left-text"></i>觀看評論
@@ -88,80 +88,7 @@
     </div>
   </div>
 
-                  
-
-  <!-- <div class="card" v-if="!isLoading">
-    <img :src="menuSrc" class="card-img-top img-fixed" :alt="menu.productImgUrl" />
-    <div class="card-body">
-      <div class="d-flex justify-content-between">
-        <span class="card-title">{{ menu.productName }} </span
-        ><span class="fs-6"> 剩餘:{{ menu.productCount }}份</span>
-      </div>
-      <p class="card-text" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden">
-        {{ menu.productDescribe }}
-      </p>
-
-      <div class="mb-3">
-        <span class="fs-3">${{ menu.productPrice }}</span>
-      </div>
-
-      <div class="input-group mb-3">
-        <button
-          class="btn btn-outline-secondary btn-border-none"
-          type="button"
-          id="button-addon1"
-          v-on:click.prevent="minusOne"
-        >
-          <i class="bi bi-dash"></i>
-        </button>
-        <input
-          type="number"
-          class="form-control text-center"
-          v-model="count"
-          v-on:input="updateQuantity($event)"
-          placeholder=""
-          aria-label="Example number with button addon"
-          aria-describedby="button-addon1"
-          min="0"
-          :max="menu.productCount"
-        />
-        <button
-          class="btn btn-outline-secondary btn-border-none"
-          type="button"
-          id="button-addon2"
-          v-on:click.prevent="addOne"
-        >
-          <i class="bi bi-plus-lg"></i>
-        </button>
-      </div>
-
-      <button class="mb-3 btn btn-outline-primary w-100"
-      v-on:click.prevent="handleAddToCart({ id: menu.id, count: count })">
-        <i class="bi bi-cart-plus"></i>加入購物車
-      </button>
-
-      <button
-        class="btn btn-outline-primary w-100"
-        v-on:click.prevent="viewComment(menu)"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
-        <i class="bi bi-chat-left-text"></i>觀看評論
-      </button>
-
-      <div style="display: flex; justify-content: center; margin: 5px 0 0 0">
-        <star-rating
-          v-model:rating="menu.avgScore"
-          :read-only="true"
-          :increment="0.1"
-          :star-size="20"
-          style="font-size: 15px"
-        ></star-rating>
-      </div>
-    </div>
-  </div> -->
-
-  <div
+  <!-- <div
     class="modal fade modal-dialog-scrollable"
     id="exampleModal"
     tabindex="-1"
@@ -180,7 +107,7 @@
         </div>
         <h4>{{ menu.productDescribe}}</h4>
         <div  v-for="comment in comments" :key="comment.id">
-          <div class="modal-body" :comment="comment">
+          <div class="modal-body" >
             <div style="display: flex">
               <div>
                 <div>
@@ -214,7 +141,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -233,8 +160,12 @@ export default {
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
     },
+    commentPeople:{
+      type: String, // menu 應該是一個物件
+      required: true,
+    }
   },
-  emits: ['update-count', 'addToCart','image-loaded'],
+  emits: ['update-count', 'addToCart','image-loaded','viewComment'],
 
   data() {
     return {
@@ -243,17 +174,7 @@ export default {
       isLoading: false,
       count: 0,
       comments: [],
-      comment: {
-        id:'',
-        commentMessage: "",
-        commentProduct: "",
-        commentRating: 0.0,
-        memberImg: "",
-        memberName: "",
-        memberid: "",
-        memberSex:"",
-        commentTime:"",
-      },
+      commentPeople:'',
     }
   },
   methods: {
@@ -268,7 +189,7 @@ export default {
           let url = URL.createObjectURL(response.data)
           this.menuSrc = url
           this.isLoading = false
-          this.$emit('image-loaded', this.menuSrc)
+          
         })
         .catch((error) => {
           console.error('Error fetching menus:', error)
@@ -299,37 +220,25 @@ export default {
       }
     },
     async viewComment(menu) {
-      this.isLoading = true
-      let api = `${import.meta.env.VITE_API}/api/${menu.productName}/comment`
-      this.axios
-        .get(api)
-        .then((response) => {
-          console.log(response.data)
-          this.comments = response.data
-        })
-        .catch((error) => {
-          console.error('Error loading menus:', error)
-        })
-        .finally(() => {
-          this.isLoading = false
-        })
-    },
 
-    async loadMemberAvatar(comment){
-      this.showComment=true
-      try {
-        const api = `${import.meta.env.VITE_API}/api/member/photo/${comment.memberid}`
-        let res = await this.axios.get(api,{ responseType: 'blob' })
-        let url = URL.createObjectURL(res.data)
-          this.memberSrc = url
-          this.isLoading = false
-          this.$emit('image-loaded', this.memberSrc)
-          
-      }catch (e) {
-        console.log(e)
-      }
+      this.$emit("view-comment",menu)
+      
     },
-    
+    // async countCommentPeople(productName) {
+    //   let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
+
+    //   axios
+    //     .get(API_URL)
+    //     .then(async (response) =>{
+          
+    //       this.commentPeople=response.data
+    //       console.log(this.commentPeople)
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error fetching commentPeople:', error)
+    //     })
+    // },
+
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
       if (value >= 0 && value <= this.menu.productCount) {
@@ -350,6 +259,7 @@ export default {
   },
   created() {
       this.loadPicture(this.menu.id)
+      
     },
 }
 </script>
