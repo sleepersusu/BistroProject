@@ -114,8 +114,8 @@ public class LotteryWinnerFrontService {
 	    return availablePrizes.get(availablePrizes.size() - 1);
 	}
 	
-	public LotteryWinners findByMemberId(Integer memberId){
-		LotteryWinners winner = lotteryWinnersRepo.findByMemberId(memberId);
+	public List<LotteryWinners> findByMemberId(Integer memberId){
+		List<LotteryWinners> winner = lotteryWinnersRepo.findByMemberId(memberId);
 		if(winner == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到此會員的中獎紀錄");
 		}

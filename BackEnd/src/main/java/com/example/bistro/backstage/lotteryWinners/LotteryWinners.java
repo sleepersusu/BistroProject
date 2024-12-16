@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.bistro.backstage.campaign.Campaign;
+import com.example.bistro.backstage.campaign.Campaign.CampaignStatus;
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 import com.example.bistro.backstage.lotteryChance.LotteryChance;
 import com.example.bistro.backstage.members.Members;
@@ -84,6 +85,16 @@ public class LotteryWinners {
 	@JsonProperty("prizeName")
 	public String fetchPrizeName() {
 	    return campaignPrizes.getPrizeName();
+	}
+	
+	@JsonProperty("campaignStatus")
+	public CampaignStatus fetchCampaignStatus() {
+	    return campaign.getCampaignStatus();
+	}
+	
+	@JsonProperty("campaignName")
+	public String fetchCampaignName() {
+		return campaign.getCampaignTitle();
 	}
 	
 
