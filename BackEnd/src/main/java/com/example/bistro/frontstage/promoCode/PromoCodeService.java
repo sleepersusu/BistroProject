@@ -4,6 +4,9 @@ import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.members.MembersRepository;
 import com.example.bistro.backstage.pointPrizes.PointPrizesBean;
 import com.example.bistro.backstage.pointPrizes.PointPrizesRepository;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +27,8 @@ public class PromoCodeService {
         Members member = membersRepository.findById(promoData.getMemberId())
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
-
         PointPrizesBean pointPrize = pointPrizesRepository.findById(promoData.getPointPrizesId())
                 .orElseThrow(() -> new RuntimeException("Point Prize not found"));
-
 
         PromoCodeBean promoCodeBean = new PromoCodeBean();
         promoCodeBean.setMembers(member);
@@ -36,4 +37,9 @@ public class PromoCodeService {
 
         promoCodeRepository.save(promoCodeBean);
     }
+    
+    public List<PromoCodeBean> findMemberPromoCode(){
+    	return promoCodeRepository.findAll();
+    }
+    
 }
