@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
 import 'aos/dist/aos.css'
 import AOS from 'aos'
 import VueLuckyCanvas from '@lucky-canvas/vue'
+import StarRating from 'vue-star-rating'
 
 window.Swal = Swal
 
@@ -23,6 +24,9 @@ app.use(router)
 app.use(VueAxios, axios)
 app.use(VueLuckyCanvas)
 
+app.component('vue-star-rating', StarRating)
 app.component('Loading', Loading)
 
+
 app.mount('#app')
+''

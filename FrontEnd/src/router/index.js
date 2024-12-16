@@ -45,6 +45,10 @@ const router = createRouter({
           path: '/campaign',
           component: () => import('../views/Campaign.vue'),
         },
+        {
+          path: '/CommentPost',
+          component: () => import('../views/CommentPost.vue'),
+        },
       ],
     },
   ],
