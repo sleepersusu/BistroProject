@@ -13,22 +13,23 @@
   "dependencies": {
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@lucky-canvas/vue": "^0.1.11",
-    "@popperjs/core": "^2.11.8",
     "aos": "^2.3.4",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.3",
+    "fireworks-js": "^2.10.8",
     "gsap": "^3.12.5",
     "pinia": "^2.2.6",
     "sweetalert2": "^11.14.5",
     "vue": "^3.5.13",
     "vue-axios": "^3.5.2",
+
     "vue-router": "^4.4.5",
     "vue-star-rating": "^2.1.0",
     "vue3-loading-overlay": "^0.0.0"
+
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
-    "@types/bootstrap": "^5.2.10",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/eslint-config-prettier": "^10.1.0",
     "autoprefixer": "^10.4.20",

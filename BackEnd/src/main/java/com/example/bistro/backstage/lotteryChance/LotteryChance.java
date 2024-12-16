@@ -21,10 +21,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "LotteryChance")
 public class LotteryChance {
@@ -71,10 +73,6 @@ public class LotteryChance {
 	    if(usedChances == null) {
 	        usedChances = 0;
 	    }
-	}
-	
-
-	public LotteryChance() {
 	}
 	
 

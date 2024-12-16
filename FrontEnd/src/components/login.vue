@@ -102,7 +102,7 @@ export default {
     },
 };
 </script>
-<style >
+<style>
 .modal-backdrop {
     z-index: 1000 !important;
     /*確保遮罩在 modal 背後 */

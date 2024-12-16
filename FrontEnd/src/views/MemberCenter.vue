@@ -21,7 +21,6 @@ export default {
     return {}
   },
   components: {
-    //   MembercenterNav
     MembercenterNav
   },
   methods: {},
@@ -30,3 +29,4 @@ export default {
   created() { },
 }
 </script>
+<style scoped></style>

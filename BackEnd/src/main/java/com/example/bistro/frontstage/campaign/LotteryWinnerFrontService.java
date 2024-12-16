@@ -3,6 +3,7 @@ package com.example.bistro.frontstage.campaign;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,9 @@ public class LotteryWinnerFrontService {
 	    }
 
 	    List<CampaignPrizes> prizes = campaignPrizeFrontService.findPrizesByCampaignId(chance.getCampaign().getId());
+	    if(prizes == null || prizes.isEmpty()) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到活動獎品..");
+	    }
 
 	    CampaignPrizes winnerPrize = drawPrizeByProbability(prizes);
 
@@ -62,7 +66,7 @@ public class LotteryWinnerFrontService {
 	    lotteryChanceService.useChance(chance.getId());
 
 	    Map<String, Object> result = new HashMap<>();
-	    result.put("isWin", winnerPrize.getPrizeName().equals("銘謝惠顧") ? false : true);
+	    result.put("isWin", !winnerPrize.getPrizeName().equals("銘謝惠顧"));
 	    result.put("remainingChances", chance.getRemainingChances());
 	    
 	    if (winnerPrize != null) {
@@ -79,20 +83,35 @@ public class LotteryWinnerFrontService {
 	}
 
 	private CampaignPrizes drawPrizeByProbability(List<CampaignPrizes> prizes) {
+	    if (prizes == null || prizes.isEmpty()) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品列表為空");
+	    }
+	    
+	    List<CampaignPrizes> availablePrizes = prizes.stream()
+	        .filter(prize -> prize.getPrizeQuantity() > 0)
+	        .collect(Collectors.toList());
+
+	    if (availablePrizes.isEmpty()) {
+	        return prizes.stream()
+	            .filter(prize -> prize.getPrizeName().equals("銘謝惠顧"))
+	            .findFirst()
+	            .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "抽獎過程發生錯誤"));
+	    }
+
 	    double random = Math.random() * 100;
 	    double cumulative = 0.00;
-	    
-	    for (CampaignPrizes prize : prizes) {
-	    	if(prize.getProbability() == null) {
-	    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品機率設定錯誤");
-	    	}
+
+	    for (CampaignPrizes prize : availablePrizes) {
+	        if(prize.getProbability() == null) {
+	            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品機率設定錯誤");
+	        }
 	        cumulative += prize.getProbability().doubleValue();
 	        if (random <= cumulative) {
 	            return prize;
 	        }
 	    }
-	    
-	    return null;
+
+	    return availablePrizes.get(availablePrizes.size() - 1);
 	}
 	
 	public LotteryWinners findByMemberId(Integer memberId){

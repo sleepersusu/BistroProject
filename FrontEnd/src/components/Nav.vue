@@ -115,7 +115,7 @@ export default {
 
 .navbar-brand {
   font-family: 'Chakra Petch', sans-serif !important;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: 1px;
   transition: all 0.3s ease;
