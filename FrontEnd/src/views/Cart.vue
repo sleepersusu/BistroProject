@@ -1,9 +1,6 @@
 <template>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
-    rel="stylesheet"
-  />
   <div>
+    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'"></PageTop>
     <BannerTop v-bind:title="'Shopping Cart'"></BannerTop>
   </div>
   <!-- Step Indicator -->
@@ -118,11 +115,9 @@
               <strong>Total</strong>
               <strong>$229.97</strong>
             </div>
-
             <button class="btn btn-dark w-100">
               <router-link class="nav-link" to="/cartCheckout">Proceed to Checkout</router-link>
             </button>
-
           </div>
         </div>
         <!--        Promo Code-->
@@ -138,9 +133,6 @@
       </div>
     </div>
   </div>
-
-
-
 </template>
 
 <script>
@@ -151,10 +143,12 @@ import CartTable from '@/components/cart/CartTable.vue'
 import CartTitle from '@/components/cart/CartTitle.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
+import PageTop from '@/components/PageTop.vue'
 
 export default {
   name: 'Cart',
   components: {
+    PageTop,
     BannerTop,
     FontAwesomeIcon,
     CartTitle,

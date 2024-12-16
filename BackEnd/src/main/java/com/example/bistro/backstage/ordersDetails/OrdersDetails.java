@@ -1,5 +1,6 @@
 package com.example.bistro.backstage.ordersDetails;
 
+
 import com.example.bistro.backstage.menu.Menu;
 import com.example.bistro.backstage.orders.Orders;
 import jakarta.persistence.*;
@@ -34,7 +35,8 @@ public class OrdersDetails {
             @JoinColumn(name = "menuId", nullable = false)
             private Menu menu;  // 訂單明細與菜單商品關聯
 
+            
 
-        public OrdersDetails() {};
 
+	
 }

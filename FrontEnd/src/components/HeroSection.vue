@@ -1,0 +1,85 @@
+<template>
+  <div class="container-fluid">
+    <div class="row bg-primary">
+      <div class="col-md-4 overflow-hidden">
+        <img
+          src="/images/wine.png"
+          data-aos="fade-right"
+          data-aos-duration="2000"
+          data-aos-delay="300"
+        />
+      </div>
+      <div
+        class="col-md-4 my-5 text-center text-accent center-content"
+        data-aos="fade-up"
+        data-aos-duration="2000"
+        data-aos-delay="1500"
+      >
+        <h1 class="display-2 mb-4 title">品味驚喜</h1>
+        <h3 class="mb-3">2024 週年慶抽獎</h3>
+        <p class="lead">消費滿1000元 即可獲得抽獎機會</p>
+
+        <div class="mb-5">
+          <img
+            src="/images/macbook1.png"
+            class="img-fluid mb-3"
+            data-aos="fade-up"
+            data-aos-duration="2000"
+            data-aos-delay="2300"
+          />
+          <h4>頭獎：MacBook Pro 1TB</h4>
+        </div>
+        <div class="scroll-down">
+          <i class="bi bi-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="col-md-4 position-relative overflow-hidden">
+        <div class="position-absolute end-0" style="top: 15%">
+          <img
+            src="/images/dish.png"
+            class=""
+            style="object-fit: cover"
+            data-aos="fade-left"
+            data-aos-duration="2000"
+            data-aos-delay="1000"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Dancing+Script:wght@700&family=Noto+Serif+TC:wght@600&display=swap');
+
+.title {
+  font-family: 'Dancing Script', 'Noto Serif TC', serif !important;
+}
+
+.scroll-down {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  animation: bounce 2s infinite;
+}
+
+.center-content {
+  background-image: url('/images/wine-bg.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0) translateX(-50%);
+  }
+  50% {
+    transform: translateY(20px) translateX(-50%);
+  }
+}
+</style>

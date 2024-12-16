@@ -26,7 +26,7 @@ public class MenuRestController {
 	private MenuRepository menuRepo;
 	
 	
-	@GetMapping("api/menu/")
+	@GetMapping("/api/menu")
 	public ResponseEntity<List<Menu>> findMenuByStatusIsSold() {
 		List<Menu> menuIsSold = menuService.findMenuByStatusIsSold();
 		return ResponseEntity.ok(menuIsSold);
