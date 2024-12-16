@@ -1,21 +1,8 @@
 <template>
     <!-- 顯示登入/註冊按鈕或頭像 -->
-    <li class="nav-item ms-lg-5">
-        <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
-        <div v-if="!isLoggedIn" class="btn btn-outline-light" v-on:click="openLoginModal">登入 / 註冊</div>
-        <div v-else class="d-flex align-items-center">
-            <router-link to="/membercenter" class="d-flex align-items-center">
-                <!-- 頭像 -->
-                <div class="circle-avatar" :style="{ backgroundImage: `url(${userAvatar})` }"></div>
-                <!-- 會員名稱 -->
-                <span class="text-light ms-2">{{ username }}</span>
-            </router-link>
-        </div>
-    </li>
-
 
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="false">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="loginModalLabel">會員登入</h5>
@@ -25,19 +12,23 @@
                     <form v-on:submit.prevent="submitLogin" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">帳號</label>
-                            <input type="text" class="form-control" id="username" name="Account" required>
+                            <input type="text" class="form-control" id="username" name="Account"
+                                value="user2@example.com" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">密碼</label>
-                            <input type="password" class="form-control" id="password" name="Password" required>
+                            <input type="password" class="form-control" id="password" name="Password" value="password2"
+                                required>
                         </div>
-                        <button type="submit" class="btn btn-primary">登入</button>
-                        <div class="mt-3 text-center">
-                            <button class="btn btn-link p-0" data-bs-toggle="modal"
-                                data-bs-target="#registerModal">註冊</button>
-                            <span> | </span>
-                            <button class="btn btn-link p-0" data-bs-toggle="modal"
-                                data-bs-target="#forgotPasswordModal">忘記密碼</button>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-outline-primary">登入</button>
+                            <div class="text-center">
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    data-bs-target="#registerModal">註冊</button>
+                                <span> | </span>
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    data-bs-target="#forgotPasswordModal">忘記密碼</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -48,14 +39,11 @@
 </template>
 <script>
 import { useUserStore } from '@/stores/userStore';
-import { Modal } from 'bootstrap/dist/js/bootstrap.bundle.min';
+import  Modal  from 'bootstrap/js/dist/modal';
 const userStore = useUserStore();
 export default {
     data() {
         return {
-            setShadow: false,
-            userAvatar: '', // 頭像圖片的URL，從資料庫撈取
-            isLoggedIn: false, // 記錄用戶是否已經登入
         };
     },
     methods: {
@@ -89,42 +77,36 @@ export default {
                 const token = response.data.token;
                 // 儲存 token（例如使用 localStorage）
                 localStorage.setItem('authToken', token);
-
-                this.username = response.data.memberName;
+                let userAvatar = '';
+                let username = response.data.memberName;
                 let imgUrl = `${userStore.getApiUrl()}/api/member/photo/${memberId}`;
                 let imgData = await this.axios.get(imgUrl,
-                {
-                    responseType: 'blob',
-                })
-                if(imgData.data.size === 0){
-                    console.log('進默認')
-                    this.userAvatar = "/public/images/avatar.jpg";
-                }else{
-                    this.userAvatar = URL.createObjectURL(imgData.data);
+                    {
+                        responseType: 'blob',
+                    })
+                if (imgData.data.size === 0) {
+                    userAvatar = "/public/images/avatar.jpg";
+                } else {
+                    userAvatar = URL.createObjectURL(imgData.data);
                 }
-                this.isLoggedIn = true;
+                this.$emit('user-login', userAvatar, username)
             } catch (error) {
                 // 處理錯誤，設登入失敗
                 console.error('登入失敗', error);
-                this.isLoggedIn = false;
-            } finally{
+                userStore.clearLoggedIn();
+            } finally {
                 console.log("準備關閉")
                 this.modal.hide();
             }
-        },
-        logout() {
-            // 處理登出邏輯
-            this.isLoggedIn = false;
-            localStorage.clear();
-            this.userAvatar = ''; // 清除頭像
         }
     },
 };
 </script>
-<style>
+<style >
 .modal-backdrop {
     z-index: 1000 !important;
-    /* 背景遮罩层的 z-index */
+    /*確保遮罩在 modal 背後 */
+
 }
 
 .modal {

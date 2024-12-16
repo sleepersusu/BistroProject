@@ -26,14 +26,13 @@
 </template>
 
 <script>
-
+import { useUserStore } from '@/stores/userStore';
+const userStore=useUserStore();
 export default {
-  data() {
-
-  },
   methods: {
     logout() {
             // 處理登出邏輯
+            userStore.clearLoggedIn();
             localStorage.clear();
         }
   }

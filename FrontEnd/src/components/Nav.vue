@@ -1,16 +1,9 @@
 <template>
-  <nav
-    class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top"
-    :class="{ 'nav-shadow': setShadow, 'navbar-shrink': setShadow }"
-  >
+  <nav class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top"
+    :class="{ 'nav-shadow': setShadow, 'navbar-shrink': setShadow }">
     <div class="container">
       <router-link class="navbar-brand text-light" to="/index">Nightly Sips</router-link>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -37,49 +30,42 @@
               <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary">
                 3
                 <span class="visually-hidden">unread messages</span>
-              </span></router-link
-            >
+              </span></router-link>
           </li>
-          <login></login>
+          <li class="nav-item ms-lg-5">
+            <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
+            <div v-if="!userStore.isLoggedIn" class="btn btn-outline-light" v-on:click="openLoginModal">登入 / 註冊</div>
+            <div v-else class="d-flex align-items-center">
+              <router-link to="/membercenter" class="d-flex align-items-center">
+                <!-- 頭像 -->
+                <div class="circle-avatar" :style="{ backgroundImage: `url(${userAvatar})` }"></div>
+                <!-- 會員名稱 -->
+                <span class="text-light ms-2">{{ username }}</span>
+              </router-link>
+            </div>
+          </li>
+          <login ref="loginModal" @user-login="handleLogin"></login>
         </ul>
       </div>
     </div>
   </nav>
 
-      <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">登入</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form v-on:submit.prevent="submitLogin">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">帳號</label>
-                            <input type="text" class="form-control" id="username" v-model="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">密碼</label>
-                            <input type="password" class="form-control" id="password" v-model="password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">登入</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </template>
 
 <script>
 import Login from './login.vue';
-
+import { useUserStore } from '@/stores/userStore';
+const userStore=useUserStore();
 export default {
   data() {
     return {
       setShadow: false,
+      userAvatar: '',
+      username:'',
+      userStore: useUserStore(),
     }
-  },components: {
+  }, components: {
     Login
   },
   methods: {
@@ -88,6 +74,14 @@ export default {
         this.setShadow = window.scrollY > 100
       })
     },
+    openLoginModal(){
+      this.$refs.loginModal.openLoginModal()
+    },
+    handleLogin(userImg,username){
+      userStore.setLoggedIn();
+      this.userAvatar = userImg;
+      this.username = username;
+    }
   },
   mounted() {
     window.addEventListener('scroll', this.navShadow)
@@ -103,6 +97,7 @@ export default {
 .nav-shadow {
   box-shadow: 0 0 12px #f5e6d3 !important;
 }
+
 .nav-item {
   font-size: 1rem !important;
 }

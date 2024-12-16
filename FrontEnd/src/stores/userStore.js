@@ -1,21 +1,19 @@
 import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore('userStore', {
-    state: () => ({
-      apiUrl: import.meta.env.VITE_API,  // 使用 VITE_API 环境变量
-      userInfo: null,
-    }),
-    actions: {
-      getApiUrl() {
-        return this.apiUrl;
-      },
-      setUserInfo(user) {
-      this.userInfo = user;
+  state: () => ({
+    apiUrl: import.meta.env.VITE_API, // 使用 VITE_API
+    isLoggedIn: false,  // isLoggedIn狀態
+  }),
+  actions: {
+    getApiUrl() {
+      return this.apiUrl;
     },
-    clearUserInfo() {
-      this.userInfo = null;
-    }
-    },getters: {
-      isLoggedIn: (state) => state.userInfo !== null,
-    }
-  });
+    setLoggedIn() {
+      this.isLoggedIn = true; // 設置登入
+    },
+    clearLoggedIn() {
+      this.isLoggedIn = false; // 清除登入
+    },
+  },
+})
