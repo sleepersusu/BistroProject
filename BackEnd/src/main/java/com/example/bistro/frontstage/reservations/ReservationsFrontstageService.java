@@ -21,6 +21,16 @@ public class ReservationsFrontstageService {
 
 	public Reservations insert(ReservationDTO dto) {
 
+		if (dto.getCustomerName() == null || dto.getCustomerName().trim().isEmpty()) {
+			throw new IllegalArgumentException("姓名不能為空白");
+		}
+		if (dto.getContactPhone() == null || !dto.getContactPhone().matches("\\d{10}")) {
+			throw new IllegalArgumentException("電話號碼必須是10個數字");
+		}
+		if (dto.getStartTime() == null) {
+			throw new IllegalArgumentException("請你選擇訂位時段");
+		}
+
 		Reservations reservations = new Reservations();
 		reservations.setCustomerName(dto.getCustomerName());
 		reservations.setCustomerGender(dto.getCustomerGender());
@@ -36,7 +46,7 @@ public class ReservationsFrontstageService {
 	}
 
 	public List<Reservations> findCount(Date reservationDate, String startTime) throws ParseException {
-		
+
 		return ReservationsRepo.findByReservationDateAndStartTime(reservationDate, startTime);
 	}
 
