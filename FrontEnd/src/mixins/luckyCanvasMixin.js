@@ -18,7 +18,7 @@ export const useLuckyCanvas = () => {
     },
   ])
   const blocks = ref([
-    { padding: '15px', background: 'GoldenRod' },
+    { padding: '15px', background: '#eed9c4' },
     { padding: '15px', background: 'black' },
   ])
   const activeStyle = {

@@ -1,7 +1,5 @@
 <template>
   <Loading :active="isLoading"></Loading>
-  <HeroSection></HeroSection>
-  <div class="fireworks-container" ref="fireworksContainer"></div>
   <BannerTop :title="'Lucky Draw'" data-aos="fade-up" data-aos-duration="1000"></BannerTop>
   <div class="container my-5">
     <div class="row">
@@ -17,6 +15,7 @@
         ></CampaignCard>
       </div>
     </div>
+    <div class="fireworks-container" ref="fireworksContainer"></div>
   </div>
   <LuckyDraw @update-chance="updateChance" ref="drawModal"></LuckyDraw>
   <CampaignModal ref="campaignModal" :campaign="selectedCampaign"></CampaignModal>
@@ -33,8 +32,7 @@ import { storeToRefs } from 'pinia'
 import { onUnmounted, onMounted, ref } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import { useFireWorks } from '@/mixins/fireWorkMixin'
-import CampaignModal from '@/components/CampaignModal.vue'
-import HeroSection from '@/components/HeroSection.vue'
+import CampaignModal from '@/components/campaignModal.vue'
 
 const { fireworksContainer } = useFireWorks(true)
 
@@ -106,12 +104,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
-}
-
-.container {
-  position: relative;
-  z-index: 1;
 }
 </style>
