@@ -1,5 +1,6 @@
 <template>
   <div>
+    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'"></PageTop>
     <BannerTop v-bind:title="'Shopping Cart'"></BannerTop>
   </div>
   <!-- Step Indicator -->
@@ -142,10 +143,12 @@ import CartTable from '@/components/cart/CartTable.vue'
 import CartTitle from '@/components/cart/CartTitle.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
+import PageTop from '@/components/PageTop.vue'
 
 export default {
   name: 'Cart',
   components: {
+    PageTop,
     BannerTop,
     FontAwesomeIcon,
     CartTitle,
