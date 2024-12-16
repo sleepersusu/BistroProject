@@ -2,7 +2,7 @@
   <div>
     <h1>兌換獎品列表</h1>
 
-<div class="container">
+<div class="container d-flex">
   <ul class="d-flex flex-wrap">
     <li v-for="prize in pointPrizes" :key="prize.id" class="d-flex flex-column" style="width: 18rem; margin: 10px;">
       <div v-if="prize.rewardsStatus=='上架中'" class="card" style="height: 490px; position: relative;">
@@ -22,20 +22,34 @@
   </ul>
 </div>
 
+<PointTotal ref="pointTotalRef"/>
 
   </div>
 </template>
 
 <script>
-import coco from '@/components/PointTotal.vue';
+import PointTotal from '@/components/PointTotal.vue';
 
 export default {
+  components: {
+    PointTotal
+  },
   data() {
     return {
       pointPrizes: [],
     }
   },
   methods: {
+    generateRandomCode() {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < 6; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters[randomIndex];
+      }
+      return result;
+    },
+
     async getPointPrizes() {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`;
       try {
@@ -65,27 +79,26 @@ export default {
       });
 
       if (result.isConfirmed) {
-        console.log('User confirmed redemption');///////////////
+        // 生成優惠碼
+        const promoCode = this.generateRandomCode();
+
+        // 調用子組件的方法更新優惠碼和商品信息
+        this.$refs.pointTotalRef.updateRedeemedPrize(
+          prize.pointPrizesName,
+          promoCode
+        );
+
         const memberId = 1;  // 假資料，會員 ID 為 9
       if(memberId){
-        const pointPrizesId = prize.id;  // 商品 ID 來自按下的商品
-        const recordsDate = new Date().toISOString();  // 使用當前時間作為兌換日期
+        // const pointPrizesId = prize.id;  // 商品 ID 來自按下的商品
+        // const recordsDate = new Date().toISOString();  // 使用當前時間作為兌換日期
 
         const requestData = {
           memberId,
-          pointPrizesId,
-          recordsDate,
+          pointPrizesId:prize.id,
+          recordsDate:new Date().toISOString(),
+          promoCode: promoCode  // 新增優惠碼
         };
-
-          window.Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
-            timer: 1500,
-            showConfirmButton: false,
-            timerProgressBar: true,
-          });
 
           try {
             const api = `${import.meta.env.VITE_API}/api/pointRecord`;
@@ -98,7 +111,17 @@ export default {
             });
 
             if (response.ok) {
-              console.log('兌換紀錄成功');
+              window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'success',
+              title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
+              timer: 1500,
+              showConfirmButton: false,
+              timerProgressBar: true,
+            });
+
+            
 
               const api2 = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`;
               const response2 = await fetch(api2, {

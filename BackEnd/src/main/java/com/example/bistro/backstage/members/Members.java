@@ -48,6 +48,7 @@ public class Members {
 	private String memberStatus;
 	private String memberShip; //會員or非會員
 	
+	
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)

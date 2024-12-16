@@ -45,6 +45,10 @@ const router = createRouter({
           component: () => import('../views/MemberPoints.vue'),
         },
         {
+          path: '/memberCart',
+          component: () => import('../views/Cart2.vue'),
+        },
+        {
           path: '/campaign',
           component: () => import('../views/Campaign.vue'),
         },

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.bistro.backstage.PointsRecords.PointsRecordsBean;
+import com.example.bistro.backstage.PointsRecords.PointsRecordsRepository;
 import com.example.bistro.backstage.PointsRecords.PointsRecordsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,20 @@ public class PointRecordRestController {
 	    Map<String, Boolean> map = pointRecordService.createPointsRecords(requestDto.getMemberId(),requestDto.getPointPrizesId(),requestDto.getRecordsDate());
 	    
 	    return ResponseEntity.ok(map);
+	}
+	
+	@PostMapping("/api/validatePromoCode")
+	public ResponseEntity<?> validatePromoCode(@RequestBody PointRecordDTO request) {
+	    PointsRecordsBean record = PointsRecordsRepository.findByPromoCode(request.getPromoCode());
+	    
+	    if (record != null) {
+	        return ResponseEntity.ok(Map.of(
+	            "valid", true, 
+	            "prize", record.getPrize()
+	        ));
+	    }
+	    
+	    return ResponseEntity.ok(Map.of("valid", false));
 	}
 	
 }
