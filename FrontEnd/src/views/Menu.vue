@@ -94,7 +94,8 @@
       <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id">
         <MenuCard
           :menu="menu"
-          :commentPeople="commentPeople"
+          
+          @getcount="countCommentPeople"
           @view-comment="openModal"
           @update-count="updateCount"
           @add-to-cart="handleAddToCart"
@@ -165,6 +166,7 @@ export default {
         })
     },
     // async countCommentPeople(productName) {
+    //   console.log(productName)
     //   let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
 
     //   axios
