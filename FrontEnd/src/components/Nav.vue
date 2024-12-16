@@ -37,7 +37,9 @@
           <li class="nav-item">
             <router-link class="nav-link position-relative" to="/cart">
               <i class="bi bi-cart fs-5"></i>
-              <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary">
+              <span
+                class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary"
+              >
                 3
                 <span class="visually-hidden">unread messages</span>
               </span></router-link
@@ -78,7 +80,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .nav-shadow {
   box-shadow: 0 0 12px #f5e6d3 !important;
 }

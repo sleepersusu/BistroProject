@@ -42,6 +42,8 @@ public class LotteryWinners {
 	@Column(name = "ID")
 	private Integer id;
 	
+	@Column(nullable = false, columnDefinition = "BIT DEFAULT 0")
+	private boolean shippingCompleted = false;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
