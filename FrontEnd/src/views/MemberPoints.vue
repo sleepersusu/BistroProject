@@ -129,6 +129,8 @@ export default {
               body: JSON.stringify(requestData),
             })
 
+            const res = await this.axios.post(api, requestData)
+
             const api3 = `${import.meta.env.VITE_API}/api/promoCode`
             const response3 = await fetch(api3, {
               method: 'POST',
