@@ -1,15 +1,224 @@
 <template>
-  <div>Reservation</div>
+  <div class="center" style="font-size: 30px">訂位資訊</div>
+
+  <div id="app" class="center">
+    <div class="row g-3" style="width: 500px">
+      <form @submit.prevent="submitReservation">
+        <div class="col-12">
+          <label for="customerName" class="form-label">訂位人姓名</label>
+          <input
+            type="text"
+            class="form-control frame"
+            id="customerName"
+            v-model="reservations.customerName"
+            required
+            aria-required="true"
+          />
+        </div>
+        <div class="col-12">
+          <label class="form-label col-md-2">性別</label>
+          <input
+            type="radio"
+            name="customerGender"
+            v-model="reservations.customerGender"
+            required
+            value="男"
+          />男
+          <input
+            type="radio"
+            name="customerGender"
+            v-model="reservations.customerGender"
+            required
+            value="女"
+          />女
+        </div>
+        <div class="col-12">
+          <label for="contactPhone" class="form-label">電話</label>
+          <input
+            type="tel"
+            class="form-control frame"
+            id="contactPhone"
+            v-model="reservations.contactPhone"
+            required
+            aria-required="true"
+          />
+        </div>
+        <div class="col-md-6">
+          <label for="numberPeople" class="form-label">訂位人數</label>
+          <select
+            class="form-control frame"
+            id="numberPeople"
+            v-model.number="reservations.numberPeople"
+            required
+            aria-required="true"
+          >
+            <option value="0" selected>選擇人數</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="reservationDate" class="form-label">日期</label>
+          <input
+            type="date"
+            class="form-control frame"
+            id="reservationDate"
+            v-model="reservations.reservationDate"
+            required
+            aria-required="true"
+          />
+        </div>
+
+        <hr />
+
+        <div class="col-md-6">
+          <label for="startTime" class="form-label">時段</label>
+          <div>
+            <button
+              v-for="time in availableTimeslots"
+              :key="time"
+              class="btn btn-outline-primary me-2"
+              @click="handleClick(time, $event)"
+            >
+              {{ time }}
+            </button>
+          </div>
+          <input type="text" v-model="reservations.startTime" />
+        </div>
+        <div class="col-12">
+          <label for="notes" class="form-label">備註</label>
+          <textarea
+            class="form-control frame"
+            style="height: 200px"
+            id="notes"
+            v-model="reservations.notes"
+          ></textarea>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-success">確認訂位</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {}
+    return {
+      reservations: {
+        customerName: '',
+        customerGender: '',
+        contactPhone: '',
+        reservationDate: new Date().toISOString().split('T')[0],
+        startTime: '',
+        numberPeople: 0,
+        notes: '',
+      },
+
+      availableTimeslots: [],
+    }
   },
-  methods: {},
+  methods: {
+    handleClick(time, event) {
+      event.preventDefault() // 阻止按鈕的默認行為，防止它觸發表單提交
+      console.log('按鈕點擊時間:', time)
+      this.reservations.startTime = time
+    },
+    formatDate(date) {
+      if (!date) return ''
+      const d = new Date(date)
+      const year = d.getFullYear()
+      const month = String(d.getMonth() + 1).padStart(2, '0')
+      const day = String(d.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    },
+
+    async displayTimes() {
+      if (this.reservations.numberPeople === 0 || !this.reservations.reservationDate) {
+        this.availableTimeslots = []
+        return
+      }
+      try {
+        const api = `${import.meta.env.VITE_API}/api/Bistro/remaining`
+        let res = await this.axios.post(api, {
+          reservationDate: this.reservations.reservationDate,
+          numberPeople: this.reservations.numberPeople,
+        })
+
+        if (res.data.success) {
+          this.availableTimeslots = res.data.availableTimeslots || []
+        } else {
+          this.availableTimeslots = []
+        }
+      } catch (e) {
+        console.error('這是錯的:', e)
+        this.availableTimeslots = []
+      }
+    },
+    startTime(time) {
+      this.reservations.startTime = time
+    },
+    async submitReservation() {
+      if (
+        !this.reservations.customerName ||
+        !this.reservations.customerGender ||
+        !this.reservations.contactPhone ||
+        !this.reservations.reservationDate ||
+        !this.reservations.startTime ||
+        !this.reservations.numberPeople
+      ) {
+        alert('請填寫所有必填欄位！')
+        return
+      }
+
+      try {
+        const api = `${import.meta.env.VITE_API}/api/Bistro/insert`
+        const response = await this.axios.post(api, this.reservations)
+        if (response.data.success) {
+          alert('訂位成功！')
+          this.reservations = {
+            customerName: '',
+            customerGender: '',
+            contactPhone: '',
+            reservationDate: new Date().toISOString().split('T')[0],
+            startTime: '',
+            numberPeople: 0,
+            notes: '',
+          }
+        } else {
+          alert('訂位失敗，請稍後再試。')
+        }
+      } catch (error) {
+        console.error('錯誤:', error)
+        alert('提交訂位資料時發生錯誤，請稍後再試。')
+      }
+    },
+  },
   computed: {},
-  watch: {},
-  created() {},
+  watch: {
+    'reservations.numberPeople': function () {
+      this.displayTimes()
+    },
+    'reservations.reservationDate': function () {
+      this.displayTimes()
+    },
+  },
+  created() {
+    this.displayTimes()
+  },
 }
 </script>
+
+<style scoped>
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.frame {
+  border: 2px solid #eed9c4;
+}
+</style>

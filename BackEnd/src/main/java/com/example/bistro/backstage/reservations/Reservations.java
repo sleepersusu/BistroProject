@@ -1,15 +1,8 @@
 package com.example.bistro.backstage.reservations;
 
-
-
-
-
-
 import java.sql.Timestamp;
 import java.util.Date;
-
 import org.springframework.format.annotation.DateTimeFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,21 +26,15 @@ public class Reservations {
 	private String contactPhone;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date reservationDate;
-	
-	@DateTimeFormat(pattern = "HH:mm")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp startTime;
+	@Temporal(TemporalType.DATE)
+	private Date reservationDate;	
+	private String startTime;
 	private Integer numberPeople;
 	private String notes;
-	private String reservationStatus="已確認";
-	
+	private String reservationStatus="已確認";	
 
 	@Column(name = "createdAt", columnDefinition = "DATETIME2" ,insertable = false, updatable = false)
-	private Timestamp createdAt;
-
-	
+	private Timestamp createdAt;	
 
 	public Integer getId() {
 		return id;
@@ -103,11 +90,11 @@ public class Reservations {
 		this.reservationDate = reservationDate;
 	}
 
-	public Timestamp getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Timestamp startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 

@@ -1,19 +1,18 @@
 <template>
   <div>
-    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'"></PageTop>
     <BannerTop v-bind:title="'Check Out'"></BannerTop>
   </div>
   <!-- Step Indicator -->
-  <div class="p-5">
-    <!-- Step Indicator -->
-    <div class="step-indicator mb-1 mt-3">
-      <div class="step">1</div>
-      <div class="step-connector"></div>
-      <div class="step active">2</div>
-      <div class="step-connector"></div>
-      <div class="step">3</div>
+    <div class="p-5">
+      <!-- Step Indicator -->
+      <div class="step-indicator mb-1 mt-3">
+        <div class="step ">1</div>
+        <div class="step-connector"></div>
+        <div class="step active">2</div>
+        <div class="step-connector"></div>
+        <div class="step">3</div>
+      </div>
     </div>
-  </div>
   <!-- Checkout Section Begin -->
   <section class="checkout spad">
     <div class="container">
@@ -26,13 +25,13 @@
                 <div class="col-lg-6">
                   <div class="checkout__input">
                     <p>Fist Name<span>*</span></p>
-                    <input type="text" placeholder="名字" />
+                    <input type="text" placeholder="名字">
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="checkout__input">
                     <p>Last Name<span>*</span></p>
-                    <input type="text" placeholder="姓" />
+                    <input type="text" placeholder="姓">
                   </div>
                 </div>
               </div>
@@ -41,25 +40,26 @@
                 <div class="col-lg-6">
                   <div class="checkout__input">
                     <p>Phone<span>*</span></p>
-                    <input type="text" placeholder="+886 " />
+                    <input type="text" placeholder="+886 ">
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="checkout__input">
                     <p>Email<span>*</span></p>
-                    <input type="text" placeholder="exexex@gmail.com" />
+                    <input type="text" placeholder="exexex@gmail.com">
                   </div>
                 </div>
               </div>
 
               <div class="checkout__input">
                 <p>Order notes<span>*</span></p>
-                <input type="text" placeholder="特殊要求" />
+                <input type="text"
+                       placeholder="特殊要求">
               </div>
               <div class="checkout__input__checkbox">
                 <label for="acc">
                   Create an account?
-                  <input type="checkbox" id="acc" />
+                  <input type="checkbox" id="acc">
                   <span class="checkmark"></span>
                 </label>
               </div>
@@ -76,19 +76,19 @@
                 </ul>
                 <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div>
                 <div class="checkout__order__total">Total <span>$750.99</span></div>
-                <!--                <div class="checkout__input__checkbox">-->
-                <!--                  <label for="acc-or">-->
-                <!--                    Create an account?-->
-                <!--                    <input type="checkbox" id="acc-or">-->
-                <!--                    <span class="checkmark"></span>-->
-                <!--                  </label>-->
-                <!--                </div>-->
-                <!--                <p>加入會員享優會</p>-->
+<!--                <div class="checkout__input__checkbox">-->
+<!--                  <label for="acc-or">-->
+<!--                    Create an account?-->
+<!--                    <input type="checkbox" id="acc-or">-->
+<!--                    <span class="checkmark"></span>-->
+<!--                  </label>-->
+<!--                </div>-->
+<!--                <p>加入會員享優會</p>-->
                 <div class="checkout__input__checkbox">
-                  <div class="checkout__order__cash">PaymentWay</div>
+                  <div class="checkout__order__cash">PaymentWay </div>
                   <label for="payment">
                     Cash
-                    <input type="radio" id="payment" name="paymentMethod" />
+                    <input type="radio" id="payment" name="paymentMethod">
                     <span class="checkmark"></span>
                   </label>
                 </div>
@@ -96,7 +96,7 @@
                 <div class="checkout__input__checkbox">
                   <label for="paypal">
                     綠界支付
-                    <input type="radio" id="paypal" name="paymentMethod" />
+                    <input type="radio" id="paypal" name="paymentMethod">
                     <span class="checkmark"></span>
                   </label>
                 </div>
@@ -104,13 +104,15 @@
                 <div class="checkout__input__checkbox">
                   <label for="linePay">
                     LinePay
-                    <input type="radio" id="linePay" name="paymentMethod" />
+                    <input type="radio" id="linePay" name="paymentMethod">
                     <span class="checkmark"></span>
                   </label>
                 </div>
 
                 <div>
-                  <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
+                    <button type="submit" class="btn btn-dark w-100">
+                      PLACE ORDER
+                    </button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -120,7 +122,8 @@
                 <button class="btn btn-dark w-100">
                   <router-link class="nav-link" to="/cartCheckFail">Fail</router-link>
                 </button>
-              </div>
+
+                </div>
             </div>
           </div>
         </form>
@@ -130,17 +133,22 @@
   <!-- Checkout Section End -->
 </template>
 
+
+
 <script>
 import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import PageTop from '@/components/PageTop.vue'
 export default defineComponent({
-  components: { PageTop, BannerTop },
+  components: { BannerTop },
 })
 </script>
 
+
+
+
 <style scoped>
+
 .step-indicator {
   display: flex;
   justify-content: center;
@@ -266,12 +274,12 @@ export default defineComponent({
   visibility: hidden;
 }
 
-.checkout__input__checkbox label input:checked ~ .checkmark {
+.checkout__input__checkbox label input:checked~.checkmark {
   background: #000;
   border-color: #000;
 }
 
-.checkout__input__checkbox label input:checked ~ .checkmark:after {
+.checkout__input__checkbox label input:checked~.checkmark:after {
   opacity: 1;
 }
 
@@ -282,7 +290,7 @@ export default defineComponent({
   height: 16px;
   width: 14px;
   border: 1px solid #a6a6a6;
-  content: '';
+  content: "";
   border-radius: 4px;
 }
 
@@ -297,7 +305,7 @@ export default defineComponent({
   -webkit-transform: rotate(127deg);
   -ms-transform: rotate(127deg);
   transform: rotate(127deg);
-  content: '';
+  content: "";
   opacity: 0;
 }
 
