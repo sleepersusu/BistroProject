@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   linkActiveClass: 'active',
   scrollBehavior () {
     return {top:0}
@@ -49,6 +49,7 @@ const router = createRouter({
           component: () => import('../views/Campaign.vue'),
         },
         {
+
           path: '/cartCheckout',
           component: () => import('../views/CartCheckout.vue'),
         },
@@ -60,6 +61,7 @@ const router = createRouter({
           path: '/cartCheckFail',
           component: () => import('../views/CartCheckFail.vue'),
         },
+
 
       ],
     },

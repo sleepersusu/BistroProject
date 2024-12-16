@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,10 +18,12 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity 
 @Table(name = "Campaign")
 public class Campaign {
@@ -32,6 +36,7 @@ public class Campaign {
 	@Column(name = "campaignTitle")
 	private String campaignTitle;
 	
+	@JsonIgnore
 	@Lob
 	@Column(name = "campaignImg")
 	private byte[] campaignImg;
@@ -104,9 +109,6 @@ public class Campaign {
     public boolean isActive() {
         return getCampaignStatus() == CampaignStatus.IN_PROGRESS;
     }
-
-	public Campaign() {
-	}
 
 	
 	

@@ -115,11 +115,9 @@
               <strong>Total</strong>
               <strong>$229.97</strong>
             </div>
-
             <button class="btn btn-dark w-100">
               <router-link class="nav-link" to="/cartCheckout">Proceed to Checkout</router-link>
             </button>
-
           </div>
         </div>
         <!--        Promo Code-->
@@ -135,9 +133,6 @@
       </div>
     </div>
   </div>
-
-
-
 </template>
 
 <script>

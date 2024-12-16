@@ -2,31 +2,127 @@
 
 <div class="container">
   <div class="d-flex justify-content-start">
+
+    <button class="btn btn-link" @click="loadAllMenu()">
     <h2>商品菜單</h2>
+  </button>
   </div>
 </div>
 <div class="container">
-    <div class=" d-flex justify-content-around">
-      
-        <button class="btn btn-outline-success" v-on:click.prevent="clickCategory('開胃菜')">開胃菜</button>
 
-        <button class="btn btn-outline-success"  v-on:click.prevent="clickCategory('主菜')">主菜</button>
 
-        <button class="btn btn-outline-success"  v-on:click.prevent="clickCategory('飲品')">飲品</button>
+  <section class="py-5 overflow-hidden">
+      <div class="container-lg">
+        <div class="row">
+          <div class="col-md-12">
 
-        <button class="btn btn-outline-success" v-on:click.prevent="clickCategory('甜點')">甜點</button>
+            <div class="section-header d-flex flex-wrap justify-content-between mb-5">
+              <h2 class="section-title">Category</h2>
+
+              <div class="d-flex align-items-center">
+                <a href="#" class="btn btn-primary me-2">View All</a>
+                <div class="swiper-buttons">
+                  <button class="swiper-prev category-carousel-prev btn btn-yellow"
+                  >❮</button>
+                  <button class="swiper-next category-carousel-next btn btn-yellow" 
+                  v-on:click.prevent="scrollRight">❯</button>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="category-carousel swiper " refs="carousel">
+              <div class="swiper-wrapper d-flex justify-content-around" style="overflow-x:auto;">
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('開胃菜')">
+                  <img src="/public/images/餐點/開胃菜.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >開胃菜</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('主菜')">
+                  <img src="/public/images/餐點/主菜.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >主菜</h4>
+                </button>
+
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('飲品')">
+                  <img src="/public/images/餐點/飲品.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >飲品</h4>
+                </button>
+
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+
+                <button class="nav-link swiper-slide text-center" v-on:click.prevent="clickCategory('甜點')">
+                  <img src="/public/images/餐點/甜點.jpg" class="rounded-circle button-image" alt="">
+                  <h4 class="fs-6 mt-3 fw-normal category-title"  >甜點</h4>
+                </button>
+                
+                
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>       
+
     
-    </div>
+
 </div>
 <div class="container">
   <div class="row mt-3">
 
     <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id" >
+
     <MenuCard :menu="menu" 
       @update-count="updateCount" 
       @add-to-cart="handleAddToCart">
     </MenuCard>
     </div>
+
 
   </div>
 </div>
@@ -41,14 +137,19 @@ import MenuCard from '@/components/MenuCard.vue';
 
 export default {
   components:{
-    MenuCard
+
+    MenuCard,
+
   },
 
   data() {
     return {
       menus:[],
 
-      totalCount: 0, // 總數量計算
+      comment: {},
+
+      menuCount: 0, 
+
       
     }
   },
@@ -66,14 +167,18 @@ export default {
 
     },
 
+  
+
 
 
 
 
     
     updateCount(newCount) {
-      this.totalCount = newCount;
-      console.log("Updated count:", this.totalCount);
+
+      this.menuCount = newCount;
+      console.log("Updated count:", this.menuCount);
+
     },
 
     handleAddToCart({ id, count }) {
@@ -83,7 +188,9 @@ export default {
     // 按分類加載菜單數據
     clickCategory(category) {
       this.isLoading = true;
-      const API_URL = `${import.meta.env.VITE_API}/api/menu/${category}`;
+
+      let API_URL = `${import.meta.env.VITE_API}/api/menu/${category}`;
+
 
       this.axios
         .get(API_URL)
@@ -97,6 +204,28 @@ export default {
           this.isLoading = false;
         });
     },
+
+
+     // 向左滾動
+     scrollLeft() {
+      const carousel = this.$refs.carousel;
+      carousel.scrollBy({
+        left: -200,
+        behavior: "smooth",
+      });
+      this.checkScrollPosition();
+    },
+
+    // 向右滾動
+    scrollRight() {
+      const carousel = this.$refs.carousel;
+      carousel.scrollBy({
+        left: 200,
+        behavior: "smooth",
+      });
+      this.checkScrollPosition();
+    },
+
   },
 
 
@@ -106,8 +235,72 @@ export default {
   created() {
     this.loadAllMenu();
 
-
-
   },
 }
 </script>
+
+<style scoped>
+  .btn-link{
+    text-decoration:none ;
+    color: black;
+  }
+
+/* Swiper carousel */
+.swiper-prev,
+.swiper-next {
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  background: #F1F1F1;
+  color: #222222;
+  padding: 0;
+  text-align: center;
+  border-radius: 10px;
+  --bs-btn-border-color: transparent;
+  --bs-btn-active-bg: #ec9b22;
+  --bs-btn-active-border-color: transparent;
+  --bs-btn-hover-bg: var(--bs-primary);
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-disabled-color: #ccc;
+  --bs-btn-disabled-bg: #eaeaea;
+  --bs-btn-disabled-border-color: #eaeaea
+}
+.swiper-prev:hover,
+.swiper-next:hover {
+  background: var(--bs-primary);
+}
+
+/* category carousel */
+.category-carousel .category-item {
+  background: #FFFFFF;
+  border: 1px solid #FBFBFB;
+  box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+  text-align: center;
+  padding: 60px 20px;
+  margin: 20px 0;
+  transition: box-shadow 0.3s ease-out, transform 0.3s ease-out;
+}
+.category-carousel .category-item:hover {
+  transform: translate3d(0,-10px,0);
+  box-shadow: 0px 21px 44px rgba(0, 0, 0, 0.08);
+}
+.category-carousel .category-item .category-title {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 27px;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  color: #222222;
+  margin-top: 20px;
+}
+
+
+.button-image { 
+  width:150px;
+  height: 150px; 
+  margin-right: 8px; 
+  object-fit: cover; 
+  border-radius: 50%; 
+}
+</style>
