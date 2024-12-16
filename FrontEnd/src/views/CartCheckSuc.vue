@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'"></PageTop>
+    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'" :link="'/index'"></PageTop>
   </div>
   <div class="text-center">
     <i class="bi bi-check-circle-fill" style="font-size: 5rem"></i>
