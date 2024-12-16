@@ -5,7 +5,7 @@
   <BannerTop :title="'Lucky Draw'" data-aos="fade-up" data-aos-duration="1000"></BannerTop>
   <div class="container my-5">
     <div class="row">
-      <div class="col-lg-3 col-md-6" v-for="(campaign, index) in campaigns" :key="campaign.id">
+      <div class="col-lg-3 col-md-6 g-3" v-for="(campaign, index) in campaigns" :key="campaign.id">
         <CampaignCard
           :campaign="campaign"
           @open-drawmodal="handleOpenModal"
