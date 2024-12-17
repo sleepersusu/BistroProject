@@ -194,6 +194,7 @@
 </template>
 
 <script>
+//記得要修改成響應式
 export default {
   data() {
     return {
