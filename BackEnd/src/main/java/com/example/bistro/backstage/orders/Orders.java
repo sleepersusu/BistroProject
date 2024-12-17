@@ -55,7 +55,7 @@ public class Orders {
             private String  seatType;         //內用和外帶
             private Integer ordersSumPrice;     //整筆訂單總價格
             private Integer pointGetted;        //獲得積分
-            private String  ordersStatus;       //訂單狀態
+//            private String  ordersStatus;       //訂單狀態 因為會有訂單基本上都是成立了，沒有意義
             private String  ordersRequest;      //特殊要求
             private String latestPaymentStatus; //最新付款資訊
 

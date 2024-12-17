@@ -23,12 +23,12 @@
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
-                <div class="col-lg-6">
-                  <div class="checkout__input">
-                    <p>Name<span>*</span></p>
-                    <input type="text" placeholder="姓名" />
-                  </div>
-                </div>
+<!--                <div class="col-lg-6">-->
+<!--                  <div class="checkout__input">-->
+<!--                    <p>Name<span>*</span></p>-->
+<!--                    <input type="text" placeholder="姓名" />-->
+<!--                  </div>-->
+<!--                </div>-->
 <!--                <div class="col-lg-6">-->
 <!--                  <div class="checkout__input">-->
 <!--                    <p>Last Name<span>*</span></p>-->
@@ -40,14 +40,14 @@
               <div class="row">
                 <div class="col-lg-6">
                   <div class="checkout__input">
-                    <p>Phone<span>*</span></p>
-                    <input type="text" placeholder="+886 " />
+                    <p>姓名<span>*</span></p>
+                    <input type="text" placeholder="姓名 " />
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="checkout__input">
-                    <p>Email<span>*</span></p>
-                    <input type="text" placeholder="exexex@gmail.com" />
+                    <p>電話<span>*</span></p>
+                    <input type="text" placeholder="+886" />
                   </div>
                 </div>
               </div>

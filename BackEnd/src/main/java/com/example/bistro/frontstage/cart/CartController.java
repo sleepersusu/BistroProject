@@ -19,7 +19,7 @@ public class CartController {
     private CartService cartService;
 
 
-    //列出會員所擁有的購物車
+    //列出會員所擁有的購物車 ---------OK
         @GetMapping("/list")
 
         public ResponseEntity<List<Cart>>shoppingCart(HttpSession httpSession) {
@@ -35,7 +35,7 @@ public class CartController {
             return ResponseEntity.ok(shoppingCart);
 
         }
-    //會員新增購物車
+    //會員新增購物車 ---------OK
         //1.確定有沒有會員，沒有要請他登入(可以在controller做)
         //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
             //如果存在    就將購物車加一
@@ -52,7 +52,7 @@ public class CartController {
             return ResponseEntity.ok("Added cart successfully.");
         }
 
-    //會員減少購物車
+    //會員減少購物車--------------------OK
         //1.確定有沒有會員，沒有要請他登入
         //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
             //如果存在    就將購物車加一
@@ -67,6 +67,18 @@ public class CartController {
             cartService.minusOneCount(loginUserId,menuId);
             List<Cart> shoppingCart = cartService.findMemberCart(loginUserId);
             return ResponseEntity.ok("minus cart successfully.");
+        }
+
+
+    // 根據會員ID和商品ID將商品添加到購物車 ---------OK
+        @PostMapping("/add/{memberId}/{menuId}/{cartCount}")
+        public ResponseEntity<?> addMenuToCart(
+                @PathVariable Integer memberId,
+                @PathVariable Integer menuId,
+                @PathVariable Integer cartCount) {
+            // 呼叫 CartService 來處理邏輯
+                Cart response = cartService.addMenuToCart(memberId, menuId, cartCount);
+                return ResponseEntity.ok(response);  // 返回成功或失敗的訊息
         }
 
 

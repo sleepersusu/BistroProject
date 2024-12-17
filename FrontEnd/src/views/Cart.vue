@@ -120,20 +120,22 @@
             </button>
           </div>
         </div>
-        <!--        Promo Code-->
-        <!--            <div class="card mt-4">-->
-        <!--              <div class="card-body">-->
-        <!--                <h5 class="card-title mb-3">Apply Promo Code</h5>-->
-        <!--                  <div class="input-group mb-3">-->
-        <!--                    <input type="text" class="form-control" placeholder="Enter promo code">-->
-        <!--                    <button class="btn btn-outline-secondary" type="button">Apply</button>-->
-        <!--                  </div>-->
-        <!--              </div>-->
-        <!--            </div>-->
+                Promo Code
+                    <div class="card mt-4">
+                      <div class="card-body">
+                        <h5 class="card-title mb-3">Apply Promo Code</h5>
+                          <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Enter promo code">
+                            <button class="btn btn-outline-secondary" type="button">Apply</button>
+                          </div>
+                      </div>
+                    </div>
       </div>
     </div>
   </div>
 </template>
+
+
 
 <script>
 //import { mapState, mapActions } from 'pinia'
@@ -168,6 +170,8 @@ export default {
   created() {},
 }
 </script>
+
+
 
 <style scoped>
 .step-indicator {
