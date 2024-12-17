@@ -24,8 +24,13 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "Menu")
 public class Menu {
@@ -59,15 +64,11 @@ public class Menu {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
-	private List<OrdersDetails> menuId; // 用於映射 OrderDetails 實體中的 menu
+	private List<OrdersDetails> orderDetails; // 用於映射 OrderDetails 實體中的 menu
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
 	private List<Comment> comments = new ArrayList<Comment>(); // 用於映射 Comment 實體中的 menu
-	
-	
-	
-
 	
 	
 
@@ -78,85 +79,6 @@ public class Menu {
 		}
 	}
 
-	public Menu() {
-
-	}
-	
-	
-	
-
-	public Integer getID() {
-		return ID;
-	}
-
-	public void setID(Integer iD) {
-		ID = iD;
-	}
-
-	public String getProductCategory() {
-		return productCategory;
-	}
-
-	public void setProductCategory(String productCategory) {
-		this.productCategory = productCategory;
-	}
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-	public byte[] getProductImg() {
-		return productImg;
-	}
-
-	public void setProductImg(byte[] productImg) {
-		this.productImg = productImg;
-	}
-
-	public Integer getProductPrice() {
-		return productPrice;
-	}
-
-	public void setProductPrice(Integer productPrice) {
-		this.productPrice = productPrice;
-	}
-
-	public String getProductDescribe() {
-		return productDescribe;
-	}
-
-	public void setProductDescribe(String productDescribe) {
-		this.productDescribe = productDescribe;
-	}
-
-	public String getProductImgUrl() {
-		return productImgUrl;
-	}
-
-	public void setProductImgUrl(String productImgUrl) {
-		this.productImgUrl = productImgUrl;
-	}
-
-	public Integer getProductCount() {
-		return productCount;
-	}
-
-	public void setProductCount(Integer productCount) {
-		this.productCount = productCount;
-	}
-
-	public Integer getMinproductCount() {
-		return minproductCount;
-	}
-
-	public void setMinproductCount(Integer minproductCount) {
-		this.minproductCount = minproductCount;
-	}
-
 	public double getAvgScore() {
 		if (avgScore == null) {
 			return 0.0; // 默認值，避免返回 null
@@ -164,53 +86,7 @@ public class Menu {
 		return avgScore;
 	}
 
-	public void setAvgScore(double avgScore) {
-		this.avgScore = avgScore;
-	}
-
-	public String getMenuStatus() {
-		return menuStatus;
-	}
-
-	public void setMenuStatus(String menuStatus) {
-		this.menuStatus = menuStatus;
-	}
-
-	public Date getCreatedDate() {
-		return createdAt;
-	}
-
-	public void setCreatedDate(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public List<OrdersDetails> getMenuId() {
-		return menuId;
-	}
-
-	public void setMenuId(List<OrdersDetails> menuId) {
-		this.menuId = menuId;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public void setAvgScore(Double avgScore) {
-		this.avgScore = avgScore;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
+	
 
 
 }

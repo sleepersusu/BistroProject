@@ -94,7 +94,7 @@
       <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id">
         <MenuCard
           :menu="menu"
-          
+
           @getcount="countCommentPeople"
           @view-comment="openModal"
           @update-count="updateCount"
@@ -103,7 +103,7 @@
         </MenuCard>
       </div>
 
-      <MenuCommentModal ref="commentMoal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
+      <MenuCommentModal ref="commentModal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
     </div>
   </div>
 </template>
@@ -124,13 +124,12 @@ export default {
       menus: [],
       currentProduct:'',
       comments: [],
-      // commentPeople:'',
       menuCount: 0,
     }
   },
   methods: {
     loadAllMenu() {
-      let API_URL = `http://localhost:8085/api/menu`
+      let API_URL = `${import.meta.env.VITE_API}/api/menu`
 
       axios.get(API_URL).then((response) => {
         this.menus = response.data
@@ -184,7 +183,7 @@ export default {
 
   created() {
     this.loadAllMenu()
-    
+
   }
 }
 </script>

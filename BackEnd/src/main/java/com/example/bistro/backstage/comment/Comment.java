@@ -44,10 +44,7 @@ public class Comment {
 	
 	
 	
-	@JsonIgnore
-	@OneToOne
-	@JoinColumn(name="orderDetailsId",referencedColumnName = "ID")
-	private OrdersDetails orderDetails;
+	
 	
 	
 	private String  commentProduct;
