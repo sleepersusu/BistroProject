@@ -15,19 +15,23 @@
         data-aos-duration="2000"
         data-aos-delay="1500"
       >
-        <h1 class="display-2 mb-4 title">品味驚喜</h1>
-        <h3 class="mb-3">2024 週年慶抽獎</h3>
-        <p class="lead">消費滿1000元 即可獲得抽獎機會</p>
+        <div data-aos="fade-up" data-aos-duration="2300" data-aos-delay="2200">
+          <h1 class="display-2 mb-4 title">品味驚喜</h1>
+          <h3 class="mb-3">2024 週年慶抽獎</h3>
+          <p class="lead">消費滿1000元 即可獲得抽獎機會</p>
+        </div>
 
         <div class="mb-5">
           <img
             src="/images/macbook1.png"
             class="img-fluid mb-3"
             data-aos="fade-up"
-            data-aos-duration="2000"
-            data-aos-delay="2300"
+            data-aos-duration="3000"
+            data-aos-delay="3000"
           />
-          <h4>頭獎：MacBook Pro 1TB</h4>
+          <h4 data-aos="fade-up" data-aos-duration="2000" data-aos-delay="2000">
+            頭獎：MacBook Pro 1TB
+          </h4>
         </div>
         <div class="scroll-down">
           <i class="bi bi-chevron-down"></i>
@@ -35,11 +39,10 @@
       </div>
 
       <div class="col-md-4 position-relative overflow-hidden">
-        <div class="position-absolute end-0" style="top: 15%">
+        <div class="position-absolute end-0">
           <img
-            src="/images/dish.png"
-            class=""
-            style="object-fit: cover"
+            src="/images/wine2.jpg"
+            style="object-fit: cover; min-height: 700px; width: 500px"
             data-aos="fade-left"
             data-aos-duration="2000"
             data-aos-delay="1000"
@@ -71,6 +74,19 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.spinning-image {
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
 }
 
 @keyframes bounce {
