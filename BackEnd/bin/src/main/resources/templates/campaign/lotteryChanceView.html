@@ -75,6 +75,8 @@ body {
 
 .modal-content {
 	min-width: 400px;
+	
+	height: auto ;
 	overflow: auto;
 }
 
@@ -128,13 +130,7 @@ body .modal .modal-content form textarea {
 
 		<div th:replace="~{layout/navbar}"></div>
 		<div id="right">
-			<header>
-
-				<button id="logout">
-					<a href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i>
-						Log Out</a>
-				</button>
-			</header>
+			<div th:replace="~{layout/headerlogout.html}"></div>
 
 			<main>
 				<h2>抽獎次數管理</h2>
@@ -152,33 +148,36 @@ body .modal .modal-content form textarea {
 						<table id="table" class="display">
 							<thead>
 								<tr>
-									<th>ID</th>
 									<th>會員編號</th>
-									<th>訂單編號</th>
-									<th>獲得抽獎次數</th>
+									<th>會員姓名</th>
+									<th>活動名稱</th>
 									<th>總抽獎次數</th>
-									<th>使用期限</th>
+									<th>已使用次數</th>
+									<th>剩餘次數</th>
+									<th>狀態</th>
 									<th>操作</th>
 								</tr>
 							</thead>
 							<tbody id="event-list">
 								<tr th:each="result : ${lotteryChances}">
-									<td th:text="${result[0]}"></td>
-									<td th:text="${result[1] != null ? result[1] : '非會員'}" th:style="${result[1] == null ? 'color: blue;' : ''}"></td>
+									<td th:text="${result[1]}"></td>									
 									<td th:text="${result[2]}"></td>
 									<td th:text="${result[3]}"></td>
 									<td th:text="${result[4]}"></td>
-									<td><span th:if="${result[5] == '1'}" style="color: green">啟用</span>
-										<span th:if="${result[5] == '0'}" style="color: red">停用</span>
-										<span th:if="${result[5] != '0' and result[5] != '1'}"
-										style="color: gray;">未知狀態</span></td>
+									<td th:text="${result[5]}"></td>
+									<td th:text="${result[6]}"></td>
+									<td><span th:if="${result[7] == '可使用'}" style="color: blue">[[${result[7]}]]</span>
+										<span th:if="${result[7] == '已過期'}" style="color: red">[[${result[7]}]]</span>
+									</td>
 									<td>
-										<button type="button" id="edit" th:data-id="${result[0]}"
+										<button type="button" id="edit" 
+											th:data-id="${result[0]}"
 											th:data-members-id="${result[1]}"
-											th:data-orders-id="${result[2]}"
-											th:data-lottery-chance="${result[3]}"
-											th:data-total-chance="${result[4]}"
-											th:data-status="${result[5]}" onclick="openEditModal(this)">編輯</button>
+											th:data-campaign-title="${result[3]}"
+											th:data-lottery-chance="${result[4]}"
+											th:data-used-chances="${result[5]}"
+											th:data-remaining-chances="${result[6]}"
+											onclick="openEditModal(this)">編輯</button>
 
 										<form th:action="@{/Bistro/campaign/chance/delete}"
 											method="post">
@@ -209,18 +208,18 @@ body .modal .modal-content form textarea {
 
 
 							<div class="question">
-								<span class="title">訂單ID</span> <input type="number"
-									name="ordersId" placeholder="請輸入訂單編號" required />
+								<span class="title">會員ID</span> <input type="number"
+									name="memberId" placeholder="請輸入訂單編號" min="1" required />
 							</div>
 
 							<div class="question">
-								<span class="title">抽獎次數</span> <input type="number"
-									name="lotteryChance" required />
+								<span class="title">活動ID</span> <input type="number"
+									name="campaignId" placeholder="請輸入活動編號" min="1" required />
 							</div>
 
 							<div class="question">
-								<span class="title">使用期限</span> <input type="text" 
-								name="status" placeholder="請輸入0或1" required pattern="^[01]$" title="請輸入0或1" />
+								<span class="title">抽獎次數</span> <input type="text" 
+								name="lotteryChance" placeholder="請輸入抽獎次數" min="1" required  />
 							</div>
 						</fieldset>
 
@@ -231,7 +230,8 @@ body .modal .modal-content form textarea {
 					</form>
 				</div>
 			</div>
-
+			
+			
 
 			<div id="addEventModal2" class="modal">
 				<div class="modal-content">
@@ -253,24 +253,25 @@ body .modal .modal-content form textarea {
 							</div>
 
 							<div class="question">
-								<span class="title">訂單ID</span> <input type="text" id="ordersId"
+								<span class="title">活動名稱</span> <input type="text" id="campaignTitle"
 									 disabled="disabled" />
 							</div>
 
 							<div class="question">
-								<span class="title">獲得抽獎次數</span> <input type="text"
+								<span class="title">總抽獎次數</span> <input type="text"
 									id="lotteryChance" name="lotteryChance" />
 							</div>
 
 							<div class="question">
-								<span class="title">總抽獎次數</span> <input type="text"
-									id="totalChance" disabled="disabled" />
+								<span class="title">已使用次數</span> <input type="text"
+									id="usedChances" disabled="disabled" />
+							</div>
+							
+							<div class="question">
+								<span class="title">剩餘次數</span> <input type="text"
+									id="remainingChances" disabled="disabled" />
 							</div>
 
-							<div class="question">
-								<span class="title">使用期限</span> <input type="text" id="status"
-									name="status" />
-							</div>
 						</fieldset>
 
 						<div id="buttonbox">
@@ -323,10 +324,10 @@ body .modal .modal-content form textarea {
 		    // 從 data 屬性獲取數據
 		    document.getElementById("chanceId").value = button.dataset.id;
 		    document.getElementById("membersId").value = button.dataset.membersId;
-		    document.getElementById("ordersId").value = button.dataset.ordersId;
+		    document.getElementById("campaignTitle").value = button.dataset.campaignTitle;
 		    document.getElementById("lotteryChance").value = button.dataset.lotteryChance;
-		    document.getElementById("totalChance").value = button.dataset.totalChance;
-		    document.getElementById("status").value = button.dataset.status;
+		    document.getElementById("usedChances").value = button.dataset.usedChances;
+		    document.getElementById("remainingChances").value = button.dataset.remainingChances;
 		}      
 	      
       

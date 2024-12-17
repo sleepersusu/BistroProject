@@ -31,6 +31,7 @@ configure({
 
 setLocale('zh_TW')
 
+
 window.Swal = Swal
 
 const app = createApp(App)
