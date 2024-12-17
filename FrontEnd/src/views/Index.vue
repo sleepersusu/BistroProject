@@ -71,7 +71,11 @@
     >
       Popular Dishes
     </h2>
-    <ProductCard></ProductCard>
+    <div class="row  my-5 mx-4" data-aos="fade-up" >
+      <div class="col-md-4 mt-4" v-for="menu in menus" :key="menu.id">
+        <ProductCard :menu="menu"></ProductCard>
+      </div>
+    </div>
     <ZigzagSection></ZigzagSection>
   </div>
 </template>
@@ -84,7 +88,36 @@ export default {
     ProductCard,
     ZigzagSection,
   },
+  data() {
+    return {
+      menus:[],
+
+    }
+  },
+  methods: {
+
+
+    loadTop3Menu(){
+
+      let API_URL = `${import.meta.env.VITE_API}/api/menu/topThree`;
+
+      this.axios.get(API_URL)
+      .then((response)=>{
+        this.menus=response.data
+        console.log(response.data)
+      })
+
+    },
+
+  },
+  computed: {},
+  watch: {},
+  created() {
+    this.loadTop3Menu();
+  },
 }
+
+
 </script>
 
 <style>
@@ -113,3 +146,6 @@ export default {
   object-position: center;
 }
 </style>
+
+
+

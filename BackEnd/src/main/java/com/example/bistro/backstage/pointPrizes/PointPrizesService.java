@@ -34,4 +34,9 @@ public class PointPrizesService {
 	public PointPrizesBean findById(int id) {
 	    return PPRepo.findById(id).orElse(null);
 	}
+	
+	public void deletePointPrizeCount(int memberId) {
+		PPRepo.deletePointPrizeCount(memberId);
+	}
+	
 }

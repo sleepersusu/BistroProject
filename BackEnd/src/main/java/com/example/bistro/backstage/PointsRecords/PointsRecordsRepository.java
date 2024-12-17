@@ -1,7 +1,7 @@
 package com.example.bistro.backstage.PointsRecords;
 
+import java.util.Date;
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,5 +20,10 @@ public interface PointsRecordsRepository extends JpaRepository<PointsRecordsBean
     nativeQuery = true)
 	List<Object[]> findMembersAllPointRecord();
 
+
+	// 添加根據 promoCode 查詢的方法
+	
+//	PointsRecordsBean findByPromoCode(String promoCode);
+	
 	
 }

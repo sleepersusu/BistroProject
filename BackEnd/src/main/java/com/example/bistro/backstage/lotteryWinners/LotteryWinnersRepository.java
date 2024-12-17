@@ -26,8 +26,10 @@ public interface LotteryWinnersRepository extends JpaRepository<LotteryWinners, 
 			   "ORDER BY lw.createdAt DESC", 
 			   nativeQuery = true)
 			List<Object[]> findAllWinners();
+
 			
 			@Query("from LotteryWinners where member.id = :memberId")
 			LotteryWinners findByMemberId(Integer memberId);
 			
+
 }

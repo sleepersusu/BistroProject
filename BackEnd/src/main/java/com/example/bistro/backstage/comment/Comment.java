@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.menu.Menu;
+import com.example.bistro.backstage.ordersDetails.OrdersDetails;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -39,6 +41,14 @@ public class Comment {
 	@ManyToOne
 	@JoinColumn(name="menuId",referencedColumnName = "ID")
 	private Menu menu;
+	
+	
+	
+	@JsonIgnore
+	@OneToOne
+	@JoinColumn(name="orderDetailsId",referencedColumnName = "ID")
+	private OrdersDetails orderDetails;
+	
 	
 	private String  commentProduct;
 	

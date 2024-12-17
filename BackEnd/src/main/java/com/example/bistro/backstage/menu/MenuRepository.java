@@ -40,7 +40,7 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 	List<Menu> findMenuByCategoryAndIsSold(String category);
 	
 	
-	@Query("FROM Menu  WHERE menuStatus = '上架' ORDER BY avgScore DESC")
+	@Query(value = "SELECT TOP 3 * FROM Menu  WHERE menuStatus = '上架' ORDER BY avgScore DESC",nativeQuery = true)
 	List<Menu> findTopThreeMenu();
 	
 	

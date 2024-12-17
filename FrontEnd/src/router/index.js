@@ -3,13 +3,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(),
   linkActiveClass: 'active',
-  scrollBehavior () {
-    return {top:0}
+  scrollBehavior() {
+    return { top: 0 }
   },
   routes: [
     {
       path: '/',
       name: 'home',
+      redirect: '/index',
       component: () => import('../views/Home.vue'),
       children: [
         {
@@ -21,8 +22,8 @@ const router = createRouter({
           component: () => import('../views/Profile.vue'),
         },
         {
-          path: '/login',
-          component: () => import('../views/Login.vue'),
+          path: '/membercenter',
+          component: () => import('../views/MemberCenter.vue'),
         },
         {
           path: '/reservations',
@@ -45,10 +46,15 @@ const router = createRouter({
           component: () => import('../views/MemberPoints.vue'),
         },
         {
+          path: '/memberCart',
+          component: () => import('../views/Cart2.vue'),
+        },
+        {
           path: '/campaign',
           component: () => import('../views/Campaign.vue'),
         },
         {
+
           path: '/cartCheckout',
           component: () => import('../views/CartCheckout.vue'),
         },
@@ -60,7 +66,10 @@ const router = createRouter({
           path: '/cartCheckFail',
           component: () => import('../views/CartCheckFail.vue'),
         },
-
+        {
+          path: '/member center',
+          component: () => import('../views/MemberCenter.vue'),
+        },
       ],
     },
   ],

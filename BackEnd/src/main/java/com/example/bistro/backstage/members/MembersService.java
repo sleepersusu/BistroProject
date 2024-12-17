@@ -1,5 +1,6 @@
 package com.example.bistro.backstage.members;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class MembersService {
@@ -16,8 +20,6 @@ public class MembersService {
 	
 	@Autowired
 	private MembersRepository memberRepo;
-
-
 
 	public Optional<Members> checkLogin(String loginAccount,String loginPassword) {
 		 Optional<Members> dbMember = memberRepo.findByMemberAccount(loginAccount);
@@ -44,18 +46,11 @@ public class MembersService {
 	
 	
 	
-	public Members findMemberbyId(Integer memberId){
-		
-		Optional<Members> op = memberRepo.findById(memberId);
-		
-		if(op.isPresent()) {
-			return op.get();
-			
-		}
-		
-		return null;
-				
-	}
+    //findById 獎品會用到
+    public Members findMembersById(Integer id) {
+        Optional<Members> op = memberRepo.findById(id);
+        return op.isPresent() ? op.get() : null;
+    }
 	
 	
 	public Members updateMember(Members member) {
