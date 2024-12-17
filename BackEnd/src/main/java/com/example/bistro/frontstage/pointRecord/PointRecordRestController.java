@@ -20,25 +20,19 @@ public class PointRecordRestController {
 	PointsRecordsService pointRecordService;
 	
 	@PostMapping("/api/pointRecord")
-	public ResponseEntity<?> pointRecord(@RequestBody PointRecordDTO requestDto) {
+	public ResponseEntity<?> CreatePointRecord(@RequestBody PointRecordDTO requestDto) {
 	    // 呼叫 Service 層，並獲取返回的結果
 	    Map<String, Boolean> map = pointRecordService.createPointsRecords(requestDto.getMemberId(),requestDto.getPointPrizesId(),requestDto.getRecordsDate());
 	    
 	    return ResponseEntity.ok(map);
 	}
 	
-//	@PostMapping("/api/validatePromoCode")
-//	public ResponseEntity<?> validatePromoCode(@RequestBody PointRecordDTO request) {
-//	    PointsRecordsBean record = PointsRecordsRepository.findByPromoCode(request.getPromoCode());
-//	    
-//	    if (record != null) {
-//	        return ResponseEntity.ok(Map.of(
-//	            "valid", true, 
-//	            "prize", record.getPrize()
-//	        ));
-//	    }
-//	    
-//	    return ResponseEntity.ok(Map.of("valid", false));
-//	}
-//	
+	@PostMapping("/api/minusMemberPoint")
+	public ResponseEntity<?> MinusMemberPoint(@RequestBody PointRecordDTO requestDto) {
+		
+		
+		
+		return null;
+	}
+	
 }
