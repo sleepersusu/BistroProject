@@ -25,8 +25,15 @@ public interface PointsRecordsRepository extends JpaRepository<PointsRecordsBean
 	@Modifying
 	@Transactional
 	@Query(value="UPDATE PointsTotal "
-			+ "SET PointsTotal = PointsTotal - :deletePoints "
-			+ "WHERE memberId = :memberId;",nativeQuery = true)
-	void minusMemberPoint(@Param("deletePoints") int deletePoints, @Param("memberId") int memberId);
+			+ "SET PointsTotal = PointsTotal - ? "
+			+ "WHERE memberId = ?",nativeQuery = true)
+	void minusMemberPoint(int PointPrizesPoints, int memberId);
 	
+
+//	UPDATE PointsTotal
+//	SET MemberPointTotal = MemberPointTotal - 20
+//	FROM PointsTotal
+//	JOIN PointPrizes ON PointPrizes.ID = PointsTotal.pointPrizesId
+//	WHERE PointsTotal.memberId = 1;
+
 }
