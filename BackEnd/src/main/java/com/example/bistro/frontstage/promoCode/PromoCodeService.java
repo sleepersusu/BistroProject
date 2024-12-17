@@ -38,8 +38,8 @@ public class PromoCodeService {
         promoCodeRepository.save(promoCodeBean);
     }
     
-    public List<PromoCodeBean> findMemberPromoCode(){
-    	return promoCodeRepository.findAll();
+    public List<PromoCodeBean> findMemberPromoCode(int memberId){
+    	return promoCodeRepository.findMemberPromoCode(memberId);
     }
     
 }

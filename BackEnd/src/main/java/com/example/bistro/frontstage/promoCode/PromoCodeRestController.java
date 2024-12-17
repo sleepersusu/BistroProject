@@ -26,8 +26,8 @@ public class PromoCodeRestController {
 	}
 
 	@GetMapping("/api/showPromoCode")
-	public ResponseEntity<List<PromoCodeBean>> showPromoCode(){
-		List<PromoCodeBean> promoCodeBean = promoCodeService.findMemberPromoCode();
+	public ResponseEntity<List<PromoCodeBean>> showPromoCode(@RequestParam int memberId){
+		List<PromoCodeBean> promoCodeBean = promoCodeService.findMemberPromoCode(memberId);
 		return ResponseEntity.ok(promoCodeBean);
 	}
 	

@@ -41,7 +41,7 @@
       </ul>
     </div>
 
-    <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal"/>
+    <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal" />
   </div>
 </template>
 
@@ -56,7 +56,7 @@ export default {
     return {
       pointPrizes: [],
       redeemedPrize: {},
-      memberId: 9,
+      memberId: 1,
     }
   },
   methods: {
@@ -75,7 +75,6 @@ export default {
 
       const response = await this.axios.get(api)
       this.pointPrizes = response.data
-
     },
 
     async redeemPrize(prize) {
@@ -94,9 +93,9 @@ export default {
         const promoCode = this.generateRandomCode()
 
         // 調用子組件的方法更新優惠碼和商品信息
-        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode}
+        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode }
 
-        const memberId = 9 // 假資料，會員 ID 為 9
+        const memberId = 1 // 假資料，會員 ID 為 9
         if (memberId) {
           // const pointPrizesId = prize.id;  // 商品 ID 來自按下的商品
           // const recordsDate = new Date().toISOString();  // 使用當前時間作為兌換日期
@@ -110,7 +109,7 @@ export default {
           const promoData = {
             memberId,
             pointPrizesId: prize.id,
-            promoCode
+            promoCode,
           }
 
           try {
