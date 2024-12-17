@@ -1,25 +1,15 @@
 <template>
   <div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px">
-
-    <div style="position: relative; flex: 1; max-width: 500px; height: 350px">
+    <div id="googlemap" style="position: relative; flex: 1; max-width: 500px; height: 350px">
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw"
         width="100%" height="100%" style="border: 0; border-radius: 10px" allowfullscreen="" loading="lazy"
         referrerpolicy="no-referrer-when-downgrade">
       </iframe>
     </div>
-
-    <div style="
-        flex: 1;
-        max-width: 350px;
-        background-color: #f9f9f9;
-        align-items: center;
-        padding: 20px;
-        border-radius: 10px;
-      ">
-
-<hr class="no-line" />
-      <h5>📍 位置</h5>
+    <div id="inform">
+      <hr class="no-line" />
+      <h5 >📍 位置</h5>
       <p>南台科技大學L棟/5F</p>
       <hr>
       <h5>📞 聯絡電話</h5>
@@ -32,17 +22,7 @@
       <p>文化商圈, 餐酒館料理</p>
       <hr>
     </div>
-
-    <div id="app" style="
-        flex: 1;
-        max-width: 500px;
-        background-color: #fff;
-        align-items: center;
-        margin: 0 20px;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      ">
+    <div id="app">
       <div style="font-size: 30px; margin-bottom: 20px">訂位資訊</div>
       <div class="row g-3">
         <form @submit.prevent="submitReservation">
@@ -89,7 +69,7 @@
           <div class="col-md-6">
             <label for="startTime" class="form-label">時段</label>
             <div>
-              <button v-for="time in availableTimeslots" :key="time" class="btn btn-outline-primary me-2"
+              <button v-for="time in availableTimeslots" :key="time" class="btn btn-outline-success me-2"
                 @click="handleClick(time, $event)">
                 {{ time }}
               </button>
@@ -233,13 +213,36 @@ export default {
 </script>
 
 <style scoped>
+#inform {
+  flex: 1;
+  max-width: 350px;
+  background-color: #f9f9f9;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+#app{
+  flex: 1;
+  max-width: 500px;
+  background-color: #fff;
+  align-items: center;
+  margin: 0 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+#googlemap{
+  position: relative;
+  flex: 1; 
+  max-width: 500px; 
+  height: 350px
+}
 .frame {
   border: 2px solid #eed9c4;
 }
 .no-line {
   border: none;
-  height: 1px;       /* 設定高度 */
-  background-color: transparent; /* 背景透明 */
+  height: 1px;
+  background-color: transparent;
 }
-
 </style>

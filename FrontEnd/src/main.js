@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
 import 'aos/dist/aos.css'
 import AOS from 'aos'
 import VueLuckyCanvas from '@lucky-canvas/vue'
+import '@fortawesome/fontawesome-free/css/all.css';
 
 window.Swal = Swal
 

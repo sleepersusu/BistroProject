@@ -58,7 +58,7 @@ public class ReservationsFrontstageService {
 		List<Reservations> reservationsList = findCount(reservationDate, time);
 		int count = 0;
 		for (Reservations reservation : reservationsList) {
-			count += reservation.getNumberPeople(); // 累加每筆預約的人數
+			count += reservation.getNumberPeople(); 
 		}
 		return count;
 	}
