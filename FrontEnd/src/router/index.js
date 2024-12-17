@@ -68,10 +68,10 @@ const router = createRouter({
         {
           path: '/lotteryResult',
           component: () => import('../views/LotteryResult.vue'),
-
-          path: '/member center',
+        },
+        {
+          path: '/membercenter',
           component: () => import('../views/MemberCenter.vue'),
-
         },
       ],
     },
