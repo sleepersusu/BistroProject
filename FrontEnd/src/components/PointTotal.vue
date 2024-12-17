@@ -50,6 +50,8 @@ export default {
 
       const response = await this.axios.get(api)
       this.memberPromoCode = response.data
+
+      console.log('API Response:', response);  // 打印 API 回应以便检查
     },
   },
 
@@ -62,11 +64,13 @@ export default {
       },
       deep: true,
     },
+  },
 
     created() {
+      console.log('子组件 created', this.memberId)
       this.getPromoCode()
     },
-  },
+
 }
 </script>
 

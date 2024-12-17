@@ -10,7 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "PointGet")
 public class PointsGetBean {
@@ -29,37 +33,5 @@ public class PointsGetBean {
     private Orders orders;
     
     private Integer pointGetted;
-
-	public Integer getID() {
-		return ID;
-	}
-
-	public void setID(Integer iD) {
-		ID = iD;
-	}
-
-	public Members getMembers() {
-		return members;
-	}
-
-	public void setMembers(Members members) {
-		this.members = members;
-	}
-
-	public Orders getOrders() {
-		return orders;
-	}
-
-	public void setOrders(Orders orders) {
-		this.orders = orders;
-	}
-
-	public Integer getPointGetted() {
-		return pointGetted;
-	}
-
-	public void setPointGetted(Integer pointGetted) {
-		this.pointGetted = pointGetted;
-	}
 
 }
