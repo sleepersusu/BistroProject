@@ -23,6 +23,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/reservations">馬上訂位</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/memberPoints">會員獎品</router-link>
+          </li>
 
           <li class="nav-item">
             <router-link class="nav-link position-relative" to="/cart">
@@ -30,7 +33,8 @@
               <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary">
                 3
                 <span class="visually-hidden">unread messages</span>
-              </span></router-link>
+              </span></router-link
+            >
           </li>
           <li class="nav-item ms-lg-5">
             <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
@@ -77,6 +81,7 @@ export default {
     },
     handleLogin(userImg,username){
       userStore.setLoggedIn();
+      console.log(userImg);
       this.userAvatar = userImg;
       this.username = username;
     }
@@ -161,6 +166,18 @@ export default {
 .navbar-toggler:focus {
   box-shadow: none;
   outline: none;
+}
+.circle-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+
+.circle-avatar:hover {
+    opacity: 0.8;
 }
 
 @media (max-width: 992px) {
