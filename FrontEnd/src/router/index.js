@@ -22,8 +22,18 @@ const router = createRouter({
           component: () => import('../views/Profile.vue'),
         },
         {
-          path: '/membercenter',
+          path: 'membercenter',
           component: () => import('../views/MemberCenter.vue'),
+          children: [
+            {
+              path: 'profile',  // 子路由路径，不需要加斜线
+              component: () => import('../views/membercenter/UserProfile.vue'),  // 正确的相对路径
+            },
+            {
+              path: 'orders',  // 子路由路径，不需要加斜线
+              component: () => import('../views/membercenter/UserOrder.vue')
+            },
+          ],
         },
         {
           path: '/reservations',
@@ -69,12 +79,9 @@ const router = createRouter({
           path: '/comment',
           component: () => import('../views/Comment.vue'),
         },
-
         {
           path: '/lotteryResult',
           component: () => import('../views/LotteryResult.vue'),
-
-
         },
       ],
     },

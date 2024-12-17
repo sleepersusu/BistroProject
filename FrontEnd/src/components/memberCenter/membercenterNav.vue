@@ -2,17 +2,17 @@
   <div class="d-flex flex-column p-3 bg-dark vh-100">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <router-link to="/" class="nav-link">
+        <router-link to="/membercenter" class="nav-link">
           <span class="icon-circle"><i class="bi bi-house-door-fill"></i></span> 會員中心
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/about" class="nav-link">
+        <router-link to="/membercenter/profile" class="nav-link">
           <span class="icon-circle"><i class="bi bi-person-fill"></i></span> 修改資料
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/services" class="nav-link">
+        <router-link to="/membercenter/orders" class="nav-link">
           <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 我的訂單
         </router-link>
       </li>
