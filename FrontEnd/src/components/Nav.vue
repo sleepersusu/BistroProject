@@ -55,7 +55,7 @@
   <login ref="loginModal" @user-login="handleLogin"></login>
 </template>
 
-<script>
+<script >
 import Login from './login.vue';
 import { useUserStore } from '@/stores/userStore';
 const userStore=useUserStore();
@@ -96,7 +96,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .nav-shadow {
   box-shadow: 0 0 12px #f5e6d3 !important;
 }
