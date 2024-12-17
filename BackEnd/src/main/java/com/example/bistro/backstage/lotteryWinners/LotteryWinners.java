@@ -8,6 +8,7 @@ import com.example.bistro.backstage.campaign.Campaign;
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 import com.example.bistro.backstage.lotteryChance.LotteryChance;
 import com.example.bistro.backstage.members.Members;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -40,6 +41,7 @@ public class LotteryWinners {
 	@Column(name = "ID")
 	private Integer id;
 	
+
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "campaignId")
@@ -52,6 +54,7 @@ public class LotteryWinners {
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
+
 	@JoinColumn(name = "prizeId")
 	private CampaignPrizes campaignPrizes;
 	

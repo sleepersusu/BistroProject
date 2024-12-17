@@ -36,7 +36,7 @@ public class PointsRecordsBean {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
     private Date recordsDate;
-
+		
 	public Integer getID() {
 		return ID;
 	}

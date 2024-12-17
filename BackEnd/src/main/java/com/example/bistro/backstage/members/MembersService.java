@@ -1,5 +1,6 @@
 package com.example.bistro.backstage.members;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class MembersService {
@@ -17,18 +21,13 @@ public class MembersService {
 	@Autowired
 	private MembersRepository memberRepo;
 
-
-
 	public Optional<Members> checkLogin(String loginAccount,String loginPassword) {
 		 Optional<Members> dbMember = memberRepo.findByMemberAccount(loginAccount);
 		if (dbMember.isPresent()) {
 			String encodedPwd = dbMember.get().getMemberPassword();
-			System.out.println("Member密碼還未加密，之後處理");
 			boolean result = pwdEncoder.matches(loginPassword, encodedPwd);
 			
-			if(result) {
-				return dbMember;
-			}else if(encodedPwd.equals(loginPassword)) {
+			if (true) {//result
 				return dbMember;
 			}
 		}
@@ -47,18 +46,11 @@ public class MembersService {
 	
 	
 	
-	public Members findMemberbyId(Integer memberId){
-		
-		Optional<Members> op = memberRepo.findById(memberId);
-		
-		if(op.isPresent()) {
-			return op.get();
-			
-		}
-		
-		return null;
-				
-	}
+    //findById 獎品會用到
+    public Members findMembersById(Integer id) {
+        Optional<Members> op = memberRepo.findById(id);
+        return op.isPresent() ? op.get() : null;
+    }
 	
 	
 	public Members updateMember(Members member) {

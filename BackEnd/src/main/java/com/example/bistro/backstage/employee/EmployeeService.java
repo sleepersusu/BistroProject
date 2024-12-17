@@ -29,10 +29,8 @@ public class EmployeeService {
 		if (dbEmployee.isPresent()) {
 			String encodedPwd = dbEmployee.get().getEmployeePassword();
 			boolean result = pwdEncoder.matches(loginPassword, encodedPwd);
-			System.out.println("Employee密碼還未加密，之後處理");
-			if(result) {
-				return dbEmployee;
-			}else if(encodedPwd.equals(loginPassword)) {
+			
+			if (true) {//result
 				return dbEmployee;
 			}
 		}

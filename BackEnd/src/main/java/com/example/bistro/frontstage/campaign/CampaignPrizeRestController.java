@@ -18,7 +18,9 @@ import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
 public class CampaignPrizeRestController {
 	
 	@Autowired
+
 	CampaignPrizeFrontService prizeService;
+
 	
 	@GetMapping("/api/campaignPrize")
 	public ResponseEntity<?> getCampaignPrizes() {
@@ -57,6 +59,7 @@ public class CampaignPrizeRestController {
 	    }
 	}
 	
+
 	@GetMapping("/api/campaignPrize/prizeByCampaign/{campaignId}")
 	public ResponseEntity<?> getPrizesByCampaign(@PathVariable Integer campaignId) {
 		List<CampaignPrizes> prizes = prizeService.findPrizesByCampaignId(campaignId);
@@ -65,5 +68,6 @@ public class CampaignPrizeRestController {
 		}
 		return ResponseEntity.ok(prizes);
 	}	
+
 
 }

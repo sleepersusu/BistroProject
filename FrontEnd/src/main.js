@@ -33,4 +33,3 @@ app.component('Loading', Loading)
 
 
 app.mount('#app')
-''

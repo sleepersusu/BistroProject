@@ -54,7 +54,7 @@ public class MembersController {
 	@Transactional
 	@PostMapping("/Bistro/member/updateMemers")
 	public String updateMemers(@ModelAttribute Members member, @RequestParam("edituserimg") MultipartFile file) {
-		Members memberbyId = membersService.findMemberbyId(member.getId());
+		Members memberbyId = membersService.findMembersById(member.getId());
 		if (file.isEmpty()) {
 
 			if (memberbyId != null) {
