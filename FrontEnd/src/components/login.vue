@@ -103,7 +103,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .circle-avatar {
     width: 40px;
     height: 40px;

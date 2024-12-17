@@ -52,8 +52,6 @@
     </div>
   </nav>
   <login ref="loginModal" @user-login="handleLogin"></login>
-
-
 </template>
 
 <script >
@@ -69,7 +67,7 @@ export default {
       userStore: useUserStore(),
     }
   }, components: {
-    Login
+    Login,
   },
   methods: {
     navShadow() {
