@@ -66,12 +66,15 @@ const router = createRouter({
           component: () => import('../views/CartCheckFail.vue'),
         },
         {
+          path: '/comment',
+          component: () => import('../views/Comment.vue'),
+        },
+
+        {
           path: '/lotteryResult',
           component: () => import('../views/LotteryResult.vue'),
-        },
-        {
-          path: '/membercenter',
-          component: () => import('../views/MemberCenter.vue'),
+
+
         },
       ],
     },

@@ -94,7 +94,7 @@
       <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id">
         <MenuCard
           :menu="menu"
-          
+
           @getcount="countCommentPeople"
           @view-comment="openModal"
           @update-count="updateCount"
@@ -103,7 +103,7 @@
         </MenuCard>
       </div>
 
-      <MenuCommentModal ref="commentMoal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
+      <MenuCommentModal ref="commentModal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
     </div>
   </div>
 </template>
@@ -124,7 +124,6 @@ export default {
       menus: [],
       currentProduct:'',
       comments: [],
-      // commentPeople:'',
       menuCount: 0,
     }
   },
@@ -165,22 +164,6 @@ export default {
           this.isLoading = false
         })
     },
-    // async countCommentPeople(productName) {
-    //   console.log(productName)
-    //   let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
-
-    //   axios
-    //     .get(API_URL)
-    //     .then(async (response) =>{
-    //       this.commentPeople=response.data
-    //       console.log(this.commentPeople)
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error fetching commentPeople:', error)
-    //     })
-    // },
-
-    
     openModal(menu) {
       this.currentProduct=menu.productName
       let api = `${import.meta.env.VITE_API}/api/${menu.productName}/comment`
@@ -194,13 +177,13 @@ export default {
           console.error('Error loading menus:', error)
         })
 
-      this.$refs.commentMoal.showModal()
+      this.$refs.commentModal.showModal()
     },
   },
 
   created() {
     this.loadAllMenu()
-    
+
   }
 }
 </script>

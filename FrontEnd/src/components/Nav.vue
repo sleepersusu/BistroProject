@@ -35,8 +35,7 @@
               >
                 3
                 <span class="visually-hidden">unread messages</span>
-              </span></router-link
-            >
+              </span></router-link>
           </li>
           <li class="nav-item ms-lg-5">
             <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
@@ -83,7 +82,6 @@ export default {
     },
     handleLogin(userImg,username){
       userStore.setLoggedIn();
-      console.log(userImg);
       this.userAvatar = userImg;
       this.username = username;
     }

@@ -88,60 +88,7 @@
     </div>
   </div>
 
-  <!-- <div
-    class="modal fade modal-dialog-scrollable"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-  >
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-2" id="exampleModalLabel">{{ menu.productName}}</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <h4>{{ menu.productDescribe}}</h4>
-        <div  v-for="comment in comments" :key="comment.id">
-          <div class="modal-body" >
-            <div style="display: flex">
-              <div>
-                <div>
-                  <section class="avatar-container">
-                    <img :src="memberSrc" alt="" class="avatar" />
-                  </section>
 
-                  <section>
-                    <h4>{{ comment.memberName }}</h4>
-                  </section>
-                </div>
-              </div>
-
-              <div>
-                <section>
-                  <star-rating
-                    v-model:rating="comment.commentRating"
-                    :read-only="true"
-                    :increment="1"
-                    :star-size="20"
-                    style="font-size: 15px"
-                  ></star-rating>
-                </section>
-
-                <section>
-                  {{ comment.commentMessage || '沒有提供評論內容。' }}
-                </section>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <script>
