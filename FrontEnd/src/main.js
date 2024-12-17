@@ -16,6 +16,7 @@ import VueLuckyCanvas from '@lucky-canvas/vue'
 import StarRating from 'vue-star-rating'
 
 
+
 window.Swal = Swal
 
 const app = createApp(App)

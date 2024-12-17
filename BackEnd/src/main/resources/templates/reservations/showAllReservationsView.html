@@ -177,7 +177,7 @@ body .modal .modal-content form textarea {
 										
 										<td th:text="${reservations.contactPhone}"></td>
 										<td th:text="${#dates.format(reservations.reservationDate, 'yyyy-MM-dd')}"></td>
-										<td th:text="${#dates.format(reservations.startTime,'HH:mm:ss')}"></td>
+										<td th:text="${reservations.startTime}"></td>
 										<td th:text="${reservations.numberPeople}"></td>
 										<td th:text="${reservations.notes}"></td>
 										<td th:text="${reservations.reservationStatus}"></td>
@@ -298,7 +298,7 @@ body .modal .modal-content form textarea {
 						</div>
 
 					</form>
-				</div>
+				
 			</div>
 			<!-- modal-content -->
 
