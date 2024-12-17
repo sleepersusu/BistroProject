@@ -102,17 +102,7 @@ export default {
     },
 };
 </script>
-<style>
-.modal-backdrop {
-    z-index: 1000 !important;
-    /*確保遮罩在 modal 背後 */
-
-}
-
-.modal {
-    z-index: 1500 !important;
-    /* 模态框的 z-index */
-}
+<style scoped>
 
 .circle-avatar {
     width: 40px;
