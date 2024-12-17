@@ -93,7 +93,7 @@ export default {
         const promoCode = this.generateRandomCode()
 
         // 調用子組件的方法更新優惠碼和商品信息
-        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode }
+        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode}
 
         const memberId = 1 // 假資料，會員 ID 為 9
         if (memberId) {

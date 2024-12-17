@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.bistro.backstage.members.Members;
@@ -48,6 +49,7 @@ public class Orders {
 
   //欄位
         //訂單資訊
+            private String  ordersNumber;         //訂單編號
             private String  ordersName;         //顧客姓名
             private String  ordersTel;          //顧客電話
             private String  seatType;         //內用和外帶
@@ -75,11 +77,13 @@ public class Orders {
         // 多對一：多個訂單可以來自同一個會員
             @ManyToOne(fetch = FetchType.LAZY)
             @JoinColumn(name = "memberId")
+            @JsonIgnore
             private Members members;
 
         // 多對一：多個訂單可以來自同一個桌號
             @ManyToOne(fetch = FetchType.LAZY)
             @JoinColumn(name = "seatsId")
+            @JsonIgnore
             private Seats seats;
 
         // 多對一：多個訂單可以來自同一個員工處理
@@ -91,7 +95,9 @@ public class Orders {
             @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL, orphanRemoval = true)
             private List<OrdersDetails> ordersDetails = new ArrayList<>();  // 訂單明細
 
-        // 一對多：一筆訂單可能有多筆付款紀錄(失敗重來之類)
+
+
+    // 一對多：一筆訂單可能有多筆付款紀錄(失敗重來之類)
             @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
             private List<Payment> payment = new ArrayList<>();  // 訂單與付款紀錄的一對多關聯
 

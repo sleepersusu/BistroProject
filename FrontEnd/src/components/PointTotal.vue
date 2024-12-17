@@ -12,17 +12,17 @@
               <p class="card-text">
                 優惠碼：<strong>{{ redeemedPrize.promoCode }}</strong>
               </p>
-              <hr />
-              <p class="card-text">目前會員ID是:{{ memberId }}</p>
-              <br />
-              <p class="card-text">您持有的優惠卷有:</p>
-              <br />
+              <hr>
+              <p class="card-text">
+                目前會員ID是:{{ memberId }}
+              </p>
+              <br>
+              <p class="card-text">
+                目前持有優惠卷:
+              </p>
+              <br>
               <ul>
-                <li
-                  v-for="item in memberPromoCode"
-                  :key="item.promoCode"
-                  style="list-style-type: none"
-                >
+                <li v-for="item in memberPromoCode" :key="item.promoCode" style="list-style-type: none;">
                   {{ item.pointPrizes.pointPrizesName }} : {{ item.promoCode }}
                 </li>
               </ul>

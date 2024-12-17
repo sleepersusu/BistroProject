@@ -13,19 +13,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class PromoCodeService {
 
-    @Autowired
-    private PromoCodeRepository promoCodeRepository;
+	@Autowired
+	private PromoCodeRepository promoCodeRepository;
 
-    @Autowired
-    private MembersRepository membersRepository;
+	@Autowired
+	private MembersRepository membersRepository;
 
-    @Autowired
-    private PointPrizesRepository pointPrizesRepository;
+	@Autowired
+	private PointPrizesRepository pointPrizesRepository;
 
-    public void createPromoCode(PromoCodeDTO promoData) {
+	public void createPromoCode(PromoCodeDTO promoData) {
 
-        Members member = membersRepository.findById(promoData.getMemberId())
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+		Members member = membersRepository.findById(promoData.getMemberId())
+				.orElseThrow(() -> new RuntimeException("Member not found"));
 
         PointPrizesBean pointPrize = pointPrizesRepository.findById(promoData.getPointPrizesId())
                 .orElseThrow(() -> new RuntimeException("Point Prize not found"));

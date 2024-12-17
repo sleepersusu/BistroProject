@@ -25,16 +25,16 @@
               <div class="row">
                 <div class="col-lg-6">
                   <div class="checkout__input">
-                    <p>Fist Name<span>*</span></p>
-                    <input type="text" placeholder="名字" />
+                    <p>Name<span>*</span></p>
+                    <input type="text" placeholder="姓名" />
                   </div>
                 </div>
-                <div class="col-lg-6">
-                  <div class="checkout__input">
-                    <p>Last Name<span>*</span></p>
-                    <input type="text" placeholder="姓" />
-                  </div>
-                </div>
+<!--                <div class="col-lg-6">-->
+<!--                  <div class="checkout__input">-->
+<!--                    <p>Last Name<span>*</span></p>-->
+<!--                    <input type="text" placeholder="姓" />-->
+<!--                  </div>-->
+<!--                </div>-->
               </div>
 
               <div class="row">
@@ -56,6 +56,7 @@
                 <p>Order notes<span>*</span></p>
                 <input type="text" placeholder="特殊要求" />
               </div>
+
               <div class="checkout__input__checkbox">
                 <label for="acc">
                   Create an account?
@@ -84,30 +85,50 @@
                 <!--                  </label>-->
                 <!--                </div>-->
                 <!--                <p>加入會員享優會</p>-->
+
+                <div class="checkout__input__checkbox">
+                  <div class="checkout__order__cash">用餐方式</div>
+                  <label for="eatin">
+                    內用
+                    <input type="radio" id="eatin" name="seatType" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+
+                <div class="checkout__input__checkbox">
+                  <label for="takeout">
+                    外帶
+                    <input type="radio" id="takeout" name="seatType" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+
+
+
                 <div class="checkout__input__checkbox">
                   <div class="checkout__order__cash">PaymentWay</div>
-                  <label for="payment">
+                  <label for="cash">
                     Cash
-                    <input type="radio" id="payment" name="paymentMethod" />
+                    <input type="radio" id="cash" name="paymentMethod" />
                     <span class="checkmark"></span>
                   </label>
                 </div>
 
                 <div class="checkout__input__checkbox">
                   <label for="paypal">
-                    綠界支付
+                    Paypal
                     <input type="radio" id="paypal" name="paymentMethod" />
                     <span class="checkmark"></span>
                   </label>
                 </div>
 
-                <div class="checkout__input__checkbox">
-                  <label for="linePay">
-                    LinePay
-                    <input type="radio" id="linePay" name="paymentMethod" />
-                    <span class="checkmark"></span>
-                  </label>
-                </div>
+<!--                <div class="checkout__input__checkbox">-->
+<!--                  <label for="linePay">-->
+<!--                    LinePay-->
+<!--                    <input type="radio" id="linePay" name="paymentMethod" />-->
+<!--                    <span class="checkmark"></span>-->
+<!--                  </label>-->
+<!--                </div>-->
 
                 <div>
                   <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
