@@ -22,8 +22,8 @@ const router = createRouter({
           component: () => import('../views/Profile.vue'),
         },
         {
-          path: '/login',
-          component: () => import('../views/Login.vue'),
+          path: '/membercenter',
+          component: () => import('../views/MemberCenter.vue'),
         },
         {
           path: '/reservations',
