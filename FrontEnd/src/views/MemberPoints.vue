@@ -117,15 +117,19 @@ export default {
 
             const response = await this.axios.post(api, requestData)
             console.log(response)
-
-            const api3 = `${import.meta.env.VITE_API}/api/promoCode`
-            const response3 = await fetch(api3, {
+//promoApi(api3)
+//PromoResponse(response3)
+            const promoApi = `${import.meta.env.VITE_API}/api/promoCode`
+            const promoResponse = await fetch(promoApi, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+              headers: {'Content-Type': 'application/json',},
               body: JSON.stringify(promoData),
             })
+
+            //兌換商品後扣除相對應積分
+            const minusPointApi = `${import.meta.env.VITE_API}/api/minusMemberPoint`
+            const minusPointResponse = await this.axios.post(minusPointApi, requestData)
+            console.log(minusPointResponse)
 
             if (response.data.兌換狀態) {
               window.Swal.fire({
@@ -139,22 +143,21 @@ export default {
                 timerProgressBar: true,
               })
 
-              // 触发子组件重新获取数据的方法
+              // 觸發子組件重新獲取資料的方法
               this.$refs.pointTotal.getPromoCode()
-
-              const api2 = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
-              const response2 = await fetch(api2, {
+//MinusPrizesApi(api2)
+//MinusPrizesResponse(res2)
+              const MinusPrizesApi = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
+              const MinusPrizesResponse = await fetch(MinusPrizesApi, {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
+                headers: {'Content-Type': 'application/json',},
                 body: JSON.stringify(requestData), // 將資料轉換為 JSON 格式發送
               })
 
-              if (response2.ok) {
-                console.log('減少商品數量成功')
+              if (MinusPrizesResponse.ok) {
+                console.log('庫存已減少')
               } else {
-                console.error('減少商品數量失敗:', response2.status, await response2.text())
+                console.error('庫存減少失敗:', MinusPrizesResponse.status, await MinusPrizesResponse.text())
               }
             } else {
               console.error('Failed to record point:', response.status)
