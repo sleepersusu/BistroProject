@@ -73,6 +73,8 @@ const router = createRouter({
         {
           path: '/lotteryResult',
           component: () => import('../views/LotteryResult.vue'),
+
+
         },
       ],
     },
