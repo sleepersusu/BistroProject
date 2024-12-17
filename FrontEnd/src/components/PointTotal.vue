@@ -17,8 +17,18 @@
               </p>
               <hr>
               <p class="card-text">
-                目前擁有的兌換卷
+                目前會員ID是:{{ memberId }}
               </p>
+              <br>
+              <p class="card-text">
+                目前持有優惠卷:
+              </p>
+              <br>
+              <ul>
+                <li v-for="item in memberPromoCode" :key="item.promoCode" style="list-style-type: none;">
+                  {{ item.pointPrizes.pointPrizesName }} : {{ item.promoCode }}
+                </li>
+              </ul>
             </div>
 
           </div>
@@ -30,7 +40,38 @@
 
 <script >
 export default{
-  props: ['redeemedPrize']
+  props: ['redeemedPrize', 'memberId'],
+
+  data(){
+    return{
+      memberPromoCode:[]
+    }
+  },
+
+  methods:{
+    async getPromoCode(){
+      const api = `${import.meta.env.VITE_API}/api/showPromoCode`
+
+      const response = await this.axios.get(api)
+      this.memberPromoCode = response.data
+    }
+  },
+
+  watch: {
+  redeemedPrize: {
+    handler(newValue) {
+      if (newValue && Object.keys(newValue).length > 0) {
+        this.getPromoCode()
+      }
+    },
+    deep: true
+  },
+
+  created() {
+    this.getPromoCode()
+  },
+}
+
 }
 </script>
 

@@ -177,7 +177,7 @@ export default {
           console.error('Error loading menus:', error)
         })
 
-      this.$refs.commentMoal.showModal()
+      this.$refs.commentModal.showModal()
     },
   },
 

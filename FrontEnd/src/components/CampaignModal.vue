@@ -74,10 +74,7 @@
           </ul>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary text-light" data-bs-dismiss="modal">
-            關閉
-          </button>
-          <button type="button" class="btn btn-primary">確認</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">關閉</button>
         </div>
       </div>
     </div>
@@ -88,34 +85,14 @@
 import { useModal } from '@/mixins/modalMixin'
 const { modalRef, showModal, hideModal } = useModal()
 import { defineProps } from 'vue'
+import { utils } from '@/mixins/utils'
+const { formatDate, getStatusDisplay } = utils()
 const props = defineProps({
   campaign: {
     type: Object,
     required: true,
   },
 })
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('zh-TW')
-}
-
-const statusFilters = {
-  IN_PROGRESS: {
-    text: '進行中',
-    class: 'text-success',
-  },
-  EXPIRED: {
-    text: '已結束',
-    class: 'text-danger',
-  },
-  NOT_STARTED: {
-    text: '未開始',
-    class: 'text-secondary',
-  },
-}
-
-const getStatusDisplay = (status) => statusFilters[status] || statusFilters['NOT_STARTED']
 
 defineExpose({
   showModal,

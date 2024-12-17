@@ -2,6 +2,7 @@ package com.example.bistro.backstage.payment;
 
 import com.example.bistro.backstage.orders.Orders;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,7 +45,8 @@ public class Payment {
    //FK
         // 每筆付款對應一筆訂單ordersId Orders(ID)
             @ManyToOne(fetch = FetchType.LAZY)  // 多對一關聯
-            @JoinColumn(name = "ordersId",nullable = false)
+            @JoinColumn(name = "ordersId")
+            @JsonIgnore
             private Orders orders;  // 訂單
 
 
