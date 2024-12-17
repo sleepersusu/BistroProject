@@ -22,7 +22,7 @@ const router = createRouter({
           component: () => import('../views/Profile.vue'),
         },
         {
-          path: 'membercenter',
+          path: '/membercenter',
           component: () => import('../views/MemberCenter.vue'),
           children: [
             {
