@@ -167,6 +167,18 @@ export default {
   box-shadow: none;
   outline: none;
 }
+.circle-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+
+.circle-avatar:hover {
+    opacity: 0.8;
+}
 
 @media (max-width: 992px) {
   .nav-link {

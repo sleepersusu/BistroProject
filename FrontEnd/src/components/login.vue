@@ -85,8 +85,10 @@ export default {
                         responseType: 'blob',
                     })
                 if (imgData.data.size === 0) {
-                    userAvatar = "/public/images/avatar.jpg";
+                    
+                    userAvatar = "/images/avatar.jpg";
                 } else {
+                    
                     userAvatar = URL.createObjectURL(imgData.data);
                 }
                 this.$emit('user-login', userAvatar, username)
@@ -95,24 +97,9 @@ export default {
                 console.error('登入失敗', error);
                 userStore.clearLoggedIn();
             } finally {
-                console.log("準備關閉")
                 this.modal.hide();
             }
         }
     },
 };
 </script>
-<style scoped>
-.circle-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-}
-
-.circle-avatar:hover {
-    opacity: 0.8;
-}
-</style>
