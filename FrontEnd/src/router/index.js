@@ -54,7 +54,6 @@ const router = createRouter({
           component: () => import('../views/Campaign.vue'),
         },
         {
-
           path: '/cartCheckout',
           component: () => import('../views/CartCheckout.vue'),
         },
@@ -67,8 +66,12 @@ const router = createRouter({
           component: () => import('../views/CartCheckFail.vue'),
         },
         {
+          path: '/lotteryResult',
+          component: () => import('../views/LotteryResult.vue'),
+
           path: '/member center',
           component: () => import('../views/MemberCenter.vue'),
+
         },
       ],
     },

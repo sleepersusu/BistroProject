@@ -1,5 +1,6 @@
 package com.example.bistro.frontstage.campaign;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class LotteryWinnerRestController {
 	
 	@GetMapping("/api/winner/member/{memberId}")
 	public ResponseEntity<?> getWinnerByMemberId(@PathVariable Integer memberId){
-		LotteryWinners winner = lotteryWinnerFrontService.findByMemberId(memberId);
+		List<LotteryWinners> winner = lotteryWinnerFrontService.findByMemberId(memberId);
 		return ResponseEntity.ok(winner);
 	}
 	

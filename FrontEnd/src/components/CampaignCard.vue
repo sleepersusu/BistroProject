@@ -40,9 +40,12 @@
 <script setup>
 import { defineProps, computed, defineEmits } from 'vue'
 import { lotteryStore } from '@/stores/lotteryStore'
-const lottery = lotteryStore()
+import { utils } from '@/mixins/utils'
 
+const { formatDate } = utils()
+const lottery = lotteryStore()
 const count = computed(() => lottery.chanceCount(props.campaign.id))
+
 const props = defineProps({
   campaign: {
     type: {},
@@ -54,11 +57,6 @@ const { campaignStatus } = props.campaign
 const emits = defineEmits(['open-drawmodal', 'open-detailmodal'])
 const startDraw = () => emits('open-drawmodal', props.campaign.id)
 const openCampaign = () => emits('open-detailmodal', props.campaign)
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('zh-TW')
-}
 </script>
 
 <style scoped>
