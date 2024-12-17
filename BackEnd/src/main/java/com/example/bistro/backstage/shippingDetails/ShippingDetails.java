@@ -50,4 +50,7 @@ public class ShippingDetails {
     
     @Column(length = 500)
     private String notes;
+    
+    @Column(nullable = false, columnDefinition = "BIT DEFAULT 0")
+    private Boolean isSend;
 }

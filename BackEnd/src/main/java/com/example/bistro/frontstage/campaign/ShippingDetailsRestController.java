@@ -50,6 +50,7 @@ public class ShippingDetailsRestController {
 			detail.setName(reqDto.getName());
 			detail.setNotes(reqDto.getNotes());
 			detail.setPhone(reqDto.getPhone());
+			detail.setIsSend(false);
 			return ResponseEntity.ok(shippingDetailsRepo.save(detail));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("已經填寫過了");
@@ -64,9 +65,10 @@ public class ShippingDetailsRestController {
             if(op.isEmpty()) {
             	throw new RuntimeException("找不到配送資訊");
             }
-            
-            emailService.sendShippingNotification(op.get());
-            
+            ShippingDetails ship = op.get();
+//            emailService.sendShippingNotification(ship);
+            ship.setIsSend(true);
+            shippingDetailsRepo.save(ship);
             return ResponseEntity.ok("郵件發送成功");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

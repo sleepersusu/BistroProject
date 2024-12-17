@@ -154,7 +154,7 @@ const getResults = async () => {
     status.start()
     const res = await axios.get(api)
     console.log(res.data)
-    lotteryResults.value = res.data
+    lotteryResults.value = res.data.sort((a, b) => b.id - a.id)
   } catch (e) {
     console.error(e)
   } finally {
