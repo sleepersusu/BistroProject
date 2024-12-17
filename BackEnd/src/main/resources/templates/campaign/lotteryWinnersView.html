@@ -121,6 +121,29 @@
       #buttonbox {
         margin-top: 0.5rem;
       }
+
+      .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        display: inline-block;
+      }
+
+      .spinner {
+        width: 1rem;
+        height: 1rem;
+        border: 0.2em solid #ccc;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.75s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
 
@@ -314,6 +337,13 @@
                   class="formbutton"
                   onclick="sendEmail()"
                 >
+                  <div
+                    class="loading-spinner"
+                    id="emailSpinner"
+                    style="display: none"
+                  >
+                    <div class="spinner"></div>
+                  </div>
                   確認寄出
                 </button>
               </div>
@@ -356,6 +386,7 @@
       };
 
       const sendEmail = async () => {
+        const spinner = document.getElementById("emailSpinner");
         try {
           const id = document.getElementById("shipId").innerHTML;
           const isSend = document.getElementById("isSend").innerHTML;
@@ -367,10 +398,11 @@
           }
 
           if (!id || Number(id) <= 0) {
-            alert("無效的訂單編號");
+            alert("無效的配送編號");
             return;
           }
 
+          spinner.style.display = "inline-block";
           const response = await fetch(api, {
             method: "POST",
             headers: {
@@ -386,6 +418,8 @@
         } catch (error) {
           console.error("寄送郵件時發生錯誤:", error);
           alert("寄送失敗，請稍後再試");
+        } finally {
+          spinner.style.display = "none";
         }
       };
 
