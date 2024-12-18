@@ -31,13 +31,13 @@
   <div class="col" v-if="!isLoading">
     <div class="product-item">
       <figure>
-        
+
           <img :src="menuSrc"  class="img-fixed">
-        
+
       </figure>
 
       <h3>{{ menu.productName }}</h3>
-      
+
     <div class="d-flex align-items-bottom justify-content-between">
       <div>
         <span class="rating">
@@ -59,19 +59,19 @@
 
 
       <div class="d-flex justify-content-between"><span class="price">${{ menu.productPrice }}</span>
-        <span class="fs-6"> 剩餘:{{ menu.productCount }}份</span> 
-      </div>                  
-                      
+        <span class="fs-6"> 剩餘:{{ menu.productCount }}份</span>
+      </div>
+
       <div class="d-flex align-items-center justify-content-between">
         <div class="input-group product-qty">
           <span class="input-group-btn">
-            <button type="button" class="quantity-left-minus btn btn-danger btn-number" 
+            <button type="button" class="quantity-left-minus btn btn-danger btn-number"
               data-type="minus" v-on:click.prevent="minusOne">
               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
             </button>
           </span>
-            <input type="text" id="quantity" name="quantity" 
-              class="form-control input-number" 
+            <input type="text" id="quantity" name="quantity"
+              class="form-control input-number"
               v-model="count"
               v-on:input="updateQuantity($event)">
 
@@ -80,11 +80,11 @@
               <svg width="16" height="16" v-on:click.prevent="addOne"><use xlink:href="#plus"></use></svg>
             </button>
           </span>
-          
+
         </div>
-        <button class=" btn btn-primary mt-3" >Add to Cart</button>
-      </div>                    
-      
+        <button class=" btn btn-primary mt-3" @click="addToCart({id:menu.id,count:count})">Add to Cart</button>
+      </div>
+
     </div>
   </div>
 
@@ -147,8 +147,9 @@
 <script>
 import axios from 'axios'
 import StarRating from 'vue-star-rating'
-
 import LoadingVue from 'vue3-loading-overlay'
+import { cartStore } from '@/stores/cartStore.js'
+import { mapState, mapActions } from 'pinia'
 export default {
   components: {
     'star-rating': StarRating,
@@ -174,6 +175,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions(cartStore,["addToCart"]),
+
     async loadPicture(ID) {
       this.isLoading = true
 
@@ -185,7 +188,7 @@ export default {
           let url = URL.createObjectURL(response.data)
           this.menuSrc = url
           this.isLoading = false
-          
+
         })
         .catch((error) => {
           console.error('Error fetching menus:', error)
@@ -214,7 +217,7 @@ export default {
           icon: 'error',
         })
       }
-    },    
+    },
     async countCommentPeople(productName) {
       console.log(productName)
       let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
@@ -231,7 +234,7 @@ export default {
     async viewComment(menu) {
 
       this.$emit("view-comment",menu)
-      
+
     },
 
 
@@ -248,14 +251,10 @@ export default {
         this.count = this.menu.productCount
       }
     },
-    handleAddToCart({ id, count }) {
-      console.log(`Added to cart: ID=${this.menu.id}, Count=${count}`);
-    },
-    
   },
   created() {
       this.loadPicture(this.menu.id)
-      this.countCommentPeople(this.menu.productName) 
+      this.countCommentPeople(this.menu.productName)
     },
 }
 </script>
@@ -334,7 +333,7 @@ min-width: 130px;
   --bs-btn-disabled-color: #fff;
   --bs-btn-disabled-bg: #d3d7dd;
   --bs-btn-disabled-border-color: transparent;
-  
+
 }
 .btn-outline-primary {
   --bs-btn-color: #ffc43f;

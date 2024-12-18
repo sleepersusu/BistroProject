@@ -14,6 +14,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@lucky-canvas/vue": "^0.1.11",
     "aos": "^2.3.4",
+    "axios": "^1.7.9",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.3",
     "fireworks-js": "^2.10.8",
