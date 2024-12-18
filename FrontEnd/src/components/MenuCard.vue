@@ -82,7 +82,7 @@
           </span>
 
         </div>
-        <button class=" btn btn-primary mt-3" @click="addToCart({id:menu.id,count:count})">Add to Cart</button>
+        <button class=" btn btn-primary mt-3" @click="handleAddToCart(menu.id)">Add to Cart</button>
       </div>
 
     </div>
@@ -97,6 +97,7 @@ import StarRating from 'vue-star-rating'
 import LoadingVue from 'vue3-loading-overlay'
 import { cartStore } from '@/stores/cartStore.js'
 import { mapState, mapActions } from 'pinia'
+import { list } from 'postcss'
 export default {
   components: {
     'star-rating': StarRating,
@@ -157,7 +158,6 @@ export default {
       } else {
         this.count = this.menu.productCount
         this.$emit('update-count', this.count)
-
         Swal.fire({
           title: '已到達庫存上限',
           text: '請重新選擇數量',
@@ -183,7 +183,10 @@ export default {
       this.$emit("view-comment",menu)
 
     },
-
+    handleAddToCart(id){
+      this.addToCart({id,count:this.count})
+      this.count=1
+    },
 
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)

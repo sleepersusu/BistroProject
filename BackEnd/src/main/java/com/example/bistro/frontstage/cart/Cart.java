@@ -60,7 +60,6 @@ public class Cart {
 	@MapsId("menuId")
 	@JoinColumn(name = "menuId", referencedColumnName = "ID", nullable = false)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	@JsonIgnore
 	private Menu menu; // 與 Menu 表的多對一關係，不允許為 NULL
 
 

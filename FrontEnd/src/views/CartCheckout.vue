@@ -1,6 +1,5 @@
 <template>
   <div>
-    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'"></PageTop>
     <BannerTop v-bind:title="'Check Out'"></BannerTop>
   </div>
   <!-- Step Indicator -->
@@ -22,21 +21,6 @@
         <form action="#">
           <div class="row">
             <div class="col-lg-8 col-md-6">
-              <div class="row">
-<!--                <div class="col-lg-6">-->
-<!--                  <div class="checkout__input">-->
-<!--                    <p>Name<span>*</span></p>-->
-<!--                    <input type="text" placeholder="姓名" />-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="col-lg-6">-->
-<!--                  <div class="checkout__input">-->
-<!--                    <p>Last Name<span>*</span></p>-->
-<!--                    <input type="text" placeholder="姓" />-->
-<!--                  </div>-->
-<!--                </div>-->
-              </div>
-
               <div class="row">
                 <div class="col-lg-6">
                   <div class="checkout__input">
@@ -68,26 +52,9 @@
             </div>
             <div class="col-lg-4 col-md-6">
               <div class="checkout__order">
-                <h4>Your Order</h4>
-                <div class="checkout__order__products">Products <span>Total</span></div>
-                <ul>
-                  <li>Vegetable’s Package <span>$75.99</span></li>
-                  <li>Fresh Vegetable <span>$151.99</span></li>
-                  <li>Organic Bananas <span>$53.99</span></li>
-                </ul>
-                <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div>
-                <div class="checkout__order__total">Total <span>$750.99</span></div>
-                <!--                <div class="checkout__input__checkbox">-->
-                <!--                  <label for="acc-or">-->
-                <!--                    Create an account?-->
-                <!--                    <input type="checkbox" id="acc-or">-->
-                <!--                    <span class="checkmark"></span>-->
-                <!--                  </label>-->
-                <!--                </div>-->
-                <!--                <p>加入會員享優會</p>-->
 
                 <div class="checkout__input__checkbox">
-                  <div class="checkout__order__cash">用餐方式</div>
+                  <h4>用餐方式</h4>
                   <label for="eatin">
                     內用
                     <input type="radio" id="eatin" name="seatType" />
@@ -106,7 +73,7 @@
 
 
                 <div class="checkout__input__checkbox">
-                  <div class="checkout__order__cash">PaymentWay</div>
+                  <h4>付款方式</h4>
                   <label for="cash">
                     Cash
                     <input type="radio" id="cash" name="paymentMethod" />
@@ -121,15 +88,6 @@
                     <span class="checkmark"></span>
                   </label>
                 </div>
-
-<!--                <div class="checkout__input__checkbox">-->
-<!--                  <label for="linePay">-->
-<!--                    LinePay-->
-<!--                    <input type="radio" id="linePay" name="paymentMethod" />-->
-<!--                    <span class="checkmark"></span>-->
-<!--                  </label>-->
-<!--                </div>-->
-
                 <div>
                   <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
                 </div>
@@ -271,7 +229,7 @@ export default defineComponent({
 }
 
 .checkout__input__checkbox {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .checkout__input__checkbox label {
@@ -315,7 +273,6 @@ export default defineComponent({
   height: 8px;
   border: solid white;
   border-width: 3px 3px 0px 0px;
-  -webkit-transform: rotate(127deg);
   -ms-transform: rotate(127deg);
   transform: rotate(127deg);
   content: '';
@@ -332,8 +289,8 @@ export default defineComponent({
   color: #1c1c1c;
   font-weight: 700;
   border-bottom: 1px solid #e1e1e1;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .checkout__order .checkout__order__products {

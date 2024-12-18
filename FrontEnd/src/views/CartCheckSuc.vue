@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'" :link="'/index'"></PageTop>
-  </div>
-  <div class="text-center">
+
+  <div class="text-center mt-5">
     <i class="bi bi-check-circle-fill" style="font-size: 5rem"></i>
   </div>
   <!-- Step Indicator -->

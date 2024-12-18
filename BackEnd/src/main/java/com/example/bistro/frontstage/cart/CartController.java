@@ -24,7 +24,6 @@ public class CartController {
 
         public ResponseEntity<List<Cart>>shoppingCart(HttpSession httpSession) {
 
-
             Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
 
             // 如果是空的，請他先登入
@@ -35,12 +34,12 @@ public class CartController {
             return ResponseEntity.ok(shoppingCart);
 
         }
-    //會員新增購物車 ---------OK
+    //會員新增購物車 ---------OK ++++
         //1.確定有沒有會員，沒有要請他登入(可以在controller做)
         //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
             //如果存在    就將購物車加一
             //如果不存在   就set cardId(複合主鍵給他)，建立一筆新的資料
-        @PostMapping("/add/{menuId}")
+        @PostMapping("/count/{menuId}")
         public ResponseEntity<String> addCart(@PathVariable Integer menuId,HttpSession httpSession) {
             Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
             // 如果是空的，請他先登入
@@ -52,7 +51,7 @@ public class CartController {
             return ResponseEntity.ok("Added cart successfully.");
         }
 
-    //會員減少購物車--------------------OK
+    //會員減少購物車--------------------OK ---
         //1.確定有沒有會員，沒有要請他登入
         //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
             //如果存在    就將購物車加一
