@@ -26,6 +26,7 @@ export const useUserStore = defineStore('userStore', {
     },
     clearLoggedIn() {
       localStorage.removeItem('memberobj')
+      // localStorage.clear();
       this.isLoggedIn = false
       this.memberprofile = {}
     },
@@ -76,6 +77,26 @@ export const useUserStore = defineStore('userStore', {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)
         this.clearLoggedIn()
+      }
+    },
+    async submitRegister(event){
+      try {
+        let API_URL = `${this.apiUrl}/api/members/create`
+        let form = new FormData(event.target)
+        let formData = {}
+        form.forEach((value, key) => {
+          formData[key] = value
+        })
+        let formJsonData = JSON.stringify(formData)
+        let response= await axios.post(API_URL,formJsonData,{
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        console.log(response.data);
+        this.submitLogin
+      } catch (error) {
+        console.error('登入失敗', error)
       }
     },
   },
