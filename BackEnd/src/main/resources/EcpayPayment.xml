@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecpay>
+    <!-- 商家代碼 -->
+    <MerchantID>2000132</MerchantID>
+    
+    <!-- ECPay 金鑰與 IV 值 (測試環境範例數據，正式環境請更換) -->
+    <HashKey>5294y06JbISpM5x9</HashKey>
+    <HashIV>v77hoKGq4kWxNNIS</HashIV>
+    
+    <!-- 交易設定 -->
+    <Payment>
+        <ServiceURL>https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5</ServiceURL>
+        <!-- 正式環境 URL: https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5 -->
+        <ReturnURL>https://yourserver.com/ecpay_return</ReturnURL>
+        <ClientBackURL>https://yourserver.com/back</ClientBackURL>
+        <OrderResultURL>https://yourserver.com/result</OrderResultURL>     
+    </Payment>
+    
+    <!-- 加密模式 -->
+    <EncryptMode>MD5</EncryptMode> <!-- 可用 SHA256 依 ECPay 要求調整 -->
+</ecpay>

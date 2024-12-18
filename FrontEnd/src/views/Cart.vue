@@ -166,7 +166,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
 import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
-import PointGet from '@/components/PointGet.vue'
+
 
 export default {
   name: 'Cart',
