@@ -12,42 +12,83 @@
           justify-content: center;
           margin-left: 50px;
           margin-right: 25px;
-          width: 30%;
         ">
         <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw"
-            class="w-100 h-100 border rounded" allowfullscreen="" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade" style="border-radius: 10px"></iframe>
+            class="w-100 h-100" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
-        <div id="inform" class="col-12" style="background-color: transparent; padding: 20px; ">
-          <div class="row">
-            <div class="col-lg-5 mb-3" style="background-color: white;margin: 20px;border-radius: 3px">
-              <div class="phone text-black" style="border-color: aliceblue;">
-                <font-awesome-icon :icon="['fas', 'phone']" />
-                <h5 class="fw-bold">Phone Numbers</h5>
-                <span>
+        <div id="inform" class="col-12" style="background-color: transparent; padding: 20px">
+          <div class="row g-4 d-flex justify-content-between">
+            <div class="col-lg-6 col-md-12 mb-3" style="
+                background-color: white;
+                border-radius: 3px;
+                padding: 20px;
+                display: flex;
+                align-items: center;
+                position: relative;
+              ">
+              <div class="phone text-black d-flex align-items-center w-100">
+                <div style="
+                    background-color: #20c997;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                    top: -30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 10;
+                  ">
+                  <font-awesome-icon :icon="['fas', 'phone']" style="color: white; font-size: 27px" />
+                </div>
+                <div style="margin-left: 80px; padding-top: 40px; text-align: center">
+                  <h5 class="fw-bold">Phone Numbers</h5>
                   <p>07-656-8106</p>
                   <p>07-716-9502</p>
-                </span>
+                </div>
               </div>
             </div>
-            <div class="col-lg-5 mb-3" style="background-color: white;margin: 20px;border-radius: 3px">
-              <div class="message" style="color: black;">
-
-                <font-awesome-icon :icon="['far', 'envelope']" />
-                <h5 class="fw-bold">Emails</h5>
-                <span>
+            <div class="col-lg-6 col-md-12 mb-3" style="
+                background-color: white;
+                border-radius: 3px;
+                padding: 20px;
+                display: flex;
+                align-items: center;
+                position: relative;
+              ">
+              <div class="message text-black d-flex align-items-center w-100">
+                <div style="
+                    background-color: #20c997;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                    top: -30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 10;
+                  ">
+                  <font-awesome-icon :icon="['far', 'envelope']" style="color: white; font-size: 27px" />
+                </div>
+                <div style="margin-left: 80px; padding-top: 40px; text-align: center">
+                  <h5 class="fw-bold">Emails</h5>
                   <p>@company.company</p>
                   <p>info@company.com</p>
-                </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div id="app" class="col-lg-5 col-md-12" style="
+      <div id="app" class="col-lg-4 col-md-12" style="
           background-color: white;
           padding: 20px;
           border-radius: 10px;
@@ -55,7 +96,6 @@
           color: black;
           margin-left: 25px;
           margin-right: 50px;
-          width: 30%;
         ">
         <div class="mb-4 text-center">
           <h4 class="fw-bold">訂位資訊</h4>
@@ -63,7 +103,6 @@
         <form @submit.prevent="submitReservation">
           <div class="mb-3">
             <label for="customerName" class="form-label">訂位人姓名</label>
-
             <input type="text" class="form-control frame" id="customerName" v-model="reservations.customerName"
               required />
           </div>
@@ -110,7 +149,11 @@
               <button v-for="time in availableTimeslots" :key="time" :class="{
                 'btn-outline-success': selectedTime !== time,
                 'btn-success': selectedTime === time,
-              }" class="btn btn-outline-success w-100 me-2 mb-2" @click="handleClick(time, $event)">
+              }"
+              :style="{
+              color: selectedTime === time ? '#fff' : '',
+            }"
+              class="btn btn-outline-success w-100 me-2 mb-2" @click="handleClick(time, $event)">
                 {{ time }}
               </button>
             </div>
@@ -130,7 +173,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -155,16 +197,16 @@ export default {
         title: '新增訂位成功!',
         icon: 'success',
         confirmButtonText: '確定',
-      });
+      })
     },
     handleClick(time, event) {
       event.preventDefault() // 阻止按鈕的默認行為，防止它觸發表單提交
       if (this.selectedTime === time) {
-        this.selectedTime = '';
+        this.selectedTime = ''
       } else {
-        this.selectedTime = time;
+        this.selectedTime = time
       }
-      this.reservations.startTime = this.selectedTime;
+      this.reservations.startTime = this.selectedTime
     },
     formatDate(date) {
       if (!date) return ''
@@ -217,7 +259,7 @@ export default {
         const api = `${import.meta.env.VITE_API}/api/Bistro/insert`
         const response = await this.axios.post(api, this.reservations)
         if (response.data.success) {
-          this.showSuccess();
+          this.showSuccess()
           this.reservations = {
             customerName: '',
             customerGender: '',
@@ -227,7 +269,6 @@ export default {
             numberPeople: 0,
             notes: '',
           }
-
         } else {
           const errorMessage = response.data.message || '訂位失敗，請稍後再試。'
           alert(`錯誤: ${errorMessage}`)
@@ -265,43 +306,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.phone,
-.message {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.phone i,
-.message i {
-  font-size: 24px;
-  color: #28a745;
-  margin-right: 10px;
-}
-
-.phone h5,
-.message h5 {
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.phone a,
-.message a {
-  color: #fff;
-  font-weight: 500;
-}
-
-.phone a:hover,
-.message a:hover {
-  color: #007bff;
-}
-
-form {
-  color: black;
-}
-
-.text-black {
-  color: black;
-}
-</style>
+<style scoped></style>
