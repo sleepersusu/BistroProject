@@ -80,6 +80,6 @@ export const useUserStore = defineStore('userStore', {
     },
   },
   getters: {
-    memberId: () => Number(localStorage.getItem('memberId')) || null,
+    memberId: () => Number(JSON.parse(localStorage.getItem('memberobj')).memberId) || null,
   },
 })

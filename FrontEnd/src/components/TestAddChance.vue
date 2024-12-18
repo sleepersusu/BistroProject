@@ -1,6 +1,6 @@
 <template>
   <isLoading :active="status.isLoading"></isLoading>
-  <button class="btn btn-primary" @click.prevent="sendOrder(4, 5000)">送出訂單</button>
+  <button class="btn btn-primary" @click.prevent="sendOrder(3, 5000)">送出訂單</button>
 </template>
 
 <script setup>

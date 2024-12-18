@@ -22,6 +22,11 @@
           <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 我的評論
         </router-link>
       </li>
+      <li class="nav-item">
+        <router-link to="/membercenter/lotteryresult" class="nav-link">
+          <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 抽獎結果
+        </router-link>
+      </li>
 
       <li class="nav-item">
         <router-link to="/index" v-on:click="clearLoggedIn" class="nav-link">
@@ -33,13 +38,13 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/userStore';
-import { mapActions } from 'pinia';
+import { useUserStore } from '@/stores/userStore'
+import { mapActions } from 'pinia'
 export default {
   methods: {
-    ...mapActions(useUserStore,['clearLoggedIn'])
-  }
-};
+    ...mapActions(useUserStore, ['clearLoggedIn']),
+  },
+}
 </script>
 
 <style scoped>
@@ -78,9 +83,9 @@ export default {
   background-color: #007bff;
 }
 
-.membernav{
+.membernav {
   height: 100vh;
-  
+
   @media (max-width: 768px) {
     height: 50vh;
   }
