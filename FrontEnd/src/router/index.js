@@ -69,9 +69,6 @@ const router = createRouter({
           path: '/lotteryResult',
           component: () => import('../views/LotteryResult.vue'),
 
-          path: '/member center',
-          component: () => import('../views/MemberCenter.vue'),
-
         },
       ],
     },

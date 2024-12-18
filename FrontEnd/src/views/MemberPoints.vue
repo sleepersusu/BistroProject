@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1>兌換獎品列表</h1>
+    <BannerTop :title="'PointShop'"></BannerTop>
 
-    <div class="container d-flex">
+    <div class="container d-flex my-5">
       <ul class="d-flex flex-wrap">
         <li
           v-for="prize in pointPrizes"
@@ -46,11 +46,13 @@
 </template>
 
 <script>
+import BannerTop from '@/components/BannerTop.vue';
 import PointTotal from '@/components/PointTotal.vue'
 
 export default {
   components: {
     PointTotal,
+    BannerTop
   },
   data() {
     return {
