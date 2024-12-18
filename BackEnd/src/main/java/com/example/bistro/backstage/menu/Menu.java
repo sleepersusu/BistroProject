@@ -16,6 +16,22 @@ import com.example.bistro.backstage.comment.Comment;
 import com.example.bistro.backstage.ordersDetails.OrdersDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,13 +49,11 @@ public class Menu {
 
 	@Lob
 	private byte[] productImg;
-	@Setter
+
     private Integer productPrice;
-	@Setter
-    @Getter
+
     private String productDescribe;
-	@Setter
-    @Getter
+
     private String productImgUrl;
 
 	private Integer productCount;
@@ -48,7 +62,7 @@ public class Menu {
 
 	private Double avgScore;
 
-	@Setter
+
     private String menuStatus;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd") // 前端輸入輸出時的格式對應，若須強制轉換格式，el 須使用雙層大括號
@@ -58,15 +72,14 @@ public class Menu {
 
 	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
-	private List<OrdersDetails> ordersDetails; // 用於映射 OrderDetails 實體中的 menu
+	private List<OrdersDetails> orderDetails; 
 
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
-	private List<Comment> comments = new ArrayList<Comment>(); // 用於映射 Comment 實體中的 menu
+	private List<Comment> comments = new ArrayList<Comment>(); 
 	
 
-	
 
 	@PrePersist // 當物件要轉換成 Persistent 狀態以前，執行這個方法
 	public void createdAt() {
@@ -76,13 +89,15 @@ public class Menu {
 	}
 
 
-
 	public double getAvgScore() {
 		if (avgScore == null) {
 			return 0.0; // 默認值，避免返回 null
 		}
 		return avgScore;
 	}
+
+
+	
 
 
 }
