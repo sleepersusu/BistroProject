@@ -24,7 +24,7 @@
           <li class="nav-item">
             <router-link class="nav-link position-relative" to="/campaign"
               >限時抽獎<span
-                v-if="userStore.memberId"
+                v-if="memberId"
                 class="position-absolute start-100 translate-middle badge rounded-pill bg-light text-primary"
               >
                 {{ allChances }}
@@ -55,19 +55,18 @@
           </li>
           <li class="nav-item ms-lg-5">
             <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
-            <div
-              v-if="!userStore.isLoggedIn"
-              class="btn btn-outline-light"
-              v-on:click="openLoginModal"
-            >
+            <div v-if="!isLoggedIn" class="btn btn-outline-light" v-on:click="openLoginModal">
               登入 / 註冊
             </div>
             <div v-else class="d-flex align-items-center">
-              <router-link to="/membercenter" class="d-flex align-items-center">
+              <router-link to="/membercenter/index" class="d-flex align-items-center">
                 <!-- 頭像 -->
-                <div class="circle-avatar" :style="{ backgroundImage: `url(${userAvatar})` }"></div>
+                <div
+                  class="circle-avatar"
+                  :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"
+                ></div>
                 <!-- 會員名稱 -->
-                <span class="text-light ms-2">{{ username }}</span>
+                <span class="text-light ms-2">{{ memberprofile?.username }}</span>
               </router-link>
             </div>
           </li>
@@ -75,7 +74,7 @@
       </div>
     </div>
   </nav>
-  <login ref="loginModal" @user-login="handleLogin"></login>
+  <login ref="loginModal"></login>
 </template>
 
 <script>
@@ -83,22 +82,21 @@ import Login from './login.vue'
 import { useUserStore } from '@/stores/userStore'
 import { lotteryStore } from '@/stores/lotteryStore'
 import { mapState, mapActions } from 'pinia'
-
-const userStore = useUserStore()
 export default {
   data() {
     return {
       setShadow: false,
-      userAvatar: '',
-      username: '',
-      userStore: useUserStore(),
     }
   },
   components: {
     Login,
   },
-  computed: { ...mapState(lotteryStore, ['allChances']) },
+  computed: {
+    ...mapState(useUserStore, ['isLoggedIn', 'memberprofile', 'memberId']),
+    ...mapState(lotteryStore, ['allChances']),
+  },
   methods: {
+    ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn']),
     ...mapActions(lotteryStore, ['getAllChanceByMember']),
     navShadow() {
       requestAnimationFrame(() => {
@@ -108,12 +106,6 @@ export default {
     openLoginModal() {
       this.$refs.loginModal.openLoginModal()
     },
-    handleLogin(userImg, username) {
-      userStore.setLoggedIn()
-      console.log(userImg)
-      this.userAvatar = userImg
-      this.username = username
-    },
   },
   mounted() {
     window.addEventListener('scroll', this.navShadow)
@@ -122,6 +114,9 @@ export default {
   },
   unmounted() {
     window.removeEventListener('scroll', this.navShadow)
+  },
+  created() {
+    this.checkLoggedIn()
   },
 }
 </script>

@@ -1,5 +1,6 @@
 package com.example.bistro.frontstage.comment;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ import com.example.bistro.backstage.members.MembersRepository;
 import com.example.bistro.backstage.menu.Menu;
 import com.example.bistro.backstage.menu.MenuService;
 
-import com.example.bistro.backstage.ordersDetails.OrdersDetails;
+
 import com.example.bistro.backstage.ordersDetails.OrdersDetailsRepository;
 
 
@@ -62,19 +63,19 @@ public class CommentRestController {
 			,@PathVariable Integer orderDetailsId) {
 
 
+		
+		
 		// 從 Session 獲取會員 ID
 		Integer membersId = (Integer) httpSession.getAttribute("membersId");
+		
+		System.out.println("會員 ID: " + membersId);
 		if (membersId == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "用戶未登入"));
 		}
 
 		try {
 
-			Optional<OrdersDetails> op = orderDetailsRepo.findById(orderDetailsId);
-			if(op.isPresent()) {
-				OrdersDetails ordersDetails = op.get();			
-				
-			}
+		
 
 
 			Integer menuId = Integer.parseInt(requestData.get("menuId").toString());
@@ -127,9 +128,15 @@ public class CommentRestController {
 
 	@GetMapping("/api/member/comment") // 根據會員取得評論
 	public ResponseEntity<?> findAllCommentByMember(HttpSession httpSession) {
+
 		// 從 HttpSession 獲取會員 ID
 		Integer memberId = (Integer) httpSession.getAttribute("membersId");
-
+		
+		
+		
+		System.out.println("會員 ID: " + memberId);	
+		
+		
 		if (memberId == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("請先登入以查看您的評論。");
 		}

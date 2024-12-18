@@ -1,23 +1,30 @@
 <template>
-  <div class="d-flex flex-column p-3 bg-dark vh-100">
+  <div class="d-flex flex-column p-3 bg-dark membernav">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <router-link to="/" class="nav-link">
+        <router-link to="/membercenter/index" class="nav-link">
           <span class="icon-circle"><i class="bi bi-house-door-fill"></i></span> 會員中心
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/about" class="nav-link">
-          <span class="icon-circle"><i class="bi bi-person-fill"></i></span> 修改資料
+        <router-link to="/membercenter/profile" class="nav-link">
+          <span class="icon-circle"><i class="bi bi-person-fill"></i></span> 會員資料
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/services" class="nav-link">
+        <router-link to="/membercenter/orders" class="nav-link">
           <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 我的訂單
         </router-link>
       </li>
+
       <li class="nav-item">
-        <router-link to="/index" v-on:click="logout" class="nav-link">
+        <router-link to="/comment" class="nav-link">
+          <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 我的評論
+        </router-link>
+      </li>
+
+      <li class="nav-item">
+        <router-link to="/index" v-on:click="clearLoggedIn" class="nav-link">
           <span class="icon-circle"><i class="bi bi-envelope-fill"></i></span> 登出
         </router-link>
       </li>
@@ -27,14 +34,10 @@
 
 <script>
 import { useUserStore } from '@/stores/userStore';
-const userStore=useUserStore();
+import { mapActions } from 'pinia';
 export default {
   methods: {
-    logout() {
-            // 處理登出邏輯
-            userStore.clearLoggedIn();
-            localStorage.clear();
-        }
+    ...mapActions(useUserStore,['clearLoggedIn'])
   }
 };
 </script>
@@ -73,5 +76,16 @@ export default {
 
 .nav-link:hover .icon-circle {
   background-color: #007bff;
+}
+
+.membernav{
+  height: 100vh;
+  
+  @media (max-width: 768px) {
+    height: 50vh;
+  }
+  @media (max-width: 576px) {
+    height: 70vh;
+  }
 }
 </style>
