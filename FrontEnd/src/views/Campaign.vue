@@ -5,7 +5,7 @@
   <BannerTop :title="'Lucky Draw'" data-aos="fade-up" data-aos-duration="1000"></BannerTop>
   <div class="container my-5">
     <div class="row">
-      <div class="col-lg-3 col-md-6" v-for="(campaign, index) in campaigns" :key="campaign.id">
+      <div class="col-lg-3 col-md-6 g-3" v-for="(campaign, index) in campaigns" :key="campaign.id">
         <CampaignCard
           :campaign="campaign"
           @open-drawmodal="handleOpenModal"
@@ -17,6 +17,7 @@
         ></CampaignCard>
       </div>
     </div>
+    <TestAddChance></TestAddChance>
   </div>
   <LuckyDraw @update-chance="updateChance" ref="drawModal"></LuckyDraw>
   <CampaignModal ref="campaignModal" :campaign="selectedCampaign"></CampaignModal>
@@ -35,6 +36,10 @@ import BannerTop from '@/components/BannerTop.vue'
 import { useFireWorks } from '@/mixins/fireWorkMixin'
 import CampaignModal from '@/components/CampaignModal.vue'
 import HeroSection from '@/components/HeroSection.vue'
+import { useUserStore } from '@/stores/userStore'
+
+// test
+import TestAddChance from '@/components/TestAddChance.vue'
 
 const { fireworksContainer } = useFireWorks(true)
 
@@ -42,6 +47,7 @@ const store = campaignStore()
 const status = statusStore()
 const lottery = lotteryStore()
 const prize = campaignPrizeStore()
+const user = useUserStore()
 const { campaigns } = storeToRefs(store)
 const { isLoading } = storeToRefs(status)
 const { getCampaigns, clearCampaignImages } = store
@@ -74,7 +80,7 @@ onMounted(async () => {
     status.start()
     await getCampaigns()
     for (const campaign of campaigns.value) {
-      await getChancesByCampaign(1, campaign.id)
+      await getChancesByCampaign(user.memberId, campaign.id)
     }
   } catch (e) {
     console.error(e)
@@ -86,7 +92,7 @@ onMounted(async () => {
 const updateChance = async (campaignId) => {
   try {
     status.start()
-    await getChancesByCampaign(1, campaignId)
+    await getChancesByCampaign(user.memberId, campaignId)
   } catch (e) {
     console.error('更新抽獎機會失敗:', e)
   } finally {

@@ -1,5 +1,8 @@
 package com.example.bistro.frontstage.campaign;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +37,21 @@ public class LotteryChancesFrontService {
 	LotteryChanceService lotteryChanceService;
 
 	public LotteryChance findChanceById(Integer id) {
+		if(id == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "會員ID不能為空");
+		}
 		return lotteryChanceService.findById(id);
+	}
+	
+	public List<LotteryChance> findByMemberId(Integer id){
+		return lotteryChanceRepo.findByMemberId(id);
 	}
 
 	public Optional<LotteryChance> findMemberChanceByCampaign(Integer memberId, Integer campaignId) {
 		return lotteryChanceRepo.findByMemberIdAndCampaignId(memberId, campaignId);
 	}
 
-	public LotteryChance calculateAndAddChances(Integer memberId, Integer campaignId, Integer orderAmount) {
+	public Map<String, Object> calculateAndAddChances(Integer memberId, Integer campaignId, Integer orderAmount) {
 		Optional<Members> member = membersRepo.findById(memberId);
 		if (member.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到會員資料");
@@ -52,6 +62,10 @@ public class LotteryChancesFrontService {
 		if (!campaign.isActive()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "活動尚未開始或已結束");
 		}
+		
+		if (orderAmount <= 0) {
+		    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "訂單金額必須大於0");
+		}
 
 		if (orderAmount < campaign.getMinOrderAmount()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -61,13 +75,17 @@ public class LotteryChancesFrontService {
 		int newChances = orderAmount / campaign.getMinOrderAmount();
 
 		Optional<LotteryChance> existingChance  = this.findMemberChanceByCampaign(memberId, campaignId);
-
+		
+		Map<String, Object> map = new HashMap<>();
 		if (existingChance.isPresent()) {
 			LotteryChance chance = existingChance.get();
 			int totalChances = chance.getLotteryChances() + newChances;
 			chance.setLotteryChances(totalChances);
-			chance.setRemainingChances(chance.getRemainingChances() + newChances);
-			return lotteryChanceRepo.save(chance);
+			chance.setRemainingChances(chance.getRemainingChances() + newChances);	
+			lotteryChanceRepo.save(chance);
+			map.put("newChances", newChances);
+			map.put("chance", chance);
+			return map;
 		} else {
 			LotteryChance chance = new LotteryChance();
 			chance.setLotteryChances(newChances);
@@ -75,9 +93,11 @@ public class LotteryChancesFrontService {
 			chance.setMember(member.get());
 			chance.setUsedChances(0);
 			chance.setRemainingChances(newChances);
-			return lotteryChanceRepo.save(chance);
+			lotteryChanceRepo.save(chance);
+			map.put("newChances", newChances);
+			map.put("chance", chance);
+			return map;
 		}
-
 	}
 
 	public LotteryChance useChance(Integer id) {

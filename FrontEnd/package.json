@@ -11,8 +11,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@lucky-canvas/vue": "^0.1.11",
+    "@vee-validate/i18n": "^4.14.7",
+    "@vee-validate/rules": "^4.14.7",
     "aos": "^2.3.4",
     "axios": "^1.7.9",
     "bootstrap": "^5.2.3",
@@ -21,6 +24,7 @@
     "gsap": "^3.12.5",
     "pinia": "^2.2.6",
     "sweetalert2": "^11.14.5",
+    "vee-validate": "^4.14.7",
     "vue": "^3.5.13",
     "vue-axios": "^3.5.2",
     "vue-router": "^4.4.5",
@@ -42,5 +46,4 @@
     "vite": "^6.0.1",
     "vite-plugin-vue-devtools": "^7.6.5"
   }
-  
 }

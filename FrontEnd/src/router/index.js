@@ -22,8 +22,26 @@ const router = createRouter({
           component: () => import('../views/Profile.vue'),
         },
         {
-          path: '/login',
-          component: () => import('../views/Login.vue'),
+          path: '/membercenter',
+          component: () => import('../views/MemberCenter.vue'),
+          children: [
+            {
+              path: 'index', // 不需要斜線，Nav-link路徑是/membercenter/index
+              component: () => import('../views/membercenter/UserIndex.vue'),
+            },
+            {
+              path: 'profile', // 不需要斜線，Nav-link路徑是/membercenter/profile
+              component: () => import('../views/membercenter/UserProfile.vue'),
+            },
+            {
+              path: 'orders', // 不需要斜線，Nav-link路徑是/membercenter/orders
+              component: () => import('../views/membercenter/UserOrder.vue'),
+            },
+            {
+              path: 'lotteryresult',
+              component: () => import('../views/membercenter/LotteryResult.vue'),
+            },
+          ],
         },
         {
           path: '/reservations',
@@ -54,7 +72,6 @@ const router = createRouter({
           component: () => import('../views/Campaign.vue'),
         },
         {
-
           path: '/cartCheckout',
           component: () => import('../views/CartCheckout.vue'),
         },
@@ -67,8 +84,8 @@ const router = createRouter({
           component: () => import('../views/CartCheckFail.vue'),
         },
         {
-          path: '/member center',
-          component: () => import('../views/MemberCenter.vue'),
+          path: '/comment',
+          component: () => import('../views/Comment.vue'),
         },
       ],
     },

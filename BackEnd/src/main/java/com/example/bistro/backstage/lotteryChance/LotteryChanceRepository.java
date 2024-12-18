@@ -27,6 +27,8 @@ public interface LotteryChanceRepository extends JpaRepository<LotteryChance, In
 		List<Object[]> findMembersAllChance();
 		
 		Optional<LotteryChance> findByMemberIdAndCampaignId(Integer memberId,Integer campaignId);
+		
+		List<LotteryChance> findByMemberId(Integer memberId);
 
 
 }

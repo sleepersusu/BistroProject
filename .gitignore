@@ -1,14 +1,11 @@
-<<<<<<< HEAD
-.project
-=======
 # 忽略 IDEA、Eclipse 和 Visual Studio Code 的配置文件
 .idea/
-.project
+.project/
 .vscode/
+.metadata/
 
 # 忽略 Node.js 的依赖文件夹
 node_modules/
 
 # 忽略环境配置文件
 .env
->>>>>>> main

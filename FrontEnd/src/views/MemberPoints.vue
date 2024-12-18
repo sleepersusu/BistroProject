@@ -41,7 +41,7 @@
       </ul>
     </div>
 
-    <PointTotal :redeemed-prize="redeemedPrize" />
+    <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal"/>
   </div>
 </template>
 
@@ -56,6 +56,7 @@ export default {
     return {
       pointPrizes: [],
       redeemedPrize: {},
+      memberId: 9,
     }
   },
   methods: {
@@ -71,17 +72,10 @@ export default {
 
     async getPointPrizes() {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
-      try {
-        const response = await fetch(api)
-        if (response.ok) {
-          const data = await response.json()
-          this.pointPrizes = data
-        } else {
-          console.error('Failed to fetch point prizes:', response.status)
-        }
-      } catch (error) {
-        console.error('Error fetching point prizes:', error)
-      }
+
+      const response = await this.axios.get(api)
+      this.pointPrizes = response.data
+
     },
 
     async redeemPrize(prize) {
@@ -100,7 +94,7 @@ export default {
         const promoCode = this.generateRandomCode()
 
         // 調用子組件的方法更新優惠碼和商品信息
-        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode }
+        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode}
 
         const memberId = 9 // 假資料，會員 ID 為 9
         if (memberId) {
@@ -121,13 +115,9 @@ export default {
 
           try {
             const api = `${import.meta.env.VITE_API}/api/pointRecord`
-            const response = await fetch(api, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(requestData),
-            })
+
+            const response = await this.axios.post(api, requestData)
+            console.log(response)
 
             const api3 = `${import.meta.env.VITE_API}/api/promoCode`
             const response3 = await fetch(api3, {
@@ -138,7 +128,7 @@ export default {
               body: JSON.stringify(promoData),
             })
 
-            if (response.ok) {
+            if (response.data.兌換狀態) {
               window.Swal.fire({
                 toast: true,
                 // position: 'top-end',
@@ -149,6 +139,9 @@ export default {
                 showConfirmButton: false,
                 timerProgressBar: true,
               })
+
+              // 触发子组件重新获取数据的方法
+              this.$refs.pointTotal.getPromoCode()
 
               const api2 = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
               const response2 = await fetch(api2, {
