@@ -26,16 +26,16 @@ const router = createRouter({
           component: () => import('../views/MemberCenter.vue'),
           children: [
             {
-              path: 'index',  // 不需要斜線，Nav-link路徑是/membercenter/index
-              component: () => import('../views/membercenter/UserIndex.vue'), 
+              path: 'index', // 不需要斜線，Nav-link路徑是/membercenter/index
+              component: () => import('../views/membercenter/UserIndex.vue'),
             },
             {
-              path: 'profile',  // 不需要斜線，Nav-link路徑是/membercenter/profile
-              component: () => import('../views/membercenter/UserProfile.vue'), 
+              path: 'profile', // 不需要斜線，Nav-link路徑是/membercenter/profile
+              component: () => import('../views/membercenter/UserProfile.vue'),
             },
             {
-              path: 'orders',  // 不需要斜線，Nav-link路徑是/membercenter/orders
-              component: () => import('../views/membercenter/UserOrder.vue')
+              path: 'orders', // 不需要斜線，Nav-link路徑是/membercenter/orders
+              component: () => import('../views/membercenter/UserOrder.vue'),
             },
           ],
         },

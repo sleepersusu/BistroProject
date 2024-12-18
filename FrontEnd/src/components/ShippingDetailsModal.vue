@@ -17,7 +17,7 @@
             aria-label="Close"
           ></button>
         </div>
-        <Form v-slot="{ errors }" @submit="handleSubmit">
+        <Form v-slot="{ errors }" @submit="handleSubmit" ref="formRef">
           <div class="modal-body">
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
@@ -76,7 +76,7 @@
               <ErrorMessage name="配送地址" class="invalid-feedback"></ErrorMessage>
             </div>
             <div class="mb-3">
-              <label for="notes" class="form-label">留言</label>
+              <label for="notes" class="form-label">留言 (選填)</label>
               <textarea
                 class="form-control"
                 id="notes"
@@ -89,7 +89,16 @@
             <button type="button" class="btn btn-secondary text-light" data-bs-dismiss="modal">
               關閉
             </button>
-            <button type="submit" class="btn btn-primary">送出</button>
+            <button type="submit" class="btn btn-primary" :disabled="loadingItem">
+              <div
+                v-if="loadingItem"
+                class="spinner-border text-light spinner-border-sm"
+                role="status"
+              >
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              送出
+            </button>
           </div>
         </Form>
       </div>
@@ -103,6 +112,7 @@ import { useModal } from '@/mixins/modalMixin'
 import { Field } from 'vee-validate'
 const { showModal: showBootstrapModal, modalRef, hideModal } = useModal()
 
+const loadingItem = ref(false)
 const shippingDetails = ref({
   lotteryWinnerId: -1,
   name: '',
@@ -115,14 +125,23 @@ const shippingDetails = ref({
 const emits = defineEmits(['submit-form'])
 const handleSubmit = () => emits('submit-form', shippingDetails.value)
 
+const formRef = ref(null)
 const showModal = (winnerId) => {
-  console.log(winnerId)
-  shippingDetails.value.lotteryWinnerId = winnerId
+  formRef.value.resetForm()
+  shippingDetails.value = {
+    lotteryWinnerId: winnerId,
+    name: '',
+    phone: '',
+    email: '',
+    address: '',
+    notes: '',
+  }
   showBootstrapModal()
 }
 
 defineExpose({
   showModal,
   hideModal,
+  loadingItem,
 })
 </script>

@@ -47,13 +47,14 @@ export const useUserStore = defineStore('userStore', {
 
         // 假設登入成功，後端返回 token
         // 儲存 token（例如使用 localStorage）
-        let userAvatar = '';
-        let memberId = response.data.memberId;
-        let imgUrl = `${this.apiUrl}/api/member/photo/${memberId}`;
+        let userAvatar = ''
+        let memberId = response.data.memberId
+        let imgUrl = `${this.apiUrl}/api/member/photo/${memberId}`
         let imgData = await axios.get(imgUrl, {
           responseType: 'blob',
         })
-        if (imgData.data.size === 0) {//判斷有無圖片，切換預設頭像
+        if (imgData.data.size === 0) {
+          //判斷有無圖片，切換預設頭像
           userAvatar = '/images/avatar.jpg'
         } else {
           userAvatar = URL.createObjectURL(imgData.data)
@@ -77,5 +78,8 @@ export const useUserStore = defineStore('userStore', {
         this.clearLoggedIn()
       }
     },
+  },
+  getters: {
+    memberId: () => Number(localStorage.getItem('memberId')) || null,
   },
 })

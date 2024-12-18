@@ -66,7 +66,7 @@ public class ShippingDetailsRestController {
             	throw new RuntimeException("找不到配送資訊");
             }
             ShippingDetails ship = op.get();
-//            emailService.sendShippingNotification(ship);
+            emailService.sendShippingNotification(ship);
             ship.setIsSend(true);
             shippingDetailsRepo.save(ship);
             return ResponseEntity.ok("郵件發送成功");
