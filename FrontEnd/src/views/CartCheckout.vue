@@ -18,27 +18,32 @@
     <div class="container">
       <div class="checkout__form">
         <h4>Confirm Order</h4>
-        <form action="#">
+
+
+        <form @submit.prevent="placeOrder">
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
-                <div class="col-lg-6">
-                  <div class="checkout__input">
-                    <p>姓名<span>*</span></p>
-                    <input type="text" placeholder="姓名 " />
+
+                  <div class="col-lg-6">
+                    <div class="checkout__input">
+                      <p>姓名<span>*</span></p>
+                      <input type="text" v-model="orderData.ordersName" placeholder="姓名" required />
+                    </div>
                   </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="checkout__input">
-                    <p>電話<span>*</span></p>
-                    <input type="text" placeholder="+886" />
+
+                  <div class="col-lg-6">
+                    <div class="checkout__input">
+                      <p>電話<span>*</span></p>
+                      <input type="text" v-model="orderData.ordersTel" placeholder="+886" required />
+                    </div>
                   </div>
-                </div>
+
               </div>
 
               <div class="checkout__input">
                 <p>Order notes<span>*</span></p>
-                <input type="text" placeholder="特殊要求" />
+                <input type="text" v-model="orderData.ordersRequest" placeholder="特殊要求" />
               </div>
 
               <div class="checkout__input__checkbox">
@@ -47,47 +52,60 @@
                   <input type="checkbox" id="acc" />
                   <span class="checkmark"></span>
                 </label>
+                <p>Create an account by entering the information below</p>
               </div>
-              <p>Create an account by entering the information below</p>
+
             </div>
+
             <div class="col-lg-4 col-md-6">
               <div class="checkout__order">
+                <!-- 金額 -->
+                  <div><h4>Your Order</h4></div>
+                  <div class="checkout__order__subtotal">
+                    <span>Subtotal</span>
+                    <span>${{ calculateSubtotal }}</span>
+                  </div>
+                  <div class="checkout__order__total">
+                    <strong>Total</strong>
+                    <strong>${{ calculateTotal }}</strong>
+                  </div>
+                <!-- 用餐方式 -->
+                  <div class="checkout__input__checkbox">
+                    <h4>用餐方式</h4>
+                    <label for="eatin">
+                      內用
+                      <input type="radio" id="eatin" value="內用" v-model="orderData.seatType" required/>
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
 
-                <div class="checkout__input__checkbox">
-                  <h4>用餐方式</h4>
-                  <label for="eatin">
-                    內用
-                    <input type="radio" id="eatin" name="seatType" />
-                    <span class="checkmark"></span>
-                  </label>
-                </div>
-
-                <div class="checkout__input__checkbox">
-                  <label for="takeout">
-                    外帶
-                    <input type="radio" id="takeout" name="seatType" />
-                    <span class="checkmark"></span>
-                  </label>
-                </div>
+                  <div class="checkout__input__checkbox">
+                    <label for="takeout">
+                      外帶
+                      <input type="radio" id="takeout" value="外帶" v-model="orderData.seatType" />
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
 
 
+                <!-- 付款方式 -->
+                  <div class="checkout__input__checkbox">
+                    <h4>付款方式</h4>
+                    <label for="cash">
+                      Cash
+                      <input type="radio" id="cash" value="Cash" v-model="orderData.PaymentWay" />
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
 
-                <div class="checkout__input__checkbox">
-                  <h4>付款方式</h4>
-                  <label for="cash">
-                    Cash
-                    <input type="radio" id="cash" name="paymentMethod" />
-                    <span class="checkmark"></span>
-                  </label>
-                </div>
+                  <div class="checkout__input__checkbox">
+                    <label for="paypal">
+                      Paypal
+                      <input type="radio" id="paypal" value="Paypal" v-model="orderData.PaymentWay" />
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
 
-                <div class="checkout__input__checkbox">
-                  <label for="paypal">
-                    Paypal
-                    <input type="radio" id="paypal" name="paymentMethod" />
-                    <span class="checkmark"></span>
-                  </label>
-                </div>
                 <div>
                   <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
                 </div>
@@ -103,6 +121,9 @@
             </div>
           </div>
         </form>
+
+
+
       </div>
     </div>
   </section>
@@ -114,8 +135,122 @@ import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageTop from '@/components/PageTop.vue'
+import { mapState, mapActions } from 'pinia'
+import { cartStore } from '@/stores/cartStore.js'
+import axios from 'axios'
+axios.defaults.baseURL = import.meta.env.VITE_API
+axios.defaults.withCredentials = true
+
 export default defineComponent({
   components: { PageTop, BannerTop },
+  data() {
+    return {
+      // cartItems:[],
+      orderData: {
+        ordersName: '', // 姓名
+        ordersTel: '', // 電話
+        seatType: '', // 用餐方式
+        ordersRequest: '', // 特殊需求
+        PaymentWay: '', // 付款方式
+        ordersSumPrice: 0, // 總金額
+        ordersDetails: [], // 訂單詳情
+        memberId: null, // 會員id
+      },
+    };
+  },
+  methods: {
+    ...mapActions(cartStore, ["getCart"]),
+
+    async placeOrder() {
+      try {
+        const cart = cartStore(); // 获取 Pinia 的 cartStore 实例
+        // 檢查購物車是否為空
+          if (!cart.cartItems || cart.cartItems.length === 0) {
+            throw new Error("購物車是空的")
+          }
+
+        // 準備訂單數據，確保與 DTO 結構匹配
+          const orderData = {
+            ordersName: this.orderData.ordersName,
+            ordersTel: this.orderData.ordersTel,
+            seatType: this.orderData.seatType,
+            ordersRequest: this.orderData.ordersRequest,
+            ordersSumPrice: parseFloat(this.calculateTotal),
+            latestPaymentStatus: '已付款', // 根據您的業務邏輯設置
+            memberId: null, // 如果有會員系統，在此設置
+
+            ordersDetails: cart.cartItems.map(item => ({
+              odName: item.menu.productName,
+              odQuantity: item.cartCount,
+              odPrice: item.menu.productPrice,
+              odSumPrice: item.cartCount * item.menu.productPrice,
+              menuId: item.menu.id,
+            })),
+            payments: [
+              {
+                paymentPrice: parseFloat(this.calculateTotal),
+                paymentWay: this.orderData.PaymentWay,
+                paymentStatus: '已完成',
+              }
+            ]
+          };
+
+        // 使用完整的 URL 發送請求
+        const response = await axios.post(`${import.meta.env.VITE_API}/api/orders/create`, orderData);
+          if (response.status === 200) {
+            console.log('Order created successfully:', response.data);
+            // 清空購物車
+              cart.clearCart();
+            //跳轉
+            this.$router.push({
+              path: '/cartCheckSuc',
+              query: { orderNumber: response.data.ordersNumber }
+            });
+          } else {
+            console.error('Order creation failed:', response.data);
+            this.$router.push('/cartCheckFail'); // 跳失敗
+          }
+      }
+      catch (error) {
+          console.error('Error placing order:', error);
+          this.$router.push('/cartCheckFail'); // 跳失敗
+        }
+    },
+
+
+
+    //all
+      async fetchCartItems() {
+        try {
+          const result = await this.getCart();
+          if (result && result.data) {
+            console.log('Fetched cart items:', result.data);
+            this.cartItems = result.data;
+          }
+        } catch (error) {
+          console.error('Failed to fetch cart items:', error);
+        }
+      },
+
+  },
+  mounted() {
+    //畫面動畫用的
+  },
+  computed: {
+    //改變一個值，計算回來，賦值給一個新的值
+    //ex:做篩選不一樣的人群，出現不一樣的結果
+    //getter or state 放在computed
+      ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
+  },
+  watch:{
+    //副作用:watch個值，有一個值改變，其他也跟著改變，不會return值
+
+
+  },
+  created() {
+    //撈資料用的
+      this.getCart();
+  },
 })
 </script>
 

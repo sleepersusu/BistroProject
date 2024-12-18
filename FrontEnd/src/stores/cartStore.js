@@ -10,16 +10,24 @@ const user = useUserStore()
 export const cartStore = defineStore('cart', {
   state: () => ({
     cartItems: [],
-    totalAmount:0,
+    taxRate:0.1,
   }),
   getters: {
-    // 購物車總金額
-    totalAmount(state) {
-      return state.cartItems.reduce(
-        (sum, item) => sum + item.cartCount * item.menu.productPrice,
-        0
-      ).toFixed(2);
-    },
+    // 購物車小計
+      calculateSubtotal(state) {
+        return state.cartItems.reduce(
+          (sum, item) => sum + item.cartCount * item.menu.productPrice,0).toFixed(2);
+      },
+    //Tax 10%
+      calculateTax(state) {
+        return (parseFloat(this.calculateSubtotal) * state.taxRate).toFixed(2);
+      },
+    //總金額
+      calculateTotal(state) {
+        return (
+          parseFloat(this.calculateSubtotal) + parseFloat(this.calculateTax)
+        ).toFixed(2);
+      },
   },
   actions: {
   //還沒進購物車畫面，在商品畫面
@@ -38,6 +46,7 @@ export const cartStore = defineStore('cart', {
         }
       },
     //進去購物車畫面
+
     //找到購物車清單
       async getCart() {
         if (!user.memberId) {
@@ -46,6 +55,7 @@ export const cartStore = defineStore('cart', {
           try {
             const url = `cart/list`
             const res = await axios.get(url)
+            this.cartItems = res.data;
             console.log(res.data) // 打印完整的返回數據
             return res // 返回整個響應
           } catch (e) {
@@ -91,5 +101,9 @@ export const cartStore = defineStore('cart', {
       removeItem(itemId) {
         this.cartItems = this.cartItems.filter(item => item.cartId !== itemId);
       },
+    //清空購物車
+      clearCart() {
+        this.cartItems = [];
+      }
   },
 })

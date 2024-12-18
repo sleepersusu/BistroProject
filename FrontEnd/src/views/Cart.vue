@@ -149,6 +149,8 @@ export default {
   },
   methods: {
     ...mapActions(cartStore, ["getCart","CountCart","MinusCart","removeItem"]),
+
+  //all
     async fetchCartItems() {
       try {
         const result = await this.getCart();
@@ -160,7 +162,6 @@ export default {
         console.error('Failed to fetch cart items:', error);
       }
     },
-
 
 
     //++
@@ -181,39 +182,32 @@ export default {
         try {
           const result = await this.MinusCart(item.menu);
           if (result && result.data) {
-            this.cartItems = result.data; // 更新购物车数据
+            this.cartItems = result.data;
           }
         } catch (error) {
           console.error('Failed to decrease quantity:', error);
         }
       } else {
-        // 如果数量是1，直接删除商品
+        // 數量=1，直接刪掉
         try {
           const result = await this.MinusCart(item.menu);
           if (result && result.data) {
-            this.cartItems = result.data; // 更新购物车数据
+            this.cartItems = result.data;
           }
         } catch (error) {
           console.error('Failed to remove item:', error);
         }
       }
     },
-
+  //刪除的controller還沒做 ==
     removeItem(itemId) {
         this.cartItems = this.cartItems.filter(item => item.cartId !== itemId);
       },
   },
   computed: {
-    calculateSubtotal() {
-      return this.cartItems.reduce((sum, item) => sum + item.cartCount * item.menu.productPrice, 0).toFixed(2);
-    },
-    calculateTax() {
-      return (parseFloat(this.calculateSubtotal) * 0.1).toFixed(2);
-    },
-    calculateTotal() {
-      return (parseFloat(this.calculateSubtotal) + parseFloat(this.calculateTax)).toFixed(2);
-    }
-    //...mapState(cartStore, ["carts"])
+    //getter or state 放在computed
+    ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
+
   },
   watch: {},
   created() {
