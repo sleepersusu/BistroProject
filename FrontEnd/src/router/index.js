@@ -24,6 +24,20 @@ const router = createRouter({
         {
           path: '/membercenter',
           component: () => import('../views/MemberCenter.vue'),
+          children: [
+            {
+              path: 'index',  // 不需要斜線，Nav-link路徑是/membercenter/index
+              component: () => import('../views/membercenter/UserIndex.vue'), 
+            },
+            {
+              path: 'profile',  // 不需要斜線，Nav-link路徑是/membercenter/profile
+              component: () => import('../views/membercenter/UserProfile.vue'), 
+            },
+            {
+              path: 'orders',  // 不需要斜線，Nav-link路徑是/membercenter/orders
+              component: () => import('../views/membercenter/UserOrder.vue')
+            },
+          ],
         },
         {
           path: '/reservations',
@@ -69,12 +83,9 @@ const router = createRouter({
           path: '/comment',
           component: () => import('../views/Comment.vue'),
         },
-
         {
           path: '/lotteryResult',
           component: () => import('../views/LotteryResult.vue'),
-
-
         },
       ],
     },
