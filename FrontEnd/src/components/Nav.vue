@@ -41,7 +41,7 @@
             <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
             <div v-if="!isLoggedIn" class="btn btn-outline-light" v-on:click="openLoginModal">登入 / 註冊</div>
             <div v-else class="d-flex align-items-center">
-              <router-link to="/membercenter" class="d-flex align-items-center">
+              <router-link to="/membercenter/index" class="d-flex align-items-center">
                 <!-- 頭像 -->
                 <div class="circle-avatar" :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"></div>
                 <!-- 會員名稱 -->

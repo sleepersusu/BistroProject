@@ -1,6 +1,6 @@
 <template>
     <div>
-        <BannerTop :title="'Member Profile'"></BannerTop>
+        <BannerTop :title="'Member Center'"></BannerTop>
     </div>
 </template>
 <script>

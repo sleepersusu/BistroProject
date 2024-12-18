@@ -5,7 +5,6 @@
         <MembercenterNav></MembercenterNav>
       </nav>
       <main class="col-md-9 col-lg-10 p-4">
-        <h1 class="text-center">會員中心</h1>
         <router-view></router-view>
       </main>
     </div>
@@ -22,7 +21,7 @@ export default {
     return {}
   },
   components: {
-    MembercenterNav
+    MembercenterNav,
   },
   methods: {},
   computed: {},
