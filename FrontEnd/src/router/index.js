@@ -37,6 +37,10 @@ const router = createRouter({
               path: 'orders', // 不需要斜線，Nav-link路徑是/membercenter/orders
               component: () => import('../views/membercenter/UserOrder.vue'),
             },
+            {
+              path: 'lotteryresult',
+              component: () => import('../views/membercenter/LotteryResult.vue'),
+            },
           ],
         },
         {
@@ -82,10 +86,6 @@ const router = createRouter({
         {
           path: '/comment',
           component: () => import('../views/Comment.vue'),
-        },
-        {
-          path: '/lotteryResult',
-          component: () => import('../views/LotteryResult.vue'),
         },
       ],
     },

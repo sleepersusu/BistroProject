@@ -9,7 +9,7 @@
     <h3 class="mb-5">目前還沒有抽獎紀錄!</h3>
     <router-link to="/campaign" class="btn btn-primary btn-lg py-3 px-5">來試試手氣吧!</router-link>
   </div>
-  <div class="container py-4 px-5" v-else>
+  <div class="container-fulid py-4 px-5" v-else>
     <div class="row">
       <div class="col-12">
         <div class="card border shadow-xs mb-4">

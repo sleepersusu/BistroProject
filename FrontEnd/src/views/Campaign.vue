@@ -17,7 +17,6 @@
         ></CampaignCard>
       </div>
     </div>
-    <router-link to="/lotteryResult" class="btn btn-outline-primary me-3">抽獎結果測試</router-link>
     <TestAddChance></TestAddChance>
   </div>
   <LuckyDraw @update-chance="updateChance" ref="drawModal"></LuckyDraw>
