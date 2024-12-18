@@ -16,6 +16,13 @@
           <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 我的訂單
         </router-link>
       </li>
+
+      <li class="nav-item">
+        <router-link to="/comment" class="nav-link">
+          <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 我的評論
+        </router-link>
+      </li>
+
       <li class="nav-item">
         <router-link to="/index" v-on:click="logout" class="nav-link">
           <span class="icon-circle"><i class="bi bi-envelope-fill"></i></span> 登出
