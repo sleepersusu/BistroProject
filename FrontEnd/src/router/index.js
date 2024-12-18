@@ -26,11 +26,11 @@ const router = createRouter({
           component: () => import('../views/MemberCenter.vue'),
           children: [
             {
-              path: 'profile',  // 子路由路径，不需要加斜线
-              component: () => import('../views/membercenter/UserProfile.vue'),  // 正确的相对路径
+              path: 'profile',  // 不需要斜線，Nav-link路徑是/membercenter/profile
+              component: () => import('../views/membercenter/UserProfile.vue'), 
             },
             {
-              path: 'orders',  // 子路由路径，不需要加斜线
+              path: 'orders',  // 不需要斜線，Nav-link路徑是/membercenter/orders
               component: () => import('../views/membercenter/UserOrder.vue')
             },
           ],

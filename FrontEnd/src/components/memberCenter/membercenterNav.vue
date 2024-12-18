@@ -17,7 +17,7 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/index" v-on:click="logout" class="nav-link">
+        <router-link to="/index" v-on:click="clearLoggedIn" class="nav-link">
           <span class="icon-circle"><i class="bi bi-envelope-fill"></i></span> 登出
         </router-link>
       </li>
@@ -27,14 +27,10 @@
 
 <script>
 import { useUserStore } from '@/stores/userStore';
-const userStore=useUserStore();
+import { mapActions } from 'pinia';
 export default {
   methods: {
-    logout() {
-            // 處理登出邏輯
-            userStore.clearLoggedIn();
-            localStorage.clear();
-        }
+    ...mapActions(useUserStore,['clearLoggedIn'])
   }
 };
 </script>
