@@ -46,10 +46,6 @@ const router = createRouter({
           component: () => import('../views/MemberPoints.vue'),
         },
         {
-          path: '/memberCart',
-          component: () => import('../views/Cart2.vue'),
-        },
-        {
           path: '/campaign',
           component: () => import('../views/Campaign.vue'),
         },
@@ -69,7 +65,6 @@ const router = createRouter({
           path: '/comment',
           component: () => import('../views/Comment.vue'),
         },
-
         {
           path: '/lotteryResult',
           component: () => import('../views/LotteryResult.vue'),

@@ -47,12 +47,12 @@
 
 <script>
 import BannerTop from '@/components/BannerTop.vue';
-import PointTotal from '@/components/PointTotal.vue'
+import PointTotal from '@/components/PointTotal.vue';
 
 export default {
   components: {
     PointTotal,
-    BannerTop
+    BannerTop,
   },
   data() {
     return {
@@ -76,6 +76,7 @@ export default {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
 
       const response = await this.axios.get(api)
+      console.log("66666", response)
       this.pointPrizes = response.data
     },
 

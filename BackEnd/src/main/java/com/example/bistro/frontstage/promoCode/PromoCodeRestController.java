@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -24,10 +25,12 @@ public class PromoCodeRestController {
 		return ResponseEntity.ok("Promo code created successfully");
 	}
 
-	@GetMapping("/api/showPromoCode")
-	public ResponseEntity<List<PromoCodeBean>> showPromoCode(@RequestParam int memberId){
+	@GetMapping("/api/showPromoCode/{memberId}")
+	public ResponseEntity<List<PromoCodeBean>> showPromoCode(@PathVariable int memberId){
 		List<PromoCodeBean> promoCodeBean = promoCodeService.findMemberPromoCode(memberId);
 		return ResponseEntity.ok(promoCodeBean);
 	}
+	
+	
 	
 }

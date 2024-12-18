@@ -84,8 +84,35 @@
                 </button>
               </div>
             </div>
+            <hr />
+            <div v-for="item in pointPrizes" class="position-relative ">
+              <div class="filter"></div>
+              <div class="row cart-item border-bottom py-3 " >
+                <div class="col-md-3">
+                  <img
+                    :src="'data:image/jpeg;base64,' + item.img"
+                    alt="Product 2"
+                    class="img-fluid rounded"
+                    style="width: 100px; height: 100px; object-fit: cover;"
+                  />
+                </div>
+                <div class="col-md-5 text-black">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <p class="text-muted">Category: Point</p>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2 text-end text-black">
+                  <p class="fw-bold"><del class="text-muted">$99.99 </del> $0</p>
+                  <button class="btn btn-lg btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
+
         <!-- Continue Shopping Button -->
         <div class="text-start mb-4">
           <a href="#" class="btn btn-outline-primary">
@@ -120,19 +147,13 @@
             </button>
           </div>
         </div>
-        <!--        Promo Code-->
-        <!--            <div class="card mt-4">-->
-        <!--              <div class="card-body">-->
-        <!--                <h5 class="card-title mb-3">Apply Promo Code</h5>-->
-        <!--                  <div class="input-group mb-3">-->
-        <!--                    <input type="text" class="form-control" placeholder="Enter promo code">-->
-        <!--                    <button class="btn btn-outline-secondary" type="button">Apply</button>-->
-        <!--                  </div>-->
-        <!--              </div>-->
-        <!--            </div>-->
+        <!-- Promo Code -->
+        <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
       </div>
     </div>
   </div>
+
+  <p class="fw-bold">{{ pointPrizes }}</p>
 </template>
 
 <script>
@@ -144,6 +165,8 @@ import CartTitle from '@/components/cart/CartTitle.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
+import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
+import PointGet from '@/components/PointGet.vue'
 
 export default {
   name: 'Cart',
@@ -154,12 +177,26 @@ export default {
     CartTitle,
     CartTable,
     CartButton,
+    VerifyPromoCode,
   },
   data() {
-    return {}
+    return {
+      pointPrizes: [],
+    }
   },
   methods: {
     //...mapActions(cartStore, ["addToCart"])
+
+    // 處理子組件傳遞過來的資料
+    handlePromoCodeTransmit(payload) {
+      console.log('從子組件收到的促銷碼名稱:', payload.name)
+
+      this.pointPrizes.push({
+        name: payload.name,
+        img: payload.image
+      })
+      // 在這裡處理接收到的數據
+    },
   },
   computed: {
     //...mapState(cartStore, ["carts"])
@@ -170,6 +207,16 @@ export default {
 </script>
 
 <style scoped>
+.filter{
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(255, 76, 63, 0.1);
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
 .step-indicator {
   display: flex;
   justify-content: center;

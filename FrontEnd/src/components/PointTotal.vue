@@ -36,7 +36,7 @@ export default {
 
   methods: {
     async getPromoCode() {
-      const api = `${import.meta.env.VITE_API}/api/showPromoCode?memberId=${this.memberId}`
+      const api = `${import.meta.env.VITE_API}/api/showPromoCode/${this.memberId}`
 
       const response = await this.axios.get(api)
       this.memberPromoCode = response.data
