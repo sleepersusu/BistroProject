@@ -126,7 +126,7 @@ public class CommentRestController {
 		}
 	}
 
-	@GetMapping("api/member/comment") // 根據會員取得評論
+	@GetMapping("/api/member/comment") // 根據會員取得評論
 	public ResponseEntity<?> findAllCommentByMember(HttpSession httpSession) {
 
 		// 從 HttpSession 獲取會員 ID
