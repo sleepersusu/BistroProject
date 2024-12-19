@@ -60,7 +60,7 @@
                 <p class="fw-bold">${{ (item.cartCount * item.menu.productPrice).toFixed(2) }}</p>
                 <button
                   class="btn btn-lg btn-outline-danger"
-                  @click="removeItem(item.cartId)">
+                  @click="removeFromCart(item)">
                   <i class="bi bi-trash"></i>
                 </button>
               </div>
@@ -130,6 +130,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
 import { cartStore } from '@/stores/cartStore.js'
+import { useUserStore } from '@/stores/userStore.js'
+const user = useUserStore()
 
 
 export default {
@@ -200,9 +202,18 @@ export default {
       }
     },
   //刪除的controller還沒做 ==
-    removeItem(itemId) {
-        this.cartItems = this.cartItems.filter(item => item.cartId !== itemId);
-      },
+    async removeFromCart(item) {
+      if (user.memberId) {
+        try {
+          await this.removeItem(item)
+          await this.fetchCartItems() // 重新獲取購物車數據
+        } catch (error) {
+          console.error('刪除商品失敗:', error)
+        }
+      } else {
+        console.error('未登入會員')
+      }
+    }
   },
   computed: {
     //getter or state 放在computed
@@ -212,7 +223,6 @@ export default {
   watch: {},
   created() {
     this.fetchCartItems()
-
   },
 }
 </script>

@@ -1,8 +1,4 @@
 <template>
-  <div>
-    <PageTop v-bind:page1="'Members'" v-bind:page2="'Orders'"></PageTop>
-  </div>
-
   <div class="container-fluid py-4 px-5">
     <div class="row">
       <div class="col-12">

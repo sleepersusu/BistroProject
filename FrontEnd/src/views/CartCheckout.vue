@@ -88,10 +88,14 @@
                   </div>
 
 
+
+
+
                 <!-- 付款方式 -->
                   <div class="checkout__input__checkbox">
                     <h4>付款方式</h4>
                     <label for="cash">
+                      <img class="pay" src="https://i.imgur.com/WIAP9Ku.jpg" alt="">
                       Cash
                       <input type="radio" id="cash" value="Cash" v-model="orderData.PaymentWay" />
                       <span class="checkmark"></span>
@@ -100,6 +104,7 @@
 
                   <div class="checkout__input__checkbox">
                     <label for="paypal">
+                      <img class="pay" src="https://i.imgur.com/cMk1MtK.jpg" alt="">
                       Paypal
                       <input type="radio" id="paypal" value="Paypal" v-model="orderData.PaymentWay" />
                       <span class="checkmark"></span>
@@ -501,5 +506,14 @@ export default defineComponent({
   letter-spacing: 2px;
   width: 100%;
   margin-top: 10px;
+}
+.pay {
+  width: 73px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #000;
+  margin: 10px 20px 10px 0px;
+  cursor: pointer;
+  box-shadow: 1px 5px 10px 1px rgba(0,0,0,0.2);
 }
 </style>
