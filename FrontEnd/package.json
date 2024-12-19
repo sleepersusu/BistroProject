@@ -17,6 +17,7 @@
     "@vee-validate/i18n": "^4.14.7",
     "@vee-validate/rules": "^4.14.7",
     "aos": "^2.3.4",
+    "axios": "^1.7.9",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.3",
     "fireworks-js": "^2.10.8",

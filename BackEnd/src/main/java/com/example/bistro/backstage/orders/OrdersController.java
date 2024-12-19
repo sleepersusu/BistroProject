@@ -57,7 +57,6 @@ public class OrdersController {
                                @RequestParam String ordersTel,
                                @RequestParam String seatType,
                                @RequestParam Integer ordersSumPrice,
-                               @RequestParam String ordersStatus,
                                @RequestParam String ordersRequest,
                                @RequestParam List<String> paymentStatus,
                                @RequestParam List<String> paymentWay,
@@ -75,7 +74,6 @@ public class OrdersController {
             orders.setSeatType(seatType);
             orders.setOrdersSumPrice(ordersSumPrice);
             orders.setPointGetted(ordersSumPrice / 100);  // 自動計算 pointGetted
-            orders.setOrdersStatus(ordersStatus);
             orders.setOrdersRequest(ordersRequest);
 
         // 處理 memberId
