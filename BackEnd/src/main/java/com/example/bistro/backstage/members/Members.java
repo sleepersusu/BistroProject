@@ -65,7 +65,7 @@ public class Members {
 
 	// 一對多：一個會員可以有很多訂單
     @JsonIgnore
-    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "members", orphanRemoval = true)
     private List<Orders> orders = new ArrayList<>(); // 會員可以有多個訂單
     
     @JsonIgnore
