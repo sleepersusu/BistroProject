@@ -118,7 +118,7 @@ public class CartService {
 
 
 
-                //會員新增購物車
+         //會員新增購物車
                     //1.確定有沒有會員，沒有要請他登入(可以在controller做)
                     //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
                         //如果存在    就將購物車加一
@@ -152,7 +152,7 @@ public class CartService {
                     return cartRepository.findCartByMemberId(membersId);
                 }
 
-                //會員減少購物車
+            //會員減少購物車
                     //1.確定有沒有會員，沒有要請他登入
                     //2.判斷memberId和menuId是否有存在了，代表這個會員已經有這個產品了
                         //如果存在    就將購物車加一
@@ -171,40 +171,47 @@ public class CartService {
                 }
 
 
-    // 將商品加入購物車 ---------OK
-    public Cart addMenuToCart(Integer memberId, Integer menuId, Integer cartCount) {
-        // 查找會員
-            Members member = membersService.findMembersById(memberId);
-            if (member == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到會員");
-                //這行代碼的作用是在某個條件下向客戶端拋出一個HTTP狀態碼為 404 (NOT_FOUND) 的異常，並且返回一個自定義的錯誤信息 "找不到商品"。
-                //這通常用於 RESTful API 中，當客戶端請求的資源不存在時，返回這個異常來告知客戶端。
-            }
+            // 將商品加入購物車 ---------OK
+            public Cart addMenuToCart(Integer memberId, Integer menuId, Integer cartCount) {
+                // 查找會員
+                    Members member = membersService.findMembersById(memberId);
+                    if (member == null) {
+                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到會員");
+                        //這行代碼的作用是在某個條件下向客戶端拋出一個HTTP狀態碼為 404 (NOT_FOUND) 的異常，並且返回一個自定義的錯誤信息 "找不到商品"。
+                        //這通常用於 RESTful API 中，當客戶端請求的資源不存在時，返回這個異常來告知客戶端。
+                    }
 
-        // 查找菜單項目
-            Menu menu = menuService.findMenuById(menuId);
-            if (menu == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到商品");
-                //這行代碼的作用是在某個條件下向客戶端拋出一個HTTP狀態碼為 404 (NOT_FOUND) 的異常，並且返回一個自定義的錯誤信息 "找不到商品"。
-                //這通常用於 RESTful API 中，當客戶端請求的資源不存在時，返回這個異常來告知客戶端。
-            }
+                // 查找菜單項目
+                    Menu menu = menuService.findMenuById(menuId);
+                    if (menu == null) {
+                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到商品");
+                        //這行代碼的作用是在某個條件下向客戶端拋出一個HTTP狀態碼為 404 (NOT_FOUND) 的異常，並且返回一個自定義的錯誤信息 "找不到商品"。
+                        //這通常用於 RESTful API 中，當客戶端請求的資源不存在時，返回這個異常來告知客戶端。
+                    }
 
-        // 構建複合主鍵
-            CartId cartId = new CartId();
-            cartId.setMembersId(memberId);
-            cartId.setMenuId(menuId);
+                // 構建複合主鍵
+                    CartId cartId = new CartId();
+                    cartId.setMembersId(memberId);
+                    cartId.setMenuId(menuId);
 
-        // 查找是否已經有該商品在購物車中
-            Optional<Cart> existingCartOpt = cartRepository.findById(cartId);
-            if (existingCartOpt.isPresent()) {
-                // 如果該商品已經在購物車中，則更新數量
-                Cart existingCart = existingCartOpt.get();  // 獲取現有的購物車項目
-                existingCart.setCartCount(existingCart.getCartCount() + cartCount);  // 更新數量
-                return cartRepository.save(existingCart);  // 保存更新後的購物車
-            } else {
-                // 如果商品不在購物車中，則新增該商品到購物車
-                Cart cartItem = new Cart(cartId, cartCount, null, member, menu);
-                return cartRepository.save(cartItem);  // 保存新商品到購物車
+                // 查找是否已經有該商品在購物車中
+                    Optional<Cart> existingCartOpt = cartRepository.findById(cartId);
+                    if (existingCartOpt.isPresent()) {
+                        // 如果該商品已經在購物車中，則更新數量
+                        Cart existingCart = existingCartOpt.get();  // 獲取現有的購物車項目
+                        existingCart.setCartCount(existingCart.getCartCount() + cartCount);  // 更新數量
+                        return cartRepository.save(existingCart);  // 保存更新後的購物車
+                    } else {
+                        // 如果商品不在購物車中，則新增該商品到購物車
+                        Cart cartItem = new Cart(cartId, cartCount, null, member, menu);
+                        return cartRepository.save(cartItem);  // 保存新商品到購物車
+                    }
             }
-    }
+            //刪除該購物車
+            @Transactional public void deleteCartItem(Integer membersId, Integer menuId) {
+                CartId cartId = new CartId(membersId, menuId);
+                Optional<Cart> existingCart = cartRepository.findById(cartId);
+                if (existingCart.isPresent()) { cartRepository.deleteById(cartId); }
+                else { throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到購物車項目"); }
+            }
 }
