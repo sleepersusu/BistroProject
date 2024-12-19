@@ -159,6 +159,12 @@ import { orderStore } from '@/stores/orderStore.js'
 const user = useUserStore()
 export default {
   name: 'Orders',
+  props:{
+    orderItems: {
+      type: Array,
+      required: true,
+    },
+  },
   components: {
 
   },
@@ -167,14 +173,11 @@ export default {
 
   },
   methods: {
-    ...mapActions(orderStore, ["getOrder"]),
   },
   computed:{
-    ...mapState(orderStore, ['orderItems']),
   },
   watch:{},
   created() {
-    this.getOrder();
   },
 }
 </script>
