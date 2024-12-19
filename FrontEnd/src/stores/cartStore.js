@@ -98,12 +98,25 @@ export const cartStore = defineStore('cart', {
         }
       },
     //刪除此商品
-      removeItem(itemId) {
-        this.cartItems = this.cartItems.filter(item => item.cartId !== itemId);
+        async removeItem(menuItem) {
+          if (!user.memberId) {
+            return null // 確保返回值
+          }
+          try {
+            const url = `cart/${user.memberId}/${menuItem.menu.id}`  // 注意路徑格式
+            const res = await axios.delete(url)
+            if (res.status === 204) {  // 成功刪除返回 204
+              return await this.getCart()  // 重新獲取最新購物車數據
+            }
+          } catch (error) {
+            console.error('刪除購物車項目失敗:', error)
+            return null
+          }
+        },
+      //清空購物車
+        clearCart() {
+          this.cartItems = [];
+        },
       },
-    //清空購物車
-      clearCart() {
-        this.cartItems = [];
-      }
-  },
+
 })

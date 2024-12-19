@@ -3,15 +3,15 @@
     <BannerTop v-bind:title="'Shopping Cart'"></BannerTop>
   </div>
   <!-- Step Indicator -->
-  <div class="p-5">
-    <div class="step-indicator mb-1 mt-3">
-      <div class="step active">1</div>
-      <div class="step-connector"></div>
-      <div class="step">2</div>
-      <div class="step-connector"></div>
-      <div class="step">3</div>
+    <div class="p-5">
+      <div class="step-indicator mb-1 mt-3">
+        <div class="step active">1</div>
+        <div class="step-connector"></div>
+        <div class="step">2</div>
+        <div class="step-connector"></div>
+        <div class="step">3</div>
+      </div>
     </div>
-  </div>
 
   <div class="container py-5">
     <div class="row">
@@ -20,9 +20,10 @@
         <div class="card mb-4">
           <div class="card-body">
             <div
-              v-for="item in cartItems"
+              v-for="(item, index) in cartItems"
               :key="item.cartId"
               class="row cart-item mb-3">
+              <hr v-if="index !== 0">
               <div class="col-md-3">
                 <img
                   :src="item.menu.productImgUrl"
@@ -53,17 +54,17 @@
                     type="button"
                     @click="increaseQuantity(item)">+
                   </button>
-
                 </div>
               </div>
               <div class="col-md-2 text-end text-black">
                 <p class="fw-bold">${{ (item.cartCount * item.menu.productPrice).toFixed(2) }}</p>
                 <button
                   class="btn btn-lg btn-outline-danger"
-                  @click="removeItem(item.cartId)">
+                  @click="removeFromCart(item)">
                   <i class="bi bi-trash"></i>
                 </button>
               </div>
+
             </div>
           </div>
         </div>
@@ -130,6 +131,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
 import { cartStore } from '@/stores/cartStore.js'
+import { useUserStore } from '@/stores/userStore.js'
+const user = useUserStore()
 
 
 export default {
@@ -200,9 +203,18 @@ export default {
       }
     },
   //刪除的controller還沒做 ==
-    removeItem(itemId) {
-        this.cartItems = this.cartItems.filter(item => item.cartId !== itemId);
-      },
+    async removeFromCart(item) {
+      if (user.memberId) {
+        try {
+          await this.removeItem(item)
+          await this.fetchCartItems() // 重新獲取購物車數據
+        } catch (error) {
+          console.error('刪除商品失敗:', error)
+        }
+      } else {
+        console.error('未登入會員')
+      }
+    }
   },
   computed: {
     //getter or state 放在computed
@@ -212,13 +224,13 @@ export default {
   watch: {},
   created() {
     this.fetchCartItems()
-
   },
 }
 </script>
 
 
 <style scoped>
+
 .step-indicator {
   display: flex;
   justify-content: center;
