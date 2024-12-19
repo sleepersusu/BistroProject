@@ -1,13 +1,13 @@
 <template>
-  <div>
-      <BannerTop :title="'Member Center'"></BannerTop>
-  </div>
+    <div>
+        <BannerTop :title="'Member Center'"></BannerTop>
+    </div>
 </template>
 <script>
 import BannerTop from '@/components/BannerTop.vue';
 export default {
 components:{
-  BannerTop
+    BannerTop
 }
 }
 </script>

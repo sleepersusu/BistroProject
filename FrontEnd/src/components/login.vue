@@ -9,7 +9,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form v-on:submit.prevent="submitLogin" method="post">
+                    <form v-on:submit.prevent="sendLogin" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">帳號</label>
                             <input type="text" class="form-control" id="username" name="Account"
@@ -40,19 +40,23 @@
 <script>
 import { useUserStore } from '@/stores/userStore';
 import  Modal  from 'bootstrap/js/dist/modal';
-const userStore = useUserStore();
+import { mapActions } from 'pinia';
 export default {
     data() {
         return {
         };
     },
     methods: {
+        ...mapActions(useUserStore,['submitLogin']),
         openLoginModal() {
             // 手動開啟登入模態框
             const modalElement = document.getElementById('loginModal');
             this.modal = new Modal(modalElement);
             this.modal.show(); // 显示模态框
         },
+        sendLogin(event){
+            this.submitLogin(event)
+            this.modal.hide();
         async submitLogin(event) {
             try {
                 // 後端服務

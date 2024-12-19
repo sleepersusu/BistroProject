@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import MembercenterNav from '@/components/memberCenter/membercenterNav.vue';
+import MembercenterNav from '@/components/membercenter/membercenterNav.vue';
 import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore();
 
@@ -21,7 +21,7 @@ export default {
     return {}
   },
   components: {
-    MembercenterNav
+    MembercenterNav,
   },
   methods: {},
   computed: {},
