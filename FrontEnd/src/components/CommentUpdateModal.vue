@@ -39,6 +39,12 @@
                     aria-label="Disabled input example" disabled readonly>
                 </div>
 
+
+                <star-rating :show-rating="false" @update:rating="rating = $event"
+                  :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]">
+                </star-rating>
+                <div style="margin-top:10px;font-weight:bold;">{{currentRatingText}}</div>
+
                 <div class="mb-3">
                     <input class="form-control"
                     type="text" value="" required>
@@ -73,23 +79,55 @@
 </template>
 
 <script>
-
-
+import { useUserStore } from '@/stores/userStore';
+import ModalMixin from '@/mixins/modalMixin-option'
+import StarRating from 'vue-star-rating'
+import { mapState } from 'pinia';
 export default {
-  components: {
-
+  props:{
+    currentComment:{
+      type: Object,
+      required: true,
+    }
   },
+  components: {
+    StarRating
+  },
+  computed:{
+    ...mapState(useUserStore,['memberId'])
+  }
+  ,
+  mixins:[ModalMixin],
 
   data() {
     return {
 
+
+      localComment: { ...this.currentComment },
+      rating: '',
+      resetableRating: 2,
+      currentRating: "No Rating",
+      mouseOverRating: null
     }
   },
   methods: {
 
+    showCurrentRating(rating) {
+      this.currentSelectedRating = rating === 0? this.currentSelectedRating: "Click to select " + rating + " stars";
+    },
+    setCurrentSelectedRating(rating) {
+      this.currentSelectedRating = "You have Selected: " + rating + " stars";
+    },
+
+
+
+
+
+
+
+
+
   async updateComment(comment) {
-
-
   let API_URL = `${import.meta.env.VITE_API}/api/put/comment/${id}`
 
     axios
@@ -101,8 +139,28 @@ export default {
         console.error('Error fetching comment:', error)
       })
     },
+  },
+  computed: {
+    currentRatingText() {
+      return this.rating
+        ? "You have selected " + this.rating + " stars"
+        : "No rating selected";
+    },
+    mouseOverRatingText() {
+      return this.mouseOverRating
+        ? "Click to select " + this.mouseOverRating + " stars"
+        : "No Rating";
+    }
+  },
+  watch: {
+    currentComment: {
+      deep: true,
+      handler(newComment) {
+        this.localComment = { ...newComment };
+      },
+    },
+  },
 
-  }
 }
 </script>
 

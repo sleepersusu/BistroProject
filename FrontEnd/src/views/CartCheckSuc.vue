@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <PageTop v-bind:page1="'Home'" v-bind:page2="'Cart'" :link="'/index'"></PageTop>
-  </div>
-  <div class="text-center">
+
+  <div class="text-center mt-5">
     <i class="bi bi-check-circle-fill" style="font-size: 5rem"></i>
   </div>
   <!-- Step Indicator -->
@@ -16,71 +14,23 @@
     </div>
   </div>
   <!-- CTA Section -->
-  <section class="cta-section mt-3">
+  <section class="cta-section">
     <div class="container">
-
-      <div class="row">
-        <!-- 左側文字 -->
-        <div class="col-lg-4 mb-4">
-          <div class="cta-text">
-            <h3 class="cta-heading ">
-              THANK YOU!
-            </h3>
-            <p>
-              感謝您的訂購！<br />
-              親愛的顧客，感謝您選擇酌夜語。<br />
-              您的訂單已成功完成！<br />
-              我們將盡快為您準備並安排配送，<br />
-              期待能為您提供一份令人滿意的體驗。
-            </p>
-            <a href="#" class="btn btn-primary cta-btn mt-3">Back to Home</a>
-          </div>
-        </div>
-        <!-- 右側表格 -->
-        <div class="col-lg-8">
-          <div class="table-responsive">
-            <table class="table table-striped table-hover align-middle">
-              <thead class="table-dark">
-              <tr>
-                <th scope="col">編號</th>
-                <th scope="col">產品名稱</th>
-                <th scope="col">數量</th>
-                <th scope="col">價格</th>
-                <th scope="col">總計</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>紅酒 A</td>
-                <td>2</td>
-                <td>$100</td>
-                <td>$200</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>白酒 B</td>
-                <td>1</td>
-                <td>$150</td>
-                <td>$150</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>香檳 C</td>
-                <td>3</td>
-                <td>$200</td>
-                <td>$600</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <h2 class="cta-heading">THANK YOU!</h2>
+      <div class="d-flex justify-content-center">
+        <p>
+          您的訂單已成功完成！<br/>
+          我們將盡快為您準備並安排配送，<br/>
+          期待能為您提供一份令人滿意的體驗。
+        </p>
+      </div>
+      <div class="button-container">
+<!--        <a href="#" class="btn btn-primary cta-btn">Home</a>-->
+        <a href="#" class="btn btn-primary cta-btn">My Orders</a>
       </div>
     </div>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
   </section>
-  <div>
-    <Orders></Orders>
-  </div>
 </template>
 
 <script>
@@ -147,11 +97,11 @@ export default defineComponent({
   font-size: 3rem;
   margin-bottom: 35px;
   font-weight: bold;
-  text-align: left;
+  text-align: center;
 }
 
 .cta-text {
-  text-align: left;
+  text-align: center;
   font-size: 1.1rem;
   line-height: 1.8;
 }
@@ -168,4 +118,12 @@ export default defineComponent({
   font-size: 1.25rem;
   padding: 12px 30px;
 }
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* 自定义间距 */
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+}
+
 </style>

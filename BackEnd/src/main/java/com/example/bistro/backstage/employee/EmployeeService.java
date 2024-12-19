@@ -1,10 +1,12 @@
 package com.example.bistro.backstage.employee;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -15,13 +17,12 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeRepository employeeRepo;
 	
-	public Employee registerEmployee(String account,String password) {
-		String encodedPwd = pwdEncoder.encode(password);//加密
-		Employee employee = new Employee();
-		employee.setEmployeeAccount(account);
-		employee.setEmployeePassword(encodedPwd);
-		
-		return employeeRepo.save(employee);
+	@Autowired
+	private JobTitleRepository jobRepo;
+	
+	public List<Employee> findAllEmployees() {
+		List<Employee> allEmployee = employeeRepo.findAll();
+		return allEmployee;
 	}
 	
 	public  Optional<Employee> checkLogin(String loginAccount,String loginPassword) {
@@ -35,6 +36,27 @@ public class EmployeeService {
 			}
 		}
 		return Optional.empty();
+	}
+	
+	@Transactional
+	public Employee insertEmployee(Employee employeeBean,Integer jobTitleId) {
+		Optional<JobTitle> job = jobRepo.findById(jobTitleId);
+		if(job.isPresent()) {
+		employeeBean.setJobTitle(job.get());
+		}else {
+			throw new IllegalArgumentException("JobTitle with ID " + jobTitleId + " not found.");
+		}
+		String status="啟用";
+		employeeBean.setEmployeeStatus(status);
+		String password = employeeBean.getEmployeePassword();
+		String encodedPwd = pwdEncoder.encode(password);//加密
+		employeeBean.setEmployeePassword(encodedPwd);
+		Optional<Employee> checkAccount = employeeRepo.findByEmployeeAccount(employeeBean.getEmployeeAccount());
+		if(checkAccount.isPresent()) {
+			return null;
+		}else {
+			return employeeRepo.save(employeeBean);
+		}
 	}
 	
 }

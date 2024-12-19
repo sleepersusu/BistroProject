@@ -30,14 +30,17 @@
 
   <div class="col" v-if="!isLoading">
     <div class="product-item">
-      <figure>
-        
-          <img :src="menuSrc"  class="img-fixed">
-        
-      </figure>
+
+
+      <div >
+        <figure>
+          <img :src="menuSrc" @error="menuSrc='public/images/avatar.jpg'"   class="img-fixed" v-on:click.prevent.stop="viewDescribeModal(menu)">
+        </figure>
+      </div>
+
 
       <h3>{{ menu.productName }}</h3>
-      
+
     <div class="d-flex align-items-bottom justify-content-between">
       <div>
         <span class="rating">
@@ -50,7 +53,7 @@
 
       <li
         class="lookComment"
-        v-on:click.prevent="viewComment(menu)"
+        v-on:click.prevent.stop="viewComment(menu)"
         style="list-style-type: none;"
       >
         <i class="bi bi-chat-left-text"></i>觀看評論
@@ -59,19 +62,21 @@
 
 
       <div class="d-flex justify-content-between"><span class="price">${{ menu.productPrice }}</span>
-        <span class="fs-6"> 剩餘:{{ menu.productCount }}份</span> 
-      </div>                  
-                      
+        <span class="fs-6"> 剩餘:{{ menu.productCount }}份</span>
+      </div>
+
       <div class="d-flex align-items-center justify-content-between">
         <div class="input-group product-qty">
           <span class="input-group-btn">
-            <button type="button" class="quantity-left-minus btn btn-danger btn-number" 
+            <button type="button" class="quantity-left-minus btn btn-danger btn-number"
               data-type="minus" v-on:click.prevent="minusOne">
               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
             </button>
           </span>
-            <input type="text" id="quantity" name="quantity" 
-              class="form-control input-number" 
+
+            <input type="text"  name="quantity"
+              class="form-control input-number quantity"
+
               v-model="count"
               v-on:input="updateQuantity($event)">
 
@@ -80,11 +85,13 @@
               <svg width="16" height="16" v-on:click.prevent="addOne"><use xlink:href="#plus"></use></svg>
             </button>
           </span>
-          
+
         </div>
-        <button class=" btn btn-primary mt-3" >Add to Cart</button>
-      </div>                    
-      
+
+        <button class=" btn btn-primary mt-3" @click="handleAddToCart(menu.id)">Add to Cart</button>
+
+      </div>
+
     </div>
   </div>
 
@@ -94,21 +101,24 @@
 <script>
 import axios from 'axios'
 import StarRating from 'vue-star-rating'
-
 import LoadingVue from 'vue3-loading-overlay'
+
+import { defineProps, computed, defineEmits } from 'vue'
+
 export default {
   components: {
     'star-rating': StarRating,
     LoadingVue,
-  },
-
+  } ,
   props: {
     menu: {
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
     },
   },
-  emits: ['update-count', 'addToCart','image-loaded','viewComment'],
+
+emits: ['update-count', 'addToCart','image-loaded','view-comment','view-menudescribe'],
+
 
   data() {
     return {
@@ -117,10 +127,12 @@ export default {
       isLoading: false,
       count: 0,
       comments: [],
-      commentPeople:'',
+      commentPeople:0,
     }
   },
   methods: {
+    ...mapActions(cartStore,["addToCart"]),
+
     async loadPicture(ID) {
       this.isLoading = true
 
@@ -132,7 +144,7 @@ export default {
           let url = URL.createObjectURL(response.data)
           this.menuSrc = url
           this.isLoading = false
-          
+
         })
         .catch((error) => {
           console.error('Error fetching menus:', error)
@@ -154,22 +166,19 @@ export default {
       } else {
         this.count = this.menu.productCount
         this.$emit('update-count', this.count)
-
         Swal.fire({
           title: '已到達庫存上限',
           text: '請重新選擇數量',
           icon: 'error',
         })
       }
-    },    
+    },
     async countCommentPeople(productName) {
-      console.log(productName)
       let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
       axios
         .get(API_URL)
         .then(async (response) =>{
           this.commentPeople=response.data
-          console.log(this.commentPeople)
         })
         .catch((error) => {
           console.error('Error fetching commentPeople:', error)
@@ -178,9 +187,19 @@ export default {
     async viewComment(menu) {
 
       this.$emit("view-comment",menu)
-      
-    },
 
+
+    },
+    async viewDescribeModal(menu) {
+      this.$emit("view-menudescribe",menu)
+},
+
+
+    },
+    handleAddToCart(id){
+      this.addToCart({id,count:this.count})
+      this.count=1
+    },
 
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
@@ -195,14 +214,12 @@ export default {
         this.count = this.menu.productCount
       }
     },
-    handleAddToCart({ id, count }) {
-      console.log(`Added to cart: ID=${this.menu.id}, Count=${count}`);
-    },
-    
+
+
   },
   created() {
       this.loadPicture(this.menu.id)
-      this.countCommentPeople(this.menu.productName) 
+      this.countCommentPeople(this.menu.productName)
     },
 }
 </script>
@@ -216,6 +233,10 @@ export default {
 }
 .card {
   margin-bottom: 5px;
+}
+
+figure>img{
+  cursor: pointer;
 }
 
 .modal-header,
@@ -244,7 +265,7 @@ export default {
 product-qty{
 min-width: 130px;
 }
-#quantity {
+.quantity {
   height: auto;
   width: 28px;
   text-align: center;
@@ -281,7 +302,7 @@ min-width: 130px;
   --bs-btn-disabled-color: #fff;
   --bs-btn-disabled-bg: #d3d7dd;
   --bs-btn-disabled-border-color: transparent;
-  
+
 }
 .btn-outline-primary {
   --bs-btn-color: #ffc43f;
