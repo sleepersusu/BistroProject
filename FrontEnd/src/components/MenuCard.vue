@@ -33,7 +33,7 @@
 
       <div >
         <figure>
-          <img :src="menuSrc"  class="img-fixed" v-on:click.prevent.stop="viewDescribeModal(menu)">
+          <img :src="menuSrc" @error="menuSrc='public/images/avatar.jpg'"   class="img-fixed" v-on:click.prevent.stop="viewDescribeModal(menu)">
         </figure>
       </div>
 

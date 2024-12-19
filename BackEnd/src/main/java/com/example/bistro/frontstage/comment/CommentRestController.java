@@ -125,8 +125,6 @@ public class CommentRestController {
 
 //		 從 HttpSession 獲取會員 ID
 		Integer memberId = (Integer) httpSession.getAttribute("membersId");
-		System.out.println("會員 ID: " + httpSession.hashCode());	
-		
 		
 		if (memberId == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("請先登入以查看您的評論。");

@@ -35,6 +35,7 @@
                         </CommentTable>
                       </tbody>
 
+
                       <tbody v-if="NoComment">
                         <tr>
                           <td colspan="4">目前尚未有評論</td>
@@ -57,11 +58,15 @@
       </main>
     </div>
   </div>
+
+
+  <CommentUpdateModal ref="commentUpdateModal" :currentComment="currentComment"></CommentUpdateModal>
 </template>
 
 <script>
 import CommentTable from '@/components/CommentTable.vue'
 import CommentUpdateModal from '@/components/CommentUpdateModal.vue'
+import { comment } from 'postcss';
 
 
 export default {
@@ -74,6 +79,7 @@ export default {
     return {
       comments: [],
       NoComment: true,
+      currentComment:{},
     }
   },
   methods: {
@@ -81,7 +87,7 @@ export default {
       let API_URL = `${import.meta.env.VITE_API}/api/member/comment`
 
       this.axios
-        .get(API_URL,{withCredentials: true})
+        .get(API_URL)
         .then(async (response) => {
 
           this.comments = response.data
@@ -92,17 +98,13 @@ export default {
           this.NoComment = true
         })
     },
-
-    // async openUpdateCommentModal(comment) {
-    //   this.currentCommentId = comment.id
-    //   this.$refs.commentUpdateModal.showModal()
-    // },
+    async openUpdateCommentModal(comment) {
+      this.currentComment = comment
+      this.$refs.commentUpdateModal.showModal()
+    },
   },
 
   created() {
-    this.loadAllCommentByMember()
-  },
-  updated() {
     this.loadAllCommentByMember()
   },
 }

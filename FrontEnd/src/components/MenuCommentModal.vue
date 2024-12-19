@@ -25,7 +25,7 @@
 
                   <div>
                     <section class="avatar-container">
-                      <img src="/public/images/SU大頭照.jpg" alt="" class="avatar" />
+                      <img :src="memberSrc" @error="memberSrc='public/images/avatar.jpg'"  alt="" class="avatar" />
                     </section>
 
                     <section>
@@ -70,13 +70,11 @@
   <script>
   import ModalMixin from '@/mixins/modalMixin-option'
   import StarRating from 'vue-star-rating'
-
   import LoadingVue from 'vue3-loading-overlay'
   export default {
       components: {
-          'star-rating': StarRating,
+          StarRating,
           LoadingVue,
-
       },
       mixins:[ModalMixin],
 
@@ -90,6 +88,11 @@
           required: true,
           },
 
+      },
+      data(){
+        return{
+          memberSrc:''
+        }
       },
       methods: {
 
@@ -118,9 +121,6 @@
               let res = await this.axios.get(api,{ responseType: 'blob' })
               let url = URL.createObjectURL(res.data)
               this.memberSrc = url
-              this.isLoading = false
-              this.$emit('image-loaded', this.memberSrc)
-
           }catch (e) {
           console.log(e)
           }
@@ -133,12 +133,5 @@
   .avatar-container>img{
     width: 100px;
   }
-
-  .commentSection{
-
-
-
-  }
-
 
   </style>

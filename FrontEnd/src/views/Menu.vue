@@ -118,7 +118,7 @@
         </MenuCard>
       </div>
         <MenuCommentModal ref="commentModal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
-        <!-- <MenuDescribeModal ref="menuDescribeModal" :menu="menu"></MenuDescribeModal> -->
+        <MenuDescribeModal ref="menuDescribeModal" :menu="menu"></MenuDescribeModal>
     </div>
   </div>
 </template>
@@ -134,7 +134,7 @@ export default {
   components: {
     MenuCard,
     MenuCommentModal,
-    // MenuDescribeModal
+    MenuDescribeModal
   },
 
   data() {
@@ -143,6 +143,7 @@ export default {
       currentProduct:'',
       comments: [],
       menuCount: 0,
+      menu:{}
     }
   },
   methods: {
@@ -193,20 +194,19 @@ export default {
 
       this.$refs.commentModal.showModal()
     },
-    // openDescribeModal(menu) {
-    //   let api = `${import.meta.env.VITE_API}/api/${menu.id}/menu`
-    //   this.axios
-    //     .get(api)
-    //     .then((response) => {
-    //       console.log(response.data)
-    //       this.comments = response.data
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error loading menu:', error)
-    //     })
+    openDescribeModal(menu) {
+      let api = `${import.meta.env.VITE_API}/api/${menu.id}/menu`
+      this.axios
+        .get(api)
+        .then((response) => {
+          this.menu = response.data
+        })
+        .catch((error) => {
+          console.error('Error loading menu:', error)
+        })
 
-    //   this.$refs.menuDescribeModal.showModal()
-    // },
+      this.$refs.menuDescribeModal.showModal()
+    },
 
 
 

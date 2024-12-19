@@ -2,7 +2,7 @@
   <div class="modal fade" ref="modal" tabindex="-1.1" aria-labelledby="modalLabel">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header border-0">
           <button
             type="button"
             class="btn-close"
@@ -13,7 +13,7 @@
         <div class="modal-body">
           <div class="container d-flex">
             <div>
-              <section><img src="/public/images/餐點/飲品.jpg" alt="" /></section>
+              <section><img :src="menuSrc" @error="menuSrc='public/images/avatar.jpg'"  alt="" /></section>
               <section class="starSection">
                 <star-rating :rating="menu.avgScore" :read-only="true" :increment="0.1"
                 :rounded-corners="true" :border-width="4" :show-rating="false"
@@ -24,7 +24,7 @@
 
             <div>
               <h3></h3>
-              <!-- <h3>{{ menu.productDescribe }}</h3> -->
+              <h3>{{ menu.productDescribe }}</h3>
             </div>
           </div>
         </div>
@@ -51,8 +51,6 @@ export default {
     return{
       menuSrc: '',
     }
-  },data(){
-
   },
 
   methods: {
@@ -64,6 +62,9 @@ export default {
         .then(async (response) => {
           let url = URL.createObjectURL(response.data)
           this.menuSrc = url
+          if(url==null){
+            this.menuSrc=""
+          }
         })
         .catch((error) => {
           console.error('Error fetching menus:', error)
@@ -73,8 +74,6 @@ export default {
 
   },
   created(){
-    alert(menu)
-    console.log('Menu ID:', this.menu);
     this.loadPicture(this.menu.id)
   }
 }
