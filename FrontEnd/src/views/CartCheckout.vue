@@ -19,7 +19,7 @@
     <div class="container">
       <div class="checkout__form">
         <h4>Confirm Order</h4>
-        <form action="#">
+        <form action="#" ref="form">
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
@@ -130,8 +130,12 @@
 <!--                  </label>-->
 <!--                </div>-->
 
+
+                  <!-- 新增一個隱藏的 div 來放置綠界表單 -->
+                  <div ref="ecpayFormContainer" style="display: none;"></div>
+
                 <div>
-                  <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
+                  <button type="button" class="btn btn-dark w-100" @click="jumpEcpay">PLACE ORDER</button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -154,10 +158,17 @@
 <script>
 import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageTop from '@/components/PageTop.vue'
 export default defineComponent({
   components: { PageTop, BannerTop },
+  methods: {
+
+    async jumpEcpay() {
+      window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`;
+    }
+  }
+
+
 })
 </script>
 
