@@ -3,20 +3,19 @@
   <BannerTop :title="'Orders History'"></BannerTop>
   <div class="container">
     <!-- 購物車空的，顯示還沒有訂單紀錄-->
-        <div
-          class="d-flex justify-content-center align-items-center flex-column my-5"
-          v-if="cartItems.length === 0"
-        >
-          <i class="bi bi-emoji-frown display-1 mb-3"></i>
-          <h3 class="mb-5">目前還沒有訂單紀錄!</h3>
-          <router-link to="/menu" class="btn btn-primary btn-lg py-3 px-5">去購物吧!</router-link>
-        </div>
-    <!-- 購物車有東西，顯示資訊-->
-        <div >
-          <Orders></Orders>
-        </div>
+    <div
+      class="d-flex justify-content-center align-items-center flex-column my-5"
+      v-if="!hasOrder"
+    >
+      <i class="bi bi-emoji-frown display-1 mb-3"></i>
+      <h3 class="mb-5">目前還沒有訂單紀錄!</h3>
+      <router-link to="/menu" class="btn btn-primary btn-lg py-3 px-5">去購物吧!</router-link>
+    </div>
+    <!-- 購物車有東西，顯示資訊 -v-else -->
+    <div >
+      <Orders></Orders>
+    </div>
   </div>
-
 </template>
 <script>
 import Orders from '@/components/Orders.vue'
@@ -37,9 +36,20 @@ export default {
   components: { BannerTop, Orders },
   data() {
     return {
-      cartItems: [], // 初始为 null，确保加载后赋值为数组
-      isLoading: false,
-    };
+      orderItems: [],
+      isLoading: ref(false),
+    }
+  },
+  computed: {
+    hasOrder() {
+      return this.orderItems.length > 0; // 判斷是否有資料
+    },
+  },
+  watch: {
+
+  },
+  created() {
+
   },
 }
 </script>

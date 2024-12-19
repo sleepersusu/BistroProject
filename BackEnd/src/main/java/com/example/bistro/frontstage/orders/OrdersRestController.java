@@ -37,7 +37,7 @@ public class OrdersRestController {
         }
 
 
-    //查看單筆訂單，根據memberId查詢訂單
+    //查看單筆訂單，根據orderId查詢訂單
         @GetMapping("/list/{id}")
         public ResponseEntity<Orders> findOrderById(@PathVariable Integer id) {
             Optional<Orders> order = Optional.ofNullable(ordersService.findOrderById(id));
@@ -45,7 +45,7 @@ public class OrdersRestController {
                     .orElseGet(() -> ResponseEntity.notFound().build());
         }
 
-    //查看單筆訂單，根據ordersNumber查詢該筆訂單的詳情
+    //訂單詳情：查看單筆訂單，根據ordersNumber查詢該筆訂單的詳情
         @GetMapping("/detailList/{ordersNumber}")
         public ResponseEntity<Orders> findOrderByOrdersNumber(@PathVariable String ordersNumber) {
             Optional<Orders> order = ordersService.findOrderByOrdersNumber(ordersNumber);
