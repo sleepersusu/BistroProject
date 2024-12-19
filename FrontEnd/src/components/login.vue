@@ -57,6 +57,7 @@ export default {
         sendLogin(event){
             this.submitLogin(event)
             this.modal.hide();
+          },
         async submitLogin(event) {
             try {
                 // 後端服務
