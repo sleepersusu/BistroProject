@@ -4,6 +4,7 @@ package com.example.bistro.frontstage.cart;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +80,14 @@ public class CartController {
                 Cart response = cartService.addMenuToCart(memberId, menuId, cartCount);
                 return ResponseEntity.ok(response);  // 返回成功或失敗的訊息
         }
-
+    //根據會員ID和商品ID將商品刪除到購物車
+        @DeleteMapping("/{memberId}/{menuId}")
+        public ResponseEntity<Void> deleteCartItem(
+                @PathVariable Integer memberId,
+                @PathVariable Integer menuId) {
+            cartService.deleteCartItem(memberId, menuId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
 
 
