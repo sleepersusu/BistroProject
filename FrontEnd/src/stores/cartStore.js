@@ -112,11 +112,11 @@ export const cartStore = defineStore('cart', {
             console.error('刪除購物車項目失敗:', error)
             return null
           }
-        }
+        },
+      //清空購物車
+        clearCart() {
+          this.cartItems = [];
+        },
       },
-    //清空購物車
-      clearCart() {
-        this.cartItems = [];
 
-      },
 })

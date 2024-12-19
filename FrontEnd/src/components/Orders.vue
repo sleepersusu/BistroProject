@@ -38,16 +38,18 @@
               <table class="table align-items-center mb-0">
                 <thead class="bg-gray-100">
                   <tr>
-                    <th class="text-dark text-xs font-weight-semibold opacity-7">Orders</th>
-                    <th class="text-dark text-xs font-weight-semibold opacity-7 ps-2">Amount</th>
+                    <th class="text-dark text-xs font-weight-semibold opacity-7">訂單編號</th>
+                    <th class="text-dark text-xs font-weight-semibold opacity-7 ps-2">金額</th>
                     <th class="text-center text-dark text-xs font-weight-semibold opacity-7">
-                      Status
+                      付款狀態
                     </th>
                     <th class="text-center text-dark text-xs font-weight-semibold opacity-7">
-                      Date
+                      付款方式
                     </th>
-                    <th class="text-dark opacity-7">取消</th>
-                    <th class="text-dark opacity-7">Time</th>
+                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">
+                      日期
+                    </th>
+
                   </tr>
                 </thead>
 
@@ -64,67 +66,6 @@
 
                     <td>
                       <p class="text-sm text-dark font-weight-semibold mb-0">$1,215</p>
-                    </td>
-
-                    <td class="align-middle text-center text-sm">
-                      <span
-                        class="badge badge-sm border border-primary text-primary"
-                        style="background-color: white"
-                      >
-                        <svg
-                          width="12"
-                          height="12"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          class="me-1ca"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        等待中
-                      </span>
-                    </td>
-
-                    <td class="align-middle text-center">
-                      <span class="text-primary text-sm font-weight-normal">23/04/18</span>
-                    </td>
-
-                    <td class="align-middle">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary font-weight-bold text-xs"
-                        data-bs-toggle="tooltip"
-                        data-bs-title="Edit user"
-                      >
-                        <button class="btn btn-sm btn-outline-danger">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </a>
-                    </td>
-
-                    <!-- 倒計時顯示 -->
-                    <td class="align-middle" id="countdown">
-                      05:00
-                    </td>
-
-                  </tr>
-
-                  <!-- 2 -->
-                  <tr>
-                    <td>
-                      <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center ms-1">
-                          <h6 class="mb-0 text-sm font-weight-semibold text-primary">O889915889</h6>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <p class="text-sm text-dark font-weight-semibold mb-0">$1,999</p>
                     </td>
 
                     <td class="align-middle text-center text-sm">
@@ -153,91 +94,16 @@
                     </td>
 
                     <td class="align-middle text-center">
-                      <span class="text-primary text-sm font-weight-normal">23/04/18</span>
-                    </td>
-
-                    <td class="align-middle">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary font-weight-bold text-xs"
-                        data-bs-toggle="tooltip"
-                        data-bs-title="Edit user"
-                      >
-                        <button class="btn btn-sm btn-outline-danger disabled" id="trashButton" >
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </a>
-                    </td>
-
-                    <!-- 倒計時顯示 -->
-                    <td class="align-middle" id="countdown">
-                      00:00
-                    </td>
-                  </tr>
-
-
-                  <!-- 3 -->
-                  <tr>
-                    <td>
-                      <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center ms-1">
-                          <h6 class="mb-0 text-sm font-weight-semibold text-primary">O775982631</h6>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <p class="text-sm text-dark font-weight-semibold mb-0">$2,500</p>
-                    </td>
-
-                    <td class="align-middle text-center text-sm">
-                      <span
-                        class="badge badge-sm border border-danger text-danger"
-                        style="background-color: white"
-                      >
-                        <svg
-                          width="12"
-                          height="12"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="me-1"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                        已取消
-                      </span>
+                      <span class="text-primary text-sm font-weight-normal">現金</span>
                     </td>
 
                     <td class="align-middle text-center">
                       <span class="text-primary text-sm font-weight-normal">23/04/18</span>
                     </td>
-
-                    <td class="align-middle">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary font-weight-bold text-xs"
-                        data-bs-toggle="tooltip"
-                        data-bs-title="Edit user"
-                      >
-                        <button class="btn btn-sm btn-outline-danger disabled">
-                          <i class="bi bi-trash" id="trashButton"></i>
-                        </button>
-                      </a>
-                    </td>
-                    <!-- 倒計時顯示 -->
-                    <td class="align-middle" id="countdown">
-                      00:00
-                    </td>
                   </tr>
 
-                  <!-- 4 -->
+
+                  <!-- 3 -->
                   <tr>
                     <td>
                       <div class="d-flex px-2 py-1">

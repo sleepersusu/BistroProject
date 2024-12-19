@@ -2,18 +2,19 @@
   <Loading :active="isLoading"></Loading>
   <BannerTop :title="'Orders History'"></BannerTop>
   <div class="container">
-    <!-- 如果购物车为空，显示提示信息 -->
-    <div
-      class="d-flex justify-content-center align-items-center flex-column my-5"
-      v-if="cartItems.length === 0"
-    >
-      <i class="bi bi-emoji-frown display-1 mb-3"></i>
-      <h3 class="mb-5">目前還沒有訂單紀錄!</h3>
-      <router-link to="/menu" class="btn btn-primary btn-lg py-3 px-5">去購物吧!</router-link>
-    </div>
-  </div>
-  <div>
-    <Orders></Orders>
+    <!-- 購物車空的，顯示還沒有訂單紀錄-->
+        <div
+          class="d-flex justify-content-center align-items-center flex-column my-5"
+          v-if="cartItems.length === 0"
+        >
+          <i class="bi bi-emoji-frown display-1 mb-3"></i>
+          <h3 class="mb-5">目前還沒有訂單紀錄!</h3>
+          <router-link to="/menu" class="btn btn-primary btn-lg py-3 px-5">去購物吧!</router-link>
+        </div>
+    <!-- 購物車有東西，顯示資訊-->
+        <div >
+          <Orders></Orders>
+        </div>
   </div>
 
 </template>

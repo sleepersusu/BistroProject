@@ -1,7 +1,5 @@
 <template>
-
   <div>
-    <PageTop v-bind:page1="'Home'" v-bind:page2="'AboutUs'"></PageTop>
     <BannerTop v-bind:title="'About Us'"></BannerTop>
   </div>
   <!-- About Start -->

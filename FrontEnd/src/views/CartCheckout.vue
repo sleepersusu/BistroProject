@@ -60,15 +60,27 @@
             <div class="col-lg-4 col-md-6">
               <div class="checkout__order">
                 <!-- 金額 -->
-                  <div><h4>Your Order</h4></div>
-                  <div class="checkout__order__subtotal">
-                    <span>Subtotal</span>
-                    <span>${{ calculateSubtotal }}</span>
-                  </div>
-                  <div class="checkout__order__total">
-                    <strong>Total</strong>
-                    <strong>${{ calculateTotal }}</strong>
-                  </div>
+                <h4>Your Order</h4>
+                <div class="checkout__order__products">Products <span>Total</span></div>
+                <ul>
+                  <li v-for="item in cartItems" :key="item.menu.id">
+                    {{ item.menu.productName }}
+                    <span>${{ (item.cartCount * item.menu.productPrice).toFixed(2) }}</span>
+                  </li>
+                </ul>
+                <div class="checkout__order__subtotal">
+                  Subtotal
+                  <span>${{ calculateSubtotal }}</span>
+                </div>
+                <div class="checkout__order__total" >
+                  Tax
+                  <span style="color: #1c1c1c">${{ calculateTax }}</span>
+                </div>
+                <div class="checkout__order__total">
+                  Total
+                  <span>${{ calculateTotal }}</span>
+                </div>
+
                 <!-- 用餐方式 -->
                   <div class="checkout__input__checkbox">
                     <h4>用餐方式</h4>
@@ -88,16 +100,26 @@
                   </div>
 
 
-
-
-
                 <!-- 付款方式 -->
                   <div class="checkout__input__checkbox">
                     <h4>付款方式</h4>
                     <label for="cash">
-                      <img class="pay" src="https://i.imgur.com/WIAP9Ku.jpg" alt="">
+                      <img class="pay"
+                           src="../../public/images/cash3.png"
+                           alt="">
                       Cash
                       <input type="radio" id="cash" value="Cash" v-model="orderData.PaymentWay" />
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+
+                  <div class="checkout__input__checkbox">
+                    <label for="ECPay">
+                      <img class="pay"
+                           src="../../public/images/ecpay2.png"
+                           alt="">
+                      ECPay
+                      <input type="radio" id="ECPay" value="ECPay" v-model="orderData.PaymentWay" />
                       <span class="checkmark"></span>
                     </label>
                   </div>
@@ -150,7 +172,7 @@ export default defineComponent({
   components: { PageTop, BannerTop },
   data() {
     return {
-      // cartItems:[],
+      cartItems:[],
       orderData: {
         ordersName: '', // 姓名
         ordersTel: '', // 電話
@@ -164,13 +186,12 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapActions(cartStore, ["getCart"]),
+    ...mapActions(cartStore, ["getCart","clearCart"]),
 
     async placeOrder() {
       try {
-        const cart = cartStore(); // 获取 Pinia 的 cartStore 实例
         // 檢查購物車是否為空
-          if (!cart.cartItems || cart.cartItems.length === 0) {
+          if (!this.cartItems || this.cartItems.length === 0) {
             throw new Error("購物車是空的")
           }
 
@@ -184,7 +205,7 @@ export default defineComponent({
             latestPaymentStatus: '已付款', // 根據您的業務邏輯設置
             memberId: null, // 如果有會員系統，在此設置
 
-            ordersDetails: cart.cartItems.map(item => ({
+            ordersDetails: this.cartItems.map(item => ({
               odName: item.menu.productName,
               odQuantity: item.cartCount,
               odPrice: item.menu.productPrice,
@@ -195,7 +216,7 @@ export default defineComponent({
               {
                 paymentPrice: parseFloat(this.calculateTotal),
                 paymentWay: this.orderData.PaymentWay,
-                paymentStatus: '已完成',
+                paymentStatus: '成功',
               }
             ]
           };
@@ -205,7 +226,7 @@ export default defineComponent({
           if (response.status === 200) {
             console.log('Order created successfully:', response.data);
             // 清空購物車
-              cart.clearCart();
+              this.clearCart();
             //跳轉
             this.$router.push({
               path: '/cartCheckSuc',
@@ -255,6 +276,7 @@ export default defineComponent({
   created() {
     //撈資料用的
       this.getCart();
+      this.fetchCartItems();
   },
 })
 </script>
@@ -508,8 +530,8 @@ export default defineComponent({
   margin-top: 10px;
 }
 .pay {
-  width: 73px;
-  height: 40px;
+  width: 77px;
+  height: 45px;
   border-radius: 5px;
   border: 1px solid #000;
   margin: 10px 20px 10px 0px;
