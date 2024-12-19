@@ -66,8 +66,35 @@
               </div>
 
             </div>
+            <div v-for="item in pointPrizes" class="position-relative ">
+              <hr />
+              <div class="filter"></div>
+              <div class="row cart-item" >
+                <div class="col-md-3">
+                  <img
+                    :src="'data:image/jpeg;base64,' + item.img"
+                    alt="Product 2"
+                    class="img-fluid rounded"
+                    style="width: 100px; height: 100px; object-fit: cover;"
+                  />
+                </div>
+                <div class="col-md-5 text-black">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <p class="text-muted">積分獎品</p>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2 text-end text-black">
+                  <p class="fw-bold"><del class="text-muted">$99.99 </del> $0</p>
+                  <button class="btn btn-lg btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
+
         <!-- Continue Shopping Button -->
         <div class="text-start mb-4">
           <a href="#" class="btn btn-outline-primary">
@@ -103,6 +130,10 @@
             </button>
           </div>
         </div>
+<<<<<<< HEAD
+        <!-- Promo Code -->
+        <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
+=======
 
         <!-- Promo Code -->
         <div class="card mt-4">
@@ -114,9 +145,11 @@
             </div>
           </div>
         </div>
+>>>>>>> 3b3ce41184f218522db9924f64161126816b1241
       </div>
     </div>
   </div>
+
 </template>
 
 
@@ -130,6 +163,7 @@ import CartTitle from '@/components/cart/CartTitle.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
+import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 const user = useUserStore()
@@ -144,15 +178,26 @@ export default {
     CartTitle,
     CartTable,
     CartButton,
+    VerifyPromoCode,
   },
   data() {
     return {
+      pointPrizes: [],
       cartItems: [],
-    };
+    }
   },
   methods: {
     ...mapActions(cartStore, ["getCart","CountCart","MinusCart","removeItem"]),
 
+    // 處理子組件傳遞過來的資料
+    handlePromoCodeTransmit(payload) {
+      console.log('從子組件收到的促銷碼名稱:', payload.name)
+
+      this.pointPrizes.push({
+        name: payload.name,
+        img: payload.image
+      })
+    },
   //all
     async fetchCartItems() {
       try {
@@ -215,6 +260,7 @@ export default {
         console.error('未登入會員')
       }
     }
+
   },
   computed: {
     //getter or state 放在computed
@@ -230,6 +276,16 @@ export default {
 
 
 <style scoped>
+.filter{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 7px;
+  background: rgba(255, 76, 63, 0.1);
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
 
 .step-indicator {
   display: flex;

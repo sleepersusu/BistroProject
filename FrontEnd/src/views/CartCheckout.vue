@@ -18,9 +18,7 @@
     <div class="container">
       <div class="checkout__form">
         <h4>Confirm Order</h4>
-
-
-        <form @submit.prevent="placeOrder">
+        <form action="#" ref="form">
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
@@ -133,8 +131,12 @@
                     </label>
                   </div>
 
+
+                  <!-- 新增一個隱藏的 div 來放置綠界表單 -->
+                  <div ref="ecpayFormContainer" style="display: none;"></div>
+
                 <div>
-                  <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
+                  <button type="button" class="btn btn-dark w-100">PLACE ORDER</button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -160,7 +162,6 @@
 <script>
 import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageTop from '@/components/PageTop.vue'
 import { mapState, mapActions } from 'pinia'
 import { cartStore } from '@/stores/cartStore.js'
@@ -187,6 +188,15 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(cartStore, ["getCart","clearCart"]),
+
+    async jumpEcpay() {
+      window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`;
+    },
+    async memberPointGet() {
+      // const pointData {
+
+      // }
+    },
 
     async placeOrder() {
       try {
@@ -278,6 +288,7 @@ export default defineComponent({
       this.getCart();
       this.fetchCartItems();
   },
+
 })
 </script>
 
