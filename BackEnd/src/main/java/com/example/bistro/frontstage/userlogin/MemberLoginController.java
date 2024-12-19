@@ -39,10 +39,12 @@ public class MemberLoginController {
 			httpSession.setAttribute("lastAccessTime", currentTime);
 			httpSession.setAttribute("membersId", memberData.getId());
 			//Session紀錄資訊
+			System.out.println(httpSession.hashCode());
 			System.out.println("session有取到"+httpSession.getAttribute("membersId"));
 			response.put("status", "success");
 			response.put("memberId", memberData.getId().toString());
 			response.put("memberName", memberData.getMemberName());
+			response.put("memberPoint", memberData.getMemberPoint().toString());
 			return ResponseEntity.ok(response);
 		}else {
 			System.out.println("登入失敗");

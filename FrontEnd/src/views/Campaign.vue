@@ -17,6 +17,13 @@
         ></CampaignCard>
       </div>
     </div>
+    <a href="https://line.me/R/ti/p/@750umglq">
+      <img
+        height="36"
+        src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
+        alt="加入好友"
+      />
+    </a>
     <TestAddChance></TestAddChance>
   </div>
   <LuckyDraw @update-chance="updateChance" ref="drawModal"></LuckyDraw>

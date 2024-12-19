@@ -33,6 +33,7 @@ const { isLoading1 } = storeToRefs(status)
 const lotteryResults = ref([])
 
 export default {
+
   components: { BannerTop, Orders },
   data() {
     return {
@@ -54,3 +55,4 @@ export default {
 }
 </script>
 <style></style>
+

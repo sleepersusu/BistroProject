@@ -1,3 +1,4 @@
+
 <template>
   <div class="container">
     <section class="py-5 overflow-hidden">
@@ -14,6 +15,20 @@
           <div class="col-md-12">
             <div class="category-carousel swiper" refs="carousel">
               <div class="swiper-wrapper d-flex justify-content-around" style="overflow-x: auto">
+
+
+                <button
+                  class="nav-link swiper-slide text-center"
+                  @click="loadAllMenu()"
+                >
+                  <img
+                    src="/public/images/餐點/全部.jpg"
+                    class="rounded-circle button-image"
+                    alt=""
+                  />
+                  <h4 class="fs-6 mt-3 fw-normal category-title">全部</h4>
+                </button>
+
                 <button
                   class="nav-link swiper-slide text-center"
                   v-on:click.prevent="clickCategory('開胃菜')"
@@ -91,10 +106,10 @@
 
   <div class="container">
     <div class="row mt-3">
-      <div class="col-md-3 col-sm-6" v-for="menu in menus" :key="menu.id">
+      <div class="col-md-6 col-lg-4 col-sm-6" v-for="menu in menus" :key="menu.id">
         <MenuCard
           :menu="menu"
-
+          @view-menudescribe="openDescribeModal"
           @getcount="countCommentPeople"
           @view-comment="openModal"
           @update-count="updateCount"
@@ -102,21 +117,24 @@
         >
         </MenuCard>
       </div>
-
-      <MenuCommentModal ref="commentModal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
+        <MenuCommentModal ref="commentModal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
+        <MenuDescribeModal ref="menuDescribeModal" :menu="menu"></MenuDescribeModal>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import MenuCard from '@/components/MenuCard.vue'
 import MenuCommentModal from '@/components/MenuCommentModal.vue'
-import axios from 'axios'
+import MenuDescribeModal from '@/components/MenuDescribeModal.vue';
+
 
 export default {
   components: {
     MenuCard,
     MenuCommentModal,
+    MenuDescribeModal
   },
 
   data() {
@@ -125,6 +143,7 @@ export default {
       currentProduct:'',
       comments: [],
       menuCount: 0,
+      menu:{}
     }
   },
   methods: {
@@ -133,23 +152,19 @@ export default {
 
       axios.get(API_URL).then((response) => {
         this.menus = response.data
-        console.log(response.data)
       })
     },
 
     updateCount(newCount) {
       this.menuCount = newCount
-      console.log('Updated count:', this.menuCount)
     },
 
     handleAddToCart({ id, count }) {
-      console.log(`Added to cart: ID=${id}, Count=${count}`)
     },
 
     // 按分類加載菜單數據
     clickCategory(category) {
       this.isLoading = true
-
       let API_URL = `${import.meta.env.VITE_API}/api/menu/${category}`
 
       this.axios
@@ -179,11 +194,26 @@ export default {
 
       this.$refs.commentModal.showModal()
     },
-  },
+    openDescribeModal(menu) {
+      let api = `${import.meta.env.VITE_API}/api/${menu.id}/menu`
+      this.axios
+        .get(api)
+        .then((response) => {
+          this.menu = response.data
+        })
+        .catch((error) => {
+          console.error('Error loading menu:', error)
+        })
 
+      this.$refs.menuDescribeModal.showModal()
+    },
+
+
+
+
+  },
   created() {
     this.loadAllMenu()
-
   }
 }
 </script>

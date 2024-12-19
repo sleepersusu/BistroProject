@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1>兌換獎品列表</h1>
+    <BannerTop :title="'PointShop'"></BannerTop>
 
-    <div class="container d-flex">
+    <div class="container d-flex my-5">
       <ul class="d-flex flex-wrap">
         <li
           v-for="prize in pointPrizes"
@@ -41,22 +41,24 @@
       </ul>
     </div>
 
-    <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal"/>
+    <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal" />
   </div>
 </template>
 
 <script>
-import PointTotal from '@/components/PointTotal.vue'
+import BannerTop from '@/components/BannerTop.vue';
+import PointTotal from '@/components/PointTotal.vue';
 
 export default {
   components: {
     PointTotal,
+    BannerTop,
   },
   data() {
     return {
       pointPrizes: [],
       redeemedPrize: {},
-      memberId: 9,
+      memberId: localStorage.memberId,
     }
   },
   methods: {
@@ -74,11 +76,16 @@ export default {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
 
       const response = await this.axios.get(api)
-      this.pointPrizes = response.data
+      // console.log("66666", response)
+      // console.log(localStorage)
+      // console.log(localStorage.memberId)
 
+      const memberId = localStorage.memberId
+      this.pointPrizes = response.data
     },
 
     async redeemPrize(prize) {
+      //確定兌換跳出視窗
       const result = await Swal.fire({
         icon: 'question',
         title: `確定要兌換${prize.pointPrizesName}嗎?`,
@@ -89,44 +96,46 @@ export default {
         reverseButtons: true,
       })
 
+      //if(兌換成功)產生兌換碼
       if (result.isConfirmed) {
-        // 生成優惠碼
         const promoCode = this.generateRandomCode()
 
         // 調用子組件的方法更新優惠碼和商品信息
         this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode}
 
-        const memberId = 9 // 假資料，會員 ID 為 9
+        const memberId = this.memberId
         if (memberId) {
-          // const pointPrizesId = prize.id;  // 商品 ID 來自按下的商品
-          // const recordsDate = new Date().toISOString();  // 使用當前時間作為兌換日期
 
           const requestData = {
             memberId,
-            pointPrizesId: prize.id,
-            recordsDate: new Date().toISOString(),
+            pointPrizesId: prize.id,// 商品 ID 來自按下的商品
+            recordsDate: new Date().toISOString(),// 使用當前時間作為兌換日期
           }
 
           const promoData = {
             memberId,
             pointPrizesId: prize.id,
-            promoCode
+            promoCode,
           }
 
           try {
+            //產生兌換紀錄
             const api = `${import.meta.env.VITE_API}/api/pointRecord`
-
             const response = await this.axios.post(api, requestData)
-            console.log(response)
+            // console.log(response)
 
-            const api3 = `${import.meta.env.VITE_API}/api/promoCode`
-            const response3 = await fetch(api3, {
+            //將會員各自的兌換碼存進SQL
+            const promoApi = `${import.meta.env.VITE_API}/api/promoCode`
+            const promoResponse = await fetch(promoApi, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+              headers: {'Content-Type': 'application/json',},
               body: JSON.stringify(promoData),
             })
+
+            //兌換商品後扣除相對應積分
+            const minusPointApi = `${import.meta.env.VITE_API}/api/minusMemberPoint`
+            const minusPointResponse = await this.axios.post(minusPointApi, requestData)
+            console.log(minusPointResponse)
 
             if (response.data.兌換狀態) {
               window.Swal.fire({
@@ -140,22 +149,20 @@ export default {
                 timerProgressBar: true,
               })
 
-              // 触发子组件重新获取数据的方法
+              // 觸發子組件重新獲取資料的方法
               this.$refs.pointTotal.getPromoCode()
 
-              const api2 = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
-              const response2 = await fetch(api2, {
+              const MinusPrizesApi = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
+              const MinusPrizesResponse = await fetch(MinusPrizesApi, {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
+                headers: {'Content-Type': 'application/json',},
                 body: JSON.stringify(requestData), // 將資料轉換為 JSON 格式發送
               })
 
-              if (response2.ok) {
-                console.log('減少商品數量成功')
+              if (MinusPrizesResponse.ok) {
+                console.log('庫存已減少')
               } else {
-                console.error('減少商品數量失敗:', response2.status, await response2.text())
+                console.error('庫存減少失敗:', MinusPrizesResponse.status, await MinusPrizesResponse.text())
               }
             } else {
               console.error('Failed to record point:', response.status)
@@ -164,6 +171,7 @@ export default {
             console.error('Error sending request:', error)
           }
         } else {
+          //if(不是會員)跳轉到登入畫面
           window.Swal.fire({
             title: '兌換商品需要點數',
             text: '請先登入會員，才能進行兌換。',

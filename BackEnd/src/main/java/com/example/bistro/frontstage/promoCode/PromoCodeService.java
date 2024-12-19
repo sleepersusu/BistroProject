@@ -27,19 +27,19 @@ public class PromoCodeService {
 		Members member = membersRepository.findById(promoData.getMemberId())
 				.orElseThrow(() -> new RuntimeException("Member not found"));
 
-		PointPrizesBean pointPrize = pointPrizesRepository.findById(promoData.getPointPrizesId())
-				.orElseThrow(() -> new RuntimeException("Point Prize not found"));
+        PointPrizesBean pointPrize = pointPrizesRepository.findById(promoData.getPointPrizesId())
+                .orElseThrow(() -> new RuntimeException("Point Prize not found"));
 
-		PromoCodeBean promoCodeBean = new PromoCodeBean();
-		promoCodeBean.setMembers(member);
-		promoCodeBean.setPointPrizes(pointPrize);
-		promoCodeBean.setPromoCode(promoData.getPromoCode());
+        PromoCodeBean promoCodeBean = new PromoCodeBean();
+        promoCodeBean.setMembers(member);
+        promoCodeBean.setPointPrizes(pointPrize);
+        promoCodeBean.setPromoCode(promoData.getPromoCode());
 
-		promoCodeRepository.save(promoCodeBean);
-	}
-
-	public List<PromoCodeBean> findMemberPromoCode() {
-		return promoCodeRepository.findAll();
-	}
-
+        promoCodeRepository.save(promoCodeBean);
+    }
+    
+    public List<PromoCodeBean> findMemberPromoCode(int memberId){
+    	return promoCodeRepository.findMemberPromoCode(memberId);
+    }
+    
 }

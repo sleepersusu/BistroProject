@@ -18,9 +18,7 @@
     <div class="container">
       <div class="checkout__form">
         <h4>Confirm Order</h4>
-
-
-        <form @submit.prevent="placeOrder">
+        <form action="#" ref="form">
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
@@ -148,8 +146,12 @@
                     </label>
                   </div>
 
+
+                  <!-- 新增一個隱藏的 div 來放置綠界表單 -->
+                  <div ref="ecpayFormContainer" style="display: none;"></div>
+
                 <div>
-                  <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
+                  <button type="button" class="btn btn-dark w-100">PLACE ORDER</button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -175,7 +177,6 @@
 <script>
 import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageTop from '@/components/PageTop.vue'
 import { mapState, mapActions } from 'pinia'
 import { cartStore } from '@/stores/cartStore.js'
@@ -205,16 +206,27 @@ export default defineComponent({
   methods: {
     ...mapActions(cartStore, ["getCart","clearCart"]),
 
+
     validatePhone() {
       // 移除非數字的字
       //replace(/\D/g, '') 是 JavaScript 中 String.prototype.replace() 方法的一種用法，移除字串中的所有非數字的字。
         this.orderData.ordersTel = this.orderData.ordersTel.replace(/\D/g, '');
     },
+    
     validateName() {
       // 僅保留中文和英文，移除數字和特殊符號
       this.orderData.ordersName = this.orderData.ordersName
         .replace(/[^a-zA-Z\u4e00-\u9fa5]/g, '') // 非中文或英文的字符替換為空
         .slice(0,15);
+     },
+
+    async jumpEcpay() {
+      window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`;
+    },
+    
+    async memberPointGet() {
+      // const pointData {
+      // }
     },
 
     async placeOrder() {
@@ -308,6 +320,7 @@ export default defineComponent({
       this.getCart();
       this.fetchCartItems();
   },
+
 })
 </script>
 
