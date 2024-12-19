@@ -135,7 +135,7 @@
                   <div ref="ecpayFormContainer" style="display: none;"></div>
 
                 <div>
-                  <button type="button" class="btn btn-dark w-100" @click="jumpEcpay">PLACE ORDER</button>
+                  <button type="button" class="btn btn-dark w-100">PLACE ORDER</button>
                 </div>
 
                 <button class="btn btn-dark w-100">
