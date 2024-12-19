@@ -87,12 +87,7 @@ const router = createRouter({
           path: '/cartCheckFail',
           component: () => import('../views/CartCheckFail.vue'),
         },
-        {
-          path: '/lotteryResult',
-          component: () => import('../views/LotteryResult.vue'),
 
-
-        },
       ],
     },
   ],
