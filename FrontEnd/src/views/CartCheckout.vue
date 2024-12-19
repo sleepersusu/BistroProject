@@ -19,7 +19,6 @@
       <div class="checkout__form">
         <h4>Confirm Order</h4>
 
-
         <form @submit.prevent="placeOrder">
           <div class="row">
             <div class="col-lg-8 col-md-6">
@@ -272,7 +271,6 @@ export default defineComponent({
           this.$router.push('/cartCheckFail'); // 跳失敗
         }
     },
-
 
 
     //all

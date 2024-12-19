@@ -24,9 +24,9 @@ public class OrdersService {
                 return ordersRepository.findByOrdersTel(ordersTel);
             }
         // 根據ordersNumber查詢訂單
-        public Optional<Orders> findOrderByOrdersNumber(String ordersNumber) {
-            return ordersRepository.findByOrdersNumber(ordersNumber);
-        }
+            public Optional<Orders> findOrderByOrdersNumber(String ordersNumber) {
+                return ordersRepository.findByOrdersNumber(ordersNumber);
+            }
 
     //使用者看到目前自己擁有的訂單
         //使用者點擊該筆訂單ID時候，會出現訂單詳情

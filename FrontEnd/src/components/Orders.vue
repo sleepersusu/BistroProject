@@ -40,36 +40,36 @@
                   <tr>
                     <th class="text-dark text-xs font-weight-semibold opacity-7">訂單編號</th>
                     <th class="text-dark text-xs font-weight-semibold opacity-7 ps-2">金額</th>
-                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">
-                      付款狀態
-                    </th>
-                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">
-                      付款方式
-                    </th>
-                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">
-                      日期
-                    </th>
-
+                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">付款狀態</th>
+                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">付款方式</th>
+                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">日期</th>
                   </tr>
                 </thead>
 
                 <tbody>
-
-                  <tr>
+                  <tr v-for="order in orderItems" :key="order.id">
                     <td>
                       <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center ms-1">
-                          <h6 class="mb-0 text-sm font-weight-semibold text-primary">O123456789</h6>
+                          <h6 class="mb-0 text-sm font-weight-semibold text-primary">
+                            {{ order.ordersNumber }}
+                          </h6>
                         </div>
                       </div>
                     </td>
 
                     <td>
-                      <p class="text-sm text-dark font-weight-semibold mb-0">$1,215</p>
+                      <p class="text-sm text-dark font-weight-semibold mb-0">
+                        {{ order.ordersSumPrice }}
+                      </p>
                     </td>
+
+
+
 
                     <td class="align-middle text-center text-sm">
                       <span
+                        v-if="order.latestPaymentStatus === '已付款'"
                         class="badge badge-sm border border-success text-success"
                         style="background-color: white"
                       >
@@ -89,36 +89,10 @@
                             stroke-linejoin="round"
                           />
                         </svg>
-                        已完成
+                        {{ order.latestPaymentStatus }}
                       </span>
-                    </td>
-
-                    <td class="align-middle text-center">
-                      <span class="text-primary text-sm font-weight-normal">現金</span>
-                    </td>
-
-                    <td class="align-middle text-center">
-                      <span class="text-primary text-sm font-weight-normal">23/04/18</span>
-                    </td>
-                  </tr>
-
-
-                  <!-- 3 -->
-                  <tr>
-                    <td>
-                      <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center ms-1">
-                          <h6 class="mb-0 text-sm font-weight-semibold text-primary">O789635631</h6>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <p class="text-sm text-dark font-weight-semibold mb-0">$2,800</p>
-                    </td>
-
-                    <td class="align-middle text-center text-sm">
                       <span
+                        v-else-if="order.latestPaymentStatus === '已取消'"
                         class="badge badge-sm border border-danger text-danger"
                         style="background-color: white"
                       >
@@ -138,19 +112,22 @@
                             d="M6 18L18 6M6 6l12 12"
                           />
                         </svg>
-                        已取消
+                        {{ order.latestPaymentStatus }}
                       </span>
                     </td>
+
                     <td class="align-middle text-center">
-                      <span class="text-primary text-sm font-weight-normal">綠界支付</span>
+                      <span class="text-primary text-sm font-weight-normal">
+                        {{ order.payment[0]?.paymentWay || '未支付' }}
+                      </span>
                     </td>
 
                     <td class="align-middle text-center">
-                      <span class="text-primary text-sm font-weight-normal">23/04/18</span>
+                      <span class="text-primary text-sm font-weight-normal">
+                        {{ order.payment[0]?.createdAt }}
+                      </span>
                     </td>
-
                   </tr>
-
 
                 </tbody>
               </table>
@@ -171,11 +148,34 @@
 </template>
 <script>
 import PageTop from '@/components/PageTop.vue'
+import { mapState, mapActions } from 'pinia'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { cartStore } from '@/stores/cartStore.js'
+import { useUserStore } from '@/stores/userStore.js'
+import { ref } from 'vue'
+import { orderStore } from '@/stores/orderStore.js'
 
+
+const user = useUserStore()
 export default {
   name: 'Orders',
-  components: { PageTop },
-}
+  components: {
 
+  },
+
+  data(){
+
+  },
+  methods: {
+    ...mapActions(orderStore, ["getOrder"]),
+  },
+  computed:{
+    ...mapState(orderStore, ['orderItems']),
+  },
+  watch:{},
+  created() {
+    this.getOrder();
+  },
+}
 </script>
 <style></style>

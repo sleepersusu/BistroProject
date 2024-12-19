@@ -12,7 +12,7 @@
       <router-link to="/menu" class="btn btn-primary btn-lg py-3 px-5">去購物吧!</router-link>
     </div>
     <!-- 購物車有東西，顯示資訊 -v-else -->
-    <div >
+    <div v-else>
       <Orders></Orders>
     </div>
   </div>

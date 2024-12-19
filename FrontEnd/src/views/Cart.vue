@@ -90,9 +90,7 @@
                       <span>Tax</span>
                       <span>${{ calculateTax }}</span>
                     </div>
-
                     <hr />
-
                     <div class="d-flex justify-content-between mb-4" style="color: #dd2222">
                       <strong>Total</strong>
                       <strong>${{ calculateTotal }}</strong>
@@ -126,8 +124,6 @@ import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 import { ref } from 'vue'
 const user = useUserStore()
-
-
 export default {
   name: 'Cart',
   components: {
