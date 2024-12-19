@@ -33,7 +33,7 @@
 
       <div >
         <figure>
-          <img :src="menuSrc"  class="img-fixed" v-on:click.prevent="viewDescribeModal(menu)">
+          <img :src="menuSrc"  class="img-fixed" v-on:click.prevent.stop="viewDescribeModal(menu)">
         </figure>
       </div>
 
@@ -51,7 +51,7 @@
 
       <li
         class="lookComment"
-        v-on:click.prevent="viewComment(menu)"
+        v-on:click.prevent.stop="viewComment(menu)"
         style="list-style-type: none;"
       >
         <i class="bi bi-chat-left-text"></i>觀看評論
@@ -83,7 +83,7 @@
           </span>
 
         </div>
-        <button class=" btn btn-primary mt-3" >Add to Cart</button>
+        <button class=" btn btn-primary mt-3" v-on:click.prevent="handleAddToCart">Add to Cart</button>
       </div>
 
     </div>
@@ -96,7 +96,7 @@
 import axios from 'axios'
 import StarRating from 'vue-star-rating'
 import LoadingVue from 'vue3-loading-overlay'
-
+import { defineProps, computed, defineEmits } from 'vue'
 export default {
   components: {
     'star-rating': StarRating,
@@ -108,7 +108,9 @@ export default {
       required: true, // 如果 menu 是必需的
     },
   },
-  emits: ['update-count', 'addToCart','image-loaded','view-comment','view-menudescribe'],
+
+emits: ['update-count', 'addToCart','image-loaded','view-comment','view-menudescribe'],
+
 
   data() {
     return {

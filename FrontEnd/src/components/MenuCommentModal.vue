@@ -21,18 +21,18 @@
 
           <div  v-for="comment in comments" :key="comment.id">
             <div class="modal-body" >
-              <div style="display: flex">
-                <div>
+              <div class="d-md-flex">
+
                   <div>
                     <section class="avatar-container">
-                      <img src="" alt="" class="avatar" />
+                      <img src="/public/images/SU大頭照.jpg" alt="" class="avatar" />
                     </section>
 
                     <section>
                       <h4>{{ comment.memberName }}</h4>
                     </section>
                   </div>
-                </div>
+
 
                 <div>
                   <section>
@@ -42,14 +42,23 @@
                       :increment="1"
                       :star-size="20"
                       style="font-size: 15px"
+                      :rounded-corners="true"
+                      :border-width="4"
+                      :show-rating="false"
+                      :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
                     ></star-rating>
                   </section>
 
-                  <section>
-                    {{ comment.commentMessage || '沒有提供評論內容。' }}
-                  </section>
+
                 </div>
+                <section >
+                    {{ comment.commentMessage || '沒有提供評論內容。' }}好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃好吃
+              </section>
               </div>
+
+
+
+
             </div>
           </div>
         </div>
@@ -59,8 +68,6 @@
   </template>
 
   <script>
-
-
   import ModalMixin from '@/mixins/modalMixin-option'
   import StarRating from 'vue-star-rating'
 
@@ -119,12 +126,19 @@
           }
       }}
   }
-
   </script>
 
 
   <style scoped>
+  .avatar-container>img{
+    width: 100px;
+  }
 
+  .commentSection{
+
+
+
+  }
 
 
   </style>

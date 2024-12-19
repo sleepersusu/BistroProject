@@ -33,7 +33,7 @@ public class MenuRestController {
 		Menu menu = menuService.findMenuById(ID);
 		
 		if(menu==null) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		
 		return ResponseEntity.ok(menu);

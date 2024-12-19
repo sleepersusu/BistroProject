@@ -42,10 +42,6 @@ export default {
       type: Object,
       required: true,
     },
-    currentId:{
-      type:Number,
-      required: true,
-    }
   },
   components:{
     StarRating,
@@ -77,7 +73,8 @@ export default {
 
   },
   created(){
-    console.log('Menu ID:', this.menu.id);
+    alert(menu)
+    console.log('Menu ID:', this.menu);
     this.loadPicture(this.menu.id)
   }
 }

@@ -2,9 +2,7 @@
 
   <div class="container-fluid">
     <div class="row">
-      <nav class="col-md-3 col-lg-2 p-3 bg-light">
-        <MembercenterNav></MembercenterNav>
-      </nav>
+
       <main class="col-md-9 col-lg-10 p-4">
         <h1 class="text-center">我的評論</h1>
         <div class="container-fluid py-4 px-5">
@@ -42,6 +40,7 @@
                           <td colspan="4">目前尚未有評論</td>
                         </tr>
                       </tbody>
+
                     </table>
                   </div>
                   <div class="border-top py-3 px-3 d-flex align-items-center">
@@ -64,13 +63,12 @@
 <script>
 import CommentTable from '@/components/CommentTable.vue'
 import CommentUpdateModal from '@/components/CommentUpdateModal.vue'
-import MembercenterNav from '@/components/memberCenter/membercenterNav.vue';
+
 
 export default {
   components: {
     CommentTable,
     CommentUpdateModal,
-    MembercenterNav,
   },
 
   data() {
