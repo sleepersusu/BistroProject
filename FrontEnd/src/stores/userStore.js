@@ -63,16 +63,19 @@ export const useUserStore = defineStore('userStore', {
 
         const token = response.data.token
         let username = response.data.memberName
+        let userpoint = response.data.memberPoint
         let memberObj = {
           memberId: memberId,
           token: token,
           username: username,
           userAvatar: userAvatar,
+          userpoint
         }
         localStorage.setItem('memberobj', JSON.stringify(memberObj))
         this.isLoggedIn = true // 設置登入
         this.memberprofile.username = username
         this.memberprofile.userAvatar = userAvatar
+        this.memberprofile.userpoint = userpoint
       } catch (error) {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)
