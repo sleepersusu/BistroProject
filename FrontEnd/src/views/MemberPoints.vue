@@ -4,17 +4,10 @@
 
     <div class="container d-flex my-5">
       <ul class="d-flex flex-wrap">
-        <li
-          v-for="prize in pointPrizes"
-          :key="prize.id"
-          class="d-flex flex-column"
-          style="width: 18rem; margin: 10px"
-        >
+        <li v-for="prize in pointPrizes" :key="prize.id" class="d-flex flex-column" style="width: 18rem; margin: 10px">
           <div
             v-if="prize.rewardsStatus == '上架中'"
-            class="card"
-            style="height: 490px; position: relative"
-          >
+            class="card" style="height: 490px; position: relative" >
             <!-- 動態綁定圖片的 Base64 編碼 -->
             <img
               :src="'data:image/jpeg;base64,' + prize.base64Image"
@@ -32,9 +25,8 @@
                 href="#"
                 class="btn btn-primary mt-auto"
                 style="position: absolute; bottom: 16px"
-                @click="redeemPrize(prize)"
-                >兌換商品</a
-              >
+                @click="redeemPrize(prize)">兌換商品
+              </a>
             </div>
           </div>
         </li>
