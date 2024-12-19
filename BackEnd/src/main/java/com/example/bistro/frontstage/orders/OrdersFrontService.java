@@ -11,6 +11,8 @@ import com.example.bistro.backstage.ordersDetails.OrdersDetailsRepository;
 import com.example.bistro.backstage.payment.Payment;
 import com.example.bistro.backstage.payment.PaymentRepository;
 import com.example.bistro.backstage.seats.SeatsRepository;
+import com.example.bistro.frontstage.cart.CartRepository;
+import com.example.bistro.frontstage.cart.CartService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,12 @@ public class OrdersFrontService {
 
     @Autowired
     private MenuRepository menuRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private CartService cartService;
 
 
     // 生成訂單編號
@@ -98,9 +106,9 @@ public class OrdersFrontService {
                         throw new RuntimeException("Menu item not found for ID: " + detailsDTO.getMenuId());
                     }
                 }
-                orderDetail.setOrders(savedOrder);  // 設定對應的訂單
-                ordersDetailsRepository.save(orderDetail);  // 儲存訂單詳情
-                orderDetails.add(orderDetail);
+                    orderDetail.setOrders(savedOrder);  // 設定對應的訂單
+                    ordersDetailsRepository.save(orderDetail);  // 儲存訂單詳情
+                    orderDetails.add(orderDetail);
             }
             savedOrder.setOrdersDetails(orderDetails);
 
@@ -116,6 +124,11 @@ public class OrdersFrontService {
                 payments.add(payment);
             }
             savedOrder.setPayment(payments);
+
+            if (ordersDTO.getMemberId() != null) {
+                cartService.clearCartByMemberId(ordersDTO.getMemberId());
+            }
+
 
         // 返回儲存的訂單
             return ordersRepository.save(newOrder);
