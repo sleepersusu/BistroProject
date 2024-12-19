@@ -90,7 +90,7 @@
                         </div>
                     </form>
                     <div class="modal-footer d-flex justify-content-center w-100">
-                        <button v-google-signin-button="clientId" class="google-signin-button"> Continue with
+                        <button v-google-signin-button="googleLogin" class="google-signin-button"> Continue with
                             Google</button>
                     </div>
                 </div>
@@ -103,8 +103,8 @@
 import { useUserStore } from '@/stores/userStore';
 import Modal from 'bootstrap/js/dist/modal';
 import { mapActions } from 'pinia';
-export default {
 
+export default {
     data() {
         return {
             loginModalElement:null,
@@ -112,7 +112,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions(useUserStore, ['submitLogin', 'submitRegister']),
+        ...mapActions(useUserStore, ['submitLogin', 'submitRegister','googleLogin']),
         openLoginModal() {
             // 手動開啟登入模態框
             this.loginModalElement= document.getElementById('loginModal');
@@ -130,7 +130,7 @@ export default {
         sendRegister(event) {
             this.submitRegister(event);
             this.registermodel.hide();
-        }
+        },
     },
 
 };

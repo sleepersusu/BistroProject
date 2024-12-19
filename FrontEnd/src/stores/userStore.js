@@ -102,6 +102,10 @@ export const useUserStore = defineStore('userStore', {
         console.error('登入失敗', error)
       }
     },
+    googleLogin(){
+      let Google_URL = `${this.apiUrl}/google/login`
+      let res=axios.get(Google_URL);
+    }
   },
   getters: {
     memberId: () => Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId) || null,
