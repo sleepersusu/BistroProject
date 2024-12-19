@@ -15,6 +15,9 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/userStore'
+const user = useUserStore()
+
   export default {
   data() {
     return {
@@ -24,7 +27,7 @@
   },
   methods: {
     async verifyPromoCode() {
-      const api = `${import.meta.env.VITE_API}/api/showPromoCode/${localStorage.memberId}`
+      const api = `${import.meta.env.VITE_API}/api/showPromoCode/${user.memberId}`
       const response = await this.axios.get(api)
       this.promoCode = response.data
 

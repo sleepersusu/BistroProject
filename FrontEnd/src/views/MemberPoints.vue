@@ -43,22 +43,29 @@
 
     <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal" />
   </div>
+
+  <login ref="loginModal"></login>
 </template>
 
 <script>
-import BannerTop from '@/components/BannerTop.vue';
-import PointTotal from '@/components/PointTotal.vue';
+import BannerTop from '@/components/BannerTop.vue'
+import PointTotal from '@/components/PointTotal.vue'
+import { useUserStore } from '@/stores/userStore'
+import login from '@/components/login.vue'
+
+const user = useUserStore()
 
 export default {
   components: {
     PointTotal,
     BannerTop,
+    login,
   },
   data() {
     return {
       pointPrizes: [],
       redeemedPrize: {},
-      memberId: localStorage.memberId,
+      memberId: user.memberId,
     }
   },
   methods: {
@@ -71,6 +78,9 @@ export default {
       }
       return result
     },
+    openLoginModal() {
+      this.$refs.loginModal.openLoginModal()
+    },
 
     async getPointPrizes() {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
@@ -80,7 +90,7 @@ export default {
       // console.log(localStorage)
       // console.log(localStorage.memberId)
 
-      const memberId = localStorage.memberId
+      const memberId = user.memberId
       this.pointPrizes = response.data
     },
 
@@ -101,15 +111,14 @@ export default {
         const promoCode = this.generateRandomCode()
 
         // 調用子組件的方法更新優惠碼和商品信息
-        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode}
+        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode }
 
-        const memberId = this.memberId
+        const memberId = user.memberId
         if (memberId) {
-
           const requestData = {
             memberId,
-            pointPrizesId: prize.id,// 商品 ID 來自按下的商品
-            recordsDate: new Date().toISOString(),// 使用當前時間作為兌換日期
+            pointPrizesId: prize.id, // 商品 ID 來自按下的商品
+            recordsDate: new Date().toISOString(), // 使用當前時間作為兌換日期
           }
 
           const promoData = {
@@ -128,7 +137,7 @@ export default {
             const promoApi = `${import.meta.env.VITE_API}/api/promoCode`
             const promoResponse = await fetch(promoApi, {
               method: 'POST',
-              headers: {'Content-Type': 'application/json',},
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(promoData),
             })
 
@@ -155,14 +164,18 @@ export default {
               const MinusPrizesApi = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
               const MinusPrizesResponse = await fetch(MinusPrizesApi, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json',},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestData), // 將資料轉換為 JSON 格式發送
               })
 
               if (MinusPrizesResponse.ok) {
                 console.log('庫存已減少')
               } else {
-                console.error('庫存減少失敗:', MinusPrizesResponse.status, await MinusPrizesResponse.text())
+                console.error(
+                  '庫存減少失敗:',
+                  MinusPrizesResponse.status,
+                  await MinusPrizesResponse.text(),
+                )
               }
             } else {
               console.error('Failed to record point:', response.status)
@@ -182,7 +195,8 @@ export default {
             reverseButtons: true, // 反轉按鈕的顯示順序
           }).then((result) => {
             if (result.isConfirmed) {
-              this.$router.push({ path: 'Login' })
+              // this.$router.push({ path: 'Login' })
+              this.openLoginModal()
             } else {
               console.log('User canceled the action')
             }

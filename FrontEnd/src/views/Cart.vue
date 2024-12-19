@@ -130,22 +130,8 @@
             </button>
           </div>
         </div>
-<<<<<<< HEAD
         <!-- Promo Code -->
         <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
-=======
-
-        <!-- Promo Code -->
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title mb-3">Apply Promo Code</h5>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Enter promo code">
-              <button class="btn btn-outline-secondary" type="button">Apply</button>
-            </div>
-          </div>
-        </div>
->>>>>>> 3b3ce41184f218522db9924f64161126816b1241
       </div>
     </div>
   </div>
