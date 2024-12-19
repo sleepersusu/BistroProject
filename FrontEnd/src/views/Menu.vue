@@ -1,3 +1,4 @@
+
 <template>
   <div class="container">
     <section class="py-5 overflow-hidden">
@@ -14,6 +15,20 @@
           <div class="col-md-12">
             <div class="category-carousel swiper" refs="carousel">
               <div class="swiper-wrapper d-flex justify-content-around" style="overflow-x: auto">
+
+
+                <button
+                  class="nav-link swiper-slide text-center"
+                  @click="loadAllMenu()"
+                >
+                  <img
+                    src="/public/images/餐點/全部.jpg"
+                    class="rounded-circle button-image"
+                    alt=""
+                  />
+                  <h4 class="fs-6 mt-3 fw-normal category-title">全部</h4>
+                </button>
+
                 <button
                   class="nav-link swiper-slide text-center"
                   v-on:click.prevent="clickCategory('開胃菜')"

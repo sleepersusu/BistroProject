@@ -86,9 +86,9 @@ export default {
       let API_URL = `${import.meta.env.VITE_API}/api/member/comment`
 
       this.axios
-        .get(API_URL,{ withCredentials: true })
+        .get(API_URL,{withCredentials: true})
         .then(async (response) => {
-          
+
           this.comments = response.data
           this.NoComment = false
         })

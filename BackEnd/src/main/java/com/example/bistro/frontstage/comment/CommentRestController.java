@@ -75,9 +75,6 @@ public class CommentRestController {
 
 		try {
 
-		
-
-
 			Integer menuId = Integer.parseInt(requestData.get("menuId").toString());
 			Short commentRating = Short.parseShort(requestData.get("commentRating").toString());
 			String commentMessage = requestData.get("commentMessage").toString();
@@ -131,9 +128,7 @@ public class CommentRestController {
 
 		// 從 HttpSession 獲取會員 ID
 		Integer memberId = (Integer) httpSession.getAttribute("membersId");
-		
-		
-		
+				
 		System.out.println("會員 ID: " + memberId);	
 		
 		
