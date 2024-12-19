@@ -85,10 +85,10 @@ export default {
                         responseType: 'blob',
                     })
                 if (imgData.data.size === 0) {
-                    
+
                     userAvatar = "/images/avatar.jpg";
                 } else {
-                    
+
                     userAvatar = URL.createObjectURL(imgData.data);
                 }
                 this.$emit('user-login', userAvatar, username)

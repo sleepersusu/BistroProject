@@ -40,7 +40,6 @@
                           <td colspan="4">目前尚未有評論</td>
                         </tr>
                       </tbody>
-
                     </table>
                   </div>
                   <div class="border-top py-3 px-3 d-flex align-items-center">
@@ -75,8 +74,6 @@ export default {
     return {
       comments: [],
       NoComment: true,
-
-      currentCommentId: '',
     }
   },
   methods: {
@@ -96,10 +93,10 @@ export default {
         })
     },
 
-    async openUpdateCommentModal(comment) {
-      this.currentCommentId = comment.id
-      this.$refs.commentUpdateModal.showModal()
-    },
+    // async openUpdateCommentModal(comment) {
+    //   this.currentCommentId = comment.id
+    //   this.$refs.commentUpdateModal.showModal()
+    // },
   },
 
   created() {
