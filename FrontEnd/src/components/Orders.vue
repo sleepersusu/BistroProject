@@ -141,27 +141,14 @@
                         已取消
                       </span>
                     </td>
+                    <td class="align-middle text-center">
+                      <span class="text-primary text-sm font-weight-normal">綠界支付</span>
+                    </td>
 
                     <td class="align-middle text-center">
                       <span class="text-primary text-sm font-weight-normal">23/04/18</span>
                     </td>
 
-                    <td class="align-middle">
-                      <a
-                        href="javascript:;"
-                        class="text-secondary font-weight-bold text-xs"
-                        data-bs-toggle="tooltip"
-                        data-bs-title="Edit user"
-                      >
-                        <button class="btn btn-sm btn-outline-danger disabled">
-                          <i class="bi bi-trash" id="trashButton"></i>
-                        </button>
-                      </a>
-                    </td>
-                    <!-- 倒計時顯示 -->
-                    <td class="align-middle" id="countdown">
-                      00:00
-                    </td>
                   </tr>
 
 
