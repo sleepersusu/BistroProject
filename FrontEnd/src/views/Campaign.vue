@@ -17,13 +17,7 @@
         ></CampaignCard>
       </div>
     </div>
-    <a href="https://line.me/R/ti/p/@750umglq">
-      <img
-        height="36"
-        src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
-        alt="加入好友"
-      />
-    </a>
+    <CampaignLineLink></CampaignLineLink>
     <TestAddChance></TestAddChance>
   </div>
   <LuckyDraw @update-chance="updateChance" ref="drawModal"></LuckyDraw>
@@ -47,6 +41,7 @@ import { useUserStore } from '@/stores/userStore'
 
 // test
 import TestAddChance from '@/components/TestAddChance.vue'
+import CampaignLineLink from '@/components/CampaignLineLink.vue'
 
 const { fireworksContainer } = useFireWorks(true)
 
