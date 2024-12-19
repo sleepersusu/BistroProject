@@ -15,9 +15,11 @@ import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate'
 import { required, email, min, max, regex } from '@vee-validate/rules'
 import { localize, setLocale } from '@vee-validate/i18n'
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
-
 import VueLuckyCanvas from '@lucky-canvas/vue'
 import StarRating from 'vue-star-rating'
+
+axios.defaults.baseURL = import.meta.env.VITE_API
+axios.defaults.withCredentials = true
 
 defineRule('required', required)
 defineRule('email', email)
@@ -30,7 +32,6 @@ configure({
 })
 
 setLocale('zh_TW')
-
 
 window.Swal = Swal
 

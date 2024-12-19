@@ -9,7 +9,7 @@
     <h3 class="mb-5">目前還沒有抽獎紀錄!</h3>
     <router-link to="/campaign" class="btn btn-primary btn-lg py-3 px-5">來試試手氣吧!</router-link>
   </div>
-  <div class="container py-4 px-5" v-else>
+  <div class="container-fulid py-4 px-5" v-else>
     <div class="row">
       <div class="col-12">
         <div class="card border shadow-xs mb-4">
@@ -18,16 +18,32 @@
               <table class="table align-items-center mb-0">
                 <thead class="bg-gray-100">
                   <tr>
-                    <th class="text-dark text-xs font-weight-semibold opacity-7">會員名稱</th>
-                    <th class="text-dark text-xs font-weight-semibold opacity-7">活動名稱</th>
-                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">
+                    <th
+                      style="min-width: 100px"
+                      class="text-dark text-xs font-weight-semibold opacity-7"
+                    >
+                      會員名稱
+                    </th>
+                    <th
+                      style="min-width: 150px"
+                      class="text-dark text-xs font-weight-semibold opacity-7"
+                    >
+                      活動名稱
+                    </th>
+                    <th
+                      style="min-width: 150px"
+                      class="text-dark text-xs font-weight-semibold opacity-7"
+                    >
                       獎品名稱
                     </th>
-                    <th class="text-center text-dark text-xs font-weight-semibold opacity-7">
+                    <th
+                      style="min-width: 150px"
+                      class="text-dark text-xs font-weight-semibold opacity-7"
+                    >
                       中獎時間
                     </th>
-                    <th class="text-dark opacity-7">活動狀態</th>
-                    <th class="text-dark opacity-7">兌換獎品</th>
+                    <th style="min-width: 100px" class="text-dark opacity-7">活動狀態</th>
+                    <th style="min-width: 150px" class="text-dark opacity-7">兌換獎品</th>
                   </tr>
                 </thead>
 
@@ -49,14 +65,16 @@
                       </p>
                     </td>
 
-                    <td class="align-middle text-center text-sm">
-                      {{ result.prizeName }}
+                    <td class="align-middle">
+                      <p class="text-sm text-dark font-weight-semibold mb-0">
+                        {{ result.prizeName }}
+                      </p>
                     </td>
 
-                    <td class="align-middle text-center">
-                      <span class="text-primary text-sm font-weight-normal">{{
-                        formatDate(result.createdAt)
-                      }}</span>
+                    <td class="align-middle">
+                      <p class="text-sm text-dark font-weight-semibold mb-0">
+                        {{ formatDate(result.createdAt) }}
+                      </p>
                     </td>
                     <td
                       class="align-middle"
@@ -107,10 +125,13 @@
 import BannerTop from '@/components/BannerTop.vue'
 import ShippingDetailsModal from '@/components/ShippingDetailsModal.vue'
 import { statusStore } from '@/stores/statusStore'
+import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
 import axios from 'axios'
 import { utils } from '@/mixins/utils'
 import { storeToRefs } from 'pinia'
+
+const user = useUserStore()
 const { getStatusDisplay, formatDate } = utils()
 
 const status = statusStore()
@@ -118,7 +139,13 @@ const { isLoading } = storeToRefs(status)
 
 const lotteryResults = ref([])
 
+const shippingModal = ref(null)
+const openModal = (id) => {
+  shippingModal.value.showModal(id)
+}
+
 const handleSubmitShipping = async (shippingDetails) => {
+  shippingModal.value.loadingItem = true
   const api = `${import.meta.env.VITE_API}/api/shippingDetails`
   try {
     status.start()
@@ -127,7 +154,8 @@ const handleSubmitShipping = async (shippingDetails) => {
       toast: true,
       position: 'top-end',
       icon: 'success',
-      title: `我們已收到您填寫的資訊`,
+      iconColor: 'black',
+      title: `感謝您的填寫，我們已收到資料！`,
       timer: 2500,
       showConfirmButton: false,
       timerProgressBar: true,
@@ -135,7 +163,7 @@ const handleSubmitShipping = async (shippingDetails) => {
     await getResults()
     shippingModal.value.hideModal()
   } catch (e) {
-    const errorMessage = e.response?.data || '發生錯誤，請稍後再試'
+    const errorMessage = e.response?.data.message || '發生錯誤，請稍後再試'
     window.Swal.fire({
       title: '錯誤',
       text: errorMessage,
@@ -144,12 +172,13 @@ const handleSubmitShipping = async (shippingDetails) => {
       confirmButtonText: '確定',
     })
   } finally {
+    shippingModal.value.loadingItem = false
     status.finish()
   }
 }
 
 const getResults = async () => {
-  const api = `${import.meta.env.VITE_API}/api/winner/member/1`
+  const api = `${import.meta.env.VITE_API}/api/winner/member/${user.memberId}`
   try {
     status.start()
     const res = await axios.get(api)
@@ -160,11 +189,6 @@ const getResults = async () => {
   } finally {
     status.finish()
   }
-}
-
-const shippingModal = ref(null)
-const openModal = (id) => {
-  shippingModal.value.showModal(id)
 }
 
 getResults()
