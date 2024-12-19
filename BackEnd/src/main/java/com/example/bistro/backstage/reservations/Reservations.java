@@ -76,8 +76,6 @@ public class Reservations {
 		this.contactPhone = contactPhone;
 	}
 
-
-
 	public Date getReservationDate() {
 		return reservationDate;
 	}

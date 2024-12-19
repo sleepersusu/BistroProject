@@ -154,6 +154,7 @@ header{
     z-index:1;
 }
 
+
 header button{
     margin-right: 50px;
     margin-top: 10px;
@@ -391,6 +392,10 @@ text-align: left;
 /*------------------------------- datatable套件不要動 -------------------------------------*/
 
 /* form */
+
+fieldset{
+	padding: 0rem 1rem;
+}
 
 
 body .modal {
@@ -671,3 +676,4 @@ body .modal .modal-content form textarea {
 .out-of-stock{
 	color:red;
 }
+

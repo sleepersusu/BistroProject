@@ -96,4 +96,12 @@ import Package from 'package'
 app.use(Package)
 ```
 
+## .env環境建置(必須)
+
+在 `.env` 中引入並註冊套件：
+
+```javascript
+VITE_API=http://localhost:8085
+```
+
 > 如果有不懂的，可以參考 Campaign.vue 檔案中的基本功能實作範例

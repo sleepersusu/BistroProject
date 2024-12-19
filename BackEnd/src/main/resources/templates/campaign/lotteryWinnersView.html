@@ -1,289 +1,471 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>得獎者管理 - DINEEASE餐廳管理系統</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>得獎者管理 - DINEEASE餐廳管理系統</title>
 
-<link rel="icon" th:href="@{/images/favicon.ico}" />
+    <link rel="icon" th:href="@{/images/favicon.ico}" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
-	rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
 
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
-<link rel="stylesheet" th:href="@{/css/demo.css}" />
-<style th:inline="css">
-body {
-	font-family: "Noto Sans TC", sans-serif;
-}
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css"
+    />
+    <link rel="stylesheet" th:href="@{/css/demo.css}" />
+    <style th:inline="css">
+      body {
+        font-family: "Noto Sans TC", sans-serif;
+      }
 
-#edit, #delete {
-	padding: 0.3rem 0.75rem;
-	cursor: pointer;
-	color: white;
-	border: none;
-	border-radius: 10px
-}
+      #edit,
+      #delete {
+        padding: 0.3rem 0.75rem;
+        cursor: pointer;
+        color: white;
+        border: none;
+        border-radius: 10px;
+      }
 
-#edit {
-	background-color: #0071e3;
-	margin-bottom: 0.3rem;
-}
+      #edit {
+        background-color: #0071e3;
+        margin-bottom: 0.3rem;
+      }
 
-#edit:hover {
-	background-color: #2894FF;
-}
+      #edit:hover {
+        background-color: #2894ff;
+      }
 
-#delete {
-	background-color: #CE0000;
-}
+      #delete {
+        background-color: #ce0000;
+      }
 
-#delete:hover {
-	background-color: #FF5151;
-}
+      #delete:hover {
+        background-color: #ff5151;
+      }
 
-#dt-search-0 {
-	margin-right: 2rem
-}
+      #dt-search-0 {
+        margin-right: 2rem;
+      }
 
-#dt-search-0:focus {
-	outline: none;
-}
+      #dt-search-0:focus {
+        outline: none;
+      }
 
-#addData {
-	padding: 0.5rem 1.25rem !important;
-	font-size: 1rem !important;
-	width: auto;
-	height: auto;
-	color: white;
-	background-color: #0071e3;
-	border: none;
-	border-radius: 0;
-	font-weight: normal;
-}
+      #addData {
+        padding: 0.5rem 1.25rem !important;
+        font-size: 1rem !important;
+        width: auto;
+        height: auto;
+        color: white;
+        background-color: #0071e3;
+        border: none;
+        border-radius: 0;
+        font-weight: normal;
+      }
 
-#addData:hover {
-	background-color: #2894FF;
-}
+      #addData:hover {
+        background-color: #2894ff;
+      }
 
-.modal-content {
-	min-width: 400px;
-	height: auto;
-	overflow: auto;
-}
+      .modal-content {
+        min-width: 400px;
+        height: auto;
+        overflow: auto;
+      }
 
-body .modal .modal-content form textarea {
-	width: 350px
-}
+      body .modal .modal-content form textarea {
+        width: 350px;
+      }
 
-#save {
-	background-color: #0071e3;
-	border-radius: 10px;
-	color: white;
-	width: auto;
-	border: none;
-	font-size: 1rem;
-	padding: 0.4rem 2rem;
-}
+      #save {
+        background-color: #0071e3;
+        border-radius: 10px;
+        color: white;
+        width: auto;
+        border: none;
+        font-size: 1rem;
+        padding: 0.4rem 2rem;
+      }
 
-#save:hover {
-	background-color: #2894FF;
-}
+      #save:hover {
+        background-color: #2894ff;
+      }
 
-#reset {
-	border-radius: 10px;
-	background-color: white;
-	color: #0071e3;
-	border: 1px solid #0071e3;
-	height: auto;
-	width: auto;
-	font-size: 1rem;
-	padding: 0.3rem 2rem;
-}
+      #reset {
+        border-radius: 10px;
+        background-color: white;
+        color: #0071e3;
+        border: 1px solid #0071e3;
+        height: auto;
+        width: auto;
+        font-size: 1rem;
+        padding: 0.3rem 2rem;
+      }
 
-#reset:hover {
-	text-decoration: none;
-}
+      #reset:hover {
+        text-decoration: none;
+      }
 
-#buttonbox {
-	margin-top: 0.5rem
-}
-</style>
+      #buttonbox {
+        margin-top: 0.5rem;
+      }
 
+      .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        display: inline-block;
+      }
 
-</head>
+      .spinner {
+        width: 1rem;
+        height: 1rem;
+        border: 0.2em solid #ccc;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.75s linear infinite;
+      }
 
-<body>
-	<!-- DataTable Scripts -->
-	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
 
-	<div id="page">
+  <body>
+    <!-- DataTable Scripts -->
+    <script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
-		<div th:replace="~{layout/navbar}"></div>
-		<div id="right">
-			<div th:replace="~{layout/headerlogout.html}"></div>
+    <div id="page">
+      <div th:replace="~{layout/navbar}"></div>
+      <div id="right">
+        <div th:replace="~{layout/headerlogout.html}"></div>
 
-			<main>
-				<h2>得獎者管理</h2>
-				<section id="workspace">
-					<div>
-						<button type="submit" class="dataButton" id="addData">
-							新增得獎者</button>
-					</div>
-				</section>
+        <main>
+          <h2>得獎者管理</h2>
+          <section id="workspace">
+            <div>
+              <button type="submit" class="dataButton" id="addData">
+                新增得獎者
+              </button>
+            </div>
+          </section>
 
+          <section>
+            <div>
+              <table id="table" class="display">
+                <thead>
+                  <tr>
+                    <th>抽獎結果ID</th>
+                    <th>會員姓名</th>
+                    <th>活動名稱</th>
+                    <th>獎品名稱</th>
+                    <th>中獎時間</th>
+                    <th>活動狀態</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="event-list">
+                  <tr th:each="result : ${allWinners}">
+                    <td th:text="${result[0]}"></td>
+                    <td th:text="${result[1]}"></td>
+                    <td th:text="${result[2]}"></td>
+                    <td th:text="${result[3]}"></td>
+                    <td th:text="${result[4]}"></td>
+                    <td>
+                      <span th:if="${result[5] == '進行中'}" style="color: blue"
+                        >[[${result[5]}]]</span
+                      >
+                      <span th:if="${result[5] == '已過期'}" style="color: red"
+                        >[[${result[5]}]]</span
+                      >
+                    </td>
+                    <td>
+                      <button
+                        type="submit"
+                        id="edit"
+                        th:onclick="openEditModal([[${result[0]}]])"
+                      >
+                        查看
+                      </button>
+                      <form
+                        th:action="@{/Bistro/campaign/winner/delete}"
+                        method="post"
+                      >
+                        <input
+                          type="hidden"
+                          name="id"
+                          th:value="${result[0]}"
+                        />
+                        <button
+                          type="submit"
+                          id="delete"
+                          onclick="return confirm('確定要刪除嗎？');"
+                        >
+                          刪除
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  <tr th:if="${#lists.isEmpty(allWinners)}">
+                    <td colspan="8">沒有抽獎資訊</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
 
+        <div id="addEventModal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>新增得獎者</h1>
+            <form
+              th:action="@{/Bistro/campaign/winner/create}"
+              enctype="multipart/form-data"
+              method="post"
+              id="dataForm"
+            >
+              <fieldset>
+                <legend style="margin-bottom: 1rem; font-weight: bold">
+                  得獎者資訊
+                </legend>
 
-				<section>
-					<div>
-						<table id="table" class="display">
-							<thead>
-								<tr>
-									<th>會員姓名</th>
-									<th>活動名稱</th>
-									<th>獎品名稱</th>
-									<th>中獎時間</th>
-									<th>活動狀態</th>
-									<th>操作</th>
-								</tr>
-							</thead>
-							<tbody id="event-list">
-								<tr th:each="result : ${allWinners}">
-									<td th:text="${result[1]}"></td>
-									<td th:text="${result[2]}"></td>
-									<td th:text="${result[3]}"></td>
-									<td th:text="${result[4]}"></td>
-									<td>
-							            <span th:if="${result[5] == '進行中'}" style="color: blue">[[${result[5]}]]</span>
-							            <span th:if="${result[5] == '已過期'}" style="color: red">[[${result[5]}]]</span>
-							        </td>
-									<td>
+                <div class="question">
+                  <span class="title">會員ID</span>
+                  <input
+                    type="number"
+                    min="1"
+                    name="memberId"
+                    placeholder="請輸入會員ID"
+                  />
+                </div>
 
-										<form th:action="@{/Bistro/campaign/winner/delete}"
-											method="post">
-											<input type="hidden" name="id" th:value="${result[0]}">
-											<button type="submit" id="delete"
-												onclick="return confirm('確定要刪除嗎？');">刪除</button>
-										</form>
-									</td>
-								</tr>
-								<tr th:if="${#lists.isEmpty(allWinners)}">
-									<td colspan="8">沒有抽獎資訊</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
-			</main>
+                <div class="question">
+                  <span class="title">選擇獎品</span>
+                  <select name="prizeId" id="prizeSelect" required>
+                    <option value="">請選擇獎品</option>
+                    <option
+                      th:each="prize : ${allCampaignPrizes}"
+                      th:value="${prize.id}"
+                      th:data-campaign-id="${prize.campaign.id}"
+                      th:data-campaign-title="${prize.campaign.campaignTitle}"
+                      th:text="${prize.prizeName}"
+                    ></option>
+                  </select>
+                </div>
 
+                <div class="question">
+                  <span class="title">活動名稱</span>
+                  <input
+                    type="text"
+                    id="campaignInput"
+                    name="campaignName"
+                    readonly
+                    placeholder="請先選擇獎品"
+                  />
+                  <input type="hidden" id="campaignIdInput" name="campaignId" />
+                </div>
+              </fieldset>
 
-			<div id="addEventModal" class="modal">
-				<div class="modal-content">
-					<span class="close">&times;</span>
-					<h1>新增得獎者</h1>
-					<form th:action="@{/Bistro/campaign/winner/create}"
-						enctype="multipart/form-data" method="post" id="dataForm">
-						<fieldset>
-							<legend style="margin-bottom: 1rem; font-weight: bold">得獎者資訊</legend>	
-							
-							<div class="question">
-							    <span class="title">會員ID</span>
-							    <input type="number" min="1"  name="memberId" placeholder="請輸入會員ID"/>
-							</div>						
+              <div id="buttonbox">
+                <button type="submit" id="save" class="formbutton">儲存</button>
+                <button type="reset" id="reset" class="formbutton">重設</button>
+              </div>
+            </form>
+          </div>
+        </div>
 
-							<div class="question">
-							    <span class="title">選擇獎品</span>
-							    <select name="prizeId" id="prizeSelect" required>
-							        <option value="">請選擇獎品</option>
-							        <option 
-							            th:each="prize : ${allCampaignPrizes}" 
-							            th:value="${prize.id}" 
-							            th:data-campaign-id="${prize.campaign.id}" 
-							            th:data-campaign-title="${prize.campaign.campaignTitle}" 
-							            th:text="${prize.prizeName}">
-							        </option>
-							    </select>
-							</div>
-							
-							<div class="question">
-							    <span class="title">活動名稱</span>
-							    <input type="text" id="campaignInput" name="campaignName" readonly placeholder="請先選擇獎品">
-							    <input type="hidden" id="campaignIdInput" name="campaignId"> 
-							</div>							
-							
-						</fieldset>
+        <div id="addEventModal2" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>配送資訊</h1>
+            <form id="dataForm">
+              <fieldset>
+                <legend style="margin-bottom: 1rem; font-weight: bold">
+                  得獎者資訊
+                </legend>
+                <p style="display: none" id="shipId"></p>
+                <p style="display: none" id="isSend"></p>
 
-						<div id="buttonbox">
-							<button type="submit" id="save" class="formbutton">儲存</button>
-							<button type="reset" id="reset" class="formbutton">重設</button>
-						</div>
-					</form>
-				</div>
-			</div>
+                <div class="question">
+                  <span class="title">姓名:</span>
+                  <p id="name">目前沒有資訊</p>
+                </div>
 
-			<footer> &copy; Made by TeamWork </footer>
-		</div>
-	</div>
+                <div class="question">
+                  <span class="title">電話:</span>
+                  <p id="phone">目前沒有資訊</p>
+                </div>
 
+                <div class="question">
+                  <span class="title">信箱:</span>
+                  <p id="email">目前沒有資訊</p>
+                </div>
 
+                <div class="question">
+                  <span class="title">地址:</span>
+                  <p id="address">目前沒有資訊</p>
+                </div>
 
-	<script>
-		$("#table").DataTable({
-			scrollX : "90%",
-			scrollY : "500px",
-			
-		})		
-		
-		
-		// jquery寫法 end
-		
-		document.getElementById("addData").addEventListener("click", () => {
-        	document.getElementById("addEventModal").style.display = "block";
-     	 });
+                <div class="question">
+                  <span class="title">留言</span>
+                  <textarea id="notes" readonly rows="3">目前沒有資訊</textarea>
+                </div>
+              </fieldset>
 
-		document.querySelectorAll(".close").forEach(closeButton => {
-		    closeButton.addEventListener("click", () => {
-		        document.getElementById("addEventModal").style.display = "none";
-		        document.getElementById("addEventModal2").style.display = "none";
-		    });
-		});
+              <div id="buttonbox">
+                <button
+                  type="button"
+                  id="save"
+                  class="formbutton"
+                  onclick="sendEmail()"
+                >
+                  <div
+                    class="loading-spinner"
+                    id="emailSpinner"
+                    style="display: none"
+                  >
+                    <div class="spinner"></div>
+                  </div>
+                  確認寄出
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
 
-	      window.onclick = function (event) {
-	        const modal = document.getElementById("addEventModal");
-	        const modal2 = document.getElementById("addEventModal2");
-	        if (event.target == modal || event.target == modal2) {
-	          document.getElementById("addEventModal").style.display = "none";
-	          document.getElementById("addEventModal2").style.display = "none";
-	        }
-	      };    
-	      
-	      document.getElementById('prizeSelect').addEventListener('change', function () {
-		    const selectedPrize = this.options[this.selectedIndex]; 
-		    const campaignInput = document.getElementById('campaignInput'); 
-		    const campaignIdInput = document.getElementById('campaignIdInput'); 
-		
-		    const campaignTitle = selectedPrize.dataset.campaignTitle || ''; 
-		    const campaignId = selectedPrize.dataset.campaignId || ''; 
-		
-		    if (campaignTitle) {
-		        campaignInput.value = campaignTitle; 
-		        campaignIdInput.value = campaignId; 
-		    } else {
-		        campaignInput.value = ''; 
-		        campaignIdInput.value = ''; 
-		    }
-		});
-			      
-	      
-      
-	</script>
-</body>
+        <footer>&copy; Made by TeamWork</footer>
+      </div>
+    </div>
+
+    <script>
+      $("#table").DataTable({
+        scrollX: "90%",
+        scrollY: "500px",
+      });
+
+      // jquery寫法 end
+
+      document.getElementById("addData").addEventListener("click", () => {
+        document.getElementById("addEventModal").style.display = "block";
+      });
+
+      document.querySelectorAll(".close").forEach((closeButton) => {
+        closeButton.addEventListener("click", () => {
+          document.getElementById("addEventModal").style.display = "none";
+          document.getElementById("addEventModal2").style.display = "none";
+          resetInfo();
+        });
+      });
+
+      window.onclick = function (event) {
+        const modal = document.getElementById("addEventModal");
+        const modal2 = document.getElementById("addEventModal2");
+        if (event.target == modal || event.target == modal2) {
+          document.getElementById("addEventModal").style.display = "none";
+          document.getElementById("addEventModal2").style.display = "none";
+          resetInfo();
+        }
+      };
+
+      const sendEmail = async () => {
+        const spinner = document.getElementById("emailSpinner");
+        try {
+          const id = document.getElementById("shipId").innerHTML;
+          const isSend = document.getElementById("isSend").innerHTML;
+          const api = `http://localhost:8085/api/shippingDetails/${id}/ship`;
+
+          if (isSend === "true") {
+            alert("你已經發送過了");
+            return;
+          }
+
+          if (!id || Number(id) <= 0) {
+            alert("無效的配送編號");
+            return;
+          }
+
+          spinner.style.display = "inline-block";
+          const response = await fetch(api, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (response.ok) {
+            alert("已通知得獎者");
+            document.getElementById("isSend").innerHTML = "true";
+          } else {
+            throw new Error(`寄送失敗: ${response.status}`);
+          }
+        } catch (error) {
+          console.error("寄送郵件時發生錯誤:", error);
+          alert("寄送失敗，請稍後再試");
+        } finally {
+          spinner.style.display = "none";
+        }
+      };
+
+      const resetInfo = () => {
+        document.getElementById("name").innerHTML = "目前沒有資訊";
+        document.getElementById("phone").innerHTML = "目前沒有資訊";
+        document.getElementById("email").innerHTML = "目前沒有資訊";
+        document.getElementById("address").innerHTML = "目前沒有資訊";
+        document.getElementById("notes").innerHTML = "目前沒有資訊";
+      };
+
+      async function openEditModal(winnerId) {
+        document.getElementById("addEventModal2").style.display = "block";
+        const api = `http://localhost:8085/api/shippingDetails/${winnerId}`;
+        const jsonData = await fetch(api);
+        if (!jsonData.ok) {
+          return;
+        }
+        const res = await jsonData.json();
+        document.getElementById("shipId").innerHTML = res.id;
+        document.getElementById("name").innerHTML = res.name;
+        document.getElementById("phone").innerHTML = res.phone;
+        document.getElementById("email").innerHTML = res.email;
+        document.getElementById("address").innerHTML = res.address;
+        document.getElementById("notes").innerHTML = res.notes;
+        document.getElementById("isSend").innerHTML = res.isSend;
+      }
+
+      document
+        .getElementById("prizeSelect")
+        .addEventListener("change", function () {
+          const selectedPrize = this.options[this.selectedIndex];
+          const campaignInput = document.getElementById("campaignInput");
+          const campaignIdInput = document.getElementById("campaignIdInput");
+
+          const campaignTitle = selectedPrize.dataset.campaignTitle || "";
+          const campaignId = selectedPrize.dataset.campaignId || "";
+
+          if (campaignTitle) {
+            campaignInput.value = campaignTitle;
+            campaignIdInput.value = campaignId;
+          } else {
+            campaignInput.value = "";
+            campaignIdInput.value = "";
+          }
+        });
+    </script>
+  </body>
 </html>

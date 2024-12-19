@@ -3,9 +3,13 @@
     :class="{ 'nav-shadow': setShadow, 'navbar-shrink': setShadow }">
     <div class="container">
       <router-link class="navbar-brand text-light" to="/index">Nightly Sips</router-link>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div class="d-flex align-items-center justify-content-end">
+        <div class="circle-avatar d-block d-lg-none" v-on:click="triggerOffcanvas"
+          :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"></div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item">
@@ -15,7 +19,11 @@
             <router-link class="nav-link" to="/order">立即點餐</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/campaign">限時抽獎</router-link>
+            <router-link class="nav-link position-relative" to="/campaign">限時抽獎<span v-if="memberId"
+                class="position-absolute start-100 translate-middle badge rounded-pill bg-light text-primary">
+                {{ allChances }}
+                <span class="visually-hidden">unread messages</span>
+              </span></router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/menu">精選菜單</router-link>
@@ -37,68 +45,83 @@
           </li>
           <li class="nav-item ms-lg-5">
             <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
-            <div v-if="!userStore.isLoggedIn" class="btn btn-outline-light" v-on:click="openLoginModal">登入 / 註冊</div>
-            <div v-else class="d-flex align-items-center">
-              <router-link to="/membercenter" class="d-flex align-items-center">
-                <!-- 頭像 -->
-                <div class="circle-avatar" :style="{ backgroundImage: `url(${userAvatar})` }"></div>
+            <div v-if="!isLoggedIn" class="btn btn-outline-light" v-on:click="openLoginModal">
+              登入 / 註冊
+            </div>
+            <div v-else class="d-flex align-items-center ">
+              <!-- 頭像 -->
+              <div class="circle-avatar d-none d-lg-block" v-on:click="triggerOffcanvas"
+                :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"></div>
+              <div class="d-flex align-items-center d-none d-lg-block">
                 <!-- 會員名稱 -->
-                <span class="text-light ms-2">{{ username }}</span>
-              </router-link>
+                <span class="text-light ms-2">{{ memberprofile?.username }}</span>
+              </div>
+              <!-- <router-link to="/membercenter/index" class="d-flex align-items-center d-none d-lg-block">
+                <span class="text-light ms-2">{{ memberprofile?.username }}</span>
+              </router-link> -->
             </div>
           </li>
-          <login ref="loginModal" @user-login="handleLogin"></login>
         </ul>
       </div>
     </div>
   </nav>
-
-
+  <login ref="loginModal"></login>
+  <AvatarProfile ref="avatarProfile"></AvatarProfile>
 </template>
 
 <script>
-import Login from './login.vue';
-import { useUserStore } from '@/stores/userStore';
-const userStore=useUserStore();
+import Login from './login.vue'
+import { useUserStore } from '@/stores/userStore'
+import { lotteryStore } from '@/stores/lotteryStore'
+import { mapState, mapActions } from 'pinia'
+import AvatarProfile from './AvatarProfile.vue';
 export default {
   data() {
     return {
       setShadow: false,
-      userAvatar: '',
-      username:'',
-      userStore: useUserStore(),
     }
-  }, components: {
-    Login
+  },
+  components: {
+    Login, AvatarProfile
+  },
+  computed: {
+    ...mapState(useUserStore, ['isLoggedIn', 'memberprofile', 'memberId']),
+    ...mapState(lotteryStore, ['allChances']),
   },
   methods: {
+    ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn']),
+    ...mapActions(lotteryStore, ['getAllChanceByMember']),
     navShadow() {
       requestAnimationFrame(() => {
         this.setShadow = window.scrollY > 100
       })
     },
-    openLoginModal(){
+    openLoginModal() {
       this.$refs.loginModal.openLoginModal()
     },
-    handleLogin(userImg,username){
-      userStore.setLoggedIn();
-      this.userAvatar = userImg;
-      this.username = username;
+    triggerOffcanvas() {
+      // 通过 $refs 访问子组件并触发显示 Offcanvas
+      const avatarProfileComponent = this.$refs.avatarProfile;
+      avatarProfileComponent.openOffcanvas();
     }
   },
   mounted() {
     window.addEventListener('scroll', this.navShadow)
     this.navShadow()
+    this.getAllChanceByMember()
   },
   unmounted() {
     window.removeEventListener('scroll', this.navShadow)
   },
+  created() {
+    this.checkLoggedIn()
+  },
 }
 </script>
 
-<style>
+<style scoped>
 .nav-shadow {
-  box-shadow: 0 0 12px #f5e6d3 !important;
+  box-shadow: 0 0 12px var(--bs-light) !important;
 }
 
 .nav-item {
@@ -141,7 +164,7 @@ export default {
   position: absolute;
   width: 0;
   height: 2px;
-  background: #f5e6d3;
+  background: var(--bs-light);
   left: 50%;
   bottom: 0;
   transition: all 0.3s ease;
@@ -155,7 +178,7 @@ export default {
 
 .nav-link:hover,
 .nav-link.active {
-  color: #f5e6d3 !important;
+  color: var(--bs-light) !important;
 }
 
 .navbar-toggler {
@@ -166,6 +189,19 @@ export default {
 .navbar-toggler:focus {
   box-shadow: none;
   outline: none;
+}
+
+.circle-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+
+.circle-avatar:hover {
+  opacity: 0.8;
 }
 
 @media (max-width: 992px) {

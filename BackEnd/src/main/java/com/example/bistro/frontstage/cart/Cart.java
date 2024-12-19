@@ -38,12 +38,12 @@ public class Cart {
 	private Date createdAt;
 
 	// 後面就不用set時間
-	@PrePersist
-	public void onCreate() {
-		if (createdAt == null) {
-			createdAt = new Date();
+		@PrePersist
+		public void onCreate() {
+			if (createdAt == null) {
+				createdAt = new Date();
+			}
 		}
-	}
 
 //FK+PK雙主鍵
 
@@ -51,7 +51,10 @@ public class Cart {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("membersId")
 	@JoinColumn(name = "membersId", referencedColumnName = "ID", nullable = false)
+	@JsonIgnore
 	private Members members;
+
+
 	// 多對一：多個產品可以同時出現在一台購物車中
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("menuId")
