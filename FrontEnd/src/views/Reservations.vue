@@ -13,80 +13,83 @@
           margin-left: 50px;
           margin-right: 25px;
         ">
-        <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
+        <div id="googlemap" class="mb-4" style="width: 90%; height: 350px;margin-left: 35px;">   <!--要調找架構 寬度 margin要改 -->
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw"
             class="w-100 h-100" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
           </iframe>
         </div>
-        <div id="inform" class="col-12" style="background-color: transparent; padding: 20px">
-          <div class="row g-4 d-flex justify-content-between">
-            <div class="col-lg-6 col-md-12 mb-3" style="
-                background-color: white;
-                border-radius: 3px;
-                padding: 20px;
-                display: flex;
-                align-items: center;
-                position: relative;
-              ">
-              <div class="phone text-black d-flex align-items-center w-100">
-                <div style="
-                    background-color: #20c997;
-                    width: 60px;
-                    height: 60px;
-                    border-radius: 50%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    position: absolute;
-                    top: -30px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    z-index: 10;
-                  ">
-                  <font-awesome-icon :icon="['fas', 'phone']" style="color: white; font-size: 27px" />
-                </div>
-                <div style="margin-left: 80px; padding-top: 40px; text-align: center">
-                  <h5 class="fw-bold">Phone Numbers</h5>
-                  <p>07-656-8106</p>
-                  <p>07-716-9502</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6 col-md-12 mb-3" style="
-                background-color: white;
-                border-radius: 3px;
-                padding: 20px;
-                display: flex;
-                align-items: center;
-                position: relative;
-              ">
-              <div class="message text-black d-flex align-items-center w-100">
-                <div style="
-                    background-color: #20c997;
-                    width: 60px;
-                    height: 60px;
-                    border-radius: 50%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    position: absolute;
-                    top: -30px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    z-index: 10;
-                  ">
-                  <font-awesome-icon :icon="['far', 'envelope']" style="color: white; font-size: 27px" />
-                </div>
-                <div style="margin-left: 80px; padding-top: 40px; text-align: center">
-                  <h5 class="fw-bold">Emails</h5>
-                  <p>@company.company</p>
-                  <p>info@company.com</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div id="inform" class="col-12" style="background-color: transparent; padding: 20px;">
+  <div class="row g-4 d-flex justify-content-center" style="gap: 30px;">
+    <div class="col-lg-5 col-md-12 mb-3" style="
+        background-color: white;
+        border-radius: 3px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        
+      ">
+      <div class="phone text-black d-flex align-items-center w-100  ">
+        <div style="
+            background-color: #20c997;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            
+          ">
+          <font-awesome-icon :icon="['fas', 'phone']" style="color: white; font-size: 27px;"></font-awesome-icon>
         </div>
+        <div style="padding-top: 40px; text-align: center;margin-left: 50px;">
+          <h5 class="fw-bold">Phone Numbers</h5>
+          <p>07-656-8106</p>
+          <p>07-716-9502</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5 col-md-12 mb-3" style="
+        background-color: white;
+        border-radius: 3px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        position: relative;
+      ">
+      <div class="message text-black d-flex align-items-center w-100">
+        <div style="
+            background-color: #20c997;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+          ">
+          <font-awesome-icon :icon="['far', 'envelope']" style="color: white; font-size: 27px;"></font-awesome-icon>
+        </div>
+        <div style="padding-top: 40px;margin-left: 30px;">
+          <h5 class="fw-bold" style="text-align: center;">Emails</h5>
+          <p>rest557@company.company</p>
+          <p>aiz777vic@company.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
       </div>
       <div id="app" class="col-lg-4 col-md-12" style="
           background-color: white;
@@ -96,11 +99,12 @@
           color: black;
           margin-left: 25px;
           margin-right: 50px;
+          width: 30%;
         ">
-        <div class="mb-4 text-center">
+        <div class="mb-4 text-center" >
           <h4 class="fw-bold">訂位資訊</h4>
         </div>
-        <form @submit.prevent="submitReservation">
+        <form @submit.prevent="submitReservation" >
           <div class="mb-3">
             <label for="customerName" class="form-label">訂位人姓名</label>
             <input type="text" class="form-control frame" id="customerName" v-model="reservations.customerName"
