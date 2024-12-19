@@ -1,5 +1,6 @@
 <template>
-    <!-- 顯示登入/註冊按鈕或頭像 -->
+  <!-- 顯示登入/註冊按鈕或頭像 -->
+
 
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="false">
         <div class="modal-dialog modal-dialog-centered">
@@ -35,6 +36,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="false">
         <div class="modal-dialog modal-dialog-centered">
@@ -102,6 +104,7 @@ import { useUserStore } from '@/stores/userStore';
 import Modal from 'bootstrap/js/dist/modal';
 import { mapActions } from 'pinia';
 export default {
+
     data() {
         return {
             loginModalElement:null,
@@ -129,6 +132,7 @@ export default {
             this.registermodel.hide();
         }
     },
+
 };
 </script>
 <style scoped>

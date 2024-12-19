@@ -30,11 +30,14 @@
 
   <div class="col" v-if="!isLoading">
     <div class="product-item">
-      <figure>
 
-          <img :src="menuSrc"  class="img-fixed">
 
-      </figure>
+      <div >
+        <figure>
+          <img :src="menuSrc" @error="menuSrc='public/images/avatar.jpg'"   class="img-fixed" v-on:click.prevent.stop="viewDescribeModal(menu)">
+        </figure>
+      </div>
+
 
       <h3>{{ menu.productName }}</h3>
 
@@ -50,7 +53,7 @@
 
       <li
         class="lookComment"
-        v-on:click.prevent="viewComment(menu)"
+        v-on:click.prevent.stop="viewComment(menu)"
         style="list-style-type: none;"
       >
         <i class="bi bi-chat-left-text"></i>觀看評論
@@ -70,8 +73,10 @@
               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
             </button>
           </span>
-            <input type="text" id="quantity" name="quantity"
-              class="form-control input-number"
+
+            <input type="text"  name="quantity"
+              class="form-control input-number quantity"
+
               v-model="count"
               v-on:input="updateQuantity($event)">
 
@@ -82,7 +87,9 @@
           </span>
 
         </div>
+
         <button class=" btn btn-primary mt-3" @click="handleAddToCart(menu.id)">Add to Cart</button>
+
       </div>
 
     </div>
@@ -95,22 +102,23 @@
 import axios from 'axios'
 import StarRating from 'vue-star-rating'
 import LoadingVue from 'vue3-loading-overlay'
-import { cartStore } from '@/stores/cartStore.js'
-import { mapState, mapActions } from 'pinia'
-import { list } from 'postcss'
+
+import { defineProps, computed, defineEmits } from 'vue'
+
 export default {
   components: {
     'star-rating': StarRating,
     LoadingVue,
-  },
-
+  } ,
   props: {
     menu: {
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
     },
   },
-  emits: ['update-count', 'addToCart','image-loaded','viewComment'],
+
+emits: ['update-count', 'addToCart','image-loaded','view-comment','view-menudescribe'],
+
 
   data() {
     return {
@@ -119,7 +127,7 @@ export default {
       isLoading: false,
       count: 0,
       comments: [],
-      commentPeople:'',
+      commentPeople:0,
     }
   },
   methods: {
@@ -166,13 +174,11 @@ export default {
       }
     },
     async countCommentPeople(productName) {
-      console.log(productName)
       let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
       axios
         .get(API_URL)
         .then(async (response) =>{
           this.commentPeople=response.data
-          console.log(this.commentPeople)
         })
         .catch((error) => {
           console.error('Error fetching commentPeople:', error)
@@ -181,6 +187,13 @@ export default {
     async viewComment(menu) {
 
       this.$emit("view-comment",menu)
+
+
+    },
+    async viewDescribeModal(menu) {
+      this.$emit("view-menudescribe",menu)
+},
+
 
     },
     handleAddToCart(id){
@@ -201,6 +214,8 @@ export default {
         this.count = this.menu.productCount
       }
     },
+
+
   },
   created() {
       this.loadPicture(this.menu.id)
@@ -218,6 +233,10 @@ export default {
 }
 .card {
   margin-bottom: 5px;
+}
+
+figure>img{
+  cursor: pointer;
 }
 
 .modal-header,
@@ -246,7 +265,7 @@ export default {
 product-qty{
 min-width: 130px;
 }
-#quantity {
+.quantity {
   height: auto;
   width: 28px;
   text-align: center;

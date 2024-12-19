@@ -149,8 +149,10 @@ export default {
   transition: box-shadow 0.3s ease; /* Smooth transition for shadow */
 }
 
+
 .circle-avatar:hover {
   opacity: 0.8;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
 }
 </style>
+

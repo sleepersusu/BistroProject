@@ -18,7 +18,7 @@
       </li>
 
       <li class="nav-item">
-        <router-link to="/comment" class="nav-link">
+        <router-link to="/membercenter/comment" class="nav-link">
           <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 我的評論
         </router-link>
       </li>

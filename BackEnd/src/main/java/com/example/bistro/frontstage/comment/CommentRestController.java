@@ -57,14 +57,11 @@ public class CommentRestController {
 	@Autowired
 	private OrdersDetailsRepository orderDetailsRepo;
 
-	@PostMapping("/api/Bistro/postComment/{orderDetailsId}") // 新增評論
+	@PostMapping("/api/Bistro/postComment") // 新增評論
 	public ResponseEntity<Map<String, Object>> postComment(HttpSession httpSession,
 			@RequestBody Map<String, Object> requestData
-			,@PathVariable Integer orderDetailsId) {
-
-
-		
-		
+			) {
+	
 		// 從 Session 獲取會員 ID
 		Integer membersId = (Integer) httpSession.getAttribute("membersId");
 		
@@ -74,9 +71,6 @@ public class CommentRestController {
 		}
 
 		try {
-
-		
-
 
 			Integer menuId = Integer.parseInt(requestData.get("menuId").toString());
 			Short commentRating = Short.parseShort(requestData.get("commentRating").toString());
@@ -127,15 +121,10 @@ public class CommentRestController {
 	}
 
 	@GetMapping("/api/member/comment") // 根據會員取得評論
-	public ResponseEntity<?> findAllCommentByMember(HttpSession httpSession) {
+	public ResponseEntity<?> findAllCommentByMember(HttpSession httpSession ) {
 
-		// 從 HttpSession 獲取會員 ID
+//		 從 HttpSession 獲取會員 ID
 		Integer memberId = (Integer) httpSession.getAttribute("membersId");
-		
-		
-		
-		System.out.println("會員 ID: " + memberId);	
-		
 		
 		if (memberId == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("請先登入以查看您的評論。");
