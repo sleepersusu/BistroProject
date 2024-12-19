@@ -31,11 +31,13 @@
   <div class="col" v-if="!isLoading">
     <div class="product-item">
 
+
       <div >
         <figure>
           <img :src="menuSrc" @error="menuSrc='public/images/avatar.jpg'"   class="img-fixed" v-on:click.prevent.stop="viewDescribeModal(menu)">
         </figure>
       </div>
+
 
       <h3>{{ menu.productName }}</h3>
 
@@ -71,8 +73,10 @@
               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
             </button>
           </span>
+
             <input type="text"  name="quantity"
               class="form-control input-number quantity"
+
               v-model="count"
               v-on:input="updateQuantity($event)">
 
@@ -83,7 +87,9 @@
           </span>
 
         </div>
-        <button class=" btn btn-primary mt-3" v-on:click.prevent="handleAddToCart">Add to Cart</button>
+
+        <button class=" btn btn-primary mt-3" @click="handleAddToCart(menu.id)">Add to Cart</button>
+
       </div>
 
     </div>
@@ -96,7 +102,9 @@
 import axios from 'axios'
 import StarRating from 'vue-star-rating'
 import LoadingVue from 'vue3-loading-overlay'
+
 import { defineProps, computed, defineEmits } from 'vue'
+
 export default {
   components: {
     'star-rating': StarRating,
@@ -123,6 +131,8 @@ emits: ['update-count', 'addToCart','image-loaded','view-comment','view-menudesc
     }
   },
   methods: {
+    ...mapActions(cartStore,["addToCart"]),
+
     async loadPicture(ID) {
       this.isLoading = true
 
@@ -156,7 +166,6 @@ emits: ['update-count', 'addToCart','image-loaded','view-comment','view-menudesc
       } else {
         this.count = this.menu.productCount
         this.$emit('update-count', this.count)
-
         Swal.fire({
           title: '已到達庫存上限',
           text: '請重新選擇數量',
@@ -179,11 +188,18 @@ emits: ['update-count', 'addToCart','image-loaded','view-comment','view-menudesc
 
       this.$emit("view-comment",menu)
 
+
     },
     async viewDescribeModal(menu) {
       this.$emit("view-menudescribe",menu)
 },
 
+
+    },
+    handleAddToCart(id){
+      this.addToCart({id,count:this.count})
+      this.count=1
+    },
 
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
@@ -198,9 +214,7 @@ emits: ['update-count', 'addToCart','image-loaded','view-comment','view-menudesc
         this.count = this.menu.productCount
       }
     },
-    handleAddToCart({ id, count }) {
-      console.log(`Added to cart: ID=${this.menu.id}, Count=${count}`);
-    },
+
 
   },
   created() {

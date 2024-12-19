@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = "/Bistro/*")
+//@WebFilter(urlPatterns = "/Bistro/*")//不需要已在Config宣告此項目
 public class LoginFilter implements Filter {
 
 	@Override
@@ -25,25 +25,26 @@ public class LoginFilter implements Filter {
 
 		HttpSession session = httpRequest.getSession(false);
 
-		if (session != null && session.getAttribute("loginAccount") != null) {
+		if (session != null && session.getAttribute("loginId") != null) {
+			System.out.println("判斷session沒銷毀");
 			long maxInactiveInterval = session.getMaxInactiveInterval()* 1000; // 转换为毫秒
 			session.setAttribute("maxInactiveInterval", maxInactiveInterval);
 			long currentTime = System.currentTimeMillis();
 			Long lastAccessTime = (Long) session.getAttribute("lastAccessTime");
 
-//			if (lastAccessTime != null) {
-//
-//				long inactiveTime = currentTime - lastAccessTime;
-//				long remainingTime = maxInactiveInterval - inactiveTime;
-//
-//				// 如果 session 超时，销毁 session
-//			    if (remainingTime <= 0) {
-//			        session.invalidate();
-//			        System.out.println("超時session銷毀");
-//			        httpResponse.sendRedirect("/"); // 重定向到登入頁面
-//			        return;
-//			    }
-//			}
+			if (lastAccessTime != null) {
+
+				long inactiveTime = currentTime - lastAccessTime;
+				long remainingTime = maxInactiveInterval - inactiveTime;
+
+				// 如果 session 超时，销毁 session
+			    if (remainingTime <= 0) {
+			        session.invalidate();
+			        System.out.println("超時session銷毀");
+			        httpResponse.sendRedirect("/"); // 重定向到登入頁面
+			        return;
+			    }
+			}
 			// 如果 session 存在，更新 lastAccessTime
 			session.setAttribute("lastAccessTime", currentTime);
 			chain.doFilter(request, response);

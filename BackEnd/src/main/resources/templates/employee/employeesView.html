@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>員工管理 - DINEEASE餐廳管理系統</title>
+
+<link rel="icon" th:href="@{/images/favicon.ico}" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+	rel="stylesheet" />
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<link rel="stylesheet" th:href="@{/css/demo.css}" />
+<style>
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
+
+#edit, #delete, #active {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#active {
+	background-color: #009c0d;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+#dt-search-0 {
+	margin-right: 2rem
+}
+
+#dt-search-0:focus {
+	outline: none;
+}
+
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
+
+#addData:hover {
+	background-color: #2894FF;
+}
+
+.modal-content {
+	min-width: 700px;
+	height: 700px;
+	overflow: auto;
+}
+
+.radiomenu {
+	display: flex;
+	height: 30px;
+	margin-bottom: 16px;
+	padding: 5px 10px;
+	align-items: center;
+}
+
+.radiomenu .radiomenuitem {
+	padding: 5px;
+	margin-right: 10px;
+}
+
+.radiomenu .radiomenuitem>label {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.radiomenu .radiomenuitem>input {
+	vertical-align: middle;
+	position: relative;
+	top: 8px
+}
+select {
+    width: 180px; /* 设置宽度 */
+    padding-top: 5px; 
+    padding-bottom: 5px; 
+    padding-right: 5px; 
+    font-size: 15px; /* 设置字体大小 */
+    border: 2px solid #ccc; /* 设置边框 */
+
+}
+
+/* 鼠标悬停时的效果 */
+select:hover {
+    border-color: #007bff; /* 设置边框颜色 */
+}
+
+</style>
+
+
+</head>
+
+<body>
+	<!-- datatable  -->
+	<script th:src="@{/jquery/jquery-3.7.1.js}" ></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js" ></script>
+
+
+	<div id="page">
+		<div th:replace="~{layout/navbar}"></div>
+		<div id="right">
+			<div th:replace="~{layout/headerlogout.html}"></div>
+
+			<main>
+				<h2>員工資訊</h2>
+				<section id="workspace">
+					<div>
+						<button type="submit" class="dataButton" id="addData">
+							新增員工</button>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<table id="table" class="display">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>帳號</th>
+									<th>密碼</th>
+									<th>姓名</th>
+									<th>性別</th>
+									<th>職位</th>
+									<th>出生日期</th>
+									<th>電話</th>
+									<th>年資</th>
+									<th>薪水</th>
+									<th>狀態</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="event-list">
+								<tr th:each="employees : ${allEmployees}">
+										<td th:text="${employees.id}"></td>
+										<td th:text="${employees.employeeAccount}"></td>
+										<td th:text="${employees.employeePassword==null?'無':employees.employeePassword }"></td>
+										<td th:text="${employees.employeeName}"></td>
+										<td th:text="${employees.employeeGender}"
+										th:style="'color: ' + (${employees.employeeGender} == '男' ? '#0072E3' : 'red')"></td>
+										<td th:text="${employees.jobTitle.jobtitleName}"></td>
+										<td th:text="${employees.employeeBorn==null?'無':employees.employeeBorn}"></td>
+										<td th:text="${employees.employeeTel}"></td>
+										<td th:text="${employees.employeeSeniority+'年'}"></td>
+										<td th:text="${employees.employeeSalary}"></td>
+										<td th:text="${employees.employeeStatus}" th:style="'color:'+(${employees.employeeStatus} == '在職' ? '#0072E3' : 'red')"></td>
+
+										<td>
+										<!-- th:data-start-date="${#dates.format(employees.employeeBirthday, 'yyyy-MM-dd')}" -->
+											<button type="button" id="edit"
+												th:data-id="${employees.id}"
+												th:data-account="${employees.employeeAccount}"
+												th:data-password="${employees.employeePassword}"
+												th:data-name="${employees.employeeName}"
+												th:data-sex="${employees.employeeGender}"
+												th:data-jobid="${employees.jobTitle.id}"
+												th:data-birthday="${employees.employeeBorn}"
+												th:data-phone="${employees.employeeTel}"
+												th:data-seniority="${employees.employeeSeniority}"
+												th:data-salary="${employees.employeeSalary}"
+												th:data-status="${employees.employeeStatus}"
+												onclick="openEditModal(this)">編輯</button>
+											<th:block th:if="${employees.employeeStatus!='註銷'}">
+												<form th:action="@{/Bistro/employee/cancel}" method="post"
+													style="display: inline;">
+													<input type="hidden" name="id" th:value="${employees.id}">
+													<button type="submit" id="delete"
+														onclick="return confirm('確定切換離職員工狀態嗎？');">註銷</button>
+												</form>
+											</th:block>
+											<th:block th:if="${employees.employeeStatus!='在職'}">
+												<form th:action="@{/Bistro/employee/active}" method="post"
+													style="display: inline;">
+													<input type="hidden" name="id" th:value="${employees.id}">
+													<button type="submit" id="active">啟用</button>
+												</form>
+											</th:block>
+										</td>
+									</tr>
+									<tr th:if="${#lists.isEmpty(allEmployees)}">
+										<td colspan="11">沒有員工資料</td>
+									</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</section>
+				
+			</main>
+
+			<!--  新增員工視窗 -->
+			<div id="addEventModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>新增員工</h1>
+					<form th:action="@{/Bistro/Employee/postemployee}" method="post" id="dataForm"
+						enctype="multipart/form-data">
+						<fieldset>
+							<legend style="margin-bottom: 1rem; font-weight: bold">
+								員工基本資料 </legend>
+
+							<div class="question">
+								<span class="title">員工帳號</span> <input type="text" id="employeeaccount"
+									name="employeeAccount" value="" placeholder="請輸入員工帳號" required
+									aria-required="true" />
+							</div>
+							<div class="question">
+								<span class="title">員工密碼</span> <input type="text" id="employeepwd"
+									name="employeePassword" value="" placeholder="請輸入員工密碼" required
+									aria-required="true" />
+							</div>
+							<div class="question">
+								<span class="title">員工姓名</span> <input type="text" id="employeename"
+									name="employeeName" value="" placeholder="請輸入員工姓名" required
+									aria-required="true" />
+							</div>
+							
+							<div class="question">
+								<span class="title">員工職位</span> 
+								<select id="employeejob" name="jobId" value="">
+									<option th:each="allJob : ${allJobTitle}" th:value="${allJob.id}" th:text="${allJob.jobtitleName}"></option>
+								</select>
+							</div>
+
+							<div class="question">
+								<span class="title">員工性別:</span>
+								<div class="question">
+									<div class="radiomenu">
+										<div class="radiomenuitem">
+											<label for="male">男</label> <input type="radio"
+												name="employeeGender" id="male" value="男" required />
+										</div>
+										<div class="radiomenuitem">
+											<label for="female">女</label> <input type="radio"
+												name="employeeGender" id="female" value="女" required />
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="question">
+								<span class="title">出生日期</span> <input type="DATE"
+									id="employeeborn" name="employeeBorn" value="" required />
+							</div>
+							
+							<div class="question">
+								<span class="title">員工薪水</span> <input type="text"
+									id="employeesalary" name="employeeSalary" value="" placeholder="請輸入員工電話"
+									required />
+							</div>
+							
+							<div class="question">
+								<span class="title">聯絡電話</span> <input type="text"
+									id="employeetel" name="employeeTel" value="" placeholder="請輸入員工電話"
+									required />
+							</div>
+
+						</fieldset>
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton">儲存</button>
+							<button type="reset" id="reset" class="formbutton">重設</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!--  編輯會員視窗 -->
+			<div id="addEventModal2" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>編輯員工</h1>
+					<form th:action="@{/Bistro/Employee/UpdateEmployee}" method="post" id="dataForm"
+						enctype="multipart/form-data">
+						<fieldset>
+							<legend style="margin-bottom: 1rem; font-weight: bold">
+								員工基本資料 </legend>
+							<input type="hidden" id="editemployeeid" name="id" value="">
+								<div class="question">
+									<span class="title">員工帳號</span> <input type="text"
+										id="editemployeeaccount" name="employeeAccount" value=""
+										placeholder="請輸入員工帳號" />
+								</div>
+								<div class="question">
+									<span class="title">員工密碼</span> <input type="text"
+										id="editemployeepwd" name="employeePassword" value=""
+										placeholder="請輸入員工密碼" />
+								</div>
+								<div class="question">
+									<span class="title">員工姓名</span> <input type="text"
+										id="editemployeename" name="employeeName" value=""
+										placeholder="請輸入員工姓名" />
+								</div>
+								
+								<div class="question">
+									<span class="title">員工職位</span> 
+									<select id="editemployeejob" name="jobId" value="">
+										<option th:each="allJob : ${allJobTitle}" th:value="${allJob.id}" th:text="${allJob.jobtitleName}"></option>
+									</select>
+								</div>
+
+								<div class="question">
+									<span class="title">員工性別:</span>
+									<div class="question">
+										<div class="radiomenu">
+											<div class="radiomenuitem">
+												<label for="male">男</label> <input type="radio"
+													id="editmale" name="employeeGender" value="男"  />
+											</div>
+											<div class="radiomenuitem">
+												<label for="female">女</label> <input type="radio"
+													id="editfemale" name="employeeGender" value="女"  />
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="question">
+									<span class="title">出生日期</span> <input type="DATE"
+										id="editemployeeborn" name="employeeBorn" value=""
+										/>
+								</div>
+								
+								<div class="question">
+									<span class="title">員工薪水</span> <input type="text"
+										id="editemployeesalary" name="employeeSalary" value="" placeholder="請輸入員工薪水"
+										required />
+								</div>
+
+
+								<div class="question">
+									<span class="title">聯絡電話</span> <input type="text"
+										id="editemployeetele" name="employeeTel" value=""
+										placeholder="請輸入員工電話" />
+								</div>
+
+						</fieldset>
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton">儲存</button>
+							<button type="reset" id="reset" class="formbutton">重設</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<footer> &copy; Made by TeamWork </footer>
+		</div>
+	</div>
+
+	<script>
+		// jquery寫法 start
+		$(document).ready(function() {
+			$("#table").DataTable({
+				scrollX : "90%",
+				scrollY : "500px",
+				paging: true, // 如果希望有分頁功能
+				searching: true, // 如果需要啟用搜尋功能
+				responsive: true, // 如果希望在不同尺寸螢幕上調整表格
+				autoWidth: false,
+		        "columnDefs": [
+		            {"width": "45px","targets": 0},
+		            {"width": "100px","targets": 1,className: 'ellipsis'},
+		            {"width": "100px","targets": 2,className: 'ellipsis'},
+		            {"width": "100px","targets": 3},
+		            {"width": "70px","targets": 4},
+		            {"width": "100px","targets": 5},
+		            {"width": "100px","targets": 6},
+		            {"width": "100px","targets": 7},
+		            {"width": "60px","targets": 8},
+		            {"width": "100px","targets": 9},
+		            {"width": "70px","targets": 10},
+		            {"width": "70px","targets": 11,"orderable": false},
+		        ]
+			});
+		});
+	    
+		// jquery寫法 end
+		
+		document.getElementById("addData").addEventListener("click", () => {
+        	document.getElementById("addEventModal").style.display = "block";
+     	 });
+
+		document.querySelectorAll(".close").forEach(closeButton => {
+		    closeButton.addEventListener("click", () => {
+		        document.getElementById("addEventModal").style.display = "none";
+		        document.getElementById("addEventModal2").style.display = "none";
+		    });
+		});
+
+	      window.onclick = function (event) {
+	        const modal = document.getElementById("addEventModal");
+	        const modal2 = document.getElementById("addEventModal2");
+	        if (event.target == modal || event.target == modal2) {
+	          document.getElementById("addEventModal").style.display = "none";
+	          document.getElementById("addEventModal2").style.display = "none";
+	        }
+	      };
+	      
+	      function openEditModal(btnData) {
+	    	  	console.log(btnData);
+		    	document.getElementById("addEventModal2").style.display = "block";
+		    	document.getElementById("editemployeeid").value = btnData.dataset.id;
+	    	    document.getElementById("editemployeeaccount").value = btnData.dataset.account;
+	    	    document.getElementById("editemployeepwd").value = btnData.dataset.password;
+	    	    document.getElementById("editemployeename").value = btnData.dataset.name;
+	    	    
+	    	    if(btnData.dataset.sex=='女'){
+	    	    	document.getElementById("editfemale").checked=true;
+	    	    }else if(btnData.dataset.sex=='男'){
+	    	    	document.getElementById("editmale").checked=true;
+	    	    }else{
+	    	    	document.getElementById("editfemale").checked=false;
+	    	    	document.getElementById("editmale").checked=false;
+	    	    }
+	    	    
+	    	    document.getElementById("editemployeeborn").value = btnData.dataset.birthday;
+	    	    
+	    	    document.getElementById("editemployeejob").value = btnData.dataset.jobid;
+	    	    document.getElementById("editemployeetele").value = btnData.dataset.phone;
+	    	    document.getElementById("editemployeesalary").value = btnData.dataset.salary;
+	    	    }
+	    	    
+
+	    </script>

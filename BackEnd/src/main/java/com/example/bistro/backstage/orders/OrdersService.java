@@ -19,6 +19,11 @@ public class OrdersService {
                 return ordersRepository.save(orders);
             }
 
+        // 根據電話查詢訂單
+            public Optional<Orders> findOrderByPhone(String ordersTel) {
+                return ordersRepository.findByOrdersTel(ordersTel);
+            }
+
     //使用者看到目前自己擁有的訂單
         //使用者點擊該筆訂單ID時候，會出現訂單詳情
         //使用者刪除(取消)這筆訂單，有時間限制

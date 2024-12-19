@@ -10,4 +10,5 @@ public class PaymentDTO {
     private Integer paymentPrice;
     private String paymentWay;
     private String paymentStatus;
+
 }
