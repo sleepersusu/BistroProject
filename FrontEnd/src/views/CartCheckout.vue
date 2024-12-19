@@ -165,7 +165,13 @@ export default defineComponent({
 
     async jumpEcpay() {
       window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`;
+    },
+    async memberPointGet() {
+      // const pointData {
+
+      // }
     }
+
   }
 
 

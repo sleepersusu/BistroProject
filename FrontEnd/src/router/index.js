@@ -83,10 +83,6 @@ const router = createRouter({
           path: '/comment',
           component: () => import('../views/Comment.vue'),
         },
-        {
-          path: '/lotteryResult',
-          component: () => import('../views/LotteryResult.vue'),
-        },
 
       ],
     },

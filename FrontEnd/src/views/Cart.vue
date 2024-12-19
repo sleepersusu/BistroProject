@@ -84,10 +84,10 @@
                 </button>
               </div>
             </div>
-            <hr />
             <div v-for="item in pointPrizes" class="position-relative ">
+              <hr />
               <div class="filter"></div>
-              <div class="row cart-item border-bottom py-3 " >
+              <div class="row cart-item" >
                 <div class="col-md-3">
                   <img
                     :src="'data:image/jpeg;base64,' + item.img"
@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-md-5 text-black">
                   <h5 class="card-title">{{ item.name }}</h5>
-                  <p class="text-muted">Category: Point</p>
+                  <p class="text-muted">積分獎品</p>
                 </div>
                 <div class="col-md-2"></div>
                 <div class="col-md-2 text-end text-black">
@@ -153,7 +153,6 @@
     </div>
   </div>
 
-  <p class="fw-bold">{{ pointPrizes }}</p>
 </template>
 
 <script>
@@ -195,7 +194,6 @@ export default {
         name: payload.name,
         img: payload.image
       })
-      // 在這裡處理接收到的數據
     },
   },
   computed: {
@@ -211,6 +209,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  margin-top: 7px;
   background: rgba(255, 76, 63, 0.1);
   height: 100%;
   width: 100%;

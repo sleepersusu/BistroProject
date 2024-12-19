@@ -58,7 +58,7 @@ export default {
     return {
       pointPrizes: [],
       redeemedPrize: {},
-      memberId: 1,
+      memberId: localStorage.memberId,
     }
   },
   methods: {
@@ -76,11 +76,16 @@ export default {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
 
       const response = await this.axios.get(api)
-      console.log("66666", response)
+      // console.log("66666", response)
+      // console.log(localStorage)
+      // console.log(localStorage.memberId)
+
+      const memberId = localStorage.memberId
       this.pointPrizes = response.data
     },
 
     async redeemPrize(prize) {
+      //確定兌換跳出視窗
       const result = await Swal.fire({
         icon: 'question',
         title: `確定要兌換${prize.pointPrizesName}嗎?`,
@@ -91,22 +96,20 @@ export default {
         reverseButtons: true,
       })
 
+      //if(兌換成功)產生兌換碼
       if (result.isConfirmed) {
-        // 生成優惠碼
         const promoCode = this.generateRandomCode()
 
         // 調用子組件的方法更新優惠碼和商品信息
         this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode}
 
-        const memberId = 1 // 假資料，會員 ID 為 9
+        const memberId = this.memberId
         if (memberId) {
-          // const pointPrizesId = prize.id;  // 商品 ID 來自按下的商品
-          // const recordsDate = new Date().toISOString();  // 使用當前時間作為兌換日期
 
           const requestData = {
             memberId,
-            pointPrizesId: prize.id,
-            recordsDate: new Date().toISOString(),
+            pointPrizesId: prize.id,// 商品 ID 來自按下的商品
+            recordsDate: new Date().toISOString(),// 使用當前時間作為兌換日期
           }
 
           const promoData = {
@@ -116,12 +119,12 @@ export default {
           }
 
           try {
+            //產生兌換紀錄
             const api = `${import.meta.env.VITE_API}/api/pointRecord`
-
             const response = await this.axios.post(api, requestData)
-            console.log(response)
-//promoApi(api3)
-//PromoResponse(response3)
+            // console.log(response)
+
+            //將會員各自的兌換碼存進SQL
             const promoApi = `${import.meta.env.VITE_API}/api/promoCode`
             const promoResponse = await fetch(promoApi, {
               method: 'POST',
@@ -148,8 +151,7 @@ export default {
 
               // 觸發子組件重新獲取資料的方法
               this.$refs.pointTotal.getPromoCode()
-//MinusPrizesApi(api2)
-//MinusPrizesResponse(res2)
+
               const MinusPrizesApi = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
               const MinusPrizesResponse = await fetch(MinusPrizesApi, {
                 method: 'POST',
@@ -169,6 +171,7 @@ export default {
             console.error('Error sending request:', error)
           }
         } else {
+          //if(不是會員)跳轉到登入畫面
           window.Swal.fire({
             title: '兌換商品需要點數',
             text: '請先登入會員，才能進行兌換。',

@@ -24,7 +24,7 @@
   },
   methods: {
     async verifyPromoCode() {
-      const api = `${import.meta.env.VITE_API}/api/showPromoCode/1`
+      const api = `${import.meta.env.VITE_API}/api/showPromoCode/${localStorage.memberId}`
       const response = await this.axios.get(api)
       this.promoCode = response.data
 
