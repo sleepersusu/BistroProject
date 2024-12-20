@@ -4,10 +4,17 @@
 
     <div class="container d-flex my-5">
       <ul class="d-flex flex-wrap">
-        <li v-for="prize in pointPrizes" :key="prize.id" class="d-flex flex-column" style="width: 18rem; margin: 10px">
+        <li
+          v-for="prize in pointPrizes"
+          :key="prize.id"
+          class="d-flex flex-column"
+          style="width: 18rem; margin: 10px"
+        >
           <div
             v-if="prize.rewardsStatus == '上架中'"
-            class="card" style="height: 490px; position: relative" >
+            class="card"
+            style="height: 490px; position: relative"
+          >
             <!-- 動態綁定圖片的 Base64 編碼 -->
             <img
               :src="'data:image/jpeg;base64,' + prize.base64Image"
@@ -21,19 +28,20 @@
                 <h5 class="card-text" style="color: red">{{ prize.pointPrizesPoints }} 點</h5>
               </div>
               <p class="card-text">{{ prize.pointPrizesDescription }}</p>
-              <a
-                href="#"
-                class="btn btn-primary mt-auto"
-                style="position: absolute; bottom: 16px"
-                @click="redeemPrize(prize)">兌換商品
-              </a>
+              <div
+                class="d-flex justify-content-between align-items-center"
+                style="position: absolute; bottom: 16px; width: 100%"
+              >
+                <a href="#" class="btn btn-primary" @click="redeemPrize(prize)"> 兌換商品 </a>
+                <h5 class="card-text mb-0 text-danger">剩餘{{ prize.pointPrizesCount }} 份</h5>
+              </div>
             </div>
           </div>
         </li>
       </ul>
     </div>
 
-    <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal" />
+    <!-- <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal" /> -->
   </div>
 
   <login ref="loginModal"></login>
@@ -77,13 +85,7 @@ export default {
 
     async getPointPrizes() {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
-
       const response = await this.axios.get(api)
-      // console.log("66666", response)
-      // console.log(localStorage)
-      // console.log(localStorage.memberId)
-
-      const memberId = user.memberId
       this.pointPrizes = response.data
     },
 
@@ -98,16 +100,14 @@ export default {
         cancelButtonText: '在想一下',
         reverseButtons: true,
       })
-
       //if(兌換成功)產生兌換碼
       if (result.isConfirmed) {
+        //用promoCode去接產生的兌換碼
         const promoCode = this.generateRandomCode()
-
-        // 調用子組件的方法更新優惠碼和商品信息
-        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode }
 
         const memberId = user.memberId
         if (memberId) {
+
           const requestData = {
             memberId,
             pointPrizesId: prize.id, // 商品 ID 來自按下的商品
@@ -124,57 +124,42 @@ export default {
             //產生兌換紀錄
             const api = `${import.meta.env.VITE_API}/api/pointRecord`
             const response = await this.axios.post(api, requestData)
-            // console.log(response)
-
+            if (response.data.兌換狀態) {
+                window.Swal.fire({
+                  toast: true,
+                  // position: 'top-end',
+                  icon: 'success',
+                  title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
+                  html: `兌換碼是 : ${promoCode}<br>可前往會員中心查看`,
+                  timer: 5000,
+                  showConfirmButton: false,
+                  timerProgressBar: true,
+                })
+              }
+          } catch (error) {
+            console.error('產生兌換紀錄失敗:', error);
+          }
+            //扣除獎品庫存
+          try {
+            const MinusPrizesApi = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
+            const MinusPrizeresponse = await this.axios.post(MinusPrizesApi, requestData)
+          } catch (error) {
+            console.error('扣除獎品庫存失敗:', error);
+          }
             //將會員各自的兌換碼存進SQL
+          try{
             const promoApi = `${import.meta.env.VITE_API}/api/promoCode`
-            const promoResponse = await fetch(promoApi, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(promoData),
-            })
+            const promoResponse = await this.axios.post(promoApi,promoData)
+          } catch (error) {
+            console.error('兌換碼存進SQL失敗:', error);
+          }
 
             //兌換商品後扣除相對應積分
+          try{
             const minusPointApi = `${import.meta.env.VITE_API}/api/minusMemberPoint`
             const minusPointResponse = await this.axios.post(minusPointApi, requestData)
-            console.log(minusPointResponse)
-
-            if (response.data.兌換狀態) {
-              window.Swal.fire({
-                toast: true,
-                // position: 'top-end',
-                icon: 'success',
-                title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
-                html: `兌換碼是 : ${promoCode}<br>可前往會員資訊查看`,
-                timer: 5000,
-                showConfirmButton: false,
-                timerProgressBar: true,
-              })
-
-              // 觸發子組件重新獲取資料的方法
-              this.$refs.pointTotal.getPromoCode()
-
-              const MinusPrizesApi = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
-              const MinusPrizesResponse = await fetch(MinusPrizesApi, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData), // 將資料轉換為 JSON 格式發送
-              })
-
-              if (MinusPrizesResponse.ok) {
-                console.log('庫存已減少')
-              } else {
-                console.error(
-                  '庫存減少失敗:',
-                  MinusPrizesResponse.status,
-                  await MinusPrizesResponse.text(),
-                )
-              }
-            } else {
-              console.error('Failed to record point:', response.status)
-            }
           } catch (error) {
-            console.error('Error sending request:', error)
+            console.error('兌換商品後扣除積分失敗:', error);
           }
         } else {
           //if(不是會員)跳轉到登入畫面
@@ -188,7 +173,6 @@ export default {
             reverseButtons: true, // 反轉按鈕的顯示順序
           }).then((result) => {
             if (result.isConfirmed) {
-              // this.$router.push({ path: 'Login' })
               this.openLoginModal()
             } else {
               console.log('User canceled the action')
