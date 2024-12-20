@@ -134,5 +134,10 @@ public class OrdersFrontService {
             return ordersRepository.save(newOrder);
     }
 
+    // 根據 memberId 查找所有訂單
+        public List<Orders> findAllOrdersByMemberId(Integer memberId) {
+            return ordersRepository.findByMembersId(memberId);
+        }
+
 
 }

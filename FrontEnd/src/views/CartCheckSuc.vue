@@ -25,8 +25,9 @@
         </p>
       </div>
       <div class="button-container">
-<!--        <a href="#" class="btn btn-primary cta-btn">Home</a>-->
-        <a href="#" class="btn btn-primary cta-btn">My Orders</a>
+        <router-link to="/membercenter/orders" class="btn btn-primary cta-btn">
+          My Orders
+        </router-link>
       </div>
     </div>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
