@@ -4,10 +4,7 @@
     <BannerTop v-bind:title="'Shopping Cart'"></BannerTop>
 
     <!-- Empty Cart State -->
-    <div
-      class="d-flex justify-content-center align-items-center flex-column my-5"
-      v-if="!hasCartItems"
-    >
+    <div class="d-flex justify-content-center align-items-center flex-column my-5" v-if="!hasCartItems">
       <i class="bi bi-emoji-frown display-1 mb-3"></i>
       <h3 class="mb-5">目前還沒有點餐紀錄!</h3>
       <router-link to="/menu" class="btn btn-primary btn-lg py-3 px-5">新增餐點</router-link>
@@ -29,11 +26,7 @@
                 >
                   <hr v-if="index !== 0">
                   <div class="col-md-3">
-                    <img
-                      :src="item.menu.productImgUrl"
-                      :alt="item.menu.productName"
-                      class="img-fluid rounded"
-                    />
+                    <img :src="item.menu.productImgUrl" :alt="item.menu.productName" class="img-fluid rounded"/>
                   </div>
                   <div class="col-md-5 text-black">
                     <h5 class="card-title">{{ item.menu.productName }}</h5>
@@ -70,35 +63,36 @@
                     </button>
                   </div>
                 </div>
+                <!-- Point Prizes -->
+                <div v-for="item in pointPrizes" class="position-relative">
+                  <hr />
+                  <div class="filter"></div>
+                  <div class="row cart-item">
+                    <div class="col-md-3">
+                      <img
+                        :src="'data:image/jpeg;base64,' + item.img"
+                        alt="Product 2"
+                        class="img-fluid rounded"
+                        style="width: 100px; height: 100px; object-fit: cover;"
+                      />
+                    </div>
+                    <div class="col-md-5 text-black">
+                      <h5 class="card-title">{{ item.name }}</h5>
+                      <p class="text-muted">積分獎品</p>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 text-end text-black">
+                      <p class="fw-bold"><del class="text-muted">$99.99 </del> $0</p>
+                      <button class="btn btn-lg btn-outline-danger">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
 
-            <!-- Point Prizes -->
-            <div v-for="item in pointPrizes" :key="item.name" class="position-relative">
-              <hr />
-              <div class="filter"></div>
-              <div class="row cart-item">
-                <div class="col-md-3">
-                  <img
-                    :src="'data:image/jpeg;base64,' + item.img"
-                    alt="Point Prize"
-                    class="img-fluid rounded"
-                    style="width: 100px; height: 100px; object-fit: cover;"
-                  />
-                </div>
-                <div class="col-md-5 text-black">
-                  <h5 class="card-title">{{ item.name }}</h5>
-                  <p class="text-muted">積分獎品</p>
-                </div>
-                <div class="col-md-2"></div>
-                <div class="col-md-2 text-end text-black">
-                  <p class="fw-bold"><del class="text-muted">$99.99</del> $0</p>
-                  <button class="btn btn-lg btn-outline-danger">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
 
             <!-- Continue Shopping Button -->
             <div class="text-start mb-4">
@@ -134,8 +128,8 @@
               </div>
             </div>
 
-            <!-- Promo Code Section -->
-            <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
+            <!-- Promo Code -->
+            <VerifyPromoCode  />
           </div>
         </div>
       </div>
@@ -145,18 +139,20 @@
 
 <script>
 import { mapState, mapActions } from 'pinia'
+import { pointStore } from '@/stores/pointStore'
 import CartButton from '@/components/cart/CartButton.vue'
 import CartTable from '@/components/cart/CartTable.vue'
 import CartTitle from '@/components/cart/CartTitle.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
-import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
+import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
 import { ref } from 'vue'
 
 const user = useUserStore()
+
 
 export default {
   name: 'Cart',
@@ -172,12 +168,28 @@ export default {
 
   data() {
     return {
-      pointPrizes: [],
       cartItems: [],
-      isLoading: ref(false),
+      isLoading:false,
+  }
+  },
+  methods: {
+    ...mapActions(cartStore, ['getCart', 'CountCart', 'MinusCart', 'removeItem']),
+
+
+    //all
+    async fetchCartItems() {
+
+      this.isLoading=true;
+
+      try {
+        const result = await this.getCart()
+        if (result && result.data) {isLoading: ref(false)}
+      }
+      catch (error) {
+        console.error('Failed to fetch cart items:', error)
+      }
     }
   },
-
   computed: {
     ...mapState(cartStore, ['calculateSubtotal', 'calculateTax', 'calculateTotal']),
     hasCartItems() {
@@ -237,15 +249,23 @@ export default {
       if (!user.memberId) {
         console.error('未登入會員')
         return
-      }
-
-      try {
+      }      try {
         await this.removeItem(item)
         await this.fetchCartItems()
       } catch (error) {
         console.error('刪除商品失敗:', error)
-      }
-    },
+    }
+  }
+},
+  computed: {
+    //getter or state 放在computed
+    ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
+    ...mapState(pointStore,["pointPrizes"]),
+
+    hasCartItems() {
+      return this.cartItems.length > 0; // 判斷購物車是否有資料
+    }
+
   },
 
   created() {

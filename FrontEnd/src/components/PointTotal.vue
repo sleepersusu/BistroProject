@@ -25,8 +25,12 @@
 </template>
 
 <script>
+import { pointStore } from '@/stores/pointStore';
+import { useUserStore } from '@/stores/userStore';
+import { mapState } from 'pinia';
+
 export default {
-  props: ['redeemedPrize', 'memberId'],
+  props: ['redeemedPrize'],
 
   data() {
     return {
@@ -36,6 +40,7 @@ export default {
 
   methods: {
     async getPromoCode() {
+      //透過computed:{...mapState(useUserStore,["memberId"])}取得會員ID
       const api = `${import.meta.env.VITE_API}/api/showPromoCode/${this.memberId}`
 
       const response = await this.axios.get(api)
@@ -60,6 +65,10 @@ export default {
     console.log('子组件 created', this.memberId)
     this.getPromoCode()
   },
+
+  computed:{
+    ...mapState(useUserStore,["memberId"])
+  }
 }
 </script>
 
