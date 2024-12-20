@@ -8,19 +8,21 @@
     <div class="row g-4 justify-content-center d-flex align-items-center" style="min-height: 100vh">
       <div class="col-lg-7 col-md-12">
         <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
-          <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
-            <img src="../../public/images/rest.jpg" alt="Example Image" class="w-100 h-100" style="object-fit: cover; width: 100%; height: 100%; max-width: calc(100% - 200px);
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw"
+            class="w-100 h-100" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="
+              max-width: calc(100% - 250px);
               margin-left: auto;
               margin-right: auto;
-              display: block;" />
-          </div>
+              display: block;
+            "></iframe>
         </div>
         <div id="inform" class="container py-4" style="background-color: transparent">
           <div class="row g-4 justify-content-center">
             <div class="col-lg-5 col-md-6 col-12">
               <div class="card text-center p-4 position-relative">
                 <div
-                  class="position-absolute top-0 start-50 translate-middle bg-success text-white rounded-circle d-flex justify-content-center align-items-center"
+                  class="position-absolute top-0 start-50 translate-middle bg-black text-white rounded-circle d-flex justify-content-center align-items-center"
                   style="width: 60px; height: 60px; z-index: 10">
                   <font-awesome-icon :icon="['fas', 'phone']" style="font-size: 27px"></font-awesome-icon>
                 </div>
@@ -34,7 +36,7 @@
             <div class="col-lg-5 col-md-6 col-12">
               <div class="card text-center p-4 position-relative">
                 <div
-                  class="position-absolute top-0 start-50 translate-middle bg-success text-white rounded-circle d-flex justify-content-center align-items-center"
+                  class="position-absolute top-0 start-50 translate-middle bg-black text-white rounded-circle d-flex justify-content-center align-items-center"
                   style="width: 60px; height: 60px; z-index: 10">
                   <font-awesome-icon :icon="['far', 'envelope']" style="font-size: 27px"></font-awesome-icon>
                 </div>
@@ -88,7 +90,7 @@
             <div class="col-md-6">
               <label for="numberPeople" class="form-label">訂位人數</label>
               <select class="form-select frame" id="numberPeople" v-model.number="reservations.numberPeople" required>
-                <option value="0" selected>選擇人數(包含小孩)</option>
+                <option value="0" selected>選擇人數</option>
                 <option value="1">1位</option>
                 <option value="2">2位</option>
                 <option value="3">3位</option>
@@ -123,7 +125,7 @@
             <textarea class="form-control frame" id="notes" rows="4" v-model="reservations.notes"></textarea>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-success w-100">確認訂位</button>
+            <button type="submit" class="btn btn-black w-100">確認訂位</button>
           </div>
         </form>
       </div>
@@ -266,7 +268,16 @@ export default {
 </script>
 
 <style scoped>
-.btn-orange {
+.btn-black {
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+}
+.btn-black:hover {
+  background-color: darkgray;
+  color: white;
+}
+/* .btn-orange {
   background-color: #ff6600;
   border: 1px solid #ff6600;
   color: white;
@@ -274,7 +285,6 @@ export default {
   font-size: 16px;
   border-radius: 5px;
   cursor: pointer;
-  /* 滑鼠樣式變成指針 */
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -298,7 +308,7 @@ export default {
   background-color: #ff6600;
   color: white;
   border-color: #ff6600;
-}
+} */
 
 /*:class="{
           'btn-outline-orange': selectedTime !== time,  
