@@ -46,12 +46,13 @@
             <router-link class="nav-link position-relative" to="/cart">
               <i class="bi bi-cart fs-5"></i>
               <span
+                v-if="totalCartItems > 0"
                 class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary"
               >
-                3
+                {{ totalCartItems > 99 ? '99+' : totalCartItems }}
                 <span class="visually-hidden">unread messages</span>
-              </span></router-link
-            >
+              </span>
+            </router-link>
           </li>
           <li class="nav-item ms-lg-5">
             <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
@@ -82,6 +83,7 @@ import Login from './login.vue'
 import { useUserStore } from '@/stores/userStore'
 import { lotteryStore } from '@/stores/lotteryStore'
 import { mapState, mapActions } from 'pinia'
+import { cartStore } from '@/stores/cartStore.js'
 export default {
   data() {
     return {
@@ -94,10 +96,12 @@ export default {
   computed: {
     ...mapState(useUserStore, ['isLoggedIn', 'memberprofile', 'memberId']),
     ...mapState(lotteryStore, ['allChances']),
+    ...mapState(cartStore,['totalCartItems'])
   },
   methods: {
     ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn']),
     ...mapActions(lotteryStore, ['getAllChanceByMember']),
+    ...mapActions(cartStore, ['getCart']),
     navShadow() {
       requestAnimationFrame(() => {
         this.setShadow = window.scrollY > 100
@@ -105,6 +109,12 @@ export default {
     },
     openLoginModal() {
       this.$refs.loginModal.openLoginModal()
+    },
+    async created() {
+      this.checkLoggedIn();
+      if (this.isLoggedIn) {
+        await this.getCart(); // 登入後獲取購物車數據
+      }
     },
   },
   mounted() {
@@ -114,6 +124,14 @@ export default {
   },
   unmounted() {
     window.removeEventListener('scroll', this.navShadow)
+  },
+  watch:{
+    // 監聽登入狀態變化
+    async isLoggedIn(newValue) {
+      if (newValue) {
+        await this.getCart();
+      }
+    }
   },
   created() {
     this.checkLoggedIn()

@@ -10,9 +10,12 @@ const user = useUserStore()
 export const orderStore=defineStore('order',{
   state:()=>({
     orderItems:[],
-    currentOrderDetail: null
+    orderDetails: {},  // 存儲所有訂單詳情
   }),
   getters:{
+    // 可以添加需要的 getters
+    hasOrders: (state) => state.orderItems.length > 0,
+    getOrderDetailById: (state) => (ordersNumber) => state.orderDetails[ordersNumber],
 
   },
   actions:{
@@ -36,15 +39,35 @@ export const orderStore=defineStore('order',{
     async getOrderDetail(ordersNumber) {
       try {
         const url = `api/orders/detailList/${ordersNumber}`
-        const res = await axios.get(url)
-        this.currentOrderDetail = res.data
-        return res.data
+        const response = await axios.get(url)
+        const filteredData = {
+          ordersName: response.data.ordersName || '',
+          ordersTel: response.data.ordersTel || '',
+          seatType: response.data.seatType || '',
+          ordersSumPrice: response.data.ordersSumPrice || 0,
+          pointGetted: response.data.pointGetted || 0,
+          ordersRequest: response.data.ordersRequest || '',
+          ordersDetails: response.data.ordersDetails || [],
+          payment: response.data.payment || []
+        }
+        this.orderDetails[ordersNumber] = filteredData
+        return filteredData
       }
       catch (e) {
         console.error('獲取訂單詳情失敗:', e)
-        throw e
+        // 移除任何過期數據
+        this.clearOrderDetail(ordersNumber);
+        throw e;
       }
     },
+    //清理訂單詳情緩存
+    clearOrderDetail(ordersNumber) {
+      delete this.orderDetails[ordersNumber]
+    },
+    //清理所有訂單詳情
+    clearAllOrderDetails() {
+      this.orderDetails = {}
+    }
 
   }
 
