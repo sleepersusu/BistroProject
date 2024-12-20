@@ -30,10 +30,10 @@ public class ImageController {
 	
 	
 	//客戶端	
-	@GetMapping("/api/{type}/photo/{ID}")
-	public ResponseEntity<byte[]> downloadPhoto(@PathVariable String type,@PathVariable Integer ID) {
+	@GetMapping("/api/{type}/photo/{id}")
+	public ResponseEntity<byte[]> downloadPhoto(@PathVariable String type,@PathVariable Integer id) {
 		
-		return imageService.imageDownload(type,ID);
+		return imageService.imageDownload(type,id);
 		
 	}
 	

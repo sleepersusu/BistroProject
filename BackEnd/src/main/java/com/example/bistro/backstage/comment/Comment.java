@@ -95,6 +95,11 @@ public class Comment {
 		return members.getId();
 	}
 	
+	@JsonProperty("menuid")
+	public Integer fetchmenuId() {
+		return menu.getID();
+	}
+	
 	
 	
 	public Integer getID() {

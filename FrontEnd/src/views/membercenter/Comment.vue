@@ -60,13 +60,12 @@
   </div>
 
 
-  <CommentUpdateModal ref="commentUpdateModal" :currentComment="currentComment"></CommentUpdateModal>
+  <CommentUpdateModal ref="commentUpdateModal" :comment="currentComment"></CommentUpdateModal>
 </template>
 
 <script>
 import CommentTable from '@/components/CommentTable.vue'
 import CommentUpdateModal from '@/components/CommentUpdateModal.vue'
-import { comment } from 'postcss';
 
 
 export default {

@@ -1,4 +1,3 @@
-
 <template>
   <div class="container">
     <section class="py-5 overflow-hidden">
@@ -15,12 +14,7 @@
           <div class="col-md-12">
             <div class="category-carousel swiper" refs="carousel">
               <div class="swiper-wrapper d-flex justify-content-around" style="overflow-x: auto">
-
-
-                <button
-                  class="nav-link swiper-slide text-center"
-                  @click="loadAllMenu()"
-                >
+                <button class="nav-link swiper-slide text-center" @click="loadAllMenu()">
                   <img
                     src="/public/images/餐點/全部.jpg"
                     class="rounded-circle button-image"
@@ -117,8 +111,12 @@
         >
         </MenuCard>
       </div>
-        <MenuCommentModal ref="commentModal" :comments="comments" :productName="currentProduct"></MenuCommentModal>
-        <MenuDescribeModal ref="menuDescribeModal" :menu="menu"></MenuDescribeModal>
+      <MenuCommentModal
+        ref="commentModal"
+        :comments="comments"
+        :productName="currentProduct"
+      ></MenuCommentModal>
+      <MenuDescribeModal ref="menuDescribeModal" :menu="menu"></MenuDescribeModal>
     </div>
   </div>
 </template>
@@ -127,23 +125,22 @@
 import axios from 'axios'
 import MenuCard from '@/components/MenuCard.vue'
 import MenuCommentModal from '@/components/MenuCommentModal.vue'
-import MenuDescribeModal from '@/components/MenuDescribeModal.vue';
-
+import MenuDescribeModal from '@/components/MenuDescribeModal.vue'
 
 export default {
   components: {
     MenuCard,
     MenuCommentModal,
-    MenuDescribeModal
+    MenuDescribeModal,
   },
 
   data() {
     return {
       menus: [],
-      currentProduct:'',
+      currentProduct: '',
       comments: [],
       menuCount: 0,
-      menu:{}
+      menu: {},
     }
   },
   methods: {
@@ -159,8 +156,7 @@ export default {
       this.menuCount = newCount
     },
 
-    handleAddToCart({ id, count }) {
-    },
+    handleAddToCart({ id, count }) {},
 
     // 按分類加載菜單數據
     clickCategory(category) {
@@ -180,7 +176,7 @@ export default {
         })
     },
     openModal(menu) {
-      this.currentProduct=menu.productName
+      this.currentProduct = menu.productName
       let api = `${import.meta.env.VITE_API}/api/${menu.productName}/comment`
       this.axios
         .get(api)
@@ -194,27 +190,21 @@ export default {
 
       this.$refs.commentModal.showModal()
     },
-    openDescribeModal(menu) {
-      let api = `${import.meta.env.VITE_API}/api/${menu.id}/menu`
-      this.axios
-        .get(api)
-        .then((response) => {
-          this.menu = response.data
-        })
-        .catch((error) => {
-          console.error('Error loading menu:', error)
-        })
-
-      this.$refs.menuDescribeModal.showModal()
+    async openDescribeModal(menu) {
+      try {
+        console.log('Opening modal for menu:', menu)
+        let api = `${import.meta.env.VITE_API}/api/${menu.id}/menu`
+        let response = await this.axios.get(api)
+        this.menu = response.data
+        this.$refs.menuDescribeModal.showModal()
+      } catch (error) {
+        console.error('Error loading menu:', error)
+      }
     },
-
-
-
-
   },
   created() {
     this.loadAllMenu()
-  }
+  },
 }
 </script>
 
