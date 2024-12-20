@@ -2,9 +2,7 @@
 
   <div class="container-fluid">
     <div class="row">
-      <nav class="col-md-3 col-lg-2 p-3 bg-light">
-        <MembercenterNav></MembercenterNav>
-      </nav>
+
       <main class="col-md-9 col-lg-10 p-4">
         <h1 class="text-center">我的評論</h1>
         <div class="container-fluid py-4 px-5">
@@ -37,6 +35,7 @@
                         </CommentTable>
                       </tbody>
 
+
                       <tbody v-if="NoComment">
                         <tr>
                           <td colspan="4">目前尚未有評論</td>
@@ -59,26 +58,28 @@
       </main>
     </div>
   </div>
+
+
+  <CommentUpdateModal ref="commentUpdateModal" :currentComment="currentComment"></CommentUpdateModal>
 </template>
 
 <script>
 import CommentTable from '@/components/CommentTable.vue'
 import CommentUpdateModal from '@/components/CommentUpdateModal.vue'
-import MembercenterNav from '@/components/memberCenter/membercenterNav.vue';
+import { comment } from 'postcss';
+
 
 export default {
   components: {
     CommentTable,
     CommentUpdateModal,
-    MembercenterNav,
   },
 
   data() {
     return {
       comments: [],
       NoComment: true,
-
-      currentCommentId: '',
+      currentComment:{},
     }
   },
   methods: {
@@ -86,9 +87,9 @@ export default {
       let API_URL = `${import.meta.env.VITE_API}/api/member/comment`
 
       this.axios
-        .get(API_URL,{ withCredentials: true })
+        .get(API_URL)
         .then(async (response) => {
-          
+
           this.comments = response.data
           this.NoComment = false
         })
@@ -97,17 +98,13 @@ export default {
           this.NoComment = true
         })
     },
-
     async openUpdateCommentModal(comment) {
-      this.currentCommentId = comment.id
+      this.currentComment = comment
       this.$refs.commentUpdateModal.showModal()
     },
   },
 
   created() {
-    this.loadAllCommentByMember()
-  },
-  updated() {
     this.loadAllCommentByMember()
   },
 }

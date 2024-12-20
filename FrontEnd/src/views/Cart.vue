@@ -68,11 +68,55 @@
                 </div>
               </div>
             </div>
-            <!-- Continue Shopping Button -->
+
+            <div v-for="item in pointPrizes" class="position-relative ">
+              <hr />
+              <div class="filter"></div>
+              <div class="row cart-item" >
+                <div class="col-md-3">
+                  <img
+                    :src="'data:image/jpeg;base64,' + item.img"
+                    alt="Product 2"
+                    class="img-fluid rounded"
+                    style="width: 100px; height: 100px; object-fit: cover;"
+                  />
+                </div>
+                <div class="col-md-5 text-black">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <p class="text-muted">積分獎品</p>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2 text-end text-black">
+                  <p class="fw-bold"><del class="text-muted">$99.99 </del> $0</p>
+                  <button class="btn btn-lg btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+         <!-- Continue Shopping Button -->
             <div class="text-start mb-4">
               <router-link to="/menu" class="btn btn-outline-primary">
                 <i class="bi bi-arrow-left me-2"></i>Continue Shopping
               </router-link>
+            </div>
+        
+        
+      </div>
+
+      <div class="col-lg-4">
+        <!-- Cart Summary -->
+        <div class="card cart-summary">
+          <div class="card-body text-black">
+            <h5 class="card-title mb-4">Order Summary</h5>
+
+            <div class="d-flex justify-content-between mb-3">
+              <span>Subtotal</span>
+              <span>${{ calculateSubtotal }}</span>
             </div>
           </div>
               <div class="col-lg-4">
@@ -91,6 +135,22 @@
                       <span>${{ calculateTax }}</span>
                     </div>
                     <hr />
+
+            <div class="d-flex justify-content-between mb-4" style="color: #dd2222">
+              <strong>Total</strong>
+              <strong>${{ calculateTotal }}</strong>
+            </div>
+            <button class="btn btn-dark w-100">
+              <router-link class="nav-link" to="/cartCheckout">Proceed to Checkout</router-link>
+            </button>
+          </div>
+        </div>
+
+        <!-- Promo Code -->
+        <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
+
+
+
                     <div class="d-flex justify-content-between mb-4" style="color: #dd2222">
                       <strong>Total</strong>
                       <strong>${{ calculateTotal }}</strong>
@@ -106,6 +166,7 @@
       </div>
 
   </div>
+
 </template>
 
 
@@ -120,6 +181,7 @@ import CartTitle from '@/components/cart/CartTitle.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
+import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 import { ref } from 'vue'
@@ -133,16 +195,28 @@ export default {
     CartTitle,
     CartTable,
     CartButton,
+    VerifyPromoCode,
   },
+  
   data() {
     return {
+      pointPrizes: [],
       cartItems: [],
       isLoading:(ref(false)),
-    };
   },
+  
   methods: {
     ...mapActions(cartStore, ["getCart","CountCart","MinusCart","removeItem"]),
 
+    // 處理子組件傳遞過來的資料
+    handlePromoCodeTransmit(payload) {
+      console.log('從子組件收到的促銷碼名稱:', payload.name)
+
+      this.pointPrizes.push({
+        name: payload.name,
+        img: payload.image
+      })
+    },
   //all
     async fetchCartItems() {
       this.isLoading=true;
@@ -210,6 +284,7 @@ export default {
         console.error('未登入會員')
       }
     }
+
   },
   computed: {
     //getter or state 放在computed
@@ -227,6 +302,16 @@ export default {
 
 
 <style scoped>
+.filter{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 7px;
+  background: rgba(255, 76, 63, 0.1);
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
 
 .step-indicator {
   display: flex;

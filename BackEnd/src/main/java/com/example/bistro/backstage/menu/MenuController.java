@@ -179,9 +179,7 @@ public class MenuController {
 				menu.setProductImgUrl(filename);
 			}
 
-			Menu updateMenu = menuService.updateMenu(menu);
-
-			
+			menuService.updateMenu(menu);
 
 			return "redirect:/Bistro/findAllMenu";
 

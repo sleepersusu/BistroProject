@@ -104,7 +104,6 @@ export default {
       this.axios.get(API_URL)
       .then((response)=>{
         this.menus=response.data
-        console.log(response.data)
       })
 
     },
