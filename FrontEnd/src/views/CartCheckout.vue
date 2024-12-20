@@ -20,7 +20,6 @@
         <h4>Confirm Order</h4>
 
         <form @submit.prevent="placeOrder">
-
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
@@ -153,7 +152,11 @@
                   <div ref="ecpayFormContainer" style="display: none;"></div>
 
                 <div>
-                  <button type="button" class="btn btn-dark w-100">PLACE ORDER</button>
+                  <button
+                    type="submit"
+                    class="btn btn-dark w-100" @click="placeOrder">
+                    PLACE ORDER
+                  </button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -214,7 +217,7 @@ export default defineComponent({
       //replace(/\D/g, '') 是 JavaScript 中 String.prototype.replace() 方法的一種用法，移除字串中的所有非數字的字。
         this.orderData.ordersTel = this.orderData.ordersTel.replace(/\D/g, '');
     },
-    
+
     validateName() {
       // 僅保留中文和英文，移除數字和特殊符號
       this.orderData.ordersName = this.orderData.ordersName
@@ -225,7 +228,7 @@ export default defineComponent({
     async jumpEcpay() {
       window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`;
     },
-    
+
     async memberPointGet() {
       // const pointData {
       // }

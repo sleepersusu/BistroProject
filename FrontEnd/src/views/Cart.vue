@@ -1,29 +1,32 @@
 <template>
   <div>
-
     <Loading :active="isLoading"></Loading>
     <BannerTop v-bind:title="'Shopping Cart'"></BannerTop>
-    <!-- 判斷是否有購物車 -->
-      <div
-        class="d-flex justify-content-center align-items-center flex-column my-5"
-        v-if="!hasCartItems"
-      >
-        <i class="bi bi-emoji-frown display-1 mb-3"></i>
-        <h3 class="mb-5">目前還沒有點餐紀錄!</h3>
-        <router-link to="/menu" class="btn btn-primary btn-lg py-3 px-5">新增餐點</router-link>
-      </div>
 
-      <div v-else>
-        <div class="container py-5">
-          <div class="row">
-            <div class="col-lg-8">
-            <!-- Cart Items -->
+    <!-- Empty Cart State -->
+    <div
+      class="d-flex justify-content-center align-items-center flex-column my-5"
+      v-if="!hasCartItems"
+    >
+      <i class="bi bi-emoji-frown display-1 mb-3"></i>
+      <h3 class="mb-5">目前還沒有點餐紀錄!</h3>
+      <router-link to="/menu" class="btn btn-primary btn-lg py-3 px-5">新增餐點</router-link>
+    </div>
+
+    <!-- Cart Content -->
+    <div v-else>
+      <div class="container py-5">
+        <div class="row">
+          <!-- Left Column - Cart Items -->
+          <div class="col-lg-8">
+            <!-- Regular Cart Items -->
             <div class="card mb-4">
               <div class="card-body">
                 <div
                   v-for="(item, index) in cartItems"
                   :key="item.cartId"
-                  class="row cart-item mb-3">
+                  class="row cart-item mb-3"
+                >
                   <hr v-if="index !== 0">
                   <div class="col-md-3">
                     <img
@@ -41,8 +44,8 @@
                       <button
                         class="btn btn-outline-secondary btn-sm"
                         type="button"
-                        @click="decreaseQuantity(item)">-
-                      </button>
+                        @click="decreaseQuantity(item)"
+                      >-</button>
                       <input
                         style="max-width: 100px"
                         type="text"
@@ -53,15 +56,16 @@
                       <button
                         class="btn btn-outline-secondary btn-sm"
                         type="button"
-                        @click="increaseQuantity(item)">+
-                      </button>
+                        @click="increaseQuantity(item)"
+                      >+</button>
                     </div>
                   </div>
                   <div class="col-md-2 text-end text-black">
                     <p class="fw-bold">${{ (item.cartCount * item.menu.productPrice).toFixed(2) }}</p>
                     <button
                       class="btn btn-lg btn-outline-danger"
-                      @click="removeFromCart(item)">
+                      @click="removeFromCart(item)"
+                    >
                       <i class="bi bi-trash"></i>
                     </button>
                   </div>
@@ -69,14 +73,15 @@
               </div>
             </div>
 
-            <div v-for="item in pointPrizes" class="position-relative ">
+            <!-- Point Prizes -->
+            <div v-for="item in pointPrizes" :key="item.name" class="position-relative">
               <hr />
               <div class="filter"></div>
-              <div class="row cart-item" >
+              <div class="row cart-item">
                 <div class="col-md-3">
                   <img
                     :src="'data:image/jpeg;base64,' + item.img"
-                    alt="Product 2"
+                    alt="Point Prize"
                     class="img-fluid rounded"
                     style="width: 100px; height: 100px; object-fit: cover;"
                   />
@@ -87,91 +92,56 @@
                 </div>
                 <div class="col-md-2"></div>
                 <div class="col-md-2 text-end text-black">
-                  <p class="fw-bold"><del class="text-muted">$99.99 </del> $0</p>
+                  <p class="fw-bold"><del class="text-muted">$99.99</del> $0</p>
                   <button class="btn btn-lg btn-outline-danger">
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
               </div>
-
             </div>
-          </div>
-        </div>
 
-         <!-- Continue Shopping Button -->
+            <!-- Continue Shopping Button -->
             <div class="text-start mb-4">
               <router-link to="/menu" class="btn btn-outline-primary">
                 <i class="bi bi-arrow-left me-2"></i>Continue Shopping
               </router-link>
             </div>
-        
-        
-      </div>
-
-      <div class="col-lg-4">
-        <!-- Cart Summary -->
-        <div class="card cart-summary">
-          <div class="card-body text-black">
-            <h5 class="card-title mb-4">Order Summary</h5>
-
-            <div class="d-flex justify-content-between mb-3">
-              <span>Subtotal</span>
-              <span>${{ calculateSubtotal }}</span>
-            </div>
           </div>
-              <div class="col-lg-4">
-                <!-- Cart Summary -->
-                <div class="card cart-summary">
-                  <div class="card-body text-black">
-                    <h5 class="card-title mb-4">Order Summary</h5>
 
-                    <div class="d-flex justify-content-between mb-3">
-                      <span>Subtotal</span>
-                      <span>${{ calculateSubtotal }}</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between mb-3">
-                      <span>Tax</span>
-                      <span>${{ calculateTax }}</span>
-                    </div>
-                    <hr />
-
-            <div class="d-flex justify-content-between mb-4" style="color: #dd2222">
-              <strong>Total</strong>
-              <strong>${{ calculateTotal }}</strong>
-            </div>
-            <button class="btn btn-dark w-100">
-              <router-link class="nav-link" to="/cartCheckout">Proceed to Checkout</router-link>
-            </button>
-          </div>
-        </div>
-
-        <!-- Promo Code -->
-        <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
-
-
-
-                    <div class="d-flex justify-content-between mb-4" style="color: #dd2222">
-                      <strong>Total</strong>
-                      <strong>${{ calculateTotal }}</strong>
-                    </div>
-                    <button class="btn btn-dark w-100">
-                      <router-link class="nav-link" to="/cartCheckout">Proceed to Checkout</router-link>
-                    </button>
-                  </div>
+          <!-- Right Column - Cart Summary -->
+          <div class="col-lg-4">
+            <div class="card cart-summary">
+              <div class="card-body text-black">
+                <h5 class="card-title mb-4">Order Summary</h5>
+                <div class="d-flex justify-content-between mb-3">
+                  <span>Subtotal</span>
+                  <span>${{ calculateSubtotal }}</span>
                 </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span>Tax</span>
+                  <span>${{ calculateTax }}</span>
+                </div>
+                <hr />
+                <div class="d-flex justify-content-between mb-4" style="color: #dd2222">
+                  <strong>Total</strong>
+                  <strong>${{ calculateTotal }}</strong>
+                </div>
+                <button class="btn btn-dark w-100">
+                  <router-link class="nav-link" to="/cartCheckout">
+                    Proceed to Checkout
+                  </router-link>
+                </button>
+              </div>
             </div>
+
+            <!-- Promo Code Section -->
+            <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
           </div>
         </div>
       </div>
-
+    </div>
   </div>
-
 </template>
-
-
-
-
 
 <script>
 import { mapState, mapActions } from 'pinia'
@@ -185,7 +155,9 @@ import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 import { ref } from 'vue'
+
 const user = useUserStore()
+
 export default {
   name: 'Cart',
   components: {
@@ -197,112 +169,93 @@ export default {
     CartButton,
     VerifyPromoCode,
   },
-  
+
   data() {
     return {
       pointPrizes: [],
       cartItems: [],
-      isLoading:(ref(false)),
+      isLoading: ref(false),
+    }
   },
-  
-  methods: {
-    ...mapActions(cartStore, ["getCart","CountCart","MinusCart","removeItem"]),
 
-    // 處理子組件傳遞過來的資料
+  computed: {
+    ...mapState(cartStore, ['calculateSubtotal', 'calculateTax', 'calculateTotal']),
+    hasCartItems() {
+      return this.cartItems.length > 0
+    },
+  },
+
+  methods: {
+    ...mapActions(cartStore, ['getCart', 'CountCart', 'MinusCart', 'removeItem']),
+
     handlePromoCodeTransmit(payload) {
       console.log('從子組件收到的促銷碼名稱:', payload.name)
-
       this.pointPrizes.push({
         name: payload.name,
         img: payload.image
       })
     },
-  //all
+
     async fetchCartItems() {
-      this.isLoading=true;
+      this.isLoading = true
       try {
-        const result = await this.getCart();
-        if (result && result.data) {
-          console.log('Fetched cart items:', result.data);
-          this.cartItems = result.data;
+        const result = await this.getCart()
+        if (result?.data) {
+          console.log('Fetched cart items:', result.data)
+          this.cartItems = result.data
         }
-      }
-      catch (error) {
-        console.error('Failed to fetch cart items:', error);
-      }
-      finally {
-        this.isLoading = false;
+      } catch (error) {
+        console.error('Failed to fetch cart items:', error)
+      } finally {
+        this.isLoading = false
       }
     },
 
+    async increaseQuantity(item) {
+      try {
+        const result = await this.CountCart(item.menu)
+        if (result?.data) {
+          this.cartItems = result.data
+        }
+      } catch (error) {
+        console.error('Failed to increase quantity:', error)
+      }
+    },
 
-    //++
-      async increaseQuantity(item) {
-        try {
-          // 確保傳遞完整的 menu 對象
-          const result = await this.CountCart(item.menu);
-          if (result && result.data) {
-            this.cartItems = result.data;
-          }
-        } catch (error) {
-          console.error('Failed to increase quantity:', error);
+    async decreaseQuantity(item) {
+      try {
+        const result = await this.MinusCart(item.menu)
+        if (result?.data) {
+          this.cartItems = result.data
         }
-      },
-    //--
-      async decreaseQuantity(item) {
-        if (item.cartCount > 1) {
-          try {
-            const result = await this.MinusCart(item.menu);
-            if (result && result.data) {
-              this.cartItems = result.data;
-            }
-          } catch (error) {
-            console.error('Failed to decrease quantity:', error);
-          }
-        } else {
-          // 數量=1，直接刪掉
-          try {
-            const result = await this.MinusCart(item.menu);
-            if (result && result.data) {
-              this.cartItems = result.data;
-            }
-          } catch (error) {
-            console.error('Failed to remove item:', error);
-          }
-        }
-      },
-  //刪除的controller還沒做 ==
+      } catch (error) {
+        console.error('Failed to decrease quantity:', error)
+      }
+    },
+
     async removeFromCart(item) {
-      if (user.memberId) {
-        try {
-          await this.removeItem(item)
-          await this.fetchCartItems() // 重新獲取購物車數據
-        } catch (error) {
-          console.error('刪除商品失敗:', error)
-        }
-      } else {
+      if (!user.memberId) {
         console.error('未登入會員')
+        return
       }
-    }
 
-  },
-  computed: {
-    //getter or state 放在computed
-    ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
-    hasCartItems() {
-      return this.cartItems.length > 0; // 判斷購物車是否有資料
+      try {
+        await this.removeItem(item)
+        await this.fetchCartItems()
+      } catch (error) {
+        console.error('刪除商品失敗:', error)
+      }
     },
   },
-  watch: {},
+
   created() {
     this.fetchCartItems()
   },
 }
 </script>
 
-
 <style scoped>
-.filter{
+.filter {
   position: absolute;
   top: 0;
   left: 0;
