@@ -83,7 +83,7 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-2 text-end text-black">
                       <p class="fw-bold"><del class="text-muted">$99.99 </del> $0</p>
-                      <button class="btn btn-lg btn-outline-danger">
+                      <button class="btn btn-lg btn-outline-danger" @click="removeCartPrize">
                         <i class="bi bi-trash"></i>
                       </button>
                     </div>
@@ -207,6 +207,13 @@ export default {
         img: payload.image
       })
     },
+    removeCartPrize(){
+      console.log("有跑到")
+      this.pointPrizes.remove({
+        name: payload.name,
+        img: payload.image
+      })
+    },
 
     async fetchCartItems() {
       this.isLoading = true
@@ -262,6 +269,7 @@ export default {
     ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
     ...mapState(pointStore,["pointPrizes"]),
 
+
     hasCartItems() {
       return this.cartItems.length > 0; // 判斷購物車是否有資料
     }
@@ -275,7 +283,7 @@ export default {
 </script>
 
 <style scoped>
-.filter {
+/* .filter {
   position: absolute;
   top: 0;
   left: 0;
@@ -284,7 +292,7 @@ export default {
   height: 100%;
   width: 100%;
   border-radius: 10px;
-}
+} */
 
 .step-indicator {
   display: flex;

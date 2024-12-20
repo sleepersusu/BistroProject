@@ -45,6 +45,10 @@ const router = createRouter({
               path: 'lotteryresult',
               component: () => import('../views/membercenter/LotteryResult.vue'),
             },
+            {
+              path: 'MerberOwnPrize',
+              component: () => import('../views/membercenter/MerberOwnPrize.vue'),
+            },
           ],
         },
         {
