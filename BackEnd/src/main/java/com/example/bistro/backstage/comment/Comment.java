@@ -83,13 +83,6 @@ public class Comment {
 		return members.getMemberSex();
 	}
 	
-	
-	
-	@JsonProperty("memberImg")
-	public byte[] fetchMemberImg() {
-		return members.getMemberImg();
-	}
-	
 	@JsonProperty("memberid")
 	public Integer fetchMemberId() {
 		return members.getId();

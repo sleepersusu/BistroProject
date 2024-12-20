@@ -221,9 +221,9 @@ public class CommentRestController {
 	@Transactional
 	@PutMapping("/api/put/comment/{ID}") // 修改評論
 	public ResponseEntity<Map<String, Object>> updateComment(@PathVariable Integer ID,
-			@RequestBody Comment updateComment) {
+			@RequestBody  CommentDTO dto) {
 		
-		System.out.println(updateComment);
+		
 		
 		
 		// 查詢原始評論
@@ -234,12 +234,12 @@ public class CommentRestController {
 
 		try {
 			// 查詢相關的菜單與會員
-			Menu menu = menuService.findMenuById(updateComment.fetchmenuId());
+			Menu menu = menuService.findMenuById(dto.getMenuId());
 			if (menu == null) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "菜單不存在"));
 			}
 
-			Optional<Members> op = membersRepo.findById(updateComment.fetchMemberId());
+			Optional<Members> op = membersRepo.findById(dto.getMemberId());
 
 			if (op.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "會員不存在"));
@@ -251,9 +251,9 @@ public class CommentRestController {
 			// 更新評論資料
 			comment.setMenu(menu);
 			comment.setMembers(members);
-			comment.setCommentProduct(updateComment.getCommentProduct());
-			comment.setCommentMessage(updateComment.getCommentMessage());
-			comment.setCommentRating(updateComment.getCommentRating());
+			comment.setCommentProduct(dto.getCommentProduct());
+			comment.setCommentMessage(dto.getCommentMessage());
+			comment.setCommentRating(dto.getCommentRating());
 
 			// 更新評論
 			commentService.updateComment(comment);

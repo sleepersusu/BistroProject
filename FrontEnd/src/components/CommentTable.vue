@@ -25,9 +25,9 @@
     </td>
     <td
       class="align-middle text-primary text-sm font-weight-normal d-flex justify-content-between"
-      data-label="用餐日期"
+      data-label="評論時間"
     >
-      2024/12/18
+      {{comment.commentTime}}
       <div class="btn-group dropend">
         <button
           class="btn btn-sm"
@@ -74,6 +74,11 @@ export default {
     async updateComment(comment) {
       this.$emit('update-comment-modal', comment)
     },
+
+    deleteComment(comment){
+
+      this.$emit('delete-comment-modal', comment)
+    }
   },
 }
 </script>

@@ -23,7 +23,7 @@
                           <th class="text-dark text-xs font-weight-semibold opacity-7">餐點名稱</th>
                           <th class="text-dark text-xs font-weight-semibold opacity-7">評價分數</th>
                           <th class="text-dark text-xs font-weight-semibold opacity-7">評論內容</th>
-                          <th class="text-dark text-xs font-weight-semibold opacity-7">用餐日期</th>
+                          <th class="text-dark text-xs font-weight-semibold opacity-7">評論時間</th>
                         </tr>
                       </thead>
 
