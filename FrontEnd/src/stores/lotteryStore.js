@@ -28,6 +28,10 @@ export const lotteryStore = defineStore('lottery', {
 
     async getAllChanceByMember() {
       const user = useUserStore()
+      if (!user.memberId) {
+        console.log('找不到會員id')
+        return
+      }
       const api = `${import.meta.env.VITE_API}/api/lotteryChance/member/${user.memberId}`
       try {
         const res = await axios.get(api)
