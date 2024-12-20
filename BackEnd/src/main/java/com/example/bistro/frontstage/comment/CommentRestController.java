@@ -222,7 +222,10 @@ public class CommentRestController {
 	@PutMapping("/api/put/comment/{ID}") // 修改評論
 	public ResponseEntity<Map<String, Object>> updateComment(@PathVariable Integer ID,
 			@RequestBody Comment updateComment) {
-
+		
+		System.out.println(updateComment);
+		
+		
 		// 查詢原始評論
 		Comment comment = commentService.findCommentById(ID);
 		if (comment == null) {
@@ -231,12 +234,12 @@ public class CommentRestController {
 
 		try {
 			// 查詢相關的菜單與會員
-			Menu menu = menuService.findMenuById(updateComment.getMenu().getID());
+			Menu menu = menuService.findMenuById(updateComment.fetchmenuId());
 			if (menu == null) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "菜單不存在"));
 			}
 
-			Optional<Members> op = membersRepo.findById(updateComment.getMembers().getId());
+			Optional<Members> op = membersRepo.findById(updateComment.fetchMemberId());
 
 			if (op.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "會員不存在"));

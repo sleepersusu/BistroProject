@@ -58,12 +58,13 @@ public class Orders {
 //            private String  ordersStatus;       //訂單狀態 因為會有訂單基本上都是成立了，沒有意義
             private String  ordersRequest;      //特殊要求
             private String latestPaymentStatus; //最新付款資訊
-
+            private String ordersStatus;	
+            
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             @Temporal(TemporalType.TIMESTAMP)
             private Date createdAt;             //訂單建立時間
-
+            
         //後面就不用set時間
             @PrePersist
             public void onCreate() {

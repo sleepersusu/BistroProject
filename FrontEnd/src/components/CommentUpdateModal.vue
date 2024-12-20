@@ -15,7 +15,6 @@
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
-            @click="handleClose"
           ></button>
         </div>
         <div class="modal-body">
@@ -24,6 +23,7 @@
               <input
                 class="form-control"
                 type="text"
+                
                 :value="comment.id"
                 aria-label="評論編號"
                 disabled
@@ -42,6 +42,17 @@
               />
             </div>
 
+            <div class="mb-3">
+              <input
+                class="form-control"
+                type="text"
+                :value="comment.memberid"
+                aria-label="會員編號"
+                disabled
+                readonly
+              />
+            </div>
+
             <star-rating
               :show-rating="false"
               :rating="comment.commentRating"
@@ -53,18 +64,16 @@
             </star-rating>
             <div style="margin-top: 10px; font-weight: bold">{{ currentRatingText }}</div>
 
-
             <div class="mb-3">
               <input
                 class="form-control"
                 type="text"
-                :value="comment.menuid"
-                aria-label="菜單編號"
+                :value="rating"
+                aria-label="分數"
                 disabled
                 readonly
               />
             </div>
-
 
             <div class="mb-3">
               <label for="commentMessage" class="form-label">你的評論</label>
@@ -123,10 +132,7 @@ export default {
     },
 
     isValid() {
-      return (
-        this.rating > 0
-
-      )
+      return this.rating > 0
     },
   },
 
@@ -135,7 +141,7 @@ export default {
   data() {
     return {
       commentMessage: '',
-      rating: 0,
+      rating: this.comment.rating,
       maxCommentLength: 100,
       isSubmitting: false,
     }
@@ -147,8 +153,8 @@ export default {
     },
 
     handleReset() {
-      this.rating = 0
-      this.commentMessage = ''
+      this.rating = this.comment.commentRating || 0
+      this.commentMessage = this.comment.commentMessage || ''
     },
 
     handleClose() {
@@ -161,36 +167,25 @@ export default {
 
       this.isSubmitting = true
 
-      try {
-        const payload = {
-          id: this.comment.id,
-          menuid: this.comment.menuid,
-          memberId: this.memberId,
-          rating: this.rating,
-          commentMessage: this.commentMessage.trim(),
-        }
 
         const API_URL = `${import.meta.env.VITE_API}/api/put/comment/${this.comment.id}`
 
-        await axios.put(API_URL, payload)
+        await axios.put(API_URL)
 
-        this.$emit('comment-updated', payload)
+
         this.handleClose()
-      } catch (error) {
-        console.error('更新評論時發生錯誤:', error)
-        // 這裡可以加入向使用者顯示錯誤訊息的邏輯
-      } finally {
-        this.isSubmitting = false
-      }
+
+
     },
   },
 
-  created() {
-    // 初始化既有評論資料
-    if (this.comment) {
-      this.rating = this.comment.commentRating || 0
-      this.commentMessage = this.comment.commentMessage || ''
-    }
+  watch: {
+    comment(newComment) {
+      if (newComment.id) {
+        this.rating = this.comment.commentRating
+        this.commentMessage = this.comment.commentMessage
+      }
+    },
   },
 }
 </script>

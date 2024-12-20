@@ -181,7 +181,6 @@ export default {
       this.axios
         .get(api)
         .then((response) => {
-          console.log(response.data)
           this.comments = response.data
         })
         .catch((error) => {
@@ -192,7 +191,6 @@ export default {
     },
     async openDescribeModal(menu) {
       try {
-        console.log('Opening modal for menu:', menu)
         let api = `${import.meta.env.VITE_API}/api/${menu.id}/menu`
         let response = await this.axios.get(api)
         this.menu = response.data

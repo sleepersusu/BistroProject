@@ -12,7 +12,10 @@
         </div>
         <div class="modal-body d-flex flex-column flex-md-row">
           <div class="col-md-6 col-lg-5 mb-3 mb-md-0">
-            <img :src="menuSrc" alt="" class="img-fluid" style="border-radius: 5px" />
+            <img :src="menuSrc"
+            @error="menuSrc = 'public/images/avatar.jpg'"
+            alt="" class="img-fluid"
+            style="border-radius: 5px" />
 
             <div style="padding-top: 20px" class="star-rating-wrapper">
               <star-rating
@@ -83,15 +86,11 @@ export default {
   methods: {
     async loadPicture(ID) {
       let API_URL = `${import.meta.env.VITE_API}/api/menu/photo/${ID}`
-      console.log('Fetching URL:', API_URL)
       this.axios
         .get(API_URL, { responseType: 'blob' })
         .then(async (response) => {
           let url = URL.createObjectURL(response.data)
           this.menuSrc = url
-          if (url == null) {
-            this.menuSrc = ''
-          }
         })
         .catch((error) => {
           console.error('Error fetching menus:', error)
@@ -99,20 +98,23 @@ export default {
         })
     },
   },
-  created() {
-    if (this.menu && this.menu.id) {
-      this.loadPicture(this.menu.id)
-    } else {
-      console.error('Invalid menu ID:', this.menu)
-      this.menuSrc = ''
-    }
-
-    this.loadPicture(this.menu.id)
+  watch: {
+    // 當菜單數據改變時重新加載圖片
+    menu(newMenu) {
+      if (newMenu.id) {
+        this.loadPicture(newMenu.id);
+      }
+    },
   },
 }
 </script>
 
 <style scoped>
+
+img{
+  max-width: 95%;
+}
+
 .star-rating-wrapper {
   max-width: 100%;
   margin: 0 auto;
