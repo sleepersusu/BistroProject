@@ -207,6 +207,10 @@ export default {
       this.submitRegister(event)
       this.registermodel.hide()
     },
+    closeLoginmodel() {
+      //會員獎品會用到
+      this.loginmodel.hide()
+    },
 
     handleForgot() {
       Swal.fire({

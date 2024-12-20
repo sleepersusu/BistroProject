@@ -18,30 +18,47 @@
     <div class="container">
       <div class="checkout__form">
         <h4>Confirm Order</h4>
-        <form action="#" ref="form">
+        <form @submit.prevent="placeOrder">
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
-
-                  <div class="col-lg-6">
-                    <div class="checkout__input">
-                      <p>姓名<span>*</span></p>
-                      <input type="text" v-model="orderData.ordersName" placeholder="姓名" required />
-                    </div>
+                <div class="col-lg-6">
+                  <div class="checkout__input">
+                    <p>姓名<span>*</span></p>
+                    <input
+                      type="text"
+                      v-model="orderData.ordersName"
+                      placeholder="請輸入訂購人姓名"
+                      maxlength="15"
+                      @input="validateName"
+                      required
+                    />
                   </div>
+                </div>
 
-                  <div class="col-lg-6">
-                    <div class="checkout__input">
-                      <p>電話<span>*</span></p>
-                      <input type="text" v-model="orderData.ordersTel" placeholder="+886" required />
-                    </div>
+                <div class="col-lg-6">
+                  <div class="checkout__input">
+                    <p>電話<span>*</span></p>
+                    <input
+                      type="text"
+                      v-model="orderData.ordersTel"
+                      placeholder="請輸入手機號碼，EX:0912345678"
+                      required
+                      maxlength="10"
+                      @input="validatePhone"
+                    />
                   </div>
-
+                </div>
               </div>
 
               <div class="checkout__input">
                 <p>Order notes<span>*</span></p>
-                <input type="text" v-model="orderData.ordersRequest" placeholder="特殊要求" />
+                <input
+                  type="text"
+                  v-model="orderData.ordersRequest"
+                  maxlength="100"
+                  placeholder="特殊要求"
+                />
               </div>
 
               <div class="checkout__input__checkbox">
@@ -52,7 +69,6 @@
                 </label>
                 <p>Create an account by entering the information below</p>
               </div>
-
             </div>
 
             <div class="col-lg-4 col-md-6">
@@ -63,14 +79,17 @@
                 <ul>
                   <li v-for="item in cartItems" :key="item.menu.id">
                     {{ item.menu.productName }}
-                    <span>${{ (item.cartCount * item.menu.productPrice).toFixed(2) }}</span>
+                    <span>${{ item.cartCount * item.menu.productPrice }}</span>
+                  </li>
+                  <li v-for="prize in pointPrizes" :key="prize.name">
+                    {{ prize.name }}<span>$0</span>
                   </li>
                 </ul>
                 <div class="checkout__order__subtotal">
                   Subtotal
                   <span>${{ calculateSubtotal }}</span>
                 </div>
-                <div class="checkout__order__total" >
+                <div class="checkout__order__total">
                   Tax
                   <span style="color: #1c1c1c">${{ calculateTax }}</span>
                 </div>
@@ -80,63 +99,71 @@
                 </div>
 
                 <!-- 用餐方式 -->
-                  <div class="checkout__input__checkbox">
-                    <h4>用餐方式</h4>
-                    <label for="eatin">
-                      內用
-                      <input type="radio" id="eatin" value="內用" v-model="orderData.seatType" required/>
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
+                <div class="checkout__input__checkbox">
+                  <h4>用餐方式</h4>
+                  <label for="eatin">
+                    內用
+                    <input
+                      type="radio"
+                      id="eatin"
+                      value="內用"
+                      v-model="orderData.seatType"
+                      required
+                    />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
 
-                  <div class="checkout__input__checkbox">
-                    <label for="takeout">
-                      外帶
-                      <input type="radio" id="takeout" value="外帶" v-model="orderData.seatType" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-
+                <div class="checkout__input__checkbox">
+                  <label for="takeout">
+                    外帶
+                    <input type="radio" id="takeout" value="外帶" v-model="orderData.seatType" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
 
                 <!-- 付款方式 -->
-                  <div class="checkout__input__checkbox">
-                    <h4>付款方式</h4>
-                    <label for="cash">
-                      <img class="pay"
-                           src="../../public/images/cash3.png"
-                           alt="">
-                      Cash
-                      <input type="radio" id="cash" value="Cash" v-model="orderData.PaymentWay" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
+                <div class="checkout__input__checkbox">
+                  <h4>付款方式</h4>
+                  <label for="cash">
+                    <img class="pay" src="../../public/images/cash3.png" alt="" />
+                    Cash
+                    <input type="radio" id="cash" value="Cash" v-model="orderData.PaymentWay" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
 
-                  <div class="checkout__input__checkbox">
-                    <label for="ECPay">
-                      <img class="pay"
-                           src="../../public/images/ecpay2.png"
-                           alt="">
-                      ECPay
-                      <input type="radio" id="ECPay" value="ECPay" v-model="orderData.PaymentWay" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
+                <div class="checkout__input__checkbox">
+                  <label for="ECPay">
+                    <img class="pay" src="../../public/images/ecpay2.png" alt="" />
+                    ECPay
+                    <input type="radio" id="ECPay" value="ECPay" v-model="orderData.PaymentWay" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
 
-                  <div class="checkout__input__checkbox">
-                    <label for="paypal">
-                      <img class="pay" src="https://i.imgur.com/cMk1MtK.jpg" alt="">
-                      Paypal
-                      <input type="radio" id="paypal" value="Paypal" v-model="orderData.PaymentWay" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-
-
-                  <!-- 新增一個隱藏的 div 來放置綠界表單 -->
-                  <div ref="ecpayFormContainer" style="display: none;"></div>
+                <div class="checkout__input__checkbox">
+                  <label for="paypal">
+                    <img class="pay" src="https://i.imgur.com/cMk1MtK.jpg" alt="" />
+                    Paypal
+                    <input type="radio" id="paypal" value="Paypal" v-model="orderData.PaymentWay" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
 
                 <div>
-                  <button type="button" class="btn btn-dark w-100">PLACE ORDER</button>
+                  <button
+                    type="submit"
+                    class="btn btn-dark w-100"
+                    @click="placeOrder"
+                    @click.prevent="
+                      () => {
+                        if (orderData.PaymentWay === 'ECPay') jumpEcpay()
+                      }
+                    "
+                  >
+                    PLACE ORDER
+                  </button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -150,9 +177,6 @@
             </div>
           </div>
         </form>
-
-
-
       </div>
     </div>
   </section>
@@ -164,16 +188,22 @@ import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
 import { mapState, mapActions } from 'pinia'
+import { pointStore } from '@/stores/pointStore'
 import { cartStore } from '@/stores/cartStore.js'
 import axios from 'axios'
-axios.defaults.baseURL = import.meta.env.VITE_API
-axios.defaults.withCredentials = true
+import { useUserStore } from '@/stores/userStore.js'
+import { lotteryStore } from '@/stores/lotteryStore'
+import { statusStore } from '@/stores/statusStore'
 
+const lottery = lotteryStore()
+const status = statusStore()
+
+const user = useUserStore()
 export default defineComponent({
   components: { PageTop, BannerTop },
   data() {
     return {
-      cartItems:[],
+      cartItems: [],
       orderData: {
         ordersName: '', // 姓名
         ordersTel: '', // 電話
@@ -184,90 +214,132 @@ export default defineComponent({
         ordersDetails: [], // 訂單詳情
         memberId: null, // 會員id
       },
-    };
+    }
   },
   methods: {
-    ...mapActions(cartStore, ["getCart","clearCart"]),
+    ...mapActions(cartStore, ['getCart', 'clearCart']),
+
+    validatePhone() {
+      // 移除非數字的字
+      //replace(/\D/g, '') 是 JavaScript 中 String.prototype.replace() 方法的一種用法，移除字串中的所有非數字的字。
+      this.orderData.ordersTel = this.orderData.ordersTel.replace(/\D/g, '')
+    },
+
+    validateName() {
+      // 僅保留中文和英文，移除數字和特殊符號
+      this.orderData.ordersName = this.orderData.ordersName
+        .replace(/[^a-zA-Z\u4e00-\u9fa5]/g, '') // 非中文或英文的字符替換為空
+        .slice(0, 15)
+    },
 
     async jumpEcpay() {
-      window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`;
-    },
-    async memberPointGet() {
-      // const pointData {
-
-      // }
+      window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`
     },
 
     async placeOrder() {
       try {
         // 檢查購物車是否為空
-          if (!this.cartItems || this.cartItems.length === 0) {
-            throw new Error("購物車是空的")
-          }
-
+        if (!this.cartItems || this.cartItems.length === 0) {
+          throw new Error('購物車是空的')
+        }
         // 準備訂單數據，確保與 DTO 結構匹配
-          const orderData = {
-            ordersName: this.orderData.ordersName,
-            ordersTel: this.orderData.ordersTel,
-            seatType: this.orderData.seatType,
-            ordersRequest: this.orderData.ordersRequest,
-            ordersSumPrice: parseFloat(this.calculateTotal),
-            latestPaymentStatus: '已付款', // 根據您的業務邏輯設置
-            memberId: null, // 如果有會員系統，在此設置
+        const orderData = {
+          ordersName: this.orderData.ordersName,
+          ordersTel: this.orderData.ordersTel,
+          seatType: this.orderData.seatType,
+          ordersRequest: this.orderData.ordersRequest,
+          ordersSumPrice: parseFloat(this.calculateTotal),
+          latestPaymentStatus: '已付款', // 根據您的業務邏輯設置
+          memberId: user.memberId, // 如果有會員系統，在此設置
 
-            ordersDetails: this.cartItems.map(item => ({
-              odName: item.menu.productName,
-              odQuantity: item.cartCount,
-              odPrice: item.menu.productPrice,
-              odSumPrice: item.cartCount * item.menu.productPrice,
-              menuId: item.menu.id,
-            })),
-            payments: [
-              {
-                paymentPrice: parseFloat(this.calculateTotal),
-                paymentWay: this.orderData.PaymentWay,
-                paymentStatus: '成功',
-              }
-            ]
-          };
+          ordersDetails: this.cartItems.map((item) => ({
+            odName: item.menu.productName,
+            odQuantity: item.cartCount,
+            odPrice: item.menu.productPrice,
+            odSumPrice: item.cartCount * item.menu.productPrice,
+            menuId: item.menu.id,
+          })),
+          payments: [
+            {
+              paymentPrice: parseFloat(this.calculateTotal),
+              paymentWay: this.orderData.PaymentWay,
+              paymentStatus: '成功',
+            },
+          ],
+        }
 
         // 使用完整的 URL 發送請求
-        const response = await axios.post(`${import.meta.env.VITE_API}/api/orders/create`, orderData);
-          if (response.status === 200) {
-            console.log('Order created successfully:', response.data);
-            // 清空購物車
-              this.clearCart();
-            //跳轉
+        const response = await axios.post(
+          `${import.meta.env.VITE_API}/api/orders/create`,
+          orderData,
+        )
+        console.log(orderData.memberId)
+        if (response.status === 200) {
+          status.start()
+          const res = await lottery.addChance(4, user.memberId, this.calculateTotal)
+          if (res?.status === 200) {
+            this.showAlert(res.data.newChances)
+          }
+          status.finish()
+
+          console.log('Order created successfully:', response.data)
+          // 清空購物車
+          this.clearCart()
+          // 根據付款方式決定後續流程
+          if (this.orderData.PaymentWay === 'ECPay') {
+            // 如果是 ECPay，將訂單編號帶入跳轉
+            window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout?orderNumber=${response.data.ordersNumber}`
+          } else {
+            // 如果是其他付款方式，直接跳轉到成功頁面
             this.$router.push({
               path: '/cartCheckSuc',
-              query: { orderNumber: response.data.ordersNumber }
-            });
-          } else {
-            console.error('Order creation failed:', response.data);
-            this.$router.push('/cartCheckFail'); // 跳失敗
+              query: { orderNumber: response.data.ordersNumber },
+            })
           }
-      }
-      catch (error) {
-          console.error('Error placing order:', error);
-          this.$router.push('/cartCheckFail'); // 跳失敗
+        } else {
+          console.error('Order creation failed:', response.data)
+          this.$router.push('/cartCheckFail') // 跳失敗
         }
+      } catch (error) {
+        console.error('Error placing order:', error)
+        this.$router.push('/cartCheckFail') // 跳失敗
+      }
     },
 
-
+    showAlert(chances) {
+      Swal.fire({
+        toast: true,
+        position: 'bottom-end',
+        icon: 'success',
+        iconColor: 'black',
+        title: `恭喜！您已獲得${chances}次抽獎機會`,
+        text: '點擊立即前往抽獎',
+        showConfirmButton: false,
+        timer: 8000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+          toast.addEventListener('click', () => {
+            this.$router.push('/campaign')
+          })
+          toast.style.cursor = 'pointer'
+        },
+      })
+    },
 
     //all
-      async fetchCartItems() {
-        try {
-          const result = await this.getCart();
-          if (result && result.data) {
-            console.log('Fetched cart items:', result.data);
-            this.cartItems = result.data;
-          }
-        } catch (error) {
-          console.error('Failed to fetch cart items:', error);
+    async fetchCartItems() {
+      try {
+        const result = await this.getCart()
+        if (result && result.data) {
+          console.log('Fetched cart items:', result.data)
+          this.cartItems = result.data
         }
-      },
-
+      } catch (error) {
+        console.error('Failed to fetch cart items:', error)
+      }
+    },
   },
   mounted() {
     //畫面動畫用的
@@ -276,19 +348,17 @@ export default defineComponent({
     //改變一個值，計算回來，賦值給一個新的值
     //ex:做篩選不一樣的人群，出現不一樣的結果
     //getter or state 放在computed
-      ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
+    ...mapState(cartStore, ['calculateSubtotal', 'calculateTax', 'calculateTotal']),
+    ...mapState(pointStore, ['pointPrizes']),
   },
-  watch:{
+  watch: {
     //副作用:watch個值，有一個值改變，其他也跟著改變，不會return值
-
-
   },
   created() {
     //撈資料用的
-      this.getCart();
-      this.fetchCartItems();
+    this.getCart()
+    this.fetchCartItems()
   },
-
 })
 </script>
 
@@ -547,6 +617,6 @@ export default defineComponent({
   border: 1px solid #000;
   margin: 10px 20px 10px 0px;
   cursor: pointer;
-  box-shadow: 1px 5px 10px 1px rgba(0,0,0,0.2);
+  box-shadow: 1px 5px 10px 1px rgba(0, 0, 0, 0.2);
 }
 </style>

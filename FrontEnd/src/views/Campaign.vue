@@ -18,7 +18,6 @@
       </div>
     </div>
     <CampaignLineLink></CampaignLineLink>
-    <TestAddChance></TestAddChance>
   </div>
   <LuckyDraw @update-chance="updateChance" ref="drawModal"></LuckyDraw>
   <CampaignModal ref="campaignModal" :campaign="selectedCampaign"></CampaignModal>
@@ -38,9 +37,6 @@ import { useFireWorks } from '@/mixins/fireWorkMixin'
 import CampaignModal from '@/components/CampaignModal.vue'
 import HeroSection from '@/components/HeroSection.vue'
 import { useUserStore } from '@/stores/userStore'
-
-// test
-import TestAddChance from '@/components/TestAddChance.vue'
 import CampaignLineLink from '@/components/CampaignLineLink.vue'
 
 const { fireworksContainer } = useFireWorks(true)
