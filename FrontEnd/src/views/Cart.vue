@@ -113,7 +113,7 @@
             </div>
 
             <!-- Promo Code -->
-            <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
+            <VerifyPromoCode  />
           </div>
         </div>
       </div>
@@ -123,6 +123,7 @@
 
 <script>
 import { mapState, mapActions } from 'pinia'
+import { pointStore } from '@/stores/pointStore'
 import CartButton from '@/components/cart/CartButton.vue'
 import CartTable from '@/components/cart/CartTable.vue'
 import CartTitle from '@/components/cart/CartTitle.vue'
@@ -132,7 +133,6 @@ import PageTop from '@/components/PageTop.vue'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
-import { ref } from 'vue'
 
 
 const user = useUserStore()
@@ -154,22 +154,12 @@ export default {
   data() {
     return {
       cartItems: [],
-      isLoading:(ref(false)),
-      pointPrizes:[]
+      isLoading:false,
   }
   },
   methods: {
     ...mapActions(cartStore, ['getCart', 'CountCart', 'MinusCart', 'removeItem']),
 
-    // 處理子組件傳遞過來的資料
-    handlePromoCodeTransmit(payload) {
-      console.log('從子組件收到的促銷碼名稱:', payload.name)
-
-      this.pointPrizes.push({
-        name: payload.name,
-        img: payload.image,
-      })
-    },
 
     //all
     async fetchCartItems() {
@@ -243,6 +233,8 @@ export default {
   computed: {
     //getter or state 放在computed
     ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
+    ...mapState(pointStore,["pointPrizes"]),
+
     hasCartItems() {
       return this.cartItems.length > 0; // 判斷購物車是否有資料
     }

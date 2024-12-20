@@ -18,7 +18,7 @@
     <div class="container">
       <div class="checkout__form">
         <h4>Confirm Order</h4>
-        <form action="#" ref="form">
+        <form @submit.prevent="placeOrder">
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
@@ -27,11 +27,11 @@
                     <div class="checkout__input">
                       <p>姓名<span>*</span></p>
                       <input type="text"
-                             v-model="orderData.ordersName"
-                             placeholder="請輸入訂購人姓名"
-                             maxlength="15"
-                             @input="validateName"
-                             required />
+                          v-model="orderData.ordersName"
+                          placeholder="請輸入訂購人姓名"
+                          maxlength="15"
+                          @input="validateName"
+                          required />
                     </div>
                   </div>
 
@@ -80,6 +80,9 @@
                     {{ item.menu.productName }}
                     <span>${{ (item.cartCount * item.menu.productPrice).toFixed(2) }}</span>
                   </li>
+                  <li v-for="prize in pointPrizes" :key="prize.name">
+                    {{ prize.name }}<span>$0</span>
+                  </li>
                 </ul>
                 <div class="checkout__order__subtotal">
                   Subtotal
@@ -118,8 +121,8 @@
                     <h4>付款方式</h4>
                     <label for="cash">
                       <img class="pay"
-                           src="../../public/images/cash3.png"
-                           alt="">
+                          src="../../public/images/cash3.png"
+                          alt="">
                       Cash
                       <input type="radio" id="cash" value="Cash" v-model="orderData.PaymentWay" />
                       <span class="checkmark"></span>
@@ -129,10 +132,11 @@
                   <div class="checkout__input__checkbox">
                     <label for="ECPay">
                       <img class="pay"
-                           src="../../public/images/ecpay2.png"
-                           alt="">
+                          src="../../public/images/ecpay2.png"
+                          alt="">
                       ECPay
-                      <input type="radio" id="ECPay" value="ECPay" v-model="orderData.PaymentWay" />
+                      <input type="radio" id="ECPay" value="ECPay" v-model="orderData.PaymentWay"
+                      />
                       <span class="checkmark"></span>
                     </label>
                   </div>
@@ -146,12 +150,8 @@
                     </label>
                   </div>
 
-
-                  <!-- 新增一個隱藏的 div 來放置綠界表單 -->
-                  <div ref="ecpayFormContainer" style="display: none;"></div>
-
                 <div>
-                  <button type="button" class="btn btn-dark w-100">PLACE ORDER</button>
+                  <button type="button" class="btn btn-dark w-100" @click="() => { if(orderData.PaymentWay === 'ECPay') jumpEcpay() }">PLACE ORDER</button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -179,6 +179,7 @@ import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
 import { mapState, mapActions } from 'pinia'
+import { pointStore } from '@/stores/pointStore'
 import { cartStore } from '@/stores/cartStore.js'
 import axios from 'axios'
 import { useUserStore } from '@/stores/userStore.js'
@@ -212,21 +213,16 @@ export default defineComponent({
       //replace(/\D/g, '') 是 JavaScript 中 String.prototype.replace() 方法的一種用法，移除字串中的所有非數字的字。
         this.orderData.ordersTel = this.orderData.ordersTel.replace(/\D/g, '');
     },
-    
+
     validateName() {
       // 僅保留中文和英文，移除數字和特殊符號
       this.orderData.ordersName = this.orderData.ordersName
         .replace(/[^a-zA-Z\u4e00-\u9fa5]/g, '') // 非中文或英文的字符替換為空
         .slice(0,15);
-     },
+    },
 
     async jumpEcpay() {
       window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`;
-    },
-    
-    async memberPointGet() {
-      // const pointData {
-      // }
     },
 
     async placeOrder() {
@@ -235,7 +231,6 @@ export default defineComponent({
           if (!this.cartItems || this.cartItems.length === 0) {
             throw new Error("購物車是空的")
           }
-
         // 準備訂單數據，確保與 DTO 結構匹配
           const orderData = {
             ordersName: this.orderData.ordersName,
@@ -269,11 +264,17 @@ export default defineComponent({
             console.log('Order created successfully:', response.data);
             // 清空購物車
               this.clearCart();
-            //跳轉
-            this.$router.push({
-              path: '/cartCheckSuc',
-              query: { orderNumber: response.data.ordersNumber }
-            });
+                  // 根據付款方式決定後續流程
+                  if (this.orderData.PaymentWay === 'ECPay') {
+                    // 如果是 ECPay，將訂單編號帶入跳轉
+                    window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout?orderNumber=${response.data.ordersNumber}`;
+                  } else {
+                    // 如果是其他付款方式，直接跳轉到成功頁面
+                    this.$router.push({
+                      path: '/cartCheckSuc',
+                      query: { orderNumber: response.data.ordersNumber }
+                    });
+                  }
           } else {
             console.error('Order creation failed:', response.data);
             this.$router.push('/cartCheckFail'); // 跳失敗
@@ -309,6 +310,7 @@ export default defineComponent({
     //ex:做篩選不一樣的人群，出現不一樣的結果
     //getter or state 放在computed
       ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
+      ...mapState(pointStore,["pointPrizes"])
   },
   watch:{
     //副作用:watch個值，有一個值改變，其他也跟著改變，不會return值
