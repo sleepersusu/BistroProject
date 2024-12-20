@@ -24,11 +24,7 @@ import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 
-import Swiper from 'swiper';
-import 'swiper/css';
-
 library.add(faUserSecret,fas,faEnvelope)
-
 
 axios.defaults.baseURL = import.meta.env.VITE_API
 axios.defaults.withCredentials = true
@@ -62,5 +58,4 @@ app.component('Form', Form)
 app.component('Field', Field)
 app.component('ErrorMessage', ErrorMessage)
 app.component('font-awesome-icon', FontAwesomeIcon)
-app.component('swiper',Swiper)
 app.mount('#app')
