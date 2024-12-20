@@ -16,11 +16,15 @@
         <div class="row">
           <!-- Left Column - Cart Items -->
           <div class="col-lg-8">
-            <!-- Cart Items -->
+            <!-- Regular Cart Items -->
             <div class="card mb-4">
               <div class="card-body">
-                <div v-for="(item, index) in cartItems" :key="item.cartId" class="row cart-item mb-3">
-                  <hr v-if="index !== 0" />
+                <div
+                  v-for="(item, index) in cartItems"
+                  :key="item.cartId"
+                  class="row cart-item mb-3"
+                >
+                  <hr v-if="index !== 0">
                   <div class="col-md-3">
                     <img :src="item.menu.productImgUrl" :alt="item.menu.productName" class="img-fluid rounded"/>
                   </div>
@@ -30,7 +34,11 @@
                   </div>
                   <div class="col-md-2">
                     <div class="input-group">
-                      <button class="btn btn-outline-secondary btn-sm" type="button" @click="decreaseQuantity(item)">-</button>
+                      <button
+                        class="btn btn-outline-secondary btn-sm"
+                        type="button"
+                        @click="decreaseQuantity(item)"
+                      >-</button>
                       <input
                         style="max-width: 100px"
                         type="text"
@@ -38,12 +46,19 @@
                         v-model="item.cartCount"
                         readonly
                       />
-                      <button class="btn btn-outline-secondary btn-sm" type="button" @click="increaseQuantity(item)">+</button>
+                      <button
+                        class="btn btn-outline-secondary btn-sm"
+                        type="button"
+                        @click="increaseQuantity(item)"
+                      >+</button>
                     </div>
                   </div>
                   <div class="col-md-2 text-end text-black">
                     <p class="fw-bold">${{ (item.cartCount * item.menu.productPrice).toFixed(2) }}</p>
-                    <button class="btn btn-lg btn-outline-danger" @click="removeFromCart(item)">
+                    <button
+                      class="btn btn-lg btn-outline-danger"
+                      @click="removeFromCart(item)"
+                    >
                       <i class="bi bi-trash"></i>
                     </button>
                   </div>
@@ -87,9 +102,8 @@
             </div>
           </div>
 
-          <!-- Right Column - Order Summary -->
+          <!-- Right Column - Cart Summary -->
           <div class="col-lg-4">
-            <!-- Cart Summary -->
             <div class="card cart-summary">
               <div class="card-body text-black">
                 <h5 class="card-title mb-4">Order Summary</h5>
@@ -107,7 +121,9 @@
                   <strong>${{ calculateTotal }}</strong>
                 </div>
                 <button class="btn btn-dark w-100">
-                  <router-link class="nav-link" to="/cartCheckout">Proceed to Checkout</router-link>
+                  <router-link class="nav-link" to="/cartCheckout">
+                    Proceed to Checkout
+                  </router-link>
                 </button>
               </div>
             </div>
@@ -133,10 +149,9 @@ import PageTop from '@/components/PageTop.vue'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
-
+import { ref } from 'vue'
 
 const user = useUserStore()
-
 
 
 export default {
@@ -168,68 +183,80 @@ export default {
 
       try {
         const result = await this.getCart()
-        if (result && result.data) {
+        if (result && result.data) {isLoading: ref(false)}
+      }
+      catch (error) {
+        console.error('Failed to fetch cart items:', error)
+      }
+    }
+  },
+  computed: {
+    ...mapState(cartStore, ['calculateSubtotal', 'calculateTax', 'calculateTotal']),
+    hasCartItems() {
+      return this.cartItems.length > 0
+    },
+  },
+
+  methods: {
+    ...mapActions(cartStore, ['getCart', 'CountCart', 'MinusCart', 'removeItem']),
+
+    handlePromoCodeTransmit(payload) {
+      console.log('從子組件收到的促銷碼名稱:', payload.name)
+      this.pointPrizes.push({
+        name: payload.name,
+        img: payload.image
+      })
+    },
+
+    async fetchCartItems() {
+      this.isLoading = true
+      try {
+        const result = await this.getCart()
+        if (result?.data) {
           console.log('Fetched cart items:', result.data)
           this.cartItems = result.data
         }
-      }
-      catch (error) {
-        console.error('Failed to fetch cart items:', error);
-      }
-      finally {
-        this.isLoading = false;
+      } catch (error) {
+        console.error('Failed to fetch cart items:', error)
+      } finally {
+        this.isLoading = false
       }
     },
 
-    //++
     async increaseQuantity(item) {
       try {
-        // 確保傳遞完整的 menu 對象
         const result = await this.CountCart(item.menu)
-        if (result && result.data) {
+        if (result?.data) {
           this.cartItems = result.data
         }
       } catch (error) {
         console.error('Failed to increase quantity:', error)
       }
     },
-    //--
-      async decreaseQuantity(item) {
-        if (item.cartCount > 1) {
-          try {
-            const result = await this.MinusCart(item.menu);
-            if (result && result.data) {
-              this.cartItems = result.data;
-            }
-          } catch (error) {
-            console.error('Failed to decrease quantity:', error);
-          }
-        } else {
-          // 數量=1，直接刪掉
-          try {
-            const result = await this.MinusCart(item.menu);
-            if (result && result.data) {
-              this.cartItems = result.data;
-            }
-          } catch (error) {
-            console.error('Failed to remove item:', error);
-          }
+
+    async decreaseQuantity(item) {
+      try {
+        const result = await this.MinusCart(item.menu)
+        if (result?.data) {
+          this.cartItems = result.data
         }
-      },
-  //刪除的controller還沒做 ==
-    async removeFromCart(item) {
-      if (user.memberId) {
-        try {
-          await this.removeItem(item)
-          await this.fetchCartItems() // 重新獲取購物車數據
-        } catch (error) {
-          console.error('刪除商品失敗:', error)
-        }
-      } else {
-        console.error('未登入會員')
+      } catch (error) {
+        console.error('Failed to decrease quantity:', error)
       }
+    },
+
+    async removeFromCart(item) {
+      if (!user.memberId) {
+        console.error('未登入會員')
+        return
+      }      try {
+        await this.removeItem(item)
+        await this.fetchCartItems()
+      } catch (error) {
+        console.error('刪除商品失敗:', error)
     }
-  },
+  }
+},
   computed: {
     //getter or state 放在computed
     ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
@@ -238,8 +265,9 @@ export default {
     hasCartItems() {
       return this.cartItems.length > 0; // 判斷購物車是否有資料
     }
+
   },
-  watch: {},
+
   created() {
     this.fetchCartItems()
   },
@@ -247,7 +275,7 @@ export default {
 </script>
 
 <style scoped>
-.filter{
+.filter {
   position: absolute;
   top: 0;
   left: 0;

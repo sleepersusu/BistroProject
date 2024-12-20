@@ -151,7 +151,11 @@
                   </div>
 
                 <div>
-                  <button type="button" class="btn btn-dark w-100" @click="() => { if(orderData.PaymentWay === 'ECPay') jumpEcpay() }">PLACE ORDER</button>
+                  <button
+                    type="submit"
+                    class="btn btn-dark w-100" @click="placeOrder" @click.prevent="() => { if(orderData.PaymentWay === 'ECPay') jumpEcpay() }">
+                    PLACE ORDER
+                  </button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -285,7 +289,6 @@ export default defineComponent({
           this.$router.push('/cartCheckFail'); // 跳失敗
         }
     },
-
 
 
     //all
