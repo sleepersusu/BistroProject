@@ -1,29 +1,19 @@
 <template>
-  <div
-    class="container-fluid py-4"
-    style="
+  <div class="container-fluid py-4" style="
       background-image: url('images/reservation-bg.jpg');
       color: white;
       padding-left: 50px;
       padding-right: 50px;
-    "
-  >
+    ">
     <div class="row g-4 justify-content-center d-flex align-items-center" style="min-height: 100vh">
       <div class="col-lg-7 col-md-12">
         <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw"
-            class="w-100 h-100"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            style="
-              max-width: calc(100% - 100px);
+          <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
+            <img src="../../public/images/rest.jpg" alt="Example Image" class="w-100 h-100" style="object-fit: cover; width: 100%; height: 100%; max-width: calc(100% - 200px);
               margin-left: auto;
               margin-right: auto;
-              display: block;
-            "
-          ></iframe>
+              display: block;" />
+          </div>
         </div>
         <div id="inform" class="container py-4" style="background-color: transparent">
           <div class="row g-4 justify-content-center">
@@ -31,12 +21,8 @@
               <div class="card text-center p-4 position-relative">
                 <div
                   class="position-absolute top-0 start-50 translate-middle bg-success text-white rounded-circle d-flex justify-content-center align-items-center"
-                  style="width: 60px; height: 60px; z-index: 10"
-                >
-                  <font-awesome-icon
-                    :icon="['fas', 'phone']"
-                    style="font-size: 27px"
-                  ></font-awesome-icon>
+                  style="width: 60px; height: 60px; z-index: 10">
+                  <font-awesome-icon :icon="['fas', 'phone']" style="font-size: 27px"></font-awesome-icon>
                 </div>
                 <div class="mt-3">
                   <h5 class="fw-bold">Phone Numbers</h5>
@@ -49,12 +35,8 @@
               <div class="card text-center p-4 position-relative">
                 <div
                   class="position-absolute top-0 start-50 translate-middle bg-success text-white rounded-circle d-flex justify-content-center align-items-center"
-                  style="width: 60px; height: 60px; z-index: 10"
-                >
-                  <font-awesome-icon
-                    :icon="['far', 'envelope']"
-                    style="font-size: 27px"
-                  ></font-awesome-icon>
+                  style="width: 60px; height: 60px; z-index: 10">
+                  <font-awesome-icon :icon="['far', 'envelope']" style="font-size: 27px"></font-awesome-icon>
                 </div>
                 <div class="mt-3">
                   <h5 class="fw-bold">Emails</h5>
@@ -66,126 +48,79 @@
           </div>
         </div>
       </div>
-      <div
-        id="app"
-        class="col-lg-4 col-md-12"
-        style="
+      <div id="app" class="col-lg-4 col-md-12" style="
           background-color: white;
           padding: 20px;
           border-radius: 10px;
           box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
           color: black;
-        "
-      >
+        ">
         <div class="mb-4 text-center">
           <h4 class="fw-bold">訂位資訊</h4>
         </div>
         <form @submit.prevent="submitReservation">
           <div class="mb-3">
             <label for="customerName" class="form-label">訂位人姓名</label>
-            <input
-              type="text"
-              class="form-control frame"
-              id="customerName"
-              v-model="reservations.customerName"
-              required
-            />
+            <input type="text" class="form-control frame" id="customerName" v-model="reservations.customerName"
+              required />
           </div>
           <div class="mb-3">
             <label class="form-label">性別</label>
             <div class="d-flex">
               <div class="form-check me-3">
-                <input
-                  type="radio"
-                  class="form-check-input"
-                  name="customerGender"
-                  v-model="reservations.customerGender"
-                  value="男"
-                  id="genderMale"
-                  required
-                />
+                <input type="radio" class="form-check-input" name="customerGender" v-model="reservations.customerGender"
+                  value="男" id="genderMale" required />
                 <label class="form-check-label" for="genderMale">男</label>
               </div>
               <div class="form-check">
-                <input
-                  type="radio"
-                  class="form-check-input"
-                  name="customerGender"
-                  v-model="reservations.customerGender"
-                  value="女"
-                  id="genderFemale"
-                  required
-                />
+                <input type="radio" class="form-check-input" name="customerGender" v-model="reservations.customerGender"
+                  value="女" id="genderFemale" required />
                 <label class="form-check-label" for="genderFemale">女</label>
               </div>
             </div>
           </div>
           <div class="mb-3">
             <label for="contactPhone" class="form-label">電話</label>
-            <input
-              type="tel"
-              class="form-control frame"
-              id="contactPhone"
-              v-model="reservations.contactPhone"
-              required
-            />
+            <input type="tel" class="form-control frame" id="contactPhone" v-model="reservations.contactPhone"
+              required />
           </div>
           <div class="row g-3">
             <div class="col-md-6">
               <label for="numberPeople" class="form-label">訂位人數</label>
-              <select
-                class="form-select frame"
-                id="numberPeople"
-                v-model.number="reservations.numberPeople"
-                required
-              >
-                <option value="0" selected>選擇人數</option>
+              <select class="form-select frame" id="numberPeople" v-model.number="reservations.numberPeople" required>
+                <option value="0" selected>選擇人數(包含小孩)</option>
                 <option value="1">1位</option>
                 <option value="2">2位</option>
                 <option value="3">3位</option>
                 <option value="4">4位</option>
+                <option value="5">5位</option>
+                <option value="6">6位</option>
+                <option value="7">7位</option>
+                <option value="8">8位</option>
               </select>
             </div>
             <div class="col-md-6">
               <label for="reservationDate" class="form-label">日期</label>
-              <input
-                type="date"
-                class="form-control frame"
-                id="reservationDate"
-                v-model="reservations.reservationDate"
-                v-bind:min="minDate"
-                v-bind:max="maxDate"
-                required
-              />
+              <input type="date" class="form-control frame" id="reservationDate" v-model="reservations.reservationDate"
+                v-bind:min="minDate" v-bind:max="maxDate" required />
             </div>
           </div>
           <div class="mb-4 mt-3">
             <label class="form-label">時段</label>
             <div>
-              <button
-                v-for="time in availableTimeslots"
-                :key="time"
-                :class="{
-                  'btn-outline-success': selectedTime !== time,
-                  'btn-success': selectedTime === time,
-                }"
-                :style="{ color: selectedTime === time ? '#fff' : '' }"
-                class="btn btn-outline-success w-100 me-2 mb-2"
-                @click="handleClick(time, $event)"
-              >
+              <button v-for="time in availableTimeslots" :key="time" :class="{
+                'btn-outline-success': selectedTime !== time,
+                'btn-success': selectedTime === time,
+              }" :style="{ color: selectedTime === time ? '#fff' : '' }"
+                class="btn btn-outline-success w-100 me-2 mb-2" @click="handleClick(time, $event)">
                 {{ time }}
               </button>
             </div>
-            <input type="text" v-model="reservations.startTime" />
+            <input type="hidden" v-model="reservations.startTime" />
           </div>
           <div class="mb-3">
             <label for="notes" class="form-label">備註</label>
-            <textarea
-              class="form-control frame"
-              id="notes"
-              rows="4"
-              v-model="reservations.notes"
-            ></textarea>
+            <textarea class="form-control frame" id="notes" rows="4" v-model="reservations.notes"></textarea>
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-success w-100">確認訂位</button>
@@ -332,37 +267,40 @@ export default {
 
 <style scoped>
 .btn-orange {
-  background-color: #ff6600;  
-  border: 1px solid #ff6600;  
-  color: white; 
-  padding: 10px 20px;  
-  font-size: 16px;  
-  border-radius: 5px;  
-  cursor: pointer;  /* 滑鼠樣式變成指針 */
-  transition: background-color 0.3s ease, border-color 0.3s ease; 
+  background-color: #ff6600;
+  border: 1px solid #ff6600;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  /* 滑鼠樣式變成指針 */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .btn-orange:hover {
-  background-color: #e65c00; 
-  border-color: #e65c00;  
+  background-color: #e65c00;
+  border-color: #e65c00;
 }
+
 .btn-outline-orange {
-  background-color: transparent;  
-  border: 2px solid #ff6600;  
-  color: #ff6600;  
-  padding: 8px 18px;  
-  font-size: 16px; 
-  border-radius: 5px;  
-  cursor: pointer;  
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; 
+  background-color: transparent;
+  border: 2px solid #ff6600;
+  color: #ff6600;
+  padding: 8px 18px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .btn-outline-orange:hover {
-  background-color: #ff6600;  
-  color: white; 
-  border-color: #ff6600; 
+  background-color: #ff6600;
+  color: white;
+  border-color: #ff6600;
 }
-  /*:class="{
+
+/*:class="{
           'btn-outline-orange': selectedTime !== time,  
           'btn-orange': selectedTime === time,  改顏色要加入這段
         }"  */
