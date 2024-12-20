@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { lotteryStore } from './lotteryStore'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -8,7 +9,7 @@ export const useUserStore = defineStore('userStore', {
     memberprofile: {},
   }),
   actions: {
-    setLoggedIn() {
+    async setLoggedIn() {
       let memberobj = localStorage.getItem('memberobj')
       this.isLoggedIn = true // 設置登入
       this.memberprofile.username = JSON.parse(memberobj).username
@@ -69,20 +70,22 @@ export const useUserStore = defineStore('userStore', {
           token: token,
           username: username,
           userAvatar: userAvatar,
-          userpoint
+          userpoint,
         }
         localStorage.setItem('memberobj', JSON.stringify(memberObj))
         this.isLoggedIn = true // 設置登入
         this.memberprofile.username = username
         this.memberprofile.userAvatar = userAvatar
         this.memberprofile.userpoint = userpoint
+        const lottery = lotteryStore()
+        lottery.getAllChanceByMember()
       } catch (error) {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)
         this.clearLoggedIn()
       }
     },
-    async submitRegister(event){
+    async submitRegister(event) {
       try {
         let API_URL = `${this.apiUrl}/api/members/create`
         let form = new FormData(event.target)
@@ -91,12 +94,12 @@ export const useUserStore = defineStore('userStore', {
           formData[key] = value
         })
         let formJsonData = JSON.stringify(formData)
-        let response= await axios.post(API_URL,formJsonData,{
+        let response = await axios.post(API_URL, formJsonData, {
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
         })
-        console.log(response.data);
+        console.log(response.data)
         this.submitLogin
       } catch (error) {
         console.error('登入失敗', error)
@@ -104,6 +107,12 @@ export const useUserStore = defineStore('userStore', {
     },
   },
   getters: {
-    memberId: () => Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId) || null,
+    memberId: (state) => {
+      if (state.isLoggedIn === true) {
+        return Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId)
+      } else {
+        return null
+      }
+    },
   },
 })
