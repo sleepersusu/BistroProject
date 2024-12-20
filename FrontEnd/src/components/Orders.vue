@@ -41,7 +41,7 @@
 
                 <tbody>
 
-                    <template v-for="order in orderItems" :key="order.id">
+                    <template v-for="order in displayedOrders" :key="order.id">
                   <!-- 訂單主要資訊行 -->
                   <tr
                     :class="{ 'table-active': expandedOrders.includes(order.ordersNumber) }"
@@ -152,16 +152,19 @@
               </table>
             </div>
 
+            <!-- 分頁功能 -->
             <div class="border-top py-3 px-3 d-flex align-items-center">
-              <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
+              <p class="font-weight-semibold mb-0 text-dark text-sm">
+                Page {{ currentPage }} of {{ totalPages }}
+              </p>
               <div class="ms-auto">
-                <button class="btn btn-sm btn-white mb-0">Previous</button>
-                <button class="btn btn-sm btn-white mb-0">Next</button>
+                <button class="btn btn-sm btn-white mb-0" :disabled="currentPage === 1" @click="previousPage">Previous</button>
+                <button class="btn btn-sm btn-white mb-0" :disabled="currentPage === totalPages" @click="nextPage">Next</button>
               </div>
             </div>
-          </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -190,6 +193,8 @@ export default {
 
   data(){
     return{
+      currentPage: 1,
+      pageSize: 10, // 每頁顯示數量
       expandedOrders:[], // 存儲已展開的訂單編號
       orderDetails: {},  // 存儲訂單詳情
     }
@@ -230,9 +235,34 @@ export default {
         // 收起訂單
         this.expandedOrders.splice(index, 1);
       }
-    }
+    },
+    // 切換頁面時清空展開的訂單
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.expandedOrders = []
+      }
+    },
+    // 切換頁面時清空展開的訂單
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.expandedOrders = []
+      }
+    },
+
   },
   computed:{
+    // 計算總頁數
+      totalPages() {
+        return Math.ceil(this.orderItems.length / this.pageSize); // 總頁數
+      },
+    // 獲取當前頁的訂單
+      displayedOrders() {
+        const start = (this.currentPage - 1) * this.pageSize;
+        const end = start + this.pageSize;
+        return this.orderItems.slice(start, end);
+      }
   },
   watch:{},
   created() {
