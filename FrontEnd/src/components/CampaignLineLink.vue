@@ -7,7 +7,7 @@
       </p>
     </div>
     <div class="line-button">
-      <a href="https://line.me/R/ti/p/@750umglq">
+      <a href="https://line.me/R/ti/p/@750umglq" target="_blank">
         <img
           height="36"
           src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"

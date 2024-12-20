@@ -3,15 +3,15 @@
     <BannerTop v-bind:title="'Shopping Cart'"></BannerTop>
   </div>
   <!-- Step Indicator -->
-    <div class="p-5">
-      <div class="step-indicator mb-1 mt-3">
-        <div class="step active">1</div>
-        <div class="step-connector"></div>
-        <div class="step">2</div>
-        <div class="step-connector"></div>
-        <div class="step">3</div>
-      </div>
+  <div class="p-5">
+    <div class="step-indicator mb-1 mt-3">
+      <div class="step active">1</div>
+      <div class="step-connector"></div>
+      <div class="step">2</div>
+      <div class="step-connector"></div>
+      <div class="step">3</div>
     </div>
+  </div>
 
   <div class="container py-5">
     <div class="row">
@@ -19,11 +19,8 @@
         <!-- Cart Items -->
         <div class="card mb-4">
           <div class="card-body">
-            <div
-              v-for="(item, index) in cartItems"
-              :key="item.cartId"
-              class="row cart-item mb-3">
-              <hr v-if="index !== 0">
+            <div v-for="(item, index) in cartItems" :key="item.cartId" class="row cart-item mb-3">
+              <hr v-if="index !== 0" />
               <div class="col-md-3">
                 <img
                   :src="item.menu.productImgUrl"
@@ -40,7 +37,9 @@
                   <button
                     class="btn btn-outline-secondary btn-sm"
                     type="button"
-                    @click="decreaseQuantity(item)">-
+                    @click="decreaseQuantity(item)"
+                  >
+                    -
                   </button>
                   <input
                     style="max-width: 100px"
@@ -52,30 +51,29 @@
                   <button
                     class="btn btn-outline-secondary btn-sm"
                     type="button"
-                    @click="increaseQuantity(item)">+
+                    @click="increaseQuantity(item)"
+                  >
+                    +
                   </button>
                 </div>
               </div>
               <div class="col-md-2 text-end text-black">
                 <p class="fw-bold">${{ (item.cartCount * item.menu.productPrice).toFixed(2) }}</p>
-                <button
-                  class="btn btn-lg btn-outline-danger"
-                  @click="removeFromCart(item)">
+                <button class="btn btn-lg btn-outline-danger" @click="removeFromCart(item)">
                   <i class="bi bi-trash"></i>
                 </button>
               </div>
-
             </div>
-            <div v-for="item in pointPrizes" class="position-relative ">
+            <div v-for="item in pointPrizes" class="position-relative">
               <hr />
               <div class="filter"></div>
-              <div class="row cart-item" >
+              <div class="row cart-item">
                 <div class="col-md-3">
                   <img
                     :src="'data:image/jpeg;base64,' + item.img"
                     alt="Product 2"
                     class="img-fluid rounded"
-                    style="width: 100px; height: 100px; object-fit: cover;"
+                    style="width: 100px; height: 100px; object-fit: cover"
                   />
                 </div>
                 <div class="col-md-5 text-black">
@@ -90,7 +88,6 @@
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -119,7 +116,7 @@
               <span>${{ calculateTax }}</span>
             </div>
 
-            <hr/>
+            <hr />
 
             <div class="d-flex justify-content-between mb-4" style="color: #dd2222">
               <strong>Total</strong>
@@ -130,30 +127,12 @@
             </button>
           </div>
         </div>
-<<<<<<< HEAD
         <!-- Promo Code -->
         <VerifyPromoCode @promo-code="handlePromoCodeTransmit" />
-=======
-
-        <!-- Promo Code -->
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title mb-3">Apply Promo Code</h5>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Enter promo code">
-              <button class="btn btn-outline-secondary" type="button">Apply</button>
-            </div>
-          </div>
-        </div>
->>>>>>> 3b3ce41184f218522db9924f64161126816b1241
       </div>
     </div>
   </div>
-
 </template>
-
-
-
 
 <script>
 import { mapState, mapActions } from 'pinia'
@@ -167,7 +146,6 @@ import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 const user = useUserStore()
-
 
 export default {
   name: 'Cart',
@@ -187,7 +165,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(cartStore, ["getCart","CountCart","MinusCart","removeItem"]),
+    ...mapActions(cartStore, ['getCart', 'CountCart', 'MinusCart', 'removeItem']),
 
     // 處理子組件傳遞過來的資料
     handlePromoCodeTransmit(payload) {
@@ -195,59 +173,58 @@ export default {
 
       this.pointPrizes.push({
         name: payload.name,
-        img: payload.image
+        img: payload.image,
       })
     },
-  //all
+    //all
     async fetchCartItems() {
       try {
-        const result = await this.getCart();
+        const result = await this.getCart()
         if (result && result.data) {
-          console.log('Fetched cart items:', result.data);
-          this.cartItems = result.data;
+          console.log('Fetched cart items:', result.data)
+          this.cartItems = result.data
         }
       } catch (error) {
-        console.error('Failed to fetch cart items:', error);
+        console.error('Failed to fetch cart items:', error)
       }
     },
 
-
     //++
-      async increaseQuantity(item) {
-        try {
-          // 確保傳遞完整的 menu 對象
-          const result = await this.CountCart(item.menu);
-          if (result && result.data) {
-            this.cartItems = result.data;
-          }
-        } catch (error) {
-          console.error('Failed to increase quantity:', error);
+    async increaseQuantity(item) {
+      try {
+        // 確保傳遞完整的 menu 對象
+        const result = await this.CountCart(item.menu)
+        if (result && result.data) {
+          this.cartItems = result.data
         }
-      },
+      } catch (error) {
+        console.error('Failed to increase quantity:', error)
+      }
+    },
     //--
     async decreaseQuantity(item) {
       if (item.cartCount > 1) {
         try {
-          const result = await this.MinusCart(item.menu);
+          const result = await this.MinusCart(item.menu)
           if (result && result.data) {
-            this.cartItems = result.data;
+            this.cartItems = result.data
           }
         } catch (error) {
-          console.error('Failed to decrease quantity:', error);
+          console.error('Failed to decrease quantity:', error)
         }
       } else {
         // 數量=1，直接刪掉
         try {
-          const result = await this.MinusCart(item.menu);
+          const result = await this.MinusCart(item.menu)
           if (result && result.data) {
-            this.cartItems = result.data;
+            this.cartItems = result.data
           }
         } catch (error) {
-          console.error('Failed to remove item:', error);
+          console.error('Failed to remove item:', error)
         }
       }
     },
-  //刪除的controller還沒做 ==
+    //刪除的controller還沒做 ==
     async removeFromCart(item) {
       if (user.memberId) {
         try {
@@ -259,13 +236,11 @@ export default {
       } else {
         console.error('未登入會員')
       }
-    }
-
+    },
   },
   computed: {
     //getter or state 放在computed
-    ...mapState(cartStore,["calculateSubtotal","calculateTax","calculateTotal"]),
-
+    ...mapState(cartStore, ['calculateSubtotal', 'calculateTax', 'calculateTotal']),
   },
   watch: {},
   created() {
@@ -274,9 +249,8 @@ export default {
 }
 </script>
 
-
 <style scoped>
-.filter{
+.filter {
   position: absolute;
   top: 0;
   left: 0;

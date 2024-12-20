@@ -178,7 +178,6 @@
 </template>
 <script>
 import { useUserStore } from '@/stores/userStore'
-import { email } from '@vee-validate/rules'
 import Modal from 'bootstrap/js/dist/modal'
 import { mapActions } from 'pinia'
 export default {
