@@ -17,28 +17,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class PointRecordRestController {
 
 	@Autowired
-	PointsRecordsService pointRecordService;
+	PointRecordFrontService pointRecordFrontService;
 	
 	@PostMapping("/api/pointRecord")
-	public ResponseEntity<?> pointRecord(@RequestBody PointRecordDTO requestDto) {
+	public ResponseEntity<?> CreatePointRecord(@RequestBody PointRecordDTO requestDto) {
 	    // 呼叫 Service 層，並獲取返回的結果
-	    Map<String, Boolean> map = pointRecordService.createPointsRecords(requestDto.getMemberId(),requestDto.getPointPrizesId(),requestDto.getRecordsDate());
+	    Map<String, Boolean> map = pointRecordFrontService.createPointsRecords(requestDto.getMemberId(),requestDto.getPointPrizesId(),requestDto.getRecordsDate());
 	    
 	    return ResponseEntity.ok(map);
 	}
 	
-//	@PostMapping("/api/validatePromoCode")
-//	public ResponseEntity<?> validatePromoCode(@RequestBody PointRecordDTO request) {
-//	    PointsRecordsBean record = PointsRecordsRepository.findByPromoCode(request.getPromoCode());
-//	    
-//	    if (record != null) {
-//	        return ResponseEntity.ok(Map.of(
-//	            "valid", true, 
-//	            "prize", record.getPrize()
-//	        ));
-//	    }
-//	    
-//	    return ResponseEntity.ok(Map.of("valid", false));
+//	@PostMapping("/api/minusMemberPoint")
+//	public ResponseEntity<?> MinusMemberPoint(@RequestBody PointRecordDTO requestDto) {
+//			
+//		PointsRecordsBean pointsRecordsBean = pointRecordFrontService.minusMemberPoint(requestDto.getPointPrizesId(), requestDto.getMemberId());
+//		
+//		return ResponseEntity.ok(pointsRecordsBean);
 //	}
-//	
+	
+	@PostMapping("/api/minusMemberPoint")
+	public ResponseEntity<?> MinusMemberPoint(@RequestBody PointRecordDTO requestDto) {
+			
+		pointRecordFrontService.minusMemberPoint(requestDto.getPointPrizesId(), requestDto.getMemberId());
+		
+		return ResponseEntity.ok("已刪除相對應點數");
+	}
+	
 }

@@ -50,7 +50,7 @@ public class ReservationRestController {
 				response.put("availableTimeslots", availableTimeslots);
 				return ResponseEntity.ok(response);
 			} else {
-				throw new RuntimeException("沒有足夠的座位，請選擇其他時段。");
+				throw new RuntimeException("沒有足夠的座位，請選擇其他日期。");
 			}
 		} catch (Exception e) {
 			Map<String, Object> response = new HashMap<>();

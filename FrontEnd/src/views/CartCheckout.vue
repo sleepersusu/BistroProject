@@ -19,8 +19,8 @@
       <div class="checkout__form">
         <h4>Confirm Order</h4>
 
-
         <form @submit.prevent="placeOrder">
+
           <div class="row">
             <div class="col-lg-8 col-md-6">
               <div class="row">
@@ -28,14 +28,25 @@
                   <div class="col-lg-6">
                     <div class="checkout__input">
                       <p>姓名<span>*</span></p>
-                      <input type="text" v-model="orderData.ordersName" placeholder="姓名" required />
+                      <input type="text"
+                             v-model="orderData.ordersName"
+                             placeholder="請輸入訂購人姓名"
+                             maxlength="15"
+                             @input="validateName"
+                             required />
                     </div>
                   </div>
 
                   <div class="col-lg-6">
                     <div class="checkout__input">
                       <p>電話<span>*</span></p>
-                      <input type="text" v-model="orderData.ordersTel" placeholder="+886" required />
+                      <input
+                        type="text" v-model="orderData.ordersTel"
+                        placeholder="請輸入手機號碼，EX:0912345678"
+                        required
+                        maxlength="10"
+                        @input="validatePhone"
+                      />
                     </div>
                   </div>
 
@@ -43,7 +54,11 @@
 
               <div class="checkout__input">
                 <p>Order notes<span>*</span></p>
-                <input type="text" v-model="orderData.ordersRequest" placeholder="特殊要求" />
+                <input
+                  type="text"
+                  v-model="orderData.ordersRequest"
+                  maxlength="100"
+                  placeholder="特殊要求" />
               </div>
 
               <div class="checkout__input__checkbox">
@@ -133,8 +148,12 @@
                     </label>
                   </div>
 
+
+                  <!-- 新增一個隱藏的 div 來放置綠界表單 -->
+                  <div ref="ecpayFormContainer" style="display: none;"></div>
+
                 <div>
-                  <button type="submit" class="btn btn-dark w-100">PLACE ORDER</button>
+                  <button type="button" class="btn btn-dark w-100">PLACE ORDER</button>
                 </div>
 
                 <button class="btn btn-dark w-100">
@@ -160,15 +179,16 @@
 <script>
 import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageTop from '@/components/PageTop.vue'
 import { mapState, mapActions } from 'pinia'
 import { cartStore } from '@/stores/cartStore.js'
 import axios from 'axios'
+import { useUserStore } from '@/stores/userStore.js'
 axios.defaults.baseURL = import.meta.env.VITE_API
 axios.defaults.withCredentials = true
-
+const user = useUserStore()
 export default defineComponent({
+
   components: { PageTop, BannerTop },
   data() {
     return {
@@ -188,6 +208,29 @@ export default defineComponent({
   methods: {
     ...mapActions(cartStore, ["getCart","clearCart"]),
 
+
+    validatePhone() {
+      // 移除非數字的字
+      //replace(/\D/g, '') 是 JavaScript 中 String.prototype.replace() 方法的一種用法，移除字串中的所有非數字的字。
+        this.orderData.ordersTel = this.orderData.ordersTel.replace(/\D/g, '');
+    },
+    
+    validateName() {
+      // 僅保留中文和英文，移除數字和特殊符號
+      this.orderData.ordersName = this.orderData.ordersName
+        .replace(/[^a-zA-Z\u4e00-\u9fa5]/g, '') // 非中文或英文的字符替換為空
+        .slice(0,15);
+     },
+
+    async jumpEcpay() {
+      window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`;
+    },
+    
+    async memberPointGet() {
+      // const pointData {
+      // }
+    },
+
     async placeOrder() {
       try {
         // 檢查購物車是否為空
@@ -203,7 +246,7 @@ export default defineComponent({
             ordersRequest: this.orderData.ordersRequest,
             ordersSumPrice: parseFloat(this.calculateTotal),
             latestPaymentStatus: '已付款', // 根據您的業務邏輯設置
-            memberId: null, // 如果有會員系統，在此設置
+            memberId: user.memberId, // 如果有會員系統，在此設置
 
             ordersDetails: this.cartItems.map(item => ({
               odName: item.menu.productName,
@@ -223,6 +266,7 @@ export default defineComponent({
 
         // 使用完整的 URL 發送請求
         const response = await axios.post(`${import.meta.env.VITE_API}/api/orders/create`, orderData);
+          console.log(orderData.memberId)
           if (response.status === 200) {
             console.log('Order created successfully:', response.data);
             // 清空購物車
@@ -242,7 +286,6 @@ export default defineComponent({
           this.$router.push('/cartCheckFail'); // 跳失敗
         }
     },
-
 
 
     //all
@@ -278,6 +321,7 @@ export default defineComponent({
       this.getCart();
       this.fetchCartItems();
   },
+
 })
 </script>
 

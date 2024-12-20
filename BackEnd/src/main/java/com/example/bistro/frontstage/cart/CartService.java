@@ -214,4 +214,12 @@ public class CartService {
                 if (existingCart.isPresent()) { cartRepository.deleteById(cartId); }
                 else { throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到購物車項目"); }
             }
+
+
+
+
+            @Transactional
+            public void clearCartByMemberId(Integer memberId) {
+                cartRepository.deleteCartItemsByMemberId(memberId);
+            }
 }
