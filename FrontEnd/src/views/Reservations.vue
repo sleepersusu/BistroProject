@@ -28,7 +28,7 @@
         display: flex;
         align-items: center;
         position: relative;
-        
+
       ">
       <div class="phone text-black d-flex align-items-center w-100  ">
         <div style="
@@ -44,7 +44,7 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
-            
+
           ">
           <font-awesome-icon :icon="['fas', 'phone']" style="color: white; font-size: 27px;"></font-awesome-icon>
         </div>
