@@ -13,6 +13,10 @@ export const cartStore = defineStore('cart', {
     taxRate:0.1,
   }),
   getters: {
+    // 購物車商品總數量
+      totalCartItems(state) {
+        return state.cartItems.reduce((total, item) => total + item.cartCount, 0);
+      },
     // 購物車小計
       calculateSubtotal(state) {
         return state.cartItems.reduce(
@@ -39,6 +43,7 @@ export const cartStore = defineStore('cart', {
         } else {
           try {
             const res = await axios.post(`cart/add/${user.memberId}/${menuItem.id}/${menuItem.count}`)
+            await this.getCart(); // 添加這行來更新購物車
             console.log(res.data)
           } catch (e) {
             console.error(e)
