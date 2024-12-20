@@ -83,6 +83,10 @@ const router = createRouter({
           path: '/cartCheckFail',
           component: () => import('../views/CartCheckFail.vue'),
         },
+        {
+          path: '/reset-password/:email',
+          component: () => import('../views/ResetPassword.vue'),
+        },
       ],
     },
   ],
