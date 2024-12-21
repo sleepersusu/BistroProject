@@ -1,44 +1,31 @@
 <template>
-  
-    
-      <div class="col card bg-light">
-
-        <img
-          :src="menuSrc"
-          class="card-img-top img-fixed"
-        />
-        <div class="card-body text-primary">
-          <h6 class="card-title">
-            {{menu.productName}}
-            <span class="float-end text-danger">{{menu.productPrice}}</span>
-          </h6>
-          <a href="#" class="btn btn-outline-primary w-100">加入購物車</a>
-        </div>
-      </div>
-    
-  
+  <div class="col card bg-light">
+    <img :src="menuSrc" class="card-img-top img-fixed" />
+    <div class="card-body text-primary">
+      <h6 class="card-title">
+        {{ menu.productName }}
+        <span class="float-end text-danger">{{ menu.productPrice }}</span>
+      </h6>
+      <a href="#" class="btn btn-outline-primary w-100">加入購物車</a>
+    </div>
+  </div>
 </template>
-
 
 <script>
 export default {
-  components:{
-
-    
-
-  },
-  props:{
-    menu:{
+  components: {},
+  props: {
+    menu: {
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
-    }
-  },data() {
+    },
+  },
+  data() {
     return {
       menuSrc: '',
     }
   },
   methods: {
-
     async loadPicture(ID) {
       this.isLoading = true
 
@@ -57,15 +44,11 @@ export default {
           this.isLoading = false
         })
     },
-
-    
-
   },
   computed: {},
   watch: {},
   created() {
     this.loadPicture(this.menu.id)
-
   },
 }
 </script>

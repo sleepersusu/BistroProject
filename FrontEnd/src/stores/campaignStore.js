@@ -40,7 +40,16 @@ export const campaignStore = defineStore('campaign', {
         return ''
       }
     },
-
+    async getActiveCampaign() {
+      const api = `${import.meta.env.VITE_API}/api/campaign/active`
+      try {
+        const res = await axios.get(api)
+        return res.data
+      } catch (e) {
+        console.error(e)
+        return []
+      }
+    },
     clearCampaignImages() {
       this.campaigns.forEach((campaign) => {
         if (campaign.imageUrl) {

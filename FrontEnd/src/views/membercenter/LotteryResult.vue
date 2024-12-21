@@ -12,6 +12,18 @@
   <div class="container-fulid py-4 px-5" v-else>
     <div class="row">
       <div class="col-12">
+        <div class="input-group mb-3">
+          <span class="input-group-text bg-dark px-4">
+            <i class="bi bi-search text-light fs-5"></i>
+          </span>
+          <input
+            type="text"
+            class="form-control shadow-none"
+            placeholder="搜尋獎品名稱"
+            aria-label="搜尋獎品"
+            v-model="searchInput"
+          />
+        </div>
         <div class="card border shadow-xs mb-4">
           <div class="card-body px-0 py-0">
             <div class="table-responsive p-0">
@@ -48,7 +60,7 @@
                 </thead>
 
                 <tbody>
-                  <tr v-for="result in lotteryResults" :key="result.id">
+                  <tr v-for="result in paginatedResults" :key="result.id">
                     <td class="align-middle">
                       <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center ms-1">
@@ -104,10 +116,24 @@
               </table>
             </div>
             <div class="border-top py-3 px-3 d-flex align-items-center">
-              <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
+              <p class="font-weight-semibold mb-0 text-dark text-sm">
+                Page {{ currentPage }} of {{ totalPages }}
+              </p>
               <div class="ms-auto">
-                <button class="btn btn-sm btn-white mb-0">Previous</button>
-                <button class="btn btn-sm btn-white mb-0">Next</button>
+                <button
+                  class="btn btn-sm btn-white mb-0"
+                  :disabled="currentPage === 1"
+                  @click="handlePageChange(currentPage - 1)"
+                >
+                  Previous
+                </button>
+                <button
+                  class="btn btn-sm btn-white mb-0"
+                  :disabled="currentPage === totalPages"
+                  @click="handlePageChange(currentPage + 1)"
+                >
+                  Next
+                </button>
               </div>
             </div>
           </div>
@@ -126,7 +152,7 @@ import BannerTop from '@/components/BannerTop.vue'
 import ShippingDetailsModal from '@/components/ShippingDetailsModal.vue'
 import { statusStore } from '@/stores/statusStore'
 import { useUserStore } from '@/stores/userStore'
-import { ref } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import axios from 'axios'
 import { utils } from '@/mixins/utils'
 import { storeToRefs } from 'pinia'
@@ -136,8 +162,6 @@ const { getStatusDisplay, formatDate } = utils()
 
 const status = statusStore()
 const { isLoading } = storeToRefs(status)
-
-const lotteryResults = ref([])
 
 const shippingModal = ref(null)
 const openModal = (id) => {
@@ -177,6 +201,7 @@ const handleSubmitShipping = async (shippingDetails) => {
   }
 }
 
+const lotteryResults = ref([])
 const getResults = async () => {
   const api = `${import.meta.env.VITE_API}/api/winner/member/${user.memberId}`
   try {
@@ -184,12 +209,37 @@ const getResults = async () => {
     const res = await axios.get(api)
     console.log(res.data)
     lotteryResults.value = res.data.sort((a, b) => b.id - a.id)
+    currentPage.value = 1
   } catch (e) {
     console.error(e)
   } finally {
     status.finish()
   }
 }
-
 getResults()
+
+const searchInput = ref('')
+const filterResults = ref([])
+watchEffect(() => {
+  filterResults.value = lotteryResults.value.filter((item) => {
+    return item.prizeName.toLowerCase().includes(searchInput.value.toLowerCase())
+  })
+})
+
+const currentPage = ref(1)
+const perPage = ref(10)
+
+const totalPages = computed(() => Math.ceil(filterResults.value.length / perPage.value))
+
+const paginatedResults = computed(() => {
+  const start = (currentPage.value - 1) * perPage.value
+  const end = start + perPage.value
+  return filterResults.value.slice(start, end)
+})
+
+const handlePageChange = (newPage) => {
+  if (newPage >= 1 && newPage <= totalPages.value) {
+    currentPage.value = newPage
+  }
+}
 </script>
