@@ -288,11 +288,6 @@ export default defineComponent({
               pointGetted: Math.floor(actualTotal / 100), // 使用實際總金額計算點數
             }
 
-            console.log('點數計算詳情:', {
-              totalAmount: actualTotal,
-              pointGetted: pointRequestData.pointGetted,
-            })
-
             const pointResponse = await axios.post(
               `${import.meta.env.VITE_API}/api/updateMemberPoint`,
               pointRequestData,
