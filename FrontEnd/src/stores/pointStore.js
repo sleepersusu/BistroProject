@@ -7,7 +7,7 @@ const user = useUserStore()
 export const pointStore = defineStore('point', {
   state: () => ({
     pointPrizes: [],
-    promoCode: [],
+    promoCode: null,
   }),
   actions: {
     async verifyPromoCode(inputPromoCode) {
@@ -34,6 +34,20 @@ export const pointStore = defineStore('point', {
       } else {
         console.log('找不到符合的促銷碼')
       }
+    },
+
+    clearPointPrizes() {
+      this.pointPrizes = []
+    },
+
+    // 檢查換卷是否已存在
+    isPromoCodeExist(promoCode) {
+      return this.pointPrizes.some((prize) => prize.promoCode === promoCode)
+    },
+
+    // 刪除購物車獎品
+    removePointPrize(item) {
+      this.pointPrizes = this.pointPrizes.filter((prize) => prize.name !== item.name)
     },
   },
 })

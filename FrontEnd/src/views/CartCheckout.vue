@@ -214,6 +214,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(cartStore, ['getCart', 'clearCart']),
+    ...mapActions(pointStore, ['removePointPrize', 'clearPointPrizes']),
 
     validatePhone() {
       // 移除非數字的字
@@ -238,6 +239,13 @@ export default defineComponent({
         if (!this.cartItems || this.cartItems.length === 0) {
           throw new Error('購物車是空的')
         }
+
+        // 計算實際總金額
+        const actualTotal = this.cartItems.reduce(
+          (sum, item) => sum + item.cartCount * item.menu.productPrice,
+          0,
+        )
+
         // 準備訂單數據，確保與 DTO 結構匹配
         const orderData = {
           ordersName: this.orderData.ordersName,
@@ -272,8 +280,37 @@ export default defineComponent({
         console.log(orderData.memberId)
         if (response.status === 200) {
           console.log('Order created successfully:', response.data)
+
+          // 記錄消費者獲得點數
+          try {
+            const pointRequestData = {
+              memberId: user.memberId,
+              pointGetted: Math.floor(actualTotal / 100), // 使用實際總金額計算點數
+            }
+
+            console.log('點數計算詳情:', {
+              totalAmount: actualTotal,
+              pointGetted: pointRequestData.pointGetted,
+            })
+
+            const pointResponse = await axios.post(
+              `${import.meta.env.VITE_API}/api/updateMemberPoint`,
+              pointRequestData,
+            )
+
+            if (pointResponse.status === 200) {
+              console.log('點數更新成功')
+            }
+          } catch (error) {
+            console.error('點數更新失敗:', error)
+          }
+
           // 清空購物車
           this.clearCart()
+
+          // 新增：清空點數獎品
+          this.clearPointPrizes()  // 需要在 pointStore 中添加這個 action
+
           // 根據付款方式決定後續流程
           if (this.orderData.PaymentWay === 'ECPay') {
             // 如果是 ECPay，將訂單編號帶入跳轉

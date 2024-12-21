@@ -122,12 +122,7 @@ body .modal .modal-content form textarea {
 
             <main>
                 <h2>會員點數資料</h2>
-                <section id="workspace">
-                    <div>
-                        <button type="button" class="dataButton" id="addData">新增會員點數資料</button>
-                    </div>
-                </section>
-
+                
                 <section>
                     <div>
                         <table id="table" class="display">
@@ -142,8 +137,8 @@ body .modal .modal-content form textarea {
                             <tbody id="event-list"> 
                                 <tr th:each="result : ${allPointsTotal}">
                                     <td th:text="${result[0]}">兌換ID</td>
-                                    <td th:text="${result[4]}">會員ID</td>
-                                    <td th:text="${result[5]}">會員名稱</td>
+                                    <td th:text="${result[2]}">會員ID</td>
+                                    <td th:text="${result[3]}">會員名稱</td>
                                     <td th:text="${result[1]}">總積分</td>
                                 </tr>
                                 <tr th:if="${allPointsTotal == null || allPointsTotal.isEmpty()}">
