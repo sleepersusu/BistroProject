@@ -36,18 +36,7 @@ export default {
 
     async checkAndVerifyPromoCode() {
       try {
-        // 檢查是否為空
-        if (!this.inputPromoCode.trim()) {
-          window.Swal.fire({
-            icon: 'warning',
-            title: '請輸入優惠碼',
-            showConfirmButton: false,
-            timer: 1500,
-          })
-          return
-        }
-
-        // 檢查是否已經使用過
+        // 直接檢查是否已使用過
         if (this.pointPrizes.some((prize) => prize.promoCode === this.inputPromoCode)) {
           window.Swal.fire({
             icon: 'error',
@@ -57,18 +46,20 @@ export default {
           return
         }
 
-        // 驗證優惠碼
-        await this.verifyPromoCode(this.inputPromoCode)
+        // 如果有輸入才進行驗證
+        // 呼叫pinia處存的verifyPromoCode方法
+        if (this.inputPromoCode) {
+          await this.verifyPromoCode(this.inputPromoCode)
+          // 成功後清空輸入框
+          this.inputPromoCode = ''
 
-        // 成功後清空輸入框
-        this.inputPromoCode = ''
-
-        window.Swal.fire({
-          icon: 'success',
-          title: '優惠碼套用成功',
-          showConfirmButton: false,
-          timer: 1500,
-        })
+          window.Swal.fire({
+            icon: 'success',
+            title: '優惠碼套用成功',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        }
       } catch (error) {
         console.error('驗證優惠碼失敗:', error)
         window.Swal.fire({

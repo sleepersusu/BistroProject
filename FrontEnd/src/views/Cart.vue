@@ -258,17 +258,6 @@ export default {
 </script>
 
 <style scoped>
-/* .filter {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin-top: 7px;
-  background: rgba(255, 76, 63, 0.1);
-  height: 100%;
-  width: 100%;
-  border-radius: 10px;
-} */
-
 .step-indicator {
   display: flex;
   justify-content: center;

@@ -10,6 +10,7 @@ export const pointStore = defineStore('point', {
     promoCode: null,
   }),
   actions: {
+    //判斷是否有此兌換碼
     async verifyPromoCode(inputPromoCode) {
       const api = `${import.meta.env.VITE_API}/api/showPromoCode/${user.memberId}`
       const response = await axios.get(api)
@@ -24,7 +25,6 @@ export const pointStore = defineStore('point', {
         const pointPrizesImg = filterCode[0].pointPrizes.pointPrizesImg
         const promoCode = filterCode[0].promoCode
         console.log(promoCode)
-        alert('兌換成功')
 
         this.pointPrizes.push({
           name: pointPrizesName,
@@ -40,9 +40,10 @@ export const pointStore = defineStore('point', {
       this.pointPrizes = []
     },
 
-    // 檢查換卷是否已存在
-    isPromoCodeExist(promoCode) {
-      return this.pointPrizes.some((prize) => prize.promoCode === promoCode)
+    addToCart(prizeData) {
+      if (!this.pointPrizes.some(prize => prize.promoCode === prizeData.promoCode)) {
+        this.pointPrizes.push(prizeData)
+      }
     },
 
     // 刪除購物車獎品

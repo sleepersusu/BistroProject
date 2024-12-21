@@ -30,8 +30,14 @@
       </li>
 
       <li class="nav-item">
-        <router-link to="/membercenter/MerberOwnPrize"  class="nav-link">
+        <router-link to="/membercenter/MerberOwnPrize" class="nav-link">
           <span class="icon-circle"><i class="bi bi-envelope-fill"></i></span> 會員優惠卷
+        </router-link>
+      </li>
+
+      <li class="nav-item">
+        <router-link to="/membercenter/PromoRecord" class="nav-link">
+          <span class="icon-circle"><i class="bi bi-envelope-fill"></i></span> 兌換紀錄
         </router-link>
       </li>
 

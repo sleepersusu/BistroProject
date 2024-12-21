@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <PointTotal/>
-  </div>
+  <PromoRecord />
 </template>
 
 <script>
