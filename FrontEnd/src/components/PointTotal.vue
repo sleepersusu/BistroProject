@@ -6,9 +6,6 @@
           <div class="promo-content">
             <h2 class="promo-title">優惠券列表</h2>
             <div class="divider">
-              <span class="divider-line"></span>
-              <i class="fas fa-wine-glass-alt divider-icon"></i>
-              <span class="divider-line"></span>
             </div>
 
             <div class="coupon-list">
@@ -16,7 +13,6 @@
                 <li v-for="item in memberPromoCode" :key="item.promoCode" class="coupon-item">
                   <div class="coupon-content">
                     <div class="coupon-main">
-                      <i class="fas fa-martini-glass coupon-icon"></i>
                       <div class="coupon-details">
                         <span class="coupon-name">{{ item.pointPrizes.pointPrizesName }}</span>
                         <span class="coupon-code">{{ item.promoCode }}</span>
@@ -140,18 +136,6 @@ export default {
   align-items: center;
   justify-content: center;
   margin: 2rem 0;
-}
-
-.divider-line {
-  height: 1px;
-  width: 100px;
-  background: linear-gradient(to right, transparent, #e0e0e0, transparent);
-}
-
-.divider-icon {
-  color: #9b8579;
-  font-size: 1.3rem;
-  margin: 0 1.5rem;
 }
 
 /* 優惠券列表樣式 */

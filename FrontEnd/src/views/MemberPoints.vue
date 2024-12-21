@@ -4,7 +4,7 @@
       <BannerTop v-bind:title="'Point Shop'"></BannerTop>
     </div>
 
-    <!-- 點數顯示區塊 - 加入新的樣式 -->
+    <!-- 點數顯示區塊 -->
     <div class="container text-center my-4">
       <div class="points-display">
         <span class="points-text">目前總共有</span>
@@ -87,10 +87,6 @@ export default {
       }
       return result
     },
-    //登入畫面的
-    openLoginModal() {
-      this.$refs.loginModal.openLoginModal()
-    },
 
     async getPointPrizes() {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
@@ -100,20 +96,16 @@ export default {
 
     async getMemberPoint() {
       try {
+        if (!user.memberId) {
+          this.memberPointTotal = 0
+          return
+        }
+
         const api = `${import.meta.env.VITE_API}/api/getMemberPoint`
         const response = await this.axios.get(api)
-
-        // 找到當前登入會員的點數資料
         const currentMemberData = response.data.find((data) => data.members.id === user.memberId)
 
-        // 如果找到會員資料，設置其點數總額
-        if (currentMemberData) {
-          this.memberPointTotal = currentMemberData.pointsTotal
-          console.log('會員點數:', this.memberPointTotal)
-        } else {
-          this.memberPointTotal = 0
-          console.log('未找到會員點數資料')
-        }
+        this.memberPointTotal = currentMemberData ? currentMemberData.pointsTotal : 0
       } catch (error) {
         console.error('獲取會員點數失敗:', error)
         this.memberPointTotal = 0
@@ -121,7 +113,6 @@ export default {
     },
 
     async redeemPrize(prize) {
-      // 先判斷點數是否足夠
       if (this.memberPointTotal < prize.pointPrizesPoints) {
         Swal.fire({
           icon: 'error',
@@ -129,10 +120,9 @@ export default {
           text: `您目前有 ${this.memberPointTotal} 點，還差 ${prize.pointPrizesPoints - this.memberPointTotal} 點才能兌換此商品`,
           confirmButtonText: '確定',
         })
-        return // 如果點數不足，直接返回不執行後續兌換流程
+        return
       }
 
-      //確定兌換跳出視窗
       const result = await Swal.fire({
         icon: 'question',
         title: `確定要兌換${prize.pointPrizesName}嗎?`,
@@ -147,94 +137,76 @@ export default {
         cancelButtonText: '在想一下',
         reverseButtons: true,
       })
-      //if(兌換成功)產生兌換碼
-      if (result.isConfirmed) {
-        //用promoCode去接產生的兌換碼
-        const promoCode = this.generateRandomCode()
 
-        const memberId = user.memberId
-        if (memberId) {
-          const requestData = {
-            memberId,
-            pointPrizesId: prize.id, // 商品 ID 來自按下的商品
-            recordsDate: new Date().toISOString(), // 使用當前時間作為兌換日期
-          }
+      if (!result.isConfirmed) {
+        return
+      }
 
-          const promoData = {
-            memberId,
-            pointPrizesId: prize.id,
-            promoCode,
-          }
+      const promoCode = this.generateRandomCode()
+      const requestData = {
+        memberId: user.memberId,
+        pointPrizesId: prize.id,
+        recordsDate: new Date().toISOString(),
+      }
 
-          try {
-            //產生兌換紀錄
-            const api = `${import.meta.env.VITE_API}/api/pointRecord`
-            const response = await this.axios.post(api, requestData)
-            if (response.data.兌換狀態) {
-              window.Swal.fire({
-                toast: true,
-                // position: 'top-end',
-                icon: 'success',
-                title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
-                html: `兌換碼是 : ${promoCode}<br>可前往會員中心查看`,
-                timer: 5000,
-                showConfirmButton: false,
-                timerProgressBar: true,
-              })
-            }
-          } catch (error) {
-            console.error('產生兌換紀錄失敗:', error)
-          }
-          //扣除獎品庫存
-          try {
-            const MinusPrizesApi = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
-            const MinusPrizeresponse = await this.axios.post(MinusPrizesApi, requestData)
-          } catch (error) {
-            console.error('扣除獎品庫存失敗:', error)
-          }
-          //將會員各自的兌換碼存進SQL
-          try {
-            const promoApi = `${import.meta.env.VITE_API}/api/promoCode`
-            const promoResponse = await this.axios.post(promoApi, promoData)
-          } catch (error) {
-            console.error('兌換碼存進SQL失敗:', error)
-          }
+      const promoData = {
+        memberId: user.memberId,
+        pointPrizesId: prize.id,
+        promoCode,
+      }
 
-          //兌換商品後扣除相對應積分
-          try {
-            const minusPointApi = `${import.meta.env.VITE_API}/api/minusMemberPoint`
-            const minusPointResponse = await this.axios.post(minusPointApi, requestData)
-          } catch (error) {
-            console.error('兌換商品後扣除積分失敗:', error)
-          }
-        } else {
-          //if(不是會員)跳轉到登入畫面
+      try {
+        // 產生兌換紀錄
+        const api = `${import.meta.env.VITE_API}/api/pointRecord`
+        const response = await this.axios.post(api, requestData)
+
+        if (response.data.兌換狀態) {
+          // 執行所有後續操作
+          await Promise.all([
+            // 扣除獎品庫存
+            this.axios.post(`${import.meta.env.VITE_API}/api/MinusOnePrizesCount`, requestData),
+            // 儲存兌換碼
+            this.axios.post(`${import.meta.env.VITE_API}/api/promoCode`, promoData),
+            // 扣除會員點數
+            this.axios.post(`${import.meta.env.VITE_API}/api/minusMemberPoint`, requestData),
+          ])
+
+          // 更新點數顯示
+          await this.getMemberPoint()
+
           window.Swal.fire({
-            title: '兌換商品需要點數',
-            text: '請先登入會員，才能進行兌換。',
-            icon: 'warning',
-            showCancelButton: true, // 顯示取消按鈕
-            confirmButtonText: '跳轉至登入',
-            cancelButtonText: '取消',
-            reverseButtons: true, // 反轉按鈕的顯示順序
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.openLoginModal()
-            } else {
-              console.log('User canceled the action')
-            }
+            toast: true,
+            icon: 'success',
+            title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
+            html: `兌換碼是 : ${promoCode}<br>可前往會員中心查看`,
+            timer: 5000,
+            showConfirmButton: false,
+            timerProgressBar: true,
           })
         }
-      } else {
-        console.log('User canceled redemption')
+      } catch (error) {
+        console.error('兌換處理失敗:', error)
+        Swal.fire({
+          icon: 'error',
+          title: '兌換失敗',
+          text: '請稍後再試',
+          confirmButtonText: '確定',
+        })
       }
-      this.getMemberPoint()
     },
   },
-  computed: {},
-  watch: {},
+  watch: {
+    // 監聽會員ID的變化
+    'user.memberId': {
+      handler(newVal) {
+        this.getMemberPoint()
+      },
+      immediate: true,
+    },
+  },
   created() {
-    this.getPointPrizes(), this.getMemberPoint()
+    this.getPointPrizes()
+    this.getMemberPoint()
   },
 }
 </script>

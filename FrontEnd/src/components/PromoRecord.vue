@@ -5,11 +5,7 @@
         <div class="records-card">
           <div class="card-header">
             <h2 class="title">已使用的優惠券紀錄</h2>
-            <div class="divider">
-              <span class="divider-line"></span>
-              <i class="fas fa-wine-glass-alt divider-icon"></i>
-              <span class="divider-line"></span>
-            </div>
+            <div class="divider"></div>
           </div>
 
           <div class="table-container">
@@ -39,10 +35,10 @@
             <p class="page-info">Page {{ currentPage }} of {{ totalPages }}</p>
             <div class="pagination-buttons">
               <button class="page-btn" @click="previousPage" :disabled="currentPage === 1">
-                <i class="fas fa-chevron-left"></i> Previous
+                Previous
               </button>
               <button class="page-btn" @click="nextPage" :disabled="currentPage === totalPages">
-                Next <i class="fas fa-chevron-right"></i>
+                Next
               </button>
             </div>
           </div>
@@ -128,18 +124,6 @@ export default {
   align-items: center;
   justify-content: center;
   margin: 1.5rem 0;
-}
-
-.divider-line {
-  height: 1px;
-  width: 80px;
-  background: linear-gradient(to right, transparent, #e0e0e0, transparent);
-}
-
-.divider-icon {
-  color: #9b8579;
-  font-size: 1.2rem;
-  margin: 0 1rem;
 }
 
 .table-container {
