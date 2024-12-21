@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div>
+      <BannerTop v-bind:title="'Point Shop'"></BannerTop>
+    </div>
+
     <!-- 點數顯示區塊 - 加入新的樣式 -->
     <div class="container text-center my-4">
       <div class="points-display">
