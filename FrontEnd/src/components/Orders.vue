@@ -137,15 +137,15 @@
                               <div class="d-flex align-items-center">
                                 <span>{{ item.odName }} x {{ item.odQuantity }}</span>
                                 <!-- 添加評論按鈕 -->
-                                <button
-                                  @click.stop="openReviewModal(item)"
-                                  class="btn btn-link btn-sm text-primary p-0 ms-2"
-                                  v-if="order.latestPaymentStatus === '已付款'"
-                                >
-                                  <i class="bi">
-                                    <font-awesome-icon v-bind:icon="['fas','fa-pen-fancy']" />
-                                  </i>
-                                </button>
+                                    <button
+                                      @click.stop="openReviewModal(item)"
+                                      class="btn btn-link btn-sm text-primary p-0 ms-2"
+                                      v-if="order.latestPaymentStatus === '已付款'"
+                                    >
+                                      <i class="bi">
+                                        <font-awesome-icon v-bind:icon="['fas','fa-pen-fancy']" />
+                                      </i>
+                                    </button>
                               </div>
                               <span>NT$ {{ item.odSumPrice }}</span>
                             </div>
@@ -235,7 +235,7 @@ export default {
       // 阻止事件冒泡，避免觸發展開/收起
       event.stopPropagation()
       // 這裡實現打開評論modal的邏輯
-      this.$emit('open-review', item)
+      // this.$emit('open-review', item)
     },
 
     async toggleOrderDetail(ordersNumber) {

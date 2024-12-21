@@ -1,7 +1,11 @@
 package com.example.bistro.backstage.orders;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+import com.example.bistro.backstage.menu.Menu;
+import com.example.bistro.backstage.ordersDetails.OrdersDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +20,7 @@ import com.example.bistro.backstage.menu.MenuRepository;
 import com.example.bistro.backstage.payment.Payment;
 import com.example.bistro.backstage.seats.Seats;
 import com.example.bistro.backstage.seats.SeatsRepository;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class OrdersController {
@@ -37,7 +42,11 @@ public class OrdersController {
         @GetMapping("/Bistro/Orders/findAll")
         public String findAll(Model model) {
             List<Orders> allOrders = ordersService.findAllOrders();
+            List<Menu> allMenus = menuRepositoryDao.findAll();
+
             model.addAttribute("allOrders", allOrders);
+            model.addAttribute("allMenus", allMenus);
+
             return "orders/ordersView";
         };
 
@@ -48,82 +57,87 @@ public class OrdersController {
             return "redirect:/Bistro/Orders/findAll";
         };
 
+    // 生成訂單編號
+    private String generateOrdersNumber() {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        return "O" + uuid.substring(0, 10);
+    }
 
-    //create 新增一筆訂單 OK 包含memberNull問題和Payment問題
-        @PostMapping("/Bistro/Orders/createOrders")
-        public String createOrders(
-                        //表單回傳的值
-                               @RequestParam String ordersName,
-                               @RequestParam String ordersTel,
-                               @RequestParam String seatType,
-                               @RequestParam Integer ordersSumPrice,
-                               @RequestParam String ordersRequest,
-                               @RequestParam List<String> paymentStatus,
-                               @RequestParam List<String> paymentWay,
-                               @RequestParam List<Integer> paymentPrice,
-                               @RequestParam(required = false) Integer memberId,
-//                               @RequestParam List<Integer> menuId,
-//                               @RequestParam Integer quantities,
-//                               @RequestParam List<Integer> prices,
-                               @RequestParam Integer seatsId ) {
-
-        //欄位要有的值，所以表單有的可以不用有，但欄位要的一定要給他
-            Orders orders = new Orders();
-            orders.setOrdersName(ordersName);
-            orders.setOrdersTel(ordersTel);
-            orders.setSeatType(seatType);
-            orders.setOrdersSumPrice(ordersSumPrice);
-            orders.setPointGetted(ordersSumPrice / 100);  // 自動計算 pointGetted
-            orders.setOrdersRequest(ordersRequest);
-
-        // 處理 memberId
-            if (memberId != null && memberId != 0) {
-                // 查找會員，若未找到則返回錯誤
-                Members member = membersRepositoryDao.findById(memberId).orElseThrow(() ->
-                        new IllegalArgumentException("Invalid member ID: " + memberId));
-                orders.setMembers(member);
-            } else {
-                // 非會員情況下不設置 membersId
-                orders.setMembers(null);
-            }
-        // 座位設置關聯
-            Seats seat = seatsRepository.findById(seatsId).orElse(null);
-            orders.setSeats(seat);
-        // 付款資訊植入
-            for (int i = 0; i < paymentStatus.size(); i++) {
-                Payment payment = new Payment();
-                payment.setOrders(orders);
-                payment.setPaymentStatus(paymentStatus.get(i));
-                payment.setPaymentWay(paymentWay.get(i));
-                payment.setPaymentPrice(paymentPrice.get(i));
-                orders.getPayment().add(payment);
-            // 更新訂單的最新付款狀態
-                orders.setLatestPaymentStatus(paymentStatus.get(i));
-            }
-
-//            // 新增訂單詳情並將odName和odPrice的值來自menu1 according to menuid
-//            for (int i = 0; i < menuId.size(); i++) {
-//                int finalI = i;
-//                Menu menu = menuRepositoryDao.findById(menuId.get(i)).orElseThrow(() -> new IllegalArgumentException("Invalid menu ID: " + menuId.get(finalI)));
-//                OrdersDetails orderDetails = new OrdersDetails();
-//                orderDetails.setOrders(orders);
-//                orderDetails.setMenu(menu);
-//                orderDetails.setOdName(menu.getProductName());
-//                // 設置 `odName` 為產品名稱
-//                orderDetails.setOdQuantity(quantities);
-//                orderDetails.setOdPrice(prices.get(i));
-//                orderDetails.setOdSumPrice( quantities * prices.get(i));
-//                orders.getOrdersDetails().add(orderDetails);
-//            }
-
-
-        // 保存訂單到DB
-            ordersService.insertOrders(orders);
-
-        return "redirect:/Bistro/Orders/findAll";
+    @GetMapping("/Bistro/Orders/findMemberByPhone")
+    @ResponseBody
+    public Optional<Members> findMemberByPhone(@RequestParam String memberPhone) {
+        return membersRepositoryDao.findByMemberPhone(memberPhone);
     }
 
 
+
+    //create 新增一筆訂單 OK 包含memberNull問題和Payment問題
+    @PostMapping("/Bistro/Orders/createOrders")
+    public String createOrders(
+            @RequestParam String ordersName,
+            @RequestParam String ordersTel,
+            @RequestParam String seatType,
+            @RequestParam Integer ordersSumPrice,
+            @RequestParam String ordersRequest,
+            @RequestParam String paymentStatus,
+            @RequestParam String paymentWay,
+            @RequestParam Integer paymentPrice,
+            @RequestParam(required = false) Integer memberId,
+            @RequestParam List<Integer> menuId,
+            @RequestParam List<Integer> quantities,
+            @RequestParam List<Integer> prices,
+            @RequestParam Integer seatsId) {
+
+        Orders orders = new Orders();
+        orders.setOrdersName(ordersName);
+        orders.setOrdersNumber(generateOrdersNumber());
+        orders.setOrdersTel(ordersTel);
+        orders.setSeatType(seatType);
+        orders.setOrdersSumPrice(ordersSumPrice);
+        orders.setPointGetted(ordersSumPrice / 100);
+        orders.setOrdersRequest(ordersRequest);
+
+        // 處理會員資訊
+        if (memberId != null && memberId != 0) {
+            Members member = membersRepositoryDao.findById(memberId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + memberId));
+            orders.setMembers(member);
+        } else {
+            orders.setMembers(null);
+        }
+
+        // 處理座位
+        Seats seat = seatsRepository.findById(seatsId).orElse(null);
+        orders.setSeats(seat);
+
+        // 處理付款資訊
+        Payment payment = new Payment();
+        payment.setOrders(orders);
+        payment.setPaymentStatus(paymentStatus);
+        payment.setPaymentWay(paymentWay);
+        payment.setPaymentPrice(paymentPrice);
+        orders.getPayment().add(payment);
+        orders.setLatestPaymentStatus(paymentStatus);
+
+        // 處理訂單詳情
+        for (int i = 0; i < menuId.size(); i++) {
+            int finalI = i;
+            Menu menu = menuRepositoryDao.findById(menuId.get(i))
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid menu ID: " + menuId.get(finalI)));
+
+            OrdersDetails orderDetails = new OrdersDetails();
+            orderDetails.setOrders(orders);
+            orderDetails.setMenu(menu);
+            orderDetails.setOdName(menu.getProductName());
+            orderDetails.setOdQuantity(quantities.get(i)); // 使用對應索引的數量
+            orderDetails.setOdPrice(prices.get(i));
+            orderDetails.setOdSumPrice(quantities.get(i) * prices.get(i));
+            orders.getOrdersDetails().add(orderDetails);
+        }
+
+        ordersService.insertOrders(orders);
+        return "redirect:/Bistro/Orders/findAll";
+    }
 }
 
 
