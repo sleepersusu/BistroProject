@@ -27,7 +27,7 @@
       class="align-middle text-primary text-sm font-weight-normal d-flex justify-content-between"
       data-label="評論時間"
     >
-      {{comment.commentTime}}
+      {{ comment.commentTime }}
       <div class="btn-group dropend">
         <button
           class="btn btn-sm"
@@ -65,7 +65,7 @@ export default {
       required: true,
     },
   },
-  emits: ['update-comment-modal'],
+  emits: ['update-comment-modal','delete-comment-modal'],
 
   data() {
     return {}
@@ -75,11 +75,44 @@ export default {
       this.$emit('update-comment-modal', comment)
     },
 
-    deleteComment(comment){
+    async deleteComment(comment) {
 
-      this.$emit('delete-comment-modal', comment)
-    }
+      const result = await Swal.fire({
+        icon: 'question',
+        title: `確定要刪除嗎?`,
+        html: `<p>刪除後無法還原</p>`,
+        showCancelButton: true,
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+        reverseButtons: true,
+      })
+
+      if (result.isConfirmed) {
+        comment = this.comment
+        let API_URL = `${import.meta.env.VITE_API}/api/Bistro/deleteComment/${this.comment.id}`
+
+        this.axios
+          .delete(API_URL)
+          .then(async () => {
+            this.$emit('delete-comment-modal')
+            await Swal.fire({
+              icon: 'success',
+              title: `刪除成功`,
+              showCancelButton: false,
+            })
+
+          })
+          .catch(async (error) => {
+            console.error('Error deletei comments:', error)
+            await Swal.fire({ icon: 'error', title: `刪除失敗`, showCancelButton: false, })
+          })
+      }
+    },
   },
+  watch(){
+
+
+  }
 }
 </script>
 

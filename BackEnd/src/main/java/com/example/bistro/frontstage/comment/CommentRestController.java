@@ -52,11 +52,6 @@ public class CommentRestController {
 
 
 
-
-	
-	@Autowired
-	private OrdersDetailsRepository orderDetailsRepo;
-
 	@PostMapping("/api/Bistro/postComment") // 新增評論
 	public ResponseEntity<Map<String, Object>> postComment(HttpSession httpSession,
 			@RequestBody Map<String, Object> requestData
@@ -219,67 +214,69 @@ public class CommentRestController {
 	}
 
 	@Transactional
-	@PutMapping("/api/put/comment/{ID}") // 修改評論
-	public ResponseEntity<Map<String, Object>> updateComment(@PathVariable Integer ID,
-			@RequestBody  CommentDTO dto) {
-		
-		
-		
-		
-		// 查詢原始評論
-		Comment comment = commentService.findCommentById(ID);
-		if (comment == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "評論不存在"));
-		}
+	@PutMapping("/api/put/comment/{ID}")
+	public ResponseEntity<Map<String, Object>> updateComment(@PathVariable Integer ID, 
+			@RequestBody CommentDTO dto) {
+	    try {	
+	        //查詢原始評論
+	        Comment comment = commentService.findCommentById(ID);
+	        if (comment == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(Map.of("success", false, "message", "評論不存在"));
+	        }
+	        
+	        //查詢相關的菜單與會員
+	        Menu menu = menuService.findMenuById(dto.getMenuId());
+	        if (menu == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(Map.of("success", false, "message", "菜單不存在"));
+	        }
 
-		try {
-			// 查詢相關的菜單與會員
-			Menu menu = menuService.findMenuById(dto.getMenuId());
-			if (menu == null) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "菜單不存在"));
-			}
+	        //驗證會員
+	        Optional<Members> op = membersRepo.findById(dto.getMemberId());
+	        if (op.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(Map.of("success", false, "message", "會員不存在"));
+	        }
 
-			Optional<Members> op = membersRepo.findById(dto.getMemberId());
+	        //權限檢查
+	        if (!comment.getMembers().getId().equals(dto.getMemberId())) {
+	            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+	                .body(Map.of("success", false, "message", "您無權修改此評論"));
+	        }
 
-			if (op.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "會員不存在"));
+	        Members members = op.get();
 
-			}
+	        // 5. 更新評論資料
+	        comment.setMenu(menu);
+	        comment.setMembers(members);
+	        comment.setCommentProduct(dto.getCommentProduct());
+	        comment.setCommentMessage(dto.getCommentMessage());
+	        comment.setCommentRating(dto.getCommentRating());
+	        comment.setCommentTime(dto.getCommentTime());
 
-			Members members = op.get();
+	        // 6. 在同一個事務中完成所有更新
+	        Comment updatedComment = commentService.updateCommentAndMenuScore(comment, menu);
 
-			// 更新評論資料
-			comment.setMenu(menu);
-			comment.setMembers(members);
-			comment.setCommentProduct(dto.getCommentProduct());
-			comment.setCommentMessage(dto.getCommentMessage());
-			comment.setCommentRating(dto.getCommentRating());
+	        // 7. 準備回應
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("success", true);
+	        response.put("updatedComment", updatedComment);
 
-			// 更新評論
-			commentService.updateComment(comment);
+	        return ResponseEntity.ok(response);
 
-			// 更新菜單平均分數
-			Double avgScore = menuService.countOneMenuAvgScore(menu.getProductName());
-			menu.setAvgScore(avgScore);
-			menuService.updateMenu(menu); // 確保平均分數更新到資料庫
+	    } catch (Exception e) {
+	        // 記錄詳細錯誤信息
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	            .body(Map.of(
+	                "success", false, 
+	                "message", "更新失敗", 
+	                "error", e.getMessage()
+	            ));
+	    }
 
-			// 返回成功回應
-			Map<String, Object> response = new HashMap<>();
-			response.put("success", true);
-			response.put("updatedComment", comment);
-
-			return ResponseEntity.ok(response);
-
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("success", false, "message", "更新失敗", "error", e.getMessage()));
-		}
 	}
-
-	
-	
-
-
 	@GetMapping("/api/{productName}/comment/people")
 	public ResponseEntity<?> countCommentPeopleByProductName(@PathVariable String productName) {
 

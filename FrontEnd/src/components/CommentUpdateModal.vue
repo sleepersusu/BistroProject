@@ -19,10 +19,11 @@
         </div>
         <div class="modal-body">
           <form @submit.prevent="handleSubmit">
+            <!-- 評論編號 -->
             <div class="mb-3">
               <input
                 class="form-control"
-                type="text"
+                type="hidden"
                 :value="comment.id"
                 aria-label="評論編號"
                 disabled
@@ -30,10 +31,11 @@
               />
             </div>
 
+            <!-- 菜單編號 -->
             <div class="mb-3">
               <input
                 class="form-control"
-                type="text"
+                type="hidden"
                 :value="comment.menuid"
                 aria-label="菜單編號"
                 disabled
@@ -41,21 +43,23 @@
               />
             </div>
 
+            <!-- 菜單名稱 -->
             <div class="mb-3">
               <input
                 class="form-control"
                 type="text"
                 :value="comment.commentProduct"
-                aria-label="菜單編號"
+                aria-label="菜單名稱"
                 disabled
                 readonly
               />
             </div>
 
+            <!-- 會員編號 -->
             <div class="mb-3">
               <input
                 class="form-control"
-                type="text"
+                type="hidden"
                 :value="comment.memberid"
                 aria-label="會員編號"
                 disabled
@@ -63,10 +67,11 @@
               />
             </div>
 
+            <!-- 評分 -->
             <star-rating
               :show-rating="false"
-              :rating="comment.commentRating"
-              @update:rating="rating = $event"
+              :rating="rating"
+              @update:rating="handleRatingUpdate"
               :star-points="[
                 23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17,
               ]"
@@ -74,10 +79,11 @@
             </star-rating>
             <div style="margin-top: 10px; font-weight: bold">{{ currentRatingText }}</div>
 
+            <!-- 顯示評分 -->
             <div class="mb-3">
               <input
                 class="form-control"
-                type="text"
+                type="hidden"
                 :value="rating"
                 aria-label="分數"
                 disabled
@@ -85,6 +91,7 @@
               />
             </div>
 
+            <!-- 評論訊息 -->
             <div class="mb-3">
               <label for="commentMessage" class="form-label">你的評論</label>
               <textarea
@@ -95,6 +102,7 @@
               ></textarea>
             </div>
 
+            <!-- 評論時間 -->
             <div class="mb-3">
               <input
                 class="form-control"
@@ -122,6 +130,7 @@ import ModalMixin from '@/mixins/modalMixin-option'
 import StarRating from 'vue-star-rating'
 import { mapState } from 'pinia'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   props: {
@@ -144,7 +153,7 @@ export default {
   },
 
   mixins: [ModalMixin],
-
+  emits:['update-table'],
   data() {
     return {
       commentMessage: '',
@@ -165,46 +174,76 @@ export default {
     },
 
     handleClose() {
-      this.handleReset()
       this.$refs.modal.hide()
+      this.$emit('close')
     },
 
     async handleSubmit() {
       // 使用當前的 comment 資料
       const updatedComment = {
         id: this.comment.id,
-        menuid: this.comment.menuid,
-        memberid: this.comment.memberid,
-        commentMessage: this.comment.commentMessage,
-        commentRating: this.comment.commentRating,
+        menuId: this.comment.menuid,
+        memberId: this.comment.memberid,
+        commentMessage: this.commentMessage,
+        commentRating: this.rating,
         commentProduct: this.comment.commentProduct,
-        memberSex: this.comment.memberSex,
-        memberName: this.comment.memberName,
         commentTime: this.currentDate,
       }
 
-      const API_URL = `${import.meta.env.VITE_API}/api/put/comment/${this.comment.id}`
+      let commentTime = this.currentDate // 例如 "2024-12-21T14:30"
 
+      // 將前端的時間格式 (yyyy-MM-ddTHH:mm) 轉換為後端期望的格式 (yyyy-MM-dd HH:mm:ss)
+      if (commentTime) {
+        // 解析前端時間格式
+        const dateObj = new Date(commentTime)
+
+        // 格式化成後端需要的格式
+        const formattedDate = dateObj.toISOString().slice(0, 19).replace('T', ' ') // "2024-12-21 14:30:00"
+        updatedComment.commentTime = formattedDate // 更新為格式化後的時間
+      }
+
+      const API_URL = `${import.meta.env.VITE_API}/api/put/comment/${this.comment.id}`
+      console.log(this.comment.id)
       try {
         // 發送 PUT 請求並傳遞更新的評論資料
-        await axios.put(API_URL, updatedComment)
+        await axios.put(API_URL, updatedComment).then(async (response) => {
+          this.$emit('update-table');
 
-        // 處理成功後的操作
-        this.handleClose()
+
+          await new Promise(resolve => setTimeout(resolve, 100));
+
+          this.$refs.modal.querySelector('[data-bs-dismiss="modal"]').click();
+
+          Swal.fire({
+            title: '感謝你得評論!',
+            text: '提交評論成功。',
+            icon: 'success',
+          })
+        })
       } catch (error) {
-        console.error('更新評論失敗', error)
-        // 可以加上錯誤處理邏輯
+        this.$refs.modal.querySelector('[data-bs-dismiss="modal"]').click();
+        Swal.fire({
+          title: '錯誤!',
+          text: '提交評論時發生錯誤。',
+          icon: 'error',
+        })
       }
     },
 
     getCurrentDate() {
       const now = new Date()
       // 將當前時間轉換為 UTC+8 時區
-      const offset = 8 * 60 // 台灣是 UTC+8，所以 offset 是 8 小時，轉換為分鐘
+      const offset = 8 * 60 // 台灣是 UTC+8，轉換為分鐘
       const localTime = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + offset * 60000)
 
       // 格式化為 yyyy-MM-ddTHH:mm 格式，符合 datetime-local 的要求
-      return localTime.toISOString().slice(0, 16)
+      const year = localTime.getFullYear()
+      const month = String(localTime.getMonth() + 1).padStart(2, '0') // 月份從 0 開始，所以加 1
+      const day = String(localTime.getDate()).padStart(2, '0')
+      const hours = String(localTime.getHours()).padStart(2, '0')
+      const minutes = String(localTime.getMinutes()).padStart(2, '0')
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`
     },
     updateCurrentDate() {
       this.currentDate = this.getCurrentDate()

@@ -1,8 +1,6 @@
 <template>
-
   <div class="container-fluid">
     <div class="row">
-
       <main class="col-md-9 col-lg-10 p-4">
         <h1 class="text-center">我的評論</h1>
         <div class="container-fluid py-4 px-5">
@@ -31,10 +29,11 @@
                         <CommentTable
                           :comment="comment"
                           @update-comment-modal="openUpdateCommentModal"
+                          @delete-comment-modal="deleteReload"
+
                         >
                         </CommentTable>
                       </tbody>
-
 
                       <tbody v-if="NoComment">
                         <tr>
@@ -59,26 +58,32 @@
     </div>
   </div>
 
+  <CommentUpdateModal
+    ref="commentUpdateModal"
+    :comment="currentComment"
+    @update-table="loadAllCommentByMember()"
+  ></CommentUpdateModal>
 
-  <CommentUpdateModal ref="commentUpdateModal" :comment="currentComment"></CommentUpdateModal>
+  <!-- <CommentDeleteModal ref="commentDeleteModal" :comment="deleteComment"> </CommentDeleteModal> -->
 </template>
 
 <script>
 import CommentTable from '@/components/CommentTable.vue'
 import CommentUpdateModal from '@/components/CommentUpdateModal.vue'
-
-
+import CommentDeleteModal from '@/components/CommentDeleteModal.vue'
 export default {
   components: {
     CommentTable,
     CommentUpdateModal,
+    CommentDeleteModal,
   },
 
   data() {
     return {
       comments: [],
       NoComment: true,
-      currentComment:{},
+      currentComment: {},
+      deleteComment:{}
     }
   },
   methods: {
@@ -88,7 +93,6 @@ export default {
       this.axios
         .get(API_URL)
         .then(async (response) => {
-
           this.comments = response.data
           this.NoComment = false
         })
@@ -101,10 +105,21 @@ export default {
       this.currentComment = comment
       this.$refs.commentUpdateModal.showModal()
     },
-  },
+    async deleteReload() {
+      this.loadAllCommentByMember()
+    },
 
+  },
   created() {
     this.loadAllCommentByMember()
+  },
+  watch: {
+    comments: {
+      handler(newVal) {
+        this.NoComment = newVal.length === 0
+      },
+      deep: true,
+    },
   },
 }
 </script>

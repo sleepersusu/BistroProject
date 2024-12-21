@@ -7,11 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.bistro.backstage.menu.Menu;
+import com.example.bistro.backstage.menu.MenuService;
+
 @Service
 public class CommentService {
 
 	@Autowired
 	private CommentRepository commentRepo;
+	
+	@Autowired
+	private MenuService menuService;
 
 	public Comment createComment(Comment comment) {
 		return commentRepo.save(comment);
@@ -66,4 +72,17 @@ public class CommentService {
 		
 
 	}
+
+	@Transactional
+    public Comment updateCommentAndMenuScore(Comment comment, Menu menu) {
+        // 1. 更新評論
+        Comment savedComment = commentRepo.save(comment);
+        
+        // 2. 更新菜單平均分數
+        Double avgScore = menuService.countOneMenuAvgScore(menu.getProductName());
+        menu.setAvgScore(avgScore);
+        menuService.updateMenu(menu);
+        
+        return savedComment;
+    }
 }
