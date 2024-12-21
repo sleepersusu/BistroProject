@@ -127,6 +127,7 @@ import StarRating from 'vue-star-rating'
 import LoadingVue from 'vue3-loading-overlay'
 import { mapActions } from 'pinia'
 import { cartStore } from '@/stores/cartStore'
+import { useNotificationStore } from '@/stores/notificationStore.js'
 
 export default {
   components: {
@@ -154,6 +155,8 @@ export default {
   },
   methods: {
     ...mapActions(cartStore, ['addToCart']),
+    ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
+
 
     async loadPicture(ID) {
       this.isLoading = true
