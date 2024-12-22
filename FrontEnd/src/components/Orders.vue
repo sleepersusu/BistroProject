@@ -77,7 +77,7 @@
                             已付款
                           </span>
                       <span
-                        v-else-if="order.latestPaymentStatus === '已取消'"
+                        v-else-if="order.latestPaymentStatus === '未付款'"
                         class="badge badge-sm border border-danger text-danger"
                         style="background-color: white"
                       >
@@ -86,7 +86,7 @@
                     </td>
                     <td class="align-middle text-center">
                           <span class="text-primary text-sm font-weight-normal">
-                            {{ order.payment[0]?.paymentWay || '未支付' }}
+                            {{ order.payment[0]?.paymentWay || '未付款' }}
                           </span>
                     </td>
                     <td class="align-middle text-center">

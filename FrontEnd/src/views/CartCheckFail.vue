@@ -1,5 +1,4 @@
 <template>
-
   <div class="text-center mt-5">
     <i class="bi bi-x-circle-fill" style="font-size: 5rem"></i>
   </div>
@@ -26,7 +25,7 @@
         </p>
       </div>
       <br />
-      <a href="#" class="btn btn-primary cta-btn mt-5 mb-5">Back to Cart</a>
+      <a @click="goBackToCart" class="btn btn-primary cta-btn mt-5 mb-5">Back to Cart</a>
     </div>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
   </section>
@@ -38,7 +37,26 @@ import PageTop from '@/components/PageTop.vue'
 
 export default defineComponent({
   components: { PageTop, BannerTop },
-})
+  mounted() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'PayPal 付款失敗,請確認您的帳戶餘額足夠,或使用其他付款方式',
+      showCancelButton: true,
+      confirmButtonText: '返回購物車',
+      cancelButtonText: '取消'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.goBackToCart();
+      }
+    });
+  },
+  methods: {
+    goBackToCart() {
+      this.$router.push('/cart');
+    },
+  },
+});
 </script>
 <style scoped>
 .step-indicator {
