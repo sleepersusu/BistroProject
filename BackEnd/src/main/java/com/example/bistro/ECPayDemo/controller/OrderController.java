@@ -52,6 +52,7 @@ public class OrderController {
             @RequestParam Map<String, String> getData,
             HttpServletRequest request
     ) {
+        //進不去的
         System.out.println("=== 進入 callback ===");
 
         Map<String, String> responseData;
@@ -75,6 +76,7 @@ public class OrderController {
 
     @RequestMapping(value = "/payment-result", method = {RequestMethod.POST, RequestMethod.GET})
     public void handlePaymentResult(HttpServletResponse response) throws IOException {
+        //進的去得
         System.out.println("=== 進入 payment-result ===");
         System.out.println("當前 paymentStatus: " + paymentStatus);
 
