@@ -31,13 +31,13 @@
           </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="/images/DSC_9550-1.jpg" class="d-block w-100" alt="..." />
+              <img src="/images/banner2.jpg" class="d-block w-100" alt="..." />
             </div>
             <div class="carousel-item">
-              <img src="/images/DSC_9531-1.jpg" class="d-block w-100" alt="..." />
+              <img src="/images/banner3.jpg" class="d-block w-100" alt="..." />
             </div>
             <div class="carousel-item">
-              <img src="/images/DSC_9562-1.jpg" class="d-block w-100" alt="..." />
+              <img src="/images/banner1.jpg" class="d-block w-100" alt="..." />
             </div>
           </div>
           <button
@@ -62,7 +62,9 @@
 
         <div class="hero-overlay d-flex flex-column justify-content-center">
           <div class="container text-white" data-aos="fade-up" data-aos-duration="1500">
-            <h1 class="hero-title mb-2">Welcome to <span class="highlight">Nightly Sips</span></h1>
+            <h1 class="hero-title mb-md-4">
+              Welcome to <span class="highlight">Nightly Sips</span>
+            </h1>
             <p class="hero-subtitle mb-md-4 mb-3">用餐不只是味蕾的享受，更是一場難忘的夜晚</p>
             <div
               class="hero-buttons mb-md-5"
@@ -100,7 +102,7 @@
           <div class="row justify-content-center">
             <div class="col-md-8 text-center text-white">
               <h2
-                class="display-6 mb-4"
+                class="lead fs-2 mb-4"
                 data-aos="fade-up"
                 data-aos-duration="1000"
                 data-aos-delay="50"

@@ -1,10 +1,11 @@
 <template>
   <div class="col card bg-light">
-    <img :src="menuSrc" class="card-img-top img-fixed" />
+    <!-- <img :src="menuSrc" class="card-img-top img-fixed" /> -->
+    <img src="/images/p9_0.jpg" class="card-img-top img-fixed" />
     <div class="card-body text-primary">
       <h6 class="card-title">
         {{ menu.productName }}
-        <span class="float-end text-danger">{{ menu.productPrice }}</span>
+        <span class="float-end text-danger">${{ menu.productPrice }}</span>
       </h6>
       <a href="#" class="btn btn-outline-primary w-100">加入購物車</a>
     </div>
