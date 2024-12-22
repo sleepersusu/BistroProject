@@ -38,10 +38,14 @@
                 <button
                   class="btn"
                   :class="
-                    memberPointTotal >= prize.pointPrizesPoints ? 'btn-primary' : 'btn-secondary'
+                    memberPointTotal >= prize.pointPrizesPoints && prize.pointPrizesCount > 0
+                      ? 'btn-primary'
+                      : 'btn-secondary'
                   "
                   @click="redeemPrize(prize)"
-                  :disabled="memberPointTotal < prize.pointPrizesPoints"
+                  :disabled="
+                    memberPointTotal < prize.pointPrizesPoints || prize.pointPrizesCount === 0
+                  "
                 >
                   {{ memberPointTotal >= prize.pointPrizesPoints ? '兌換商品' : '點數不足' }}
                 </button>
@@ -113,11 +117,11 @@ export default {
     },
 
     async redeemPrize(prize) {
-      if (this.memberPointTotal < prize.pointPrizesPoints) {
+      if (prize.pointPrizesCount === 0) {
         Swal.fire({
           icon: 'error',
-          title: '點數不足',
-          text: `您目前有 ${this.memberPointTotal} 點，還差 ${prize.pointPrizesPoints - this.memberPointTotal} 點才能兌換此商品`,
+          title: '商品已售完',
+          text: '很抱歉，此商品已經售完',
           confirmButtonText: '確定',
         })
         return
@@ -171,9 +175,6 @@ export default {
             this.axios.post(`${import.meta.env.VITE_API}/api/minusMemberPoint`, requestData),
           ])
 
-          // 更新點數顯示
-          await this.getMemberPoint()
-
           window.Swal.fire({
             toast: true,
             icon: 'success',
@@ -183,6 +184,8 @@ export default {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+          this.getPointPrizes()
+          this.getMemberPoint()
         }
       } catch (error) {
         console.error('兌換處理失敗:', error)
@@ -234,16 +237,18 @@ export default {
 }
 
 .prize-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 0;
   list-style: none;
-  justify-content: center;
+  width: 100%;
+  max-width: 1320px; /* 可以根據需要調整 */
+  margin: 0 auto;
 }
 
 .prize-item {
-  width: 300px;
+  width: 100%;
   transition: transform 0.2s;
 }
 
@@ -261,7 +266,9 @@ export default {
 
 .card-img-top {
   height: 200px;
-  object-fit: cover;
+  object-fit: contain;
+  background-color: #f8f9fa; /* 可選：設置背景色，讓留白部分不會太突兀 */
+  padding: 10px; /* 可選：加一點內邊距讓圖片不會貼邊 */
 }
 
 .card-body {

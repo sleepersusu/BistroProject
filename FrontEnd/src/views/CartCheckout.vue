@@ -230,9 +230,22 @@ export default defineComponent({
     },
 
     async jumpEcpay() {
-      window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout`
+      try {
+        // 將金額轉為整數（確保沒有小數點）
+        const integerAmount = Math.round(this.calculateTotal)
+        // 構建查詢字串
+        const queryParams = new URLSearchParams({
+          amount: integerAmount.toString(), // 轉為字串
+          ordersName: this.orderData.ordersName,
+          ordersTel: this.orderData.ordersTel,
+        }).toString()
+        // 使用查詢字串進行轉導
+        window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout?${queryParams}`
+      } catch (error) {
+        console.error('綠界支付發生錯誤:', error)
+        this.$router.push('/cartCheckFail')
+      }
     },
-
     async placeOrder() {
       try {
         // 檢查購物車是否為空
@@ -304,12 +317,12 @@ export default defineComponent({
           this.clearCart()
 
           // 新增：清空點數獎品
-          this.clearPointPrizes()  // 需要在 pointStore 中添加這個 action
+          this.clearPointPrizes() // 需要在 pointStore 中添加這個 action
 
           // 根據付款方式決定後續流程
           if (this.orderData.PaymentWay === 'ECPay') {
             // 如果是 ECPay，將訂單編號帶入跳轉
-            window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout?orderNumber=${response.data.ordersNumber}`
+            window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout?amount=${this.calculateTotal}`
           } else {
             // 如果是其他付款方式，直接跳轉到成功頁面
             this.$router.push({
@@ -336,11 +349,9 @@ export default defineComponent({
         const api = `${import.meta.env.VITE_API}/api/createPromoRecord`
         const response = await this.axios.post(api, requestData)
         if (response.status === 200 || response.status === 201) {
-          console.log('請求成功', response.data)
-          alert('優惠券記錄新增成功！')
+          console.log('優惠券記錄新增成功！', response.data)
         } else {
-          console.error('請求失敗', response.data)
-          alert('記錄新增失敗，請稍後再試。')
+          console.error('優惠券記錄新增失敗，請稍後再試', response.data)
         }
       } catch (error) {
         console.error('發生錯誤', error)

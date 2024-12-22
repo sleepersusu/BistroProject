@@ -69,7 +69,7 @@ export const useUserStore = defineStore('userStore', {
           token: token,
           username: username,
           userAvatar: userAvatar,
-          userpoint
+          userpoint,
         }
         localStorage.setItem('memberobj', JSON.stringify(memberObj))
         this.isLoggedIn = true // 設置登入
@@ -82,7 +82,7 @@ export const useUserStore = defineStore('userStore', {
         this.clearLoggedIn()
       }
     },
-    async submitRegister(event){
+    async submitRegister(event) {
       try {
         let API_URL = `${this.apiUrl}/api/members/create`
         let form = new FormData(event.target)
@@ -91,12 +91,12 @@ export const useUserStore = defineStore('userStore', {
           formData[key] = value
         })
         let formJsonData = JSON.stringify(formData)
-        let response= await axios.post(API_URL,formJsonData,{
+        let response = await axios.post(API_URL, formJsonData, {
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
         })
-        console.log(response.data);
+        console.log(response.data)
         this.submitLogin
       } catch (error) {
         console.error('登入失敗', error)
