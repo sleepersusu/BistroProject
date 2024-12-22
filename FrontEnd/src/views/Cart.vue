@@ -218,30 +218,17 @@ export default {
             title: '刪除成功',
             text: `商品 "${item.menu.productName}" 已成功從購物車移除！`,
             icon: 'success',
-            background: '#333333', // 黑灰底
-            color: '#ffffff',     // 白字
-            iconColor: '#00ff00', // 成功圖標顏色
+            background: '#fff', // 黑灰底
+            color: '#000000',     // 白字
+            iconColor: '#d60101', // 成功圖標顏色
             confirmButtonText: '確定',
             customClass: {
-              confirmButton: 'custom-swal-btn', // 自定義按鈕樣式
+              confirmButton: 'btn btn-primary text-white', // 自定義按鈕樣式
             },
           });
 
         } catch (error) {
           console.error('刪除商品失敗:', error)
-          // 失敗提示框
-          Swal.fire({
-            title: '刪除失敗',
-            text: '無法刪除該商品，請稍後再試！',
-            icon: 'error',
-            background: '#333333', // 黑灰底
-            color: '#ffffff',     // 白字
-            iconColor: '#ff0000', // 失敗圖標顏色
-            confirmButtonText: '關閉',
-            customClass: {
-              confirmButton: 'custom-swal-btn', // 自定義按鈕樣式
-            },
-          });
         }
       } else {
         console.error('未登入會員')
@@ -249,12 +236,12 @@ export default {
           title: '未登入會員',
           text: '請先登入會員以刪除商品！',
           icon: 'warning',
-          background: '#333333', // 黑灰底
-          color: '#ffffff',     // 白字
-          iconColor: '#ffc107', // 警告圖標顏色
+          background: '#fff', // 黑灰底
+          color: '#000000',     // 白字
+          iconColor: '#f6b704', // 警告圖標顏色
           confirmButtonText: '登入',
           customClass: {
-            confirmButton: 'custom-swal-btn', // 自定義按鈕樣式
+            confirmButton: 'btn btn-primary text-white', // 自定義按鈕樣式
           },
         });
       }

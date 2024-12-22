@@ -32,8 +32,10 @@
                         placeholder="請輸入訂購人姓名"
                         maxlength="15"
                         @input="validateName"
+                        :class="{ 'is-invalid': nameError }"
                         required
                       />
+                      <small v-if="nameError" class="text-danger">{{ nameError }}</small>
                     </div>
                   </div>
 
@@ -47,7 +49,9 @@
                         required
                         maxlength="10"
                         @input="validatePhone"
+                        :class="{ 'is-invalid': phoneError }"
                       />
+                      <small v-if="phoneError" class="text-danger">{{ phoneError }}</small>
                     </div>
                   </div>
                 </div>
@@ -184,6 +188,8 @@ export default defineComponent({
 
   data() {
     return {
+      nameError: '',
+      phoneError:'',
       cartItems: [],
       isProcessing: false,
       orderData: {
@@ -234,14 +240,26 @@ export default defineComponent({
 
     // 驗證電話格式
     validatePhone() {
-      this.orderData.ordersTel = this.orderData.ordersTel.replace(/\D/g, '')
+      const phoneRegex = /^09\d{8}$/ // 09開頭,8位數字
+      if (!this.orderData.ordersTel.trim()) {
+        this.phoneError = '電話為必填'
+      } else if (!phoneRegex.test(this.orderData.ordersTel)) {
+        this.phoneError = '電話格式錯誤，請輸入正確的手機號碼'
+      } else {
+        this.phoneError = ''
+      }
     },
 
     // 驗證姓名格式
     validateName() {
-      this.orderData.ordersName = this.orderData.ordersName
-        .replace(/[^a-zA-Z\u4e00-\u9fa5]/g, '')
-        .slice(0, 15)
+      const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s]{2,15}$/ // 允许中文、英文、空格，长度2~15
+      if (!this.orderData.ordersName.trim()) {
+        this.nameError = '姓名為必填'
+      } else if (!nameRegex.test(this.orderData.ordersName)) {
+        this.nameError = '姓名格式錯誤，請輸入2-15個字的中文或英文'
+      } else {
+        this.nameError = ''
+      }
     },
 
     // 處理現金支付
@@ -416,10 +434,8 @@ export default defineComponent({
               this.$router.push({
                 path: '/membercenter/orders',
                 query: { orderNumber },
-              });
-            });
-            // 清空購物車
-            await this.clearCart();
+              })
+            })
           }
         } else {
           throw new Error('訂單創建失敗')
@@ -429,10 +445,6 @@ export default defineComponent({
         this.$router.push('/cartCheckFail')
       } finally {
         this.isProcessing = false
-        // 只有訂單建立成功或付款成功時才清空購物車
-        if (response.status === 200 || this.$route.path === '/cartCheckSuc') {
-          await this.clearCart()
-        }
       }
     },
 
@@ -479,6 +491,18 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.is-invalid {
+  border-color: #dc3545 !important;
+  background-color: #ffffff !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
 .step-indicator {
   display: flex;
   justify-content: center;

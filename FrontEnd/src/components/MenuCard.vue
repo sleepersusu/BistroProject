@@ -149,7 +149,7 @@ export default {
       menuSrc: '',
       memberSrc: '',
       isLoading: false,
-      count: 0,
+      count: 1,
       comments: [],
       commentPeople: 0,
     }
@@ -216,20 +216,25 @@ export default {
       this.$emit('view-menudescribe', menu)
     },
     handleAddToCart(id) {
+      const productName = this.menu.productName;
       this.addToCart({ id, count: this.count })
       this.count = 1
       // 黑灰底白字的提示框
       Swal.fire({
-        title: '成功加入購物車',
-        text: '您的商品已成功加入購物車！',
+        toast:true,
+        title: `「${productName}」成功加入購物車！`,
+        position:'top-end',
         icon: 'success',
-        background: '#333333', // 黑灰底
-        color: '#ffffff',     // 白字
-        iconColor: '#00ff00', // 成功图标绿色
-        confirmButtonText: '繼續購物',
-        customClass: {
-          confirmButton: 'custom-swal-btn',
+        background: '#fff', // 黑灰底
+        color: '#000000',     // 白字
+        iconColor: '#000000', // 成功
+        showConfirmButton: false, //不顯示確認按鈕
+        timer: 2330, //時間
+        timerProgressBar: true, //進度條
+        didOpen: (toast) => {
+          toast.style.marginTop = '80px'; // 動態調整位置
         },
+
       });
     },
 
@@ -256,20 +261,7 @@ export default {
 
 <style scoped>
 
-/*  SweetAlert */
-.custom-swal-btn {
-  background-color: #444444; /* 按钮黑灰色 */
-  color: #ffffff;           /* 按钮白字 */
-  border: none;             /* 移除边框 */
-  border-radius: 5px;       /* 按钮圆角 */
-  padding: 10px 20px;       /* 内边距 */
-  font-size: 16px;          /* 字体大小 */
-  cursor: pointer;
-}
 
-.custom-swal-btn:hover {
-  background-color: #666666; /* 悬停效果 */
-}
 .img-fixed {
   width: 100%; /* 讓圖片寬度符合卡片寬度 */
   height: 200px; /* 固定高度 */

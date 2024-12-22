@@ -38,18 +38,7 @@ import PageTop from '@/components/PageTop.vue'
 export default defineComponent({
   components: { PageTop, BannerTop },
   mounted() {
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'PayPal 付款失敗,請確認您的帳戶餘額足夠,或使用其他付款方式',
-      showCancelButton: true,
-      confirmButtonText: '返回購物車',
-      cancelButtonText: '取消'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.goBackToCart();
-      }
-    });
+
   },
   methods: {
     goBackToCart() {
