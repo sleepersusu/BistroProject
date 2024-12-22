@@ -34,6 +34,36 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt-api</artifactId>
+		    <version>0.11.5</version>
+		</dependency>
+		<dependency> 
+			<groupId>com.google.auth</groupId>
+			<artifactId>google-auth-library-oauth2-http</artifactId>
+			<version>1.1.0</version>	
+		</dependency>
+		<dependency>
+	        <groupId>com.google.api-client</groupId>
+	        <artifactId>google-api-client</artifactId>
+	        <version>1.34.0</version>  <!-- 請使用最新版本 -->
+	    </dependency>
+	    
+    
+	    <!-- Jackson JSON processing library (for Google API client) -->
+	    <dependency>
+	        <groupId>com.google.http-client</groupId>
+	        <artifactId>google-http-client-gson</artifactId>
+	        <version>1.40.1</version> <!-- 或選擇最新版本 -->
+	    </dependency>
+	    
+	    <!-- HTTP transport library (for making requests) -->
+	    <dependency>
+	        <groupId>com.google.http-client</groupId>
+	        <artifactId>google-http-client</artifactId>
+	        <version>1.40.1</version>  <!-- 或選擇其他版本 -->
+	    </dependency>
 		<dependency><!-- line bot -->
 			<groupId>com.linecorp.bot</groupId>
 			<artifactId>line-bot-spring-boot</artifactId>
@@ -101,21 +131,20 @@
 		</dependency>
 		
 		<!--綠界金流-->
-			<!-- <https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api> -->
-			<dependency>
-			    <groupId>javax.servlet</groupId>
-			    <artifactId>javax.servlet-api</artifactId>
-			    <version>3.0.1</version>
-			    <scope>provided</scope>
-			</dependency>
+		<!-- <https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api> -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.0.1</version>
+		    <scope>provided</scope>
+		</dependency>
 
-			<!-- <https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core> -->
-			<dependency>
-			    <groupId>org.apache.logging.log4j</groupId>
-			    <artifactId>log4j-core</artifactId>
-			    <version>2.17.1</version>
-			</dependency>
-
+		<!-- <https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core> -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>2.17.1</version>
+		</dependency>
 
 		<!--Json-->
 		<dependency>
@@ -123,10 +152,6 @@
 			<artifactId>gson</artifactId>
 			<version>2.8.9</version>
 		</dependency>
-
-
-
-
 
 	</dependencies>
 

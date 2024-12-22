@@ -44,10 +44,14 @@ public class MemberLoginController {
 			response.put("status", "success");
 			response.put("memberId", memberData.getId().toString());
 			response.put("memberName", memberData.getMemberName());
-			response.put("memberPoint", memberData.getMemberPoint().toString());
+			if(memberData.getMemberPoint()==null) {
+				response.put("memberPoint", "0");
+			}else {
+				response.put("memberPoint", memberData.getMemberPoint().toString());
+			}
 			return ResponseEntity.ok(response);
 		}else {
-			System.out.println("登入失敗");
+			System.out.println("會員登入失敗");
 			response.put("status", "fail");
 			return ResponseEntity.status(404).body(response);
 		}

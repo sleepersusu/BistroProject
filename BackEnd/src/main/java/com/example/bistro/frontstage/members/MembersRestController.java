@@ -7,6 +7,7 @@ import com.example.bistro.backstage.members.Members;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,9 +30,9 @@ public class MembersRestController {
 		String userPhone = membersDTO.getUserPhone();
 		String userAccount = membersDTO.getUserAccount();
 		String userPassword = membersDTO.getUserPassword();
-		boolean result = memberFronetService.findMemberByAccount(userAccount);
+		Optional<Members> result = memberFronetService.findMemberByAccount(userAccount);
 		Map<String, String> response = new HashMap<>();
-		if(result) {
+		if(result.isPresent()) {
 			response.put("status", "資料已存在");
 			return ResponseEntity.status(404).body(response);
 		}else {
@@ -43,7 +44,7 @@ public class MembersRestController {
 			memberBean.setMemberPassword(userPassword);
 			memberBean.setMemberEmail(userAccount);
 
-			Members memberData = memberFronetService.createMember(memberBean);
+			Members memberData = memberFronetService.insertMember(memberBean);
 			
 			response.put("status", "success");
 			response.put("memberId", memberData.getId().toString());

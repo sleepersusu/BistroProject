@@ -18,22 +18,21 @@ public class MemberFrontService {
 	@Autowired
 	private MembersRepository memberRepo;
 	
-	public boolean findMemberByAccount(String Account) {
-		Optional<Members> result = memberRepo.findByMemberAccount(Account);
-		if(result.isPresent()) {
-			return true;
-		}else {
-			return false;
-		}
+	public Optional<Members> findMemberByAccount(String Account) {
+		Optional<Members> memberData = memberRepo.findByMemberAccount(Account);
+		return memberData;
 	}
-	public Members createMember(Members memberBean) {
+	public Members insertMember(Members memberBean) {
 		String memberShip="會員";
 		String memberStatus="啟用";
 		memberBean.setMemberShip(memberShip);
+		memberBean.setMemberPoint(0);
 		memberBean.setMemberStatus(memberStatus);
+		if(memberBean.getMemberPassword()!=null) {
 		String password = memberBean.getMemberPassword();
 		String encodedPwd = pwdEncoder.encode(password);
 		memberBean.setMemberPassword(encodedPwd);
+		}
 		return memberRepo.save(memberBean);
 	}
 }

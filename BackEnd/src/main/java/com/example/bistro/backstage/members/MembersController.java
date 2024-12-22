@@ -88,15 +88,10 @@ public class MembersController {
     @Transactional
     @PostMapping("/Bistro/Member/postMember")
     public String createNewMember(@ModelAttribute Members memberBean,@RequestParam("memberPhoto") MultipartFile file) {
-    	String memberShip = "會員";
-    	String memberStatus = "啟用";
     	String name = memberBean.getMemberName();
     	String phone = memberBean.getMemberPhone();
     	Members dbMember = membersService.findMembers(name, phone);
     	if(dbMember==null) {
-    		memberBean.setMemberShip(memberShip);
-    		memberBean.setMemberStatus(memberStatus);
-    		memberBean.setMemberPoint(0);
         	try {
         		if (file != null && !file.isEmpty()) {
         			byte[] fileBytes = file.getBytes(); // 轉成 byte[]

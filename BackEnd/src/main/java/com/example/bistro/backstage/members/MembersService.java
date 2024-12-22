@@ -18,6 +18,14 @@ public class MembersService {
 	private MembersRepository memberRepo;
 	
 	public Members insertMember(Members memberBean) {
+		String memberShip="會員";
+		String memberStatus="啟用";
+		memberBean.setMemberShip(memberShip);
+		memberBean.setMemberPoint(0);
+		memberBean.setMemberStatus(memberStatus);
+		String password = memberBean.getMemberPassword();
+		String encodedPwd = pwdEncoder.encode(password);
+		memberBean.setMemberPassword(encodedPwd);
 		return memberRepo.save(memberBean);
 	}
 	
@@ -60,5 +68,10 @@ public class MembersService {
 		memberRepo.save(memberBean);
 		return "更新完成";
 	}
+	public Optional<Members> findMemberByAccount(String loginAccount) {
+		Optional<Members> memberData = memberRepo.findByMemberAccount(loginAccount);
+	return memberData;
+	}
+	
 	
 }

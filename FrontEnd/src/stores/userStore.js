@@ -8,6 +8,9 @@ export const useUserStore = defineStore('userStore', {
     memberprofile: {},
   }),
   actions: {
+    getURL() {
+      return this.apiUrl
+    },
     setLoggedIn() {
       let memberobj = localStorage.getItem('memberobj')
       this.isLoggedIn = true // 設置登入
@@ -29,6 +32,47 @@ export const useUserStore = defineStore('userStore', {
       // localStorage.clear();
       this.isLoggedIn = false
       this.memberprofile = {}
+    },
+    async handleGoogleLogin(idToken) {
+      try {
+        let response = await axios.get(`${this.apiUrl}/google`, {
+          params: {
+            idToken: idToken, // 將 code 作為請求參數發送
+          },
+        })
+        console.log('後端回應：', response.data)
+        const token = response.data.token
+        let userAvatar=''
+        let memberId = response.data.memberId
+        let imgUrl = `${this.apiUrl}/api/member/photo/${memberId}`
+        let imgData = await axios.get(imgUrl, {
+          responseType: 'blob',
+        })
+        
+        if (imgData.data.size === 0) {
+          //判斷有無圖片，切換預設頭像
+          console.log('圖'+userAvatar)
+          userAvatar = '/images/avatar.jpg'
+        } else {
+          userAvatar = URL.createObjectURL(imgData.data)
+        }
+        let username = response.data.memberName
+        let userpoint = response.data.memberPoint
+        let memberObj = {
+          memberId: memberId,
+          token: token,
+          username: username,
+          userAvatar: userAvatar,
+          userpoint,
+        }
+        localStorage.setItem('memberobj', JSON.stringify(memberObj))
+        this.isLoggedIn = true // 設置登入
+        this.memberprofile.username = username
+        this.memberprofile.userAvatar = userAvatar
+        this.memberprofile.userpoint = userpoint
+      } catch (error) {
+        console.error('Google發送後端失敗', error)
+      }
     },
     async submitLogin(event) {
       try {
@@ -60,7 +104,6 @@ export const useUserStore = defineStore('userStore', {
         } else {
           userAvatar = URL.createObjectURL(imgData.data)
         }
-
         const token = response.data.token
         let username = response.data.memberName
         let userpoint = response.data.memberPoint
@@ -69,7 +112,7 @@ export const useUserStore = defineStore('userStore', {
           token: token,
           username: username,
           userAvatar: userAvatar,
-          userpoint
+          userpoint,
         }
         localStorage.setItem('memberobj', JSON.stringify(memberObj))
         this.isLoggedIn = true // 設置登入
@@ -82,7 +125,7 @@ export const useUserStore = defineStore('userStore', {
         this.clearLoggedIn()
       }
     },
-    async submitRegister(event){
+    async submitRegister(event) {
       try {
         let API_URL = `${this.apiUrl}/api/members/create`
         let form = new FormData(event.target)
@@ -91,21 +134,21 @@ export const useUserStore = defineStore('userStore', {
           formData[key] = value
         })
         let formJsonData = JSON.stringify(formData)
-        let response= await axios.post(API_URL,formJsonData,{
+        let response = await axios.post(API_URL, formJsonData, {
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
         })
-        console.log(response.data);
+        console.log(response.data)
         this.submitLogin
       } catch (error) {
         console.error('登入失敗', error)
       }
     },
-    googleLogin(){
+    googleLogin() {
       let Google_URL = `${this.apiUrl}/google/login`
-      let res=axios.get(Google_URL);
-    }
+      let res = axios.get(Google_URL)
+    },
   },
   getters: {
     memberId: () => Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId) || null,

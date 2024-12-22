@@ -120,8 +120,7 @@ export default {
     openLoginModal() {
       this.$refs.loginModal.openLoginModal()
     },
-    triggerOffcanvas() {
-      // 通过 $refs 访问子组件并触发显示 Offcanvas
+    triggerOffcanvas() {//觸發會員右側欄
       const avatarProfileComponent = this.$refs.avatarProfile
       avatarProfileComponent.openOffcanvas()
     },

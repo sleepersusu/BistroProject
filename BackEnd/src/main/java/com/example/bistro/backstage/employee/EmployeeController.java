@@ -7,11 +7,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.bistro.backstage.members.Members;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,30 +39,21 @@ public class EmployeeController {
     }
     @PostMapping("/Bistro/Employee/postemployee")
     public String createEmployee(@ModelAttribute Employee employee,@RequestParam Integer jobId) {
-    	System.out.println("進新增");
-    	System.out.println(employee.getEmployeeAccount());
-    	System.out.println(employee.getEmployeePassword());
-    	System.out.println(employee.getEmployeeName());
-    	System.out.println(employee.getEmployeeGender());
-    	System.out.println(employee.getEmployeeTel());
-    	System.out.println(employee.getEmployeeSalary());
-    	System.out.println(employee.getEmployeeSeniority());
-    	System.out.println(employee.getEmployeeBorn());
-    	System.out.println(jobId);
+    	Employee employeeData = employeeService.findEmployeeByAccount(employee.getEmployeeAccount());
+    	if(employeeData==null) {
+    		employeeService.insertEmployee(employee,jobId);
+    	}else {
+    		System.out.println("員工帳號已存在");
+    	}
         return "redirect:/Bistro/Employee/findAllEmployees";
     }
     @PostMapping("/Bistro/Employee/UpdateEmployee")
     public String updateEmployee(@ModelAttribute Employee employee,@RequestParam Integer jobId) {
-    	System.out.println("進上傳");
-    	System.out.println(employee.getEmployeeAccount());
-    	System.out.println(employee.getEmployeePassword());
-    	System.out.println(employee.getEmployeeName());
-    	System.out.println(employee.getEmployeeGender());
-    	System.out.println(employee.getEmployeeTel());
-    	System.out.println(employee.getEmployeeSalary());
-    	System.out.println(employee.getEmployeeSeniority());
-    	System.out.println(employee.getEmployeeBorn());
-    	System.out.println(jobId);
+    	Employee employeeData = employeeService.findEmployeeById(employee.getId());
+    	employee.setCreatedAt(employeeData.getCreatedAt());
+    	employee.setEmployeeStatus(employeeData.getEmployeeStatus());
+    	employee.setEmployeeSeniority(employeeData.getEmployeeSeniority());
+    	employeeService.updateEmployee(employee,jobId);
     	return "redirect:/Bistro/Employee/findAllEmployees";
     }
     
@@ -104,4 +99,27 @@ public class EmployeeController {
 			return "Insert employee OK.";
 		}
 	}
+	
+    @Transactional
+    @PostMapping("/Bistro/Employee/cancel")
+    public String cancelMember(@RequestParam Integer id) {
+    	Employee employeeBean = employeeService.findEmployeeById(id);
+    	String employeeStatus="離職";
+    	System.out.println(employeeBean.getEmployeeStatus());
+    	employeeBean.setEmployeeStatus(employeeStatus);
+    	String result = employeeService.updateEmployee(employeeBean,employeeBean.getJobTitle().getId());
+    	System.out.println(result);
+    	return "redirect:/Bistro/Employee/findAllEmployees";
+    }
+    @Transactional
+    @PostMapping("/Bistro/Employee/active")
+    public String activeMember(@RequestParam Integer id) {
+    	Employee employeeBean = employeeService.findEmployeeById(id);
+    	String employeeStatus="在職";
+    	System.out.println(employeeBean.getEmployeeStatus());
+    	employeeBean.setEmployeeStatus(employeeStatus);
+    	String result = employeeService.updateEmployee(employeeBean,employeeBean.getJobTitle().getId());
+    	System.out.println(result);
+    	return "redirect:/Bistro/Employee/findAllEmployees";
+    }
 }
