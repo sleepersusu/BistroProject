@@ -165,8 +165,8 @@
                 v-for="time in availableTimeslots"
                 :key="time"
                 :class="{
-                  'btn-outline-black': selectedTime === time,
-                  'btn-black': selectedTime !== time,
+                  'btn-outline-black': selectedTime !== time,
+                  'btn-black': selectedTime === time,
                 }"
                 :style="{ color: selectedTime === time ? '#fff' : '' }"
                 class="btn btn-black w-100 me-2 mb-2"
@@ -363,7 +363,7 @@ export default {
 }
 
 .btn-outline-black{
-  background-color: darkgray;
+  background-color: white;
   color: black;
   
 }
@@ -391,41 +391,5 @@ export default {
     max-width: 100%;
   }
 }
-/* .btn-orange {
-  background-color: #ff6600;
-  border: 1px solid #ff6600;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
 
-.btn-orange:hover {
-  background-color: #e65c00;
-  border-color: #e65c00;
-}
-
-.btn-outline-orange {
-  background-color: transparent;
-  border: 2px solid #ff6600;
-  color: #ff6600;
-  padding: 8px 18px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-.btn-outline-orange:hover {
-  background-color: #ff6600;
-  color: white;
-  border-color: #ff6600;
-} */
-
-/*:class="{
-          'btn-outline-orange': selectedTime !== time,
-          'btn-orange': selectedTime === time,  改顏色要加入這段
-        }"  */
 </style>

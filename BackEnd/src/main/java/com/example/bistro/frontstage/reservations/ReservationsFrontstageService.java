@@ -31,7 +31,7 @@ public class ReservationsFrontstageService {
 //	public void sendReservationConfirmation(String contactPhone, Date reservationDate, String starTime,
 //			Integer numberPeople) {
 //
-//    		 String formattedPhone= "+886982554956";   				 
+//    		 String formattedPhone= "";   				 
 ////    		 String formattedPhone = "+886" + contactPhone.substring(1);; 接使用者的電話號碼
 //
 //		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
