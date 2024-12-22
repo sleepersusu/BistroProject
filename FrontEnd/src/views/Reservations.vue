@@ -287,15 +287,15 @@ export default {
         const response = await this.axios.post(api, this.reservations)
         if (response.data.success) {
           // 發送簡訊要取得的資料
-          const confirmationApi = `${import.meta.env.VITE_API}/api/Bistro/send`
-          const reservationData = {
-            contactPhone: this.reservations.contactPhone,
-            reservationDate: this.reservations.reservationDate,
-            startTime: this.reservations.startTime,
-            numberPeople: this.reservations.numberPeople,
-          }
-          const smsResponse = await this.axios.post(confirmationApi, reservationData)
-          if (smsResponse.data.success) {
+          // const confirmationApi = `${import.meta.env.VITE_API}/api/Bistro/send`
+          // const reservationData = {
+          //   contactPhone: this.reservations.contactPhone,
+          //   reservationDate: this.reservations.reservationDate,
+          //   startTime: this.reservations.startTime,
+          //   numberPeople: this.reservations.numberPeople,
+          // }
+          // const smsResponse = await this.axios.post(confirmationApi, reservationData)
+          // if (smsResponse.data.success) {
             this.showSuccess()
             this.reservations = {
               customerName: '',
@@ -307,10 +307,10 @@ export default {
               notes: '',
             }
             this.selectedTime = ''
-          } else {
-            const errorMessage = smsResponse.data.message || '訂位確認簡訊發送失敗，請稍後再試。'
-            alert(`錯誤: ${errorMessage}`)
-          }
+          // } else {
+          //   const errorMessage = smsResponse.data.message || '訂位確認簡訊發送失敗，請稍後再試。'
+          //   alert(`錯誤: ${errorMessage}`)
+          // }
         } else {
           const errorMessage = response.data.message || '訂位失敗，請稍後再試。'
           alert(`錯誤: ${errorMessage}`)
