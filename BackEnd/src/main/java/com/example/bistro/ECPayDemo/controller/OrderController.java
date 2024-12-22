@@ -3,13 +3,14 @@ package com.example.bistro.ECPayDemo.controller;
 import java.io.IOException;
 import java.util.Map;
 
+import com.example.bistro.ECPayDemo.request.CheckoutResult;
+import com.example.bistro.ECPayDemo.request.CheckoutResult1;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,19 +27,17 @@ import jakarta.servlet.http.HttpServletResponse;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class OrderController {
 
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
     @Autowired
     OrderService orderService;
 
     private static String paymentStatus;
 
     @GetMapping("/ecpayCheckout")
-    public String ecpayCheckout(
-            @RequestParam(required = false, defaultValue = "0") String amount,
-            @RequestParam(required = false, defaultValue = "") String ordersName,
-            @RequestParam(required = false, defaultValue = "") String ordersTel) {
+    public String ecpayCheckout(@RequestParam CheckoutResult checkoutResult) {
         try {
-            System.out.println("有進到後端");
-            String aioCheckOutALLForm = orderService.ecpayCheckout(amount, ordersName, ordersTel);
+            log.info("有進到後端，收到的參數{}",checkoutResult);
+            String aioCheckOutALLForm = orderService.ecpayCheckout(checkoutResult);
             return aioCheckOutALLForm;
         } catch (Exception e) {
             e.printStackTrace();
