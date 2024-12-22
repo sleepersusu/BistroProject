@@ -41,7 +41,7 @@ export const pointStore = defineStore('point', {
     },
 
     addToCart(prizeData) {
-      if (!this.pointPrizes.some(prize => prize.promoCode === prizeData.promoCode)) {
+      if (!this.pointPrizes.some((prize) => prize.promoCode === prizeData.promoCode)) {
         this.pointPrizes.push(prizeData)
       }
     },
