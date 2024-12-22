@@ -1,6 +1,7 @@
 package com.example.bistro.frontstage.campaign;
 
 
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class LineWebhookController {
     
     @Autowired
     private ObjectMapper objectMapper;
+    
 
     @PostMapping("/line/webhook")
     public ResponseEntity<String> handleWebhook(@RequestBody String body) {
@@ -79,7 +81,7 @@ public class LineWebhookController {
     }
     
     @PostMapping("/line/send-message/{winnerId}")
-    public ResponseEntity<String> sendMessageToUser(@PathVariable("winnerId") Integer winnerId) {
+    public ResponseEntity<String> sendMessageToUser(@PathVariable Integer winnerId) {
     	Optional<LotteryWinners> op = winnersRepo.findById(winnerId);
     	LotteryWinners winner = op.get();
         Integer id = winner.getMember().getId();

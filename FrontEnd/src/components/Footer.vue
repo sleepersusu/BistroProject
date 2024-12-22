@@ -1,9 +1,5 @@
 <template>
-  <div class="pt-2 mb-0 bg-light ">
-    <h3 class="text-dark text-center mb-3 fs-2" style="font-family: 'Chakra Petch', cursive !important" > Location</h3>
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-  </div>
-    <div class=" bg-dark">
+  <div class="bg-dark">
     <div class="container">
       <footer class="py-5 text-light">
         <div class="row">
@@ -14,7 +10,6 @@
               <li class="nav-item mb-2">
                 <a href="#" class="nav-link p-0 text-light">Features</a>
               </li>
-
             </ul>
           </div>
 
@@ -25,7 +20,6 @@
               <li class="nav-item mb-2">
                 <a href="#" class="nav-link p-0 text-light">Features</a>
               </li>
-
             </ul>
           </div>
 
@@ -36,7 +30,6 @@
               <li class="nav-item mb-2">
                 <a href="#" class="nav-link p-0 text-light">Features</a>
               </li>
-
             </ul>
           </div>
 

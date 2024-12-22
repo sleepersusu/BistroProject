@@ -2,6 +2,7 @@ package com.example.bistro.frontstage.orders;
 
 import com.example.bistro.backstage.orders.Orders;
 import com.example.bistro.backstage.orders.OrdersService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class OrdersRestController {
     //新增訂單，來自DTO的資料轉換存到資料庫
         @PostMapping("/create")
         public ResponseEntity<Orders> createOrder(@RequestBody OrdersDTO ordersRequestDTO) {
+            System.out.println("Received OrdersDTO: " + ordersRequestDTO.getMemberId());
             Orders newOrder = ordersFrontService.createOrder(ordersRequestDTO);
             return ResponseEntity.ok(newOrder);
         }
@@ -34,20 +36,43 @@ public class OrdersRestController {
             List<Orders> orders = ordersService.findAllOrders();
             return ResponseEntity.ok(orders);
         }
+    // 根據會員Id查詢該會員所有訂單-----ok
+        @GetMapping("/list/member")
+            public ResponseEntity<List<Orders>> findOrdersByMemberId(HttpSession httpSession) {
+                Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
+                // 檢查用戶是否登錄
+                    if (loginUserId == null) {
+                        return ResponseEntity.status(401).body(null); // 未登錄
+                    }
+                List<Orders> orders = ordersFrontService.findAllOrdersByMemberId(loginUserId);
+                // 檢查訂單列表是否為空
+                    if (orders.isEmpty()) {
+                        return ResponseEntity.status(204).body(null); // 無訂單
+                    }
+                return ResponseEntity.ok(orders); // 返回訂單列表
+            }
 
-
-    //查看單筆訂單，根據memberId查詢訂單
-        @GetMapping("/getlist/{id}")
+    //查看單筆訂單，根據orderId查詢訂單
+        @GetMapping("/list/{id}")
         public ResponseEntity<Orders> findOrderById(@PathVariable Integer id) {
             Optional<Orders> order = Optional.ofNullable(ordersService.findOrderById(id));
             return order.map(ResponseEntity::ok)
                     .orElseGet(() -> ResponseEntity.notFound().build());
         }
 
+    //訂單詳情：查看單筆訂單，根據ordersNumber查詢該筆訂單的詳情
+        @GetMapping("/detailList/{ordersNumber}")
+        public ResponseEntity<Orders> findOrderByOrdersNumber(@PathVariable String ordersNumber) {
+            Optional<Orders> order = ordersService.findOrderByOrdersNumber(ordersNumber);
+            return order.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        }
+
+
 
     //查詢訂單，根據訂單當初填入的電話號碼，無論是否為會員
     // OrdersController.java
-        @GetMapping("/getPhone/{ordersTel}")
+        @GetMapping("/phone/{ordersTel}")
         public ResponseEntity<Orders> findOrderByPhone(@PathVariable String ordersTel) {
             Optional<Orders> order = ordersService.findOrderByPhone(ordersTel);
             return order.map(ResponseEntity::ok)

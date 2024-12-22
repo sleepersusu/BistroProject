@@ -23,6 +23,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { Notifications } from '@kyvg/vue3-notification'
+import velocity from 'velocity-animate'
+
 
 library.add(faUserSecret,fas,faEnvelope)
 
@@ -49,6 +52,7 @@ AOS.init()
 app.use(createPinia())
 app.use(router)
 app.use(VueAxios, axios)
+app.use(Notifications,{velocity})
 
 app.use(VueLuckyCanvas)
 

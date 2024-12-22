@@ -1,12 +1,22 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top"
-    :class="{ 'nav-shadow': setShadow, 'navbar-shrink': setShadow }">
+  <nav
+    class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top"
+    :class="{ 'nav-shadow': setShadow, 'navbar-shrink': setShadow }"
+  >
     <div class="container">
       <router-link class="navbar-brand text-light" to="/index">Nightly Sips</router-link>
       <div class="d-flex align-items-center justify-content-end">
-        <div class="circle-avatar d-block d-lg-none" v-on:click="triggerOffcanvas"
-          :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"></div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <div
+          class="circle-avatar d-block d-lg-none"
+          v-on:click="triggerOffcanvas"
+          :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"
+        ></div>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
       </div>
@@ -19,11 +29,15 @@
             <router-link class="nav-link" to="/order">立即點餐</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link position-relative" to="/campaign">限時抽獎<span v-if="memberId"
-                class="position-absolute start-100 translate-middle badge rounded-pill bg-light text-primary">
+            <router-link class="nav-link position-relative" to="/campaign"
+              >限時抽獎<span
+                v-if="memberId && allChances > 0"
+                class="position-absolute start-100 translate-middle badge rounded-pill bg-light text-primary"
+              >
                 {{ allChances }}
                 <span class="visually-hidden">unread messages</span>
-              </span></router-link>
+              </span></router-link
+            >
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/menu">精選菜單</router-link>
@@ -38,20 +52,28 @@
           <li class="nav-item">
             <router-link class="nav-link position-relative" to="/cart">
               <i class="bi bi-cart fs-5"></i>
-              <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary">
-                3
+
+              <span
+                v-if="totalCartItems > 0"
+                class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-light text-primary"
+              >
+                {{ totalCartItems > 99 ? '99+' : totalCartItems }}
                 <span class="visually-hidden">unread messages</span>
-              </span></router-link>
+              </span>
+            </router-link>
           </li>
           <li class="nav-item ms-lg-5">
             <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
             <div v-if="!isLoggedIn" class="btn btn-outline-light" v-on:click="openLoginModal">
               登入 / 註冊
             </div>
-            <div v-else class="d-flex align-items-center ">
+            <div v-else class="d-flex align-items-center">
               <!-- 頭像 -->
-              <div class="circle-avatar d-none d-lg-block" v-on:click="triggerOffcanvas"
-                :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"></div>
+              <div
+                class="circle-avatar d-none d-lg-block"
+                v-on:click="triggerOffcanvas"
+                :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"
+              ></div>
               <div class="d-flex align-items-center d-none d-lg-block">
                 <!-- 會員名稱 -->
                 <span class="text-light ms-2">{{ memberprofile?.username }}</span>
@@ -74,7 +96,11 @@ import Login from './login.vue'
 import { useUserStore } from '@/stores/userStore'
 import { lotteryStore } from '@/stores/lotteryStore'
 import { mapState, mapActions } from 'pinia'
-import AvatarProfile from './AvatarProfile.vue';
+
+import { cartStore } from '@/stores/cartStore.js'
+
+import AvatarProfile from './AvatarProfile.vue'
+
 export default {
   data() {
     return {
@@ -82,15 +108,18 @@ export default {
     }
   },
   components: {
-    Login, AvatarProfile
+    Login,
+    AvatarProfile,
   },
   computed: {
     ...mapState(useUserStore, ['isLoggedIn', 'memberprofile', 'memberId']),
     ...mapState(lotteryStore, ['allChances']),
+    ...mapState(cartStore, ['totalCartItems']),
   },
   methods: {
     ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn']),
     ...mapActions(lotteryStore, ['getAllChanceByMember']),
+    ...mapActions(cartStore, ['getCart']),
     navShadow() {
       requestAnimationFrame(() => {
         this.setShadow = window.scrollY > 100
@@ -99,11 +128,19 @@ export default {
     openLoginModal() {
       this.$refs.loginModal.openLoginModal()
     },
+
+    async created() {
+      this.checkLoggedIn()
+      if (this.isLoggedIn) {
+        await this.getCart() // 登入後獲取購物車數據
+      }
+    },
+
     triggerOffcanvas() {
       // 通过 $refs 访问子组件并触发显示 Offcanvas
-      const avatarProfileComponent = this.$refs.avatarProfile;
-      avatarProfileComponent.openOffcanvas();
-    }
+      const avatarProfileComponent = this.$refs.avatarProfile
+      avatarProfileComponent.openOffcanvas()
+    },
   },
   mounted() {
     window.addEventListener('scroll', this.navShadow)
@@ -112,6 +149,14 @@ export default {
   },
   unmounted() {
     window.removeEventListener('scroll', this.navShadow)
+  },
+  watch: {
+    // 監聽登入狀態變化
+    async isLoggedIn(newValue) {
+      if (newValue) {
+        await this.getCart()
+      }
+    },
   },
   created() {
     this.checkLoggedIn()
