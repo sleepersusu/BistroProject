@@ -17,7 +17,6 @@
         ></CampaignCard>
       </div>
     </div>
-    <CampaignLineLink></CampaignLineLink>
   </div>
   <LuckyDraw @update-chance="updateChance" ref="drawModal"></LuckyDraw>
   <CampaignModal ref="campaignModal" :campaign="selectedCampaign"></CampaignModal>

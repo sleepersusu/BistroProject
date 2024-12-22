@@ -68,17 +68,17 @@
           <p>&copy; 2024 酌夜語 Nightly Sips. All rights reserved.</p>
           <ul class="list-unstyled d-flex">
             <li class="ms-4">
-              <a class="link-primary" target="_blank" href="https://www.facebook.com/"
+              <a class="link-light" target="_blank" href="https://www.facebook.com/"
                 ><i class="bi bi-facebook fs-4"></i
               ></a>
             </li>
             <li class="ms-4">
-              <a class="link-primary" target="_blank" href="https://www.instagram.com/"
+              <a class="link-light" target="_blank" href="https://www.instagram.com/"
                 ><i class="bi bi-instagram fs-4"></i
               ></a>
             </li>
             <li class="ms-4">
-              <a class="link-primary" target="_blank" href="https://www.threads.net/"
+              <a class="link-light" target="_blank" href="https://www.threads.net/"
                 ><i class="bi bi-threads fs-4"></i
               ></a>
             </li>

@@ -31,21 +31,13 @@
           </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img
-                src="https://images.unsplash.com/photo-1514361659284-59851c90d011?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                class="d-block w-100"
-                alt="..."
-              />
-            </div>
-            <div class="carousel-item">
-              <img
-                src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                class="d-block w-100"
-                alt="..."
-              />
-            </div>
-            <div class="carousel-item">
               <img src="/images/DSC_9550-1.jpg" class="d-block w-100" alt="..." />
+            </div>
+            <div class="carousel-item">
+              <img src="/images/DSC_9531-1.jpg" class="d-block w-100" alt="..." />
+            </div>
+            <div class="carousel-item">
+              <img src="/images/DSC_9562-1.jpg" class="d-block w-100" alt="..." />
             </div>
           </div>
           <button
@@ -79,7 +71,9 @@
               data-aos-delay="500"
             >
               <router-link to="/menu" class="btn btn-outline-light me-3">查看菜單</router-link>
-              <router-link to="/reservations" class="btn btn-primary">立即訂位</router-link>
+              <router-link to="/reservations" class="btn btn-primary text-dark"
+                >立即訂位</router-link
+              >
             </div>
           </div>
         </div>
@@ -237,18 +231,20 @@ export default {
 }
 
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   font-weight: 300;
   letter-spacing: 1px;
 }
 
 .highlight {
-  color: #d4af37;
+  color: #ffdc35;
+  font-size: 3.5rem;
+  text-shadow: 0 4px 35px #ffdc35;
   font-weight: 400;
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 300;
   letter-spacing: 0.5px;
   opacity: 0.9;
@@ -258,22 +254,22 @@ export default {
   padding: 0.8rem 2rem;
   font-size: 0.9rem;
   letter-spacing: 2px;
-  border-radius: 20px;
+  border-radius: 10px;
   transition: all 0.3s ease;
 }
 
 .btn-primary {
-  background-color: #d4af37;
-  border-color: #d4af37;
+  background-color: #ffdc35;
+  border-color: #ffdc35;
 }
 
 .btn-primary:hover {
-  background-color: #bf9b30;
-  border-color: #bf9b30;
+  background-color: #ffdc35;
+  border-color: #ffdc35;
 }
 
 .btn-outline-light:hover {
-  color: #bf9b30;
+  color: #ffdc35;
   background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -283,6 +279,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 4rem 0;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 @media (min-width: 768px) and (max-width: 991.98px) {
@@ -313,6 +310,10 @@ export default {
     font-size: 2rem;
   }
 
+  .highlight {
+    font-size: 2.5rem;
+  }
+
   .parallax-section {
     min-height: 350px;
   }
@@ -333,6 +334,10 @@ export default {
     font-size: 1.5rem;
   }
 
+  .highlight {
+    font-size: 2rem;
+  }
+
   .hero-subtitle {
     font-size: 0.9rem;
   }
@@ -345,6 +350,13 @@ export default {
   .parallax-section {
     min-height: 300px;
     padding: 2rem 0;
+  }
+  .parallax-section h2 {
+    font-size: 1.25rem;
+  }
+
+  .parallax-section p {
+    font-size: 1rem !important;
   }
 }
 </style>

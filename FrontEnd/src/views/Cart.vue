@@ -149,9 +149,6 @@
 <script>
 import { mapState, mapActions } from 'pinia'
 import { pointStore } from '@/stores/pointStore'
-import CartButton from '@/components/cart/CartButton.vue'
-import CartTable from '@/components/cart/CartTable.vue'
-import CartTitle from '@/components/cart/CartTitle.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
@@ -168,9 +165,6 @@ export default {
     PageTop,
     BannerTop,
     FontAwesomeIcon,
-    CartTitle,
-    CartTable,
-    CartButton,
     VerifyPromoCode,
   },
 

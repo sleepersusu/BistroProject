@@ -60,10 +60,6 @@ const router = createRouter({
           component: () => import('../views/Cart.vue'),
         },
         {
-          path: '/order',
-          component: () => import('../views/Order.vue'),
-        },
-        {
           path: '/memberPoints',
           component: () => import('../views/MemberPoints.vue'),
         },
