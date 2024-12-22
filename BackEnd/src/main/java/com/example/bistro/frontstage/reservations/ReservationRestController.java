@@ -63,8 +63,8 @@ public class ReservationRestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 		}
 	}
-
-	// 接API簡訊功能
+//
+//	 接API簡訊功能
 //	@PostMapping("/api/Bistro/send")
 //	public ResponseEntity<Map<String, Object>> submitReservation(@RequestBody ReservationDTO dto) {
 //		try {

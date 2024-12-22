@@ -28,30 +28,7 @@ public class ReservationsFrontstageService {
 	
 
 	// 發送訂位確認簡訊的動態方法
-//	public void sendReservationConfirmation(String contactPhone, Date reservationDate, String starTime,
-//			Integer numberPeople) {
-//
-//    		 String formattedPhone= "";   				 
-////    		 String formattedPhone = "+886" + contactPhone.substring(1);; 接使用者的電話號碼
-//
-//		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-//		
-//		LocalDate Date = LocalDate.now();   //要把格式改成
-//		
-//		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//	        String formattedDate = Date.format(formatter);
-//
-//		String messageContent = String.format("您的訂位成功！\n" + "訂位日期：%s\n" + "訂位時間：%s\n" + "人數：%d\n" + "感謝您的預約，期待您的光臨！",
-//				formattedDate, starTime, numberPeople);
-//
-//		Message message = Message.creator(new PhoneNumber(formattedPhone), // 接收簡訊的號碼
-//				new PhoneNumber(FROM_PHONE_NUMBER), // 你的 Twilio 虛擬號碼
-//				messageContent) // 簡訊的內容
-//				.create();
-//
-//		System.out.println("Message sent! SID: " + message.getSid());
-//
-//	}
+	
 
 	public Reservations insert(ReservationDTO dto) {
 
