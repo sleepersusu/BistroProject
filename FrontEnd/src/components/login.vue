@@ -41,7 +41,7 @@
                         <div class="line r"></div>
                     </div>
                     <div class="d-flex justify-content-center w-100">
-                        <div id="g_id_onload" data-itp_support="true" data-bs-dismiss="modal">
+                        <div id="googlebutton" data-itp_support="true" data-bs-dismiss="modal">
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                         <div class="line r"></div>
                     </div>
                     <div class="d-flex justify-content-center w-100">
-                        <div id="g_id_onload2" data-itp_support="true" data-bs-dismiss="modal">
+                        <div id="googlebutton2" data-itp_support="true" data-bs-dismiss="modal">
                         </div>
                     </div>
                 </div>
@@ -133,11 +133,6 @@ export default {
         sendRegister(event) {
             this.submitRegister(event)
             this.registermodel.hide()
-        },
-
-        testGoogle() {
-            let response = this.axios.get('http://localhost:8085/google/login')
-            console.log(response)
         },
 
         handleForgot() {
@@ -186,7 +181,7 @@ export default {
                 })
                 // 渲染 Google 按鈕
                 google.accounts.id.renderButton(
-                    document.getElementById("g_id_onload"),
+                    document.getElementById("googlebutton"),
                     {
                         type: "standard",          // 樣式類型
                         text: "signin_with",       // 顯示文本
@@ -197,7 +192,7 @@ export default {
                     }
                 )
                 google.accounts.id.renderButton(
-                    document.getElementById("g_id_onload2"),
+                    document.getElementById("googlebutton2"),
                     {
                         type: "standard",          // 樣式類型
                         text: "signin_with",       // 顯示文本

@@ -35,4 +35,28 @@ public class MemberFrontService {
 		}
 		return memberRepo.save(memberBean);
 	}
+	
+	public Optional<Members> findMemberById(Integer id) {
+		Optional<Members> resultData = memberRepo.findById(id);
+		return resultData;
+	}
+	public Optional<Members> updateMember(Members memberBean) {
+		Optional<Members> resultData = memberRepo.findById(memberBean.getId());
+		if(resultData.isPresent()) {
+			Members memberData = resultData.get();
+			memberBean.setCreatedAt(memberData.getCreatedAt());
+			memberBean.setMemberStatus(memberData.getMemberStatus());
+			memberBean.setMemberShip(memberData.getMemberShip());
+			if(memberBean.getMemberPoint()==null) {
+				memberBean.setMemberPoint(memberData.getMemberPoint());				
+			}
+			if(memberBean.getMemberImg()!=null) {
+				
+			}
+			
+		}
+		return null;
+	}
+
+	
 }

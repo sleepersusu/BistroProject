@@ -5,31 +5,66 @@ export const useUserStore = defineStore('userStore', {
   state: () => ({
     apiUrl: import.meta.env.VITE_API, // 使用 VITE_API
     isLoggedIn: false, // isLoggedIn狀態
-    memberprofile: {},
-  }),
-  actions: {
-    getURL() {
-      return this.apiUrl
+    memberprofile: {
+      userName: '',
+      userEmail: '',
+      userPhone: '',
+      userAvatar: '', // 默认值为空字符串，或者给一个默认头像
+      userGender: null,
+      userAddress: '', // 默认值为空字符串
+      userBirthdate: '',
     },
+  }),
+  getters: {
+    // 取得會員資料
+    getProfile: (state) => state.memberprofile,
+
+    // 檢查是否登入
+    checkLogin: (state) => state.isLoggedIn,
+
+    memberId: () => Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId) || null,
+  },
+  actions: {
     setLoggedIn() {
       let memberobj = localStorage.getItem('memberobj')
       this.isLoggedIn = true // 設置登入
-      this.memberprofile.username = JSON.parse(memberobj).username
+      this.memberprofile.userName = JSON.parse(memberobj).userName
       this.memberprofile.userAvatar = JSON.parse(memberobj).userAvatar
     },
     checkLoggedIn() {
       let memberobj = localStorage.getItem('memberobj')
       if (JSON.parse(memberobj)?.memberId) {
-        this.memberprofile.username = JSON.parse(memberobj)?.username
+        this.memberprofile.userName = JSON.parse(memberobj)?.userName
         this.memberprofile.userAvatar = JSON.parse(memberobj)?.userAvatar
         this.isLoggedIn = true
       } else {
         this.isLoggedIn = false // 清除登入
       }
     },
+    loadMemberData(memberId) {//會員資料頁面撈資訊
+      try {
+        let response = axios.get(`${this.apiUrl}/api/members/${memberId}`)
+        .then((response) => {
+          this.userEmail=response.data.memberEmail
+          this.userPhone=response.data.memberPhone
+          this.userGender=response.data.memberSex
+          this.userAddress=response.data.memberAddress
+          this.userBirthdate=response.data.memberBirthday
+          console.log(this.userBirthdate)
+          console.log(response.data.memberAccount)
+          console.log(response.data.memberFavor)
+          console.log(response.data.memberImg)
+          console.log(response.data.memberPassword)
+          console.log(response.data.memberPoint)
+          console.log(response.data.memberShip)
+          console.log(response.data.memberStatus)
+        })
+
+        return response.data
+      } catch (error) {}
+    },
     clearLoggedIn() {
       localStorage.removeItem('memberobj')
-      // localStorage.clear();
       this.isLoggedIn = false
       this.memberprofile = {}
     },
@@ -40,36 +75,34 @@ export const useUserStore = defineStore('userStore', {
             idToken: idToken, // 將 code 作為請求參數發送
           },
         })
-        console.log('後端回應：', response.data)
         const token = response.data.token
-        let userAvatar=''
+        let userAvatar = ''
         let memberId = response.data.memberId
         let imgUrl = `${this.apiUrl}/api/member/photo/${memberId}`
         let imgData = await axios.get(imgUrl, {
           responseType: 'blob',
         })
-        
+
         if (imgData.data.size === 0) {
           //判斷有無圖片，切換預設頭像
-          console.log('圖'+userAvatar)
           userAvatar = '/images/avatar.jpg'
         } else {
           userAvatar = URL.createObjectURL(imgData.data)
         }
-        let username = response.data.memberName
-        let userpoint = response.data.memberPoint
+        let userName = response.data.memberName
+        let userPoint = response.data.memberPoint
         let memberObj = {
-          memberId: memberId,
+          memberId,
           token: token,
-          username: username,
-          userAvatar: userAvatar,
-          userpoint,
+          userName,
+          userAvatar,
+          userPoint,
         }
         localStorage.setItem('memberobj', JSON.stringify(memberObj))
         this.isLoggedIn = true // 設置登入
-        this.memberprofile.username = username
+        this.memberprofile.userName = userName
         this.memberprofile.userAvatar = userAvatar
-        this.memberprofile.userpoint = userpoint
+        this.memberprofile.userPoint = userPoint
       } catch (error) {
         console.error('Google發送後端失敗', error)
       }
@@ -91,7 +124,6 @@ export const useUserStore = defineStore('userStore', {
         })
 
         // 假設登入成功，後端返回 token
-        // 儲存 token（例如使用 localStorage）
         let userAvatar = ''
         let memberId = response.data.memberId
         let imgUrl = `${this.apiUrl}/api/member/photo/${memberId}`
@@ -105,20 +137,20 @@ export const useUserStore = defineStore('userStore', {
           userAvatar = URL.createObjectURL(imgData.data)
         }
         const token = response.data.token
-        let username = response.data.memberName
-        let userpoint = response.data.memberPoint
+        let userName = response.data.memberName
+        let userPoint = response.data.memberPoint
         let memberObj = {
           memberId: memberId,
           token: token,
-          username: username,
-          userAvatar: userAvatar,
-          userpoint,
+          userName,
+          userAvatar,
+          userPoint,
         }
         localStorage.setItem('memberobj', JSON.stringify(memberObj))
         this.isLoggedIn = true // 設置登入
-        this.memberprofile.username = username
+        this.memberprofile.userName = userName
         this.memberprofile.userAvatar = userAvatar
-        this.memberprofile.userpoint = userpoint
+        this.memberprofile.userPoint = userPoint
       } catch (error) {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)
@@ -145,12 +177,15 @@ export const useUserStore = defineStore('userStore', {
         console.error('登入失敗', error)
       }
     },
-    googleLogin() {
-      let Google_URL = `${this.apiUrl}/google/login`
-      let res = axios.get(Google_URL)
+    async userProfileAccess(event) {
+      let Profile_URL = `${this.apiUrl}/google/login`
+      let form = new FormData(event.target)
+      let formData = {}
+      form.forEach((value, key) => {
+        formData[key] = value
+      })
+      let response = await axios.post(Profile_URL, formData)
+      console.log(response.data)
     },
-  },
-  getters: {
-    memberId: () => Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId) || null,
   },
 })

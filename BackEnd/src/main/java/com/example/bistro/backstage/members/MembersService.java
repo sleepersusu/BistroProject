@@ -34,6 +34,21 @@ public class MembersService {
         Optional<Members> op = memberRepo.findById(id);
         return op.isPresent() ? op.get() : null;
     }
+    //確認密碼
+    public boolean checkMembersPWD(Members memberBean) {
+    	Optional<Members> resultData = memberRepo.findById(memberBean.getId());
+    	if(resultData.isPresent()) {
+    		Members memberData = resultData.get();
+    		String encodedPwd = memberData.getMemberPassword();
+    		boolean result = pwdEncoder.matches(memberBean.getMemberPassword(), encodedPwd);
+    		if(!result) {
+    			memberBean.getMemberPassword();
+    		}
+    		return result;
+    	}else {
+    		return false;
+    	}
+    }
 
 	//根據姓名或電話查詢會員
 	public Members findMembers(String name, String phone) {
@@ -50,6 +65,7 @@ public class MembersService {
 	public List<Members> findAllMembers() {
 		return memberRepo.findAll();
 	}
+	
 	
 	public Optional<Members> checkLogin(String loginAccount,String loginPassword) {
 		 Optional<Members> dbMember = memberRepo.findByMemberAccount(loginAccount);

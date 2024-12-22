@@ -54,9 +54,12 @@ public class EmployeeService {
 			Employee employeeBean = employeeData.get();
 			String passwordData = employeeBean.getEmployeePassword();
 			boolean matchResult = pwdEncoder.matches(loginPassword, passwordData);
+			System.out.println(passwordData);
+			System.out.println(loginPassword);
+			System.out.println("比較");
 			if (matchResult) {//result
 				return employeeData;
-			}else if(passwordData==loginPassword){
+			}else if(passwordData.equals(loginPassword)){
 				return employeeData;
 			}
 		}

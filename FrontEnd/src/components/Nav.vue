@@ -74,11 +74,8 @@
               ></div>
               <div class="d-flex align-items-center d-none d-lg-block">
                 <!-- 會員名稱 -->
-                <span class="text-light ms-2">{{ memberprofile?.username }}</span>
+                <span class="text-light ms-2">{{ memberprofile?.userName }}</span>
               </div>
-              <!-- <router-link to="/membercenter/index" class="d-flex align-items-center d-none d-lg-block">
-                <span class="text-light ms-2">{{ memberprofile?.username }}</span>
-              </router-link> -->
             </div>
           </li>
         </ul>

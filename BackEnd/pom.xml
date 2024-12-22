@@ -39,18 +39,18 @@
 		    <artifactId>jjwt-api</artifactId>
 		    <version>0.11.5</version>
 		</dependency>
-		<dependency> 
-			<groupId>com.google.auth</groupId>
-			<artifactId>google-auth-library-oauth2-http</artifactId>
-			<version>1.1.0</version>	
-		</dependency>
 		<dependency>
-	        <groupId>com.google.api-client</groupId>
-	        <artifactId>google-api-client</artifactId>
-	        <version>1.34.0</version>  <!-- 請使用最新版本 -->
-	    </dependency>
+    		<groupId>com.google.auth</groupId>
+    		<artifactId>google-auth-library-oauth2-http</artifactId>
+   			<version>1.23.0</version>
+		</dependency>	
+		<dependency>
+		    <groupId>com.google.apis</groupId>
+		    <artifactId>google-api-services-oauth2</artifactId>
+		    <version>v2-rev151-1.25.0</version>
+		</dependency>
+
 	    
-    
 	    <!-- Jackson JSON processing library (for Google API client) -->
 	    <dependency>
 	        <groupId>com.google.http-client</groupId>
