@@ -25,9 +25,7 @@ public class ReservationsFrontstageService {
 	private SeatsCountRepository SeatsCountRepo;
 
 	// 這些可以放在配置文件中，使用 @Value 或其他配置方式來注入
-	public static final String ACCOUNT_SID = "";
-	public static final String AUTH_TOKEN = "";
-	public static final String FROM_PHONE_NUMBER = "";
+	
 
 	// 發送訂位確認簡訊的動態方法
 //	public void sendReservationConfirmation(String contactPhone, Date reservationDate, String starTime,
