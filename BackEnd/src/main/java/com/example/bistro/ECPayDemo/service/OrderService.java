@@ -11,29 +11,27 @@ import com.example.bistro.ecpay.payment.integration.domain.AioCheckOutALL;
 
 @Service
 public class OrderService {
-	public String ecpayCheckout(String amount, String ordersName, String ordersTel) {
-	    String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
-	    AllInOne all = new AllInOne("");
-	    AioCheckOutALL obj = new AioCheckOutALL();
-	    
-	    // 確保金額為整數字串
-	    String totalAmount = String.valueOf(Math.round(Double.parseDouble(amount)));
-	    
-	    obj.setMerchantTradeNo(uuId);
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	    obj.setMerchantTradeDate(sdf.format(new Date()));
-	    
-	    obj.setTotalAmount(totalAmount); // 使用處理過的整數金額
-	    obj.setTradeDesc("訂購人：" + ordersName + " 電話：" + ordersTel);
-	    obj.setItemName("餐點訂單");
-	    
-	    // 設定回調 URL
-	    obj.setReturnURL("     https://5d0a-36-236-213-175.ngrok-free.app/ecpay/callback");
-	    obj.setOrderResultURL("https://5d0a-36-236-213-175.ngrok-free.app/payment-result");
+    public String ecpayCheckout(String amount, String ordersName, String ordersTel) {
+        String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
+        AllInOne all = new AllInOne("");
+        AioCheckOutALL obj = new AioCheckOutALL();
 
-	    obj.setNeedExtraPaidInfo("N");
-	    
-	    String form = all.aioCheckOut(obj, null);
-	    return form;
-	}
+        // 確保金額為整數字串
+        String totalAmount = String.valueOf(Math.round(Double.parseDouble(amount)));
+        obj.setMerchantTradeNo(uuId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        obj.setMerchantTradeDate(sdf.format(new Date()));
+        obj.setTotalAmount(totalAmount); // 使用處理過的整數金額
+        obj.setTradeDesc("訂購人：" + ordersName + " 電話：" + ordersTel);
+        obj.setItemName("餐點訂單");
+        // 設定回調 URL
+        obj.setReturnURL("     https://c164-36-236-213-175.ngrok-free.app/ecpay/callback");
+        obj.setOrderResultURL("https://c164-36-236-213-175.ngrok-free.app/payment-result");
+
+        obj.setNeedExtraPaidInfo("N");
+
+        String form = all.aioCheckOut(obj, null);
+        return form;
+    }
 }
+
