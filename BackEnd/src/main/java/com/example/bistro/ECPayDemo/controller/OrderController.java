@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.example.bistro.ECPayDemo.request.CheckoutResult;
-import com.example.bistro.ECPayDemo.request.CheckoutResult1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
