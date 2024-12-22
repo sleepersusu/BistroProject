@@ -57,6 +57,19 @@ export default {
       ...mapActions(cartStore, ['addToCart']),
       handleAddToCart(id) {
         this.addToCart({ id, count: this.count })
+        // 黑灰底白字的提示框
+        Swal.fire({
+          title: '成功加入購物車',
+          text: '您的商品已成功加入購物車！',
+          icon: 'success',
+          background: '#333333', // 黑灰底
+          color: '#ffffff',     // 白字
+          iconColor: '#00ff00', // 成功图标绿色
+          confirmButtonText: '繼續購物',
+          customClass: {
+            confirmButton: 'custom-swal-btn',
+          },
+        });
         this.count = 1
       },
 

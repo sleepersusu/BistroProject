@@ -213,14 +213,50 @@ export default {
           // console.log("刪除商品成功");
           await this.fetchCartItems()
           // console.log("重新獲取購物車數據成功");
-          this.success('刪除商品成功')
+          // 成功提示框
+          Swal.fire({
+            title: '刪除成功',
+            text: `商品 "${item.menu.productName}" 已成功從購物車移除！`,
+            icon: 'success',
+            background: '#333333', // 黑灰底
+            color: '#ffffff',     // 白字
+            iconColor: '#00ff00', // 成功圖標顏色
+            confirmButtonText: '確定',
+            customClass: {
+              confirmButton: 'custom-swal-btn', // 自定義按鈕樣式
+            },
+          });
+
         } catch (error) {
           console.error('刪除商品失敗:', error)
-          this.error('刪除商品失敗', error)
+          // 失敗提示框
+          Swal.fire({
+            title: '刪除失敗',
+            text: '無法刪除該商品，請稍後再試！',
+            icon: 'error',
+            background: '#333333', // 黑灰底
+            color: '#ffffff',     // 白字
+            iconColor: '#ff0000', // 失敗圖標顏色
+            confirmButtonText: '關閉',
+            customClass: {
+              confirmButton: 'custom-swal-btn', // 自定義按鈕樣式
+            },
+          });
         }
       } else {
         console.error('未登入會員')
-        this.warn('請先登入會員')
+        Swal.fire({
+          title: '未登入會員',
+          text: '請先登入會員以刪除商品！',
+          icon: 'warning',
+          background: '#333333', // 黑灰底
+          color: '#ffffff',     // 白字
+          iconColor: '#ffc107', // 警告圖標顏色
+          confirmButtonText: '登入',
+          customClass: {
+            confirmButton: 'custom-swal-btn', // 自定義按鈕樣式
+          },
+        });
       }
     },
   },
@@ -239,6 +275,21 @@ export default {
 </script>
 
 <style scoped>
+
+/* 自定義 SweetAlert 按鈕樣式 */
+.custom-swal-btn {
+  background-color: #444444; /* 按鈕黑灰色 */
+  color: #ffffff;           /* 按鈕白字 */
+  border: none;             /* 移除邊框 */
+  border-radius: 5px;       /* 按鈕圓角 */
+  padding: 10px 20px;       /* 按鈕內邊距 */
+  font-size: 16px;          /* 字體大小 */
+  cursor: pointer;
+}
+
+.custom-swal-btn:hover {
+  background-color: #666666; /* 懸停效果 */
+}
 .step-indicator {
   display: flex;
   justify-content: center;

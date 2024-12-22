@@ -301,10 +301,10 @@ export default defineComponent({
           icon: 'error',
           title: 'Oops...',
           text: 'PayPal 付款失敗，請確認您的帳戶餘額足夠或使用其他支付方式。',
-          confirmButtonText: '返回購物車'
+          confirmButtonText: '返回購物車',
         }).then(() => {
-          this.$router.push('/cart');
-        });
+          this.$router.push('/cart')
+        })
       }
     },
 
@@ -351,13 +351,13 @@ export default defineComponent({
           return
         }
 
-           Swal.fire({
-             icon: 'info',
-             title: '訂單處理中...',
-             text: '請稍候，我們正在處理您的訂單。',
-             showConfirmButton: false,
-             allowOutsideClick: false,
-           });
+        Swal.fire({
+          icon: 'info',
+          title: '訂單處理中...',
+          text: '請稍候，我們正在處理您的訂單。',
+          showConfirmButton: false,
+          allowOutsideClick: false,
+        })
 
         const orderData = {
           ordersName: this.orderData.ordersName,
@@ -389,7 +389,7 @@ export default defineComponent({
         )
 
         if (response.status === 200) {
-          Swal.close(); // 關閉進度提示框
+          Swal.close() // 關閉進度提示框
           const orderNumber = response.data.ordersNumber
 
           switch (this.orderData.PaymentWay) {
@@ -404,6 +404,22 @@ export default defineComponent({
             case 'Paypal':
               await this.handlePayPalPayment(orderNumber)
               break
+          }
+          // 僅支付成功時彈出成功提示
+          if (response.data.paymentStatus === '成功') {
+            Swal.fire({
+              icon: 'success',
+              title: '交易成功！',
+              text: `您的訂單編號是 ${orderNumber}，感謝您的支持！`,
+              confirmButtonText: '查看訂單',
+            }).then(() => {
+              this.$router.push({
+                path: '/membercenter/orders',
+                query: { orderNumber },
+              });
+            });
+            // 清空購物車
+            await this.clearCart();
           }
         } else {
           throw new Error('訂單創建失敗')

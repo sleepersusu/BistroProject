@@ -41,7 +41,27 @@ import Orders from '@/components/Orders.vue'
 import PageTop from '@/components/PageTop.vue'
 
 export default defineComponent({
+  name:'CartCheckSuc',
   components: { PageTop, Orders, BannerTop },
+  mounted() {
+    const orderNumber = this.$route.query.orderNumber || '未知';
+
+    // 彈出交易成功的提示框
+    Swal.fire({
+      icon: 'success',
+      title: '交易成功！',
+      text: `您的訂單編號是 ${orderNumber}，感謝您的支持！`,
+      confirmButtonText: '查看訂單',
+    }).then(() => {
+      // 可選：在用戶確認後執行跳轉操作
+      this.$router.push({
+        path: '/membercenter/orders',
+        query: { orderNumber },
+      });
+    });
+  },
+
+
 })
 </script>
 
