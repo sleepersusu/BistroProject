@@ -217,6 +217,7 @@ export default {
     },
     handleAddToCart(id) {
       this.addToCart({ id, count: this.count })
+      this.count = 1
       // 黑灰底白字的提示框
       Swal.fire({
         title: '成功加入購物車',
@@ -230,7 +231,6 @@ export default {
           confirmButton: 'custom-swal-btn',
         },
       });
-      this.count = 1
     },
 
     updateQuantity(event) {
