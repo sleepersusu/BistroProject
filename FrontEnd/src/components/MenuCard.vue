@@ -148,7 +148,7 @@ export default {
       menuSrc: '',
       memberSrc: '',
       isLoading: false,
-      count: 0,
+      count: 1,
       comments: [],
       commentPeople: 0,
     }
@@ -156,7 +156,6 @@ export default {
   methods: {
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
-
 
     async loadPicture(ID) {
       this.isLoading = true
@@ -216,9 +215,9 @@ export default {
     },
     handleAddToCart(id) {
       this.addToCart({ id, count: this.count })
+      this.addToCartAndMinusStock(id, this.count)
       this.count = 1
     },
-
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
       if (value >= 0 && value <= this.menu.productCount) {
@@ -232,11 +231,50 @@ export default {
         this.count = this.menu.productCount
       }
     },
+
+    async addToCartAndMinusStock(productId, quantity) {
+      const API_URL = `${import.meta.env.VITE_API}/api/menu/minusCartStock/${productId}`
+
+      const payload = {
+        productId: productId,
+        quantity: quantity, // 減少的數量
+      }
+      try {
+        // 發送PUT請求到後端，更新庫存
+        const response = await axios.put(API_URL, payload)
+
+        console.log(this.menu.productCount)
+        console.log('庫存已更新')
+        // 更新本地對應商品的庫存
+
+        if (response.data.success) {
+          // 更新本地庫存（確保 UI 與後端同步）
+          this.menu.productCount = response.data.productCount
+          Swal.fire({
+          text: '成功加入購物車',
+          icon: 'success',
+        })
+
+        } else {
+          throw new Error('庫存更新失敗')
+        }
+
+
+      } catch (error) {
+        console.error('更新庫存時發生錯誤:', error)
+        Swal.fire({
+          title: '錯誤',
+          text: '更新庫存時發生錯誤，請稍後再試。',
+          icon: 'error',
+        })
+      }
+    },
   },
   created() {
     this.loadPicture(this.menu.id)
     this.countCommentPeople(this.menu.productName)
   },
+  watch: {},
 }
 </script>
 

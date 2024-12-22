@@ -6,7 +6,7 @@
     aria-labelledby="exampleModalLabel"
     ref="modal"
   >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">更新評論</h1>
@@ -71,6 +71,7 @@
             <star-rating
               :show-rating="false"
               :rating="rating"
+              :star-size="25"
               @update:rating="handleRatingUpdate"
               :star-points="[
                 23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17,
@@ -148,7 +149,18 @@ export default {
     ...mapState(useUserStore, ['memberId']),
 
     currentRatingText() {
-      return this.rating ? `您已選擇 ${this.rating} 顆星` : '尚未評分'
+      switch (true) {
+        case this.rating == 5:
+          return '太棒了！超乎期待'
+        case this.rating == 4:
+          return '很好！令人滿意'
+        case this.rating== 3:
+          return '普通，還可以'
+        case this.rating == 2:
+          return '不太理想'
+        default:
+          return '非常不滿意'
+      }
     },
   },
 
@@ -176,7 +188,26 @@ export default {
     handleClose() {
       this.$refs.modal.hide()
       this.$emit('close')
-    },
+    },getCurrentDate() {
+    const taipeiDate = new Date().toLocaleString('en-US', {
+      timeZone: 'Asia/Taipei',
+      hour12: false
+    });
+
+    // 解析台北時間字符串
+    const date = new Date(taipeiDate);
+
+    // 格式化為需要的格式 (YYYY-MM-DDTHH:mm)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  },
+
 
     async handleSubmit() {
       // 使用當前的 comment 資料
@@ -190,17 +221,13 @@ export default {
         commentTime: this.currentDate,
       }
 
-      let commentTime = this.currentDate // 例如 "2024-12-21T14:30"
+      let commentTime = this.currentDate;
 
-      // 將前端的時間格式 (yyyy-MM-ddTHH:mm) 轉換為後端期望的格式 (yyyy-MM-dd HH:mm:ss)
-      if (commentTime) {
-        // 解析前端時間格式
-        const dateObj = new Date(commentTime)
-
-        // 格式化成後端需要的格式
-        const formattedDate = dateObj.toISOString().slice(0, 19).replace('T', ' ') // "2024-12-21 14:30:00"
-        updatedComment.commentTime = formattedDate // 更新為格式化後的時間
-      }
+// 修改時間格式轉換邏輯
+if (commentTime) {
+  // 將 T 替換為空格，並添加秒數
+  const formattedDate = commentTime.replace('T', ' ') + ':00';
+  updatedComment.commentTime = formattedDate;
 
       const API_URL = `${import.meta.env.VITE_API}/api/put/comment/${this.comment.id}`
       console.log(this.comment.id)
@@ -215,7 +242,7 @@ export default {
           this.$refs.modal.querySelector('[data-bs-dismiss="modal"]').click();
 
           Swal.fire({
-            title: '感謝你得評論!',
+            title: '感謝你的評論!',
             text: '提交評論成功。',
             icon: 'success',
           })
@@ -228,23 +255,8 @@ export default {
           icon: 'error',
         })
       }
-    },
-
-    getCurrentDate() {
-      const now = new Date()
-      // 將當前時間轉換為 UTC+8 時區
-      const offset = 8 * 60 // 台灣是 UTC+8，轉換為分鐘
-      const localTime = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + offset * 60000)
-
-      // 格式化為 yyyy-MM-ddTHH:mm 格式，符合 datetime-local 的要求
-      const year = localTime.getFullYear()
-      const month = String(localTime.getMonth() + 1).padStart(2, '0') // 月份從 0 開始，所以加 1
-      const day = String(localTime.getDate()).padStart(2, '0')
-      const hours = String(localTime.getHours()).padStart(2, '0')
-      const minutes = String(localTime.getMinutes()).padStart(2, '0')
-
-      return `${year}-${month}-${day}T${hours}:${minutes}`
-    },
+    }
+  },
     updateCurrentDate() {
       this.currentDate = this.getCurrentDate()
     },

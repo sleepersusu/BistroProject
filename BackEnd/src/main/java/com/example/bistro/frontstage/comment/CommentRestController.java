@@ -1,6 +1,6 @@
 package com.example.bistro.frontstage.comment;
 
-
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,15 +21,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bistro.backstage.comment.Comment;
+import com.example.bistro.backstage.comment.CommentRepository;
 import com.example.bistro.backstage.comment.CommentService;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.members.MembersRepository;
+import com.example.bistro.backstage.members.MembersService;
 import com.example.bistro.backstage.menu.Menu;
 import com.example.bistro.backstage.menu.MenuService;
-
-
+import com.example.bistro.backstage.orders.Orders;
 import com.example.bistro.backstage.ordersDetails.OrdersDetailsRepository;
-
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -38,89 +39,81 @@ public class CommentRestController {
 	@Autowired
 	private CommentService commentService;
 
-	
 	@Autowired
 	private CommentFrontService commentFrontService;
-	
-
 
 	@Autowired
 	private MenuService menuService;
 
 	@Autowired
 	private MembersRepository membersRepo;
-
-
-
-	@PostMapping("/api/Bistro/postComment") // 新增評論
-	public ResponseEntity<Map<String, Object>> postComment(HttpSession httpSession,
-			@RequestBody Map<String, Object> requestData
-			) {
 	
-		// 從 Session 獲取會員 ID
-		Integer membersId = (Integer) httpSession.getAttribute("membersId");
-		
-		System.out.println("會員 ID: " + membersId);
-		if (membersId == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "用戶未登入"));
-		}
+	@Autowired
+	private CommentRepository commentRepo;
 
-		try {
+	@PostMapping("/api/comment/postComment")
+	public ResponseEntity<?> createComment(@RequestBody CommentDTO dto, HttpSession httpSession) {
+	    try {
+	        // 從 session 中取得會員 ID
+	        Integer memberId = (Integer) httpSession.getAttribute("membersId");
+	        if (memberId == null) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or missing Member ID");
+	        }
 
-			Integer menuId = Integer.parseInt(requestData.get("menuId").toString());
-			Short commentRating = Short.parseShort(requestData.get("commentRating").toString());
-			String commentMessage = requestData.get("commentMessage").toString();
+	        // 驗證會員是否存在
+	        Optional<Members> memberOp = membersRepo.findById(memberId);
+	        if (!memberOp.isPresent()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found");
+	        }
+	        Members member = memberOp.get();
 
-			// 查詢會員與菜單
-			Members newMember = membersRepo.findById(membersId).get();
-			if (newMember == null) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "會員不存在"));
-			}
+	        // 驗證菜單是否存在
+	        Menu menu = menuService.findMenuByProductName(dto.getCommentProduct());
+	        if (menu == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Menu not found for the given product name");
+	        }
 
-			Menu menu = menuService.findMenuById(menuId);
-			if (menu == null) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "菜單不存在"));
-			}
+	        // 創建評論物件並填充屬性
+	        Comment newComment = new Comment();
+	        newComment.setMenu(menu);
+	        newComment.setMembers(member);
+	        newComment.setCommentMessage(dto.getCommentMessage());
+	        newComment.setCommentProduct(dto.getCommentProduct());
+	        newComment.setCommentRating(dto.getCommentRating());
+	        newComment.setCommentTime(new Date()); // 設定當前時間
 
-			if (commentRating < 1 || commentRating > 5) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-						.body(Map.of("success", false, "message", "評分必須在 1 到 5 之間"));
-			}
+	        // 保存評論到資料庫
+	        Comment savedComment = commentRepo.save(newComment);
 
-			String commentProduct = menu.getProductName();
+	        // 驗證保存結果
+	        if (savedComment == null || savedComment.getID() == null) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create comment");
+	        }
 
-			Comment newComment = new Comment();
-			newComment.setMembers(newMember);
-			newComment.setMenu(menu);
-			newComment.setCommentProduct(commentProduct);
-			newComment.setCommentRating(commentRating);
-			newComment.setCommentMessage(commentMessage);
+	        // 構建回應資料
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("message", "Comment created successfully");
+	        response.put("commentId", savedComment.getID());
+	        response.put("commentTime", savedComment.getCommentTime());
+	        
+	        System.out.println(response);
+	        return ResponseEntity.ok(response);
 
-			commentService.createComment(newComment);
-
-			Double avgScore = menuService.countOneMenuAvgScore(commentProduct);
-			menu.setAvgScore(avgScore);
-			menuService.updateMenu(menu);
-
-			Map<String, Object> response = new HashMap<>();
-			response.put("success", true);
-			response.put("comment", newComment);
-			return ResponseEntity.ok(response);
-
-		} catch (NumberFormatException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("success", false, "message", "請求參數格式錯誤"));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("success", false, "message", "系統錯誤", "error", e.getMessage()));
-		}
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("An unexpected error occurred: " + e.getMessage());
+	    }
 	}
 
+
+	
+
 	@GetMapping("/api/member/comment") // 根據會員取得評論
-	public ResponseEntity<?> findAllCommentByMember(HttpSession httpSession ) {
+	public ResponseEntity<?> findAllCommentByMember(HttpSession httpSession) {
 
 //		 從 HttpSession 獲取會員 ID
 		Integer memberId = (Integer) httpSession.getAttribute("membersId");
-		
+
 		if (memberId == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("請先登入以查看您的評論。");
 		}
@@ -215,80 +208,72 @@ public class CommentRestController {
 
 	@Transactional
 	@PutMapping("/api/put/comment/{ID}")
-	public ResponseEntity<Map<String, Object>> updateComment(@PathVariable Integer ID, 
-			@RequestBody CommentDTO dto) {
-	    try {	
-	        //查詢原始評論
-	        Comment comment = commentService.findCommentById(ID);
-	        if (comment == null) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                .body(Map.of("success", false, "message", "評論不存在"));
-	        }
-	        
-	        //查詢相關的菜單與會員
-	        Menu menu = menuService.findMenuById(dto.getMenuId());
-	        if (menu == null) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                .body(Map.of("success", false, "message", "菜單不存在"));
-	        }
+	public ResponseEntity<Map<String, Object>> updateComment(@PathVariable Integer ID, @RequestBody CommentDTO dto,
+			HttpSession httpSession) {
+		try {
 
-	        //驗證會員
-	        Optional<Members> op = membersRepo.findById(dto.getMemberId());
-	        if (op.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                .body(Map.of("success", false, "message", "會員不存在"));
-	        }
+			Integer membersId = (Integer) httpSession.getAttribute("membersId");
 
-	        //權限檢查
-	        if (!comment.getMembers().getId().equals(dto.getMemberId())) {
-	            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-	                .body(Map.of("success", false, "message", "您無權修改此評論"));
-	        }
+			// 查詢原始評論
+			Comment comment = commentService.findCommentById(ID);
+			if (comment == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "評論不存在"));
+			}
 
-	        Members members = op.get();
+			// 查詢相關的菜單與會員
+			Menu menu = menuService.findMenuById(dto.getMenuId());
+			if (menu == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "菜單不存在"));
+			}
 
-	        // 5. 更新評論資料
-	        comment.setMenu(menu);
-	        comment.setMembers(members);
-	        comment.setCommentProduct(dto.getCommentProduct());
-	        comment.setCommentMessage(dto.getCommentMessage());
-	        comment.setCommentRating(dto.getCommentRating());
-	        comment.setCommentTime(dto.getCommentTime());
+			// 驗證會員
+			Optional<Members> op = membersRepo.findById(dto.getMemberId());
+			if (op.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("success", false, "message", "會員不存在"));
+			}
 
-	        // 6. 在同一個事務中完成所有更新
-	        Comment updatedComment = commentService.updateCommentAndMenuScore(comment, menu);
+			// 權限檢查
+			if (!membersId.equals(dto.getMemberId())) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body(Map.of("success", false, "message", "您無權修改此評論"));
+			}
 
-	        // 7. 準備回應
-	        Map<String, Object> response = new HashMap<>();
-	        response.put("success", true);
-	        response.put("updatedComment", updatedComment);
+			Members members = op.get();
 
-	        return ResponseEntity.ok(response);
+			// 5. 更新評論資料
+			comment.setMenu(menu);
+			comment.setMembers(members);
+			comment.setCommentProduct(dto.getCommentProduct());
+			comment.setCommentMessage(dto.getCommentMessage());
+			comment.setCommentRating(dto.getCommentRating());
+			comment.setCommentTime(dto.getCommentTime());
 
-	    } catch (Exception e) {
-	        // 記錄詳細錯誤信息
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	            .body(Map.of(
-	                "success", false, 
-	                "message", "更新失敗", 
-	                "error", e.getMessage()
-	            ));
-	    }
+			// 6. 在同一個事務中完成所有更新
+			Comment updatedComment = commentService.updateCommentAndMenuScore(comment, menu);
+
+			// 7. 準備回應
+			Map<String, Object> response = new HashMap<>();
+			response.put("success", true);
+			response.put("updatedComment", updatedComment);
+
+			return ResponseEntity.ok(response);
+
+		} catch (Exception e) {
+			// 記錄詳細錯誤信息
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("success", false, "message", "更新失敗", "error", e.getMessage()));
+		}
 
 	}
+
 	@GetMapping("/api/{productName}/comment/people")
 	public ResponseEntity<?> countCommentPeopleByProductName(@PathVariable String productName) {
 
 		// 根據商品找評論
 		String commentPeople = commentFrontService.countCommentPeopleByProductName(productName);
 
-		
 		return ResponseEntity.ok(commentPeople);
 	}
-
-	
-	
-
 
 }

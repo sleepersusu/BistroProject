@@ -50,5 +50,14 @@ public class CommentDTO {
 		}
 		
 	}
+
+
+	public CommentDTO(String commentProduct, Short commentRating, String commentMessage) {
+		this.commentProduct = commentProduct;
+		this.commentRating = commentRating;
+		this.commentMessage = commentMessage;
+	}
+	
+	
 	
 }
