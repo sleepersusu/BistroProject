@@ -1,9 +1,11 @@
 package com.example.bistro.ECPayDemo.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
-import com.example.bistro.ECPayDemo.request.CheckoutResult;
+import com.example.bistro.ECPayDemo.request.CheckoutRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class OrderController {
     private static String paymentStatus;
 
     @GetMapping("/ecpayCheckout")
-    public String ecpayCheckout(@RequestParam CheckoutResult checkoutResult) {
+    public String ecpayCheckout(@RequestParam CheckoutRequest checkoutResult) {
         try {
             log.info("有進到後端，收到的參數{}",checkoutResult);
             String aioCheckOutALLForm = orderService.ecpayCheckout(checkoutResult);

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import com.example.bistro.ECPayDemo.request.CheckoutResult;
+import com.example.bistro.ECPayDemo.request.CheckoutRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.bistro.ecpay.payment.integration.AllInOne;
@@ -12,7 +12,7 @@ import com.example.bistro.ecpay.payment.integration.domain.AioCheckOutALL;
 
 @Service
 public class OrderService {
-    public String ecpayCheckout(CheckoutResult checkoutResult) {
+    public String ecpayCheckout(CheckoutRequest checkoutResult) {
         String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
         AllInOne all = new AllInOne("");
         AioCheckOutALL obj = new AioCheckOutALL();
