@@ -214,16 +214,20 @@ export default {
           await this.fetchCartItems()
           // console.log("重新獲取購物車數據成功");
           // 成功提示框
-          Swal.fire({
+           Swal.fire({
+            toast: true,
+            position: 'top-end',
             title: '刪除成功',
             text: `商品 "${item.menu.productName}" 已成功從購物車移除！`,
             icon: 'success',
             background: '#fff', // 黑灰底
             color: '#000000',     // 白字
             iconColor: '#d60101', // 成功圖標顏色
-            confirmButtonText: '確定',
-            customClass: {
-              confirmButton: 'btn btn-primary text-white', // 自定義按鈕樣式
+            showConfirmButton: false, //不顯示確認按鈕
+            timer: 2330, //時間
+            timerProgressBar: true, //進度條
+            didOpen: (toast) => {
+              toast.style.marginTop = '80px'; // 動態調整位置
             },
           });
 

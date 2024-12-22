@@ -17,7 +17,7 @@
     <section class="checkout spad">
       <div class="container">
         <div class="checkout__form">
-          <h4>Confirm Order</h4>
+          <h4>確認訂單資訊</h4>
           <form @submit.prevent="placeOrder">
             <div class="row">
               <!-- Left Column - Customer Info -->
@@ -33,7 +33,7 @@
                         maxlength="15"
                         @input="validateName"
                         :class="{ 'is-invalid': nameError }"
-                        required
+
                       />
                       <small v-if="nameError" class="text-danger">{{ nameError }}</small>
                     </div>
@@ -46,7 +46,7 @@
                         type="text"
                         v-model="orderData.ordersTel"
                         placeholder="請輸入手機號碼，EX:0912345678"
-                        required
+
                         maxlength="10"
                         @input="validatePhone"
                         :class="{ 'is-invalid': phoneError }"
@@ -99,7 +99,7 @@
                   <div class="checkout__input__checkbox">
                     <h4>用餐方式</h4>
                     <label for="eatin">
-                      內用
+                      <span class="ms-2">內用</span>
                       <input
                         type="radio"
                         id="eatin"
@@ -113,7 +113,7 @@
 
                   <div class="checkout__input__checkbox">
                     <label for="takeout">
-                      外帶
+                      <span class="ms-2">外帶</span>
                       <input type="radio" id="takeout" value="外帶" v-model="orderData.seatType" />
                       <span class="checkmark"></span>
                     </label>
@@ -123,25 +123,25 @@
                   <div class="checkout__input__checkbox">
                     <h4>付款方式</h4>
                     <label for="cash">
-                      <img class="pay" src="../../public/images/cash3.png" alt="現金支付" />
+                      <img class="pay ms-3" src="../../public/images/cash3.png" alt="現金支付" />
                       Cash
                       <input type="radio" id="cash" value="Cash" v-model="orderData.PaymentWay" />
-                      <span class="checkmark"></span>
+                      <span class="checkmark mt-3"></span>
                     </label>
                   </div>
 
-                  <div class="checkout__input__checkbox">
-                    <label for="ECPay">
-                      <img class="pay" src="../../public/images/ecpay2.png" alt="綠界支付" />
+                  <div class="checkout__input__checkbox align-middle">
+                    <label for="ECPay" >
+                      <img class="pay ms-3" src="../../public/images/ecpay2.png" alt="綠界支付" />
                       ECPay
                       <input type="radio" id="ECPay" value="ECPay" v-model="orderData.PaymentWay" />
-                      <span class="checkmark"></span>
+                      <span class="checkmark mt-3 "></span>
                     </label>
                   </div>
 
                   <div class="checkout__input__checkbox">
                     <label for="paypal">
-                      <img class="pay" src="https://i.imgur.com/cMk1MtK.jpg" alt="PayPal支付" />
+                      <img class="pay ms-3" src="https://i.imgur.com/cMk1MtK.jpg" alt="PayPal支付" />
                       Paypal
                       <input
                         type="radio"
@@ -149,7 +149,7 @@
                         value="Paypal"
                         v-model="orderData.PaymentWay"
                       />
-                      <span class="checkmark"></span>
+                      <span class="checkmark mt-3"></span>
                     </label>
                   </div>
 
@@ -761,5 +761,6 @@ export default defineComponent({
   margin: 10px 20px 10px 0px;
   cursor: pointer;
   box-shadow: 1px 5px 10px 1px rgba(0, 0, 0, 0.2);
+  object-fit: contain;
 }
 </style>

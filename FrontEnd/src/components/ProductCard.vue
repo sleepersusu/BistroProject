@@ -61,6 +61,8 @@ export default {
         this.count = 1
         // 黑灰底白字的提示框
         Swal.fire({
+          toast:true,
+          position:'top-end',
           title: '成功加入購物車',
           text: `「${productName}」已加入！`,
           icon: 'success',
