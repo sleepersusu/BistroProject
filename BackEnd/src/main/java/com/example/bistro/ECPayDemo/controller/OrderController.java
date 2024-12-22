@@ -86,21 +86,7 @@ public class OrderController {
 
         // 測試用：直接導向成功頁面
         response.sendRedirect("http://localhost:5173/cartCheckSuc");
-       
-       /* 正式邏輯：
-       if (paymentStatus == null) {
-           System.out.println("paymentStatus 為 null，設為 0");
-           paymentStatus = "0";
-       }
 
-       if ("1".equals(paymentStatus)) {
-           System.out.println("導向成功頁面");
-           response.sendRedirect("http://localhost:5173/cartCheckSuc");
-       } else {
-           System.out.println("導向失敗頁面");
-           response.sendRedirect("http://localhost:5173/cartCheckFail");
-       }
-       */
     }
 
     @RequestMapping(value = {"/ecpay/callback", "/payment-result"}, method = RequestMethod.OPTIONS)
@@ -113,24 +99,3 @@ public class OrderController {
     }
 }
 
-// 新增：處理綠界的回調
-//@PostMapping("/ecpay/callback")
-//public String handleCallback(@RequestBody Map<String, String> response) {
-//	System.out.println("有進到callback");
-//  String status = response.get("RtnCode");
-//  // 這裡可以加入交易記錄的處理邏輯
-//  return status;
-//}
-
-//  // 處理付款結果的重定向
-//  @GetMapping("/payment-result")
-//  public void handlePaymentResult(HttpServletResponse response) throws IOException {
-//  	System.out.println("有進到payment-result");
-/// /      if ("1".equals(RtnCode)) {
-/// /          response.sendRedirect("http://localhost:5173/cartCheckSuc");
-/// /      } else {
-/// /          response.sendRedirect("http://localhost:5173/cartCheckFail");
-/// /      }
-//  	response.sendRedirect("http://localhost:5173/cartCheckSuc");
-//  }
-//} 
