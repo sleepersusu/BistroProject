@@ -80,7 +80,7 @@
           <div class="mb-3">
             <label for="contactPhone" class="form-label">電話</label>
             <input type="tel" class="form-control frame" id="contactPhone" v-model="reservations.contactPhone"
-              required />
+             maxlength="10"  required />
           </div>
           <div class="row g-3">
             <div class="col-md-6">
