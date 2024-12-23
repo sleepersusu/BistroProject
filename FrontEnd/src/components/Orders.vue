@@ -90,6 +90,84 @@
                           已付款
                         </span>
                         <span
+                          v-else-if="order.latestPaymentStatus === '未付款'"
+                          class="badge badge-sm border border-danger text-danger"
+                          style="background-color: white"
+                        >
+                          已取消
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-primary text-sm font-weight-normal">
+                          {{ order.payment[0]?.paymentWay || '未付款' }}
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-primary text-sm font-weight-normal">
+                          {{ order.payment[0]?.createdAt }}
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <!-- 添加展開/收起指示器 -->
+                        <i
+                          :class="[
+                            'bi',
+                            expandedOrders.includes(order.ordersNumber)
+                              ? 'bi-chevron-up'
+                              : 'bi-chevron-down',
+                          ]"
+                          class="ms-1"
+                        ></i>
+                      </td>
+                    </tr>
+                    <!-- 訂單詳情行 -->
+                    <tr v-if="expandedOrders.includes(order.ordersNumber)">
+                      <td colspan="6">
+                        <div class="px-4 py-3 bg-light">
+                          <div v-if="orderDetails[order.ordersNumber]" class="row">
+                            <div class="col-md-6">
+                              <h6 class="text-dark mb-3">訂單詳情</h6>
+                              <div class="mb-2">
+                                <strong>訂購人：</strong>
+                                {{ orderDetails[order.ordersNumber]?.ordersName || '未提供' }}
+                              </div>
+                              <div class="mb-2">
+                                <strong>電話：</strong>
+                                {{ orderDetails[order.ordersNumber].ordersTel }}
+                              </div>
+                              <div class="mb-2">
+                                <strong>用餐方式：</strong>
+                                {{ orderDetails[order.ordersNumber].seatType }}
+                              </div>
+                              <div class="mb-2">
+                                <strong>獲得點數：</strong>
+                                {{ orderDetails[order.ordersNumber].pointGetted }}
+                              </div>
+                              <div
+                                class="mb-2"
+                                v-if="orderDetails[order.ordersNumber].ordersRequest"
+                              >
+                                <strong>備註：</strong>
+                                {{ orderDetails[order.ordersNumber].ordersRequest }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-sm text-dark font-weight-semibold mb-0">
+                          {{ order.ordersSumPrice }}
+                        </p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span
+                          v-if="order.latestPaymentStatus === '已付款'"
+                          class="badge badge-sm border border-success text-success"
+                          style="background-color: white"
+                        >
+                          已付款
+                        </span>
+                        <span
                           v-else-if="order.latestPaymentStatus === '已取消'"
                           class="badge badge-sm border border-danger text-danger"
                           style="background-color: white"
@@ -291,7 +369,7 @@ export default {
       this.saveCommentStatus()
       this.$refs.commentPostModal.hideModal()
     },
-    // 添加保存方法 
+    // 添加保存方法
     saveCommentStatus() {
       localStorage.setItem('commentStatus', JSON.stringify(this.commentStatus))
     },

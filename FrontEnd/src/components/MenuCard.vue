@@ -149,7 +149,7 @@ export default {
       menuSrc: '',
       memberSrc: '',
       isLoading: false,
-      count: 1||0,
+      count: 1,
       comments: [],
       commentPeople: 0,
       cartCount: 0,
@@ -215,10 +215,27 @@ export default {
     async viewDescribeModal(menu) {
       this.$emit('view-menudescribe', menu)
     },
-    async handleAddToCart(id) {
+    handleAddToCart(id) {
+      const productName = this.menu.productName;
       this.addToCart({ id, count: this.count })
       this.count = 1
+      // 黑灰底白字的提示框
+      Swal.fire({
+        toast:true,
+        title: `「${productName}」成功加入購物車！`,
+        position:'top-end',
+        icon: 'success',
+        background: '#fff', // 黑灰底
+        color: '#000000',     // 白字
+        iconColor: '#000000', // 成功
+        showConfirmButton: false, //不顯示確認按鈕
+        timer: 2330, //時間
+        timerProgressBar: true, //進度條
+        didOpen: (toast) => {
+          toast.style.marginTop = '80px'; // 動態調整位置
+        },
 
+      });
     },
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
@@ -277,6 +294,8 @@ export default {
 </script>
 
 <style scoped>
+
+
 .img-fixed {
   width: 100%; /* 讓圖片寬度符合卡片寬度 */
   height: 200px; /* 固定高度 */

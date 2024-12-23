@@ -86,11 +86,12 @@ public class CartController {
             cartService.deleteCartItem(memberId, menuId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        
-        
-        
-        
-
+    // 清空購物車
+        @DeleteMapping("/clear/{memberId}")
+        public ResponseEntity<Void> clearCart(@PathVariable Integer memberId) {
+            cartService.clearCartByMemberId(memberId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
 
 

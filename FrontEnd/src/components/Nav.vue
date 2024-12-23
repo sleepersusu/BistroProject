@@ -26,9 +26,6 @@
             <router-link class="nav-link" to="/profile">關於我們</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/order">立即點餐</router-link>
-          </li>
-          <li class="nav-item">
             <router-link class="nav-link position-relative" to="/campaign"
               >限時抽獎<span
                 v-if="memberId && allChances > 0"
@@ -99,7 +96,8 @@ import { mapState, mapActions } from 'pinia'
 
 import { cartStore } from '@/stores/cartStore.js'
 
-import AvatarProfile from './AvatarProfile.vue'
+import AvatarProfile from './AvatarProfile.vue';
+import { pointStore } from '@/stores/pointStore'
 
 export default {
   data() {
@@ -120,6 +118,7 @@ export default {
     ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn']),
     ...mapActions(lotteryStore, ['getAllChanceByMember']),
     ...mapActions(cartStore, ['getCart']),
+    ...mapActions(pointStore,['getMemberPoint']),
     navShadow() {
       requestAnimationFrame(() => {
         this.setShadow = window.scrollY > 100
@@ -154,7 +153,8 @@ export default {
     // 監聽登入狀態變化
     async isLoggedIn(newValue) {
       if (newValue) {
-        await this.getCart()
+        await this.getCart();
+        await this.getMemberPoint();
       }
     },
   },

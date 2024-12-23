@@ -394,12 +394,12 @@
           const isSend = document.getElementById("isSend").innerHTML;
 
           if (isSend === "true") {
-            alert("提示", "你已經發送過了", "info");
+            alert("你已經發送過了");
             return;
           }
 
           if (!id || Number(id) <= 0) {
-            alert("錯誤", "無效的配送編號", "error");
+            alert("無效的配送編號");
             return;
           }
 
@@ -417,16 +417,17 @@
           ]);
 
           if (shipResponse.ok && lineResponse.ok) {
-            alert("成功", "已通知得獎者", "success");
+            alert("已通知得獎者");
             document.getElementById("isSend").innerHTML = "true";
           } else {
             throw new Error("寄送失敗");
           }
-        } catch (error) {
-          console.error("寄送時發生錯誤:", error);
-          alert("錯誤", "寄送失敗，請稍後再試", "error");
+        } catch (e) {
+          console.error("寄送時發生錯誤:", e);
+          alert("寄送失敗，請稍後再試");
         } finally {
           spinner.style.display = "none";
+          document.getElementById("addEventModal2").style.display = "none";
         }
       };
 

@@ -1,5 +1,4 @@
 <template>
-
   <div class="text-center mt-5">
     <i class="bi bi-check-circle-fill" style="font-size: 5rem"></i>
   </div>
@@ -19,9 +18,13 @@
       <h2 class="cta-heading">THANK YOU!</h2>
       <div class="d-flex justify-content-center">
         <p>
-          您的訂單已成功完成！<br/>
-          我們將盡快為您準備並安排配送，<br/>
+          <span class="order-number-highlight text-dark">
+            訂單編號：<strong>{{ orderNumber }}</strong>
+          </span>
+          您的訂單已成功完成！<br />
+          我們將盡快為您準備並安排配送，<br />
           期待能為您提供一份令人滿意的體驗。
+          <br />
         </p>
       </div>
       <div class="button-container">
@@ -39,13 +42,81 @@ import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import Orders from '@/components/Orders.vue'
 import PageTop from '@/components/PageTop.vue'
+import { campaignStore } from '@/stores/campaignStore.js'
+import { lotteryStore } from '@/stores/lotteryStore.js'
+import { statusStore } from '@/stores/statusStore.js'
+import { useUserStore } from '@/stores/userStore.js'
+import { orderStore } from '@/stores/orderStore.js'
+
+
+const campaign = campaignStore()
+const lottery = lotteryStore()
+const status = statusStore()
+const user = useUserStore()
+const order = orderStore()
 
 export default defineComponent({
+  name: 'CartCheckSuc',
   components: { PageTop, Orders, BannerTop },
+  data() {
+    return {
+      // 從路由參數中get訂單編號
+      orderNumber: this.$route.query.orderNumber || '未知',
+    }
+  },
+  methods: {
+    async addMemberChance(){
+      status.start()
+      const orderData = await order.getOrderDetail(this.orderNumber)
+      console.log(orderData)
+      const sumPirce = orderData?.ordersSumPrice
+      const activeCampaign = await campaign.getActiveCampaign()
+      const res = await lottery.addChance(
+        activeCampaign[0].id,
+        user.memberId,
+        sumPirce,
+      )
+      if (res?.status === 200) {
+        this.showAlert(res.data.newChances)
+      }
+      status.finish()
+    },
+    showAlert(chances) {
+      Swal.fire({
+        toast: true,
+        position: 'bottom-end',
+        icon: 'success',
+        iconColor: 'black',
+        title: `恭喜！您已獲得${chances}次抽獎機會`,
+        text: '點擊立即前往抽獎',
+        showConfirmButton: false,
+        timer: 8000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+          toast.addEventListener('click', () => {
+            this.$router.push('/campaign')
+          })
+          toast.style.cursor = 'pointer'
+        },
+      })
+    },
+  },
+  async created() {
+    this.addMemberChance()
+  },
 })
 </script>
 
 <style scoped>
+.order-number-highlight {
+  font-size: 1.5rem; /* 字号增大 */
+  font-weight: bold; /* 加粗 */
+  margin: 20px 0; /* 上下增加间距 */
+  display: block; /* 设置为块级元素，便于控制间距 */
+}
+
 .step-indicator {
   display: flex;
   justify-content: center;
@@ -119,6 +190,7 @@ export default defineComponent({
   font-size: 1.25rem;
   padding: 12px 30px;
 }
+
 .button-container {
   display: flex;
   justify-content: center;
@@ -126,5 +198,4 @@ export default defineComponent({
   margin-top: 2rem;
   margin-bottom: 5rem;
 }
-
 </style>
