@@ -67,6 +67,7 @@
             class="btn btn-secondary"
             @click="handleReset"
             :disabled="isSubmitting"
+            style="color:white; background-color: red;"
           >
             重設
           </button>
@@ -222,6 +223,8 @@ export default {
           title: '感謝你的評論!',
           text: '提交評論成功。',
           icon: 'success',
+          confirmButtonColor: "#000000",
+
         })
 
 
@@ -241,6 +244,7 @@ export default {
           title: '錯誤!',
           text: '評論星數最少1分，最多5分。',
           icon: 'error',
+
         })
       } finally {
         this.isSubmitting = false
@@ -266,5 +270,9 @@ export default {
 
 .invalid-feedback {
   display: block;
+}
+
+button{
+  border: none;
 }
 </style>

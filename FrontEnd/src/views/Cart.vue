@@ -63,6 +63,7 @@
                         class="btn btn-outline-secondary btn-sm"
                         type="button"
                         @click="increaseQuantity(item)"
+                        :disabled="item.cartCount==0"
                       >
                         +
                       </button>
@@ -131,6 +132,7 @@ import { useUserStore } from '@/stores/userStore.js'
 import { ref } from 'vue'
 import { Notifications, notify } from '@kyvg/vue3-notification'
 import { useNotificationStore } from '@/stores/notificationStore'
+import { isDisabled } from 'bootstrap/js/dist/util'
 const user = useUserStore()
 export default {
   name: 'Cart',

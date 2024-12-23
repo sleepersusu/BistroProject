@@ -50,7 +50,7 @@
           <img
             :src="menuSrc"
             @error="menuSrc = 'public/images/avatar.jpg'"
-            class="img-fixed"
+            class="img-fixed tab-image"
             v-on:click.prevent.stop="viewDescribeModal(menu)"
           />
         </figure>
@@ -77,8 +77,8 @@
       </div>
 
       <div class="d-flex justify-content-between">
-        <span class="price">${{ menu.productPrice }}</span>
-        <span class="fs-6"> 剩餘:{{ availableStock }}份</span>
+        <span class="price">NT${{ menu.productPrice }}</span>
+        <span class="fs-6"> 剩餘:{{ menu.productCount }}份</span>
       </div>
 
       <div class="d-flex align-items-center justify-content-between">
@@ -89,7 +89,7 @@
               class="quantity-left-minus btn btn-danger btn-number"
               data-type="minus"
               v-on:click.prevent="minusOne"
-              :disabled="quantity <= 1"
+              :disabled="this.count==0"
             >
               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
             </button>
@@ -107,7 +107,7 @@
             <button
               type="button"
               class="quantity-right-plus btn btn-success btn-number"
-              data-type="plus"
+              data-type="plus" :disabled="this.count==menu.productCount"
             >
               <svg width="16" height="16" v-on:click.prevent="addOne">
                 <use xlink:href="#plus"></use>
@@ -116,7 +116,7 @@
           </span>
         </div>
 
-        <button class="btn btn-primary mt-3" @click="handleAddToCart(menu.id)">Add to Cart</button>
+        <button class="btn btn-primary mt-3" @click="handleAddToCart(menu.id)" :disabled="this.count==0">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -215,9 +215,10 @@ export default {
     async viewDescribeModal(menu) {
       this.$emit('view-menudescribe', menu)
     },
-    handleAddToCart(id) {
+    async handleAddToCart(id) {
       this.addToCart({ id, count: this.count })
       this.count = 1
+
     },
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
@@ -250,22 +251,14 @@ export default {
         }
       }
     },
-    // 獲取最新庫存
-    async getProductStock() {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_API}/api/${this.menu.id}/menu/`)
-        this.menu.productCount = response.data.productCount
-      } catch (error) {
-        console.error('獲取庫存失敗:', error)
-      }
-    },
+
   },
 
   computed: {
     // 計算實際可用庫存
-    availableStock() {
-      return this.menu.productCount - this.cartCount - this.count
-    },
+    // availableStock() {
+    //   return this.menu.productCount - this.cartCount - this.count
+    // },
   },
   availableStock(newStock) {
     if (newStock <= 0) {
@@ -273,7 +266,7 @@ export default {
     }
   },
 
-   async created() {
+  async created() {
     this.loadPicture(this.menu.id)
     await this.getCommentPeople()
     await this.getCartCount() // 初始化購物車數量
@@ -345,14 +338,14 @@ product-qty {
 
 .btn-primary {
   --bs-btn-color: #fff;
-  --bs-btn-bg: #ffc43f;
+  --bs-btn-bg: #111111;
   --bs-btn-border-color: transparent;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #f7a422;
+  --bs-btn-hover-bg: #3b3b3b;
   --bs-btn-hover-border-color: transparent;
   --bs-btn-focus-shadow-rgb: 49, 132, 253;
   --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #ffc43f;
+  --bs-btn-active-bg: #111111;
   --bs-btn-active-border-color: transparent;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #fff;
@@ -440,41 +433,104 @@ product-qty {
 .product-item {
   position: relative;
   padding: 16px;
-  background: #ffffff;
-  border: 1px solid #fbfbfb;
+  background: #FFFFFF;
+  border: 1px solid #FBFBFB;
   box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.04);
   border-radius: 16px;
   margin-bottom: 30px;
   transition: box-shadow 0.3s ease-out;
 }
-
 .product-item:hover {
   box-shadow: 0px 21px 44px rgba(0, 0, 0, 0.08);
 }
-
+.product-item h3 {
+  display: block;
+  width: 100%;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  text-transform: capitalize;
+  color: #333333;
+  margin: 0;
+}
+.product-item figure {
+  background: #F9F9F9;
+  border-radius: 12px;
+  text-align: center;
+}
+.product-item figure img {
+  max-height: 210px;
+  height: auto;
+}
+.product-item .btn-wishlist {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  transition: all 0.3s ease-out;
+}
+.product-item .btn-wishlist:hover {
+  background: rgb(240, 56, 56);
+  color: #fff;
+}
+.product-item .qty {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #9D9D9D;
+}
+.product-item .rating {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: #222222;
+}
+.product-item .rating iconify-icon {
+  color: #FFC43F;
+}
 .product-item .price {
   display: block;
+  width: 50%;
   font-weight: 600;
   font-size: 22px;
   line-height: 30px;
   text-transform: capitalize;
   color: #222222;
 }
-
-.product-item figure {
-  background: #f9f9f9;
-  border-radius: 12px;
-  text-align: center;
+.product-item .product-qty {
+  width: 85px;
 }
-.product-item figure {
-  max-height: 210px;
+.product-item .btn-link {
+  text-decoration: none;
+}
+.product-item #quantity {
   height: auto;
-  width: 100%;
-  border-radius: 12px;
+  width: 28px;
+  text-align: center;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
-
-.product-item .rating iconify-icon {
-  color: #ffc43f;
+.product-item .btn-number {
+  width: 26px;
+  height: 26px;
+  line-height: 1;
+  text-align: center;
+  background: #FFFFFF;
+  border: 1px solid #E2E2E2;
+  border-radius: 6px;
+  color: #222;
+  padding: 0;
 }
 
 .nav-link {

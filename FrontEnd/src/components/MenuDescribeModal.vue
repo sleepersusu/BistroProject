@@ -227,7 +227,7 @@ export default {
       const API_URL = `${import.meta.env.VITE_API}/api/menu/minusCartStock/${productId}`
 
       const payload = {
-        productId: productId,
+        productId: id,
         quantity: quantity, // 減少的數量
       }
       try {
@@ -320,14 +320,14 @@ product-qty {
 
 .btn-primary {
   --bs-btn-color: #fff;
-  --bs-btn-bg: #ffc43f;
+  --bs-btn-bg: #111111;
   --bs-btn-border-color: transparent;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #f7a422;
+  --bs-btn-hover-bg: #3b3b3b;
   --bs-btn-hover-border-color: transparent;
   --bs-btn-focus-shadow-rgb: 49, 132, 253;
   --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #ffc43f;
+  --bs-btn-active-bg: #111111;
   --bs-btn-active-border-color: transparent;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #fff;

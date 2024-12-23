@@ -7,10 +7,11 @@
           <div class="col-md-12">
             <div class="category-carousel swiper">
               <div class="swiper-wrapper">
+
                 <div>
                   <button class="nav-link category-item swiper-slide" @click="loadAllMenu()">
                     <div>
-                      <img src="/public/images/餐點/全部.jpg" alt="" />
+                      <font-awesome-icon :icon="['fas', 'list']"size="2xl" />
                       <h3 class="category-title">全部</h3>
                     </div>
                   </button>
@@ -21,7 +22,7 @@
                   v-on:click.prevent="clickCategory('開胃菜')"
                 >
                   <div>
-                    <img src="/public/images/餐點/開胃菜.jpg" alt="" />
+                    <font-awesome-icon :icon="['fas', 'plate-wheat']"size="2xl" />
                     <h3 class="category-title">開胃菜</h3>
                   </div>
                 </button>
@@ -31,7 +32,7 @@
                   v-on:click.prevent="clickCategory('主菜')"
                 >
                   <div>
-                    <img src="/public/images/餐點/主菜.jpg" alt="" />
+                    <font-awesome-icon :icon="['fas', 'utensils']" size="2xl"/>
                     <h3 class="category-title">主菜</h3>
                   </div>
                 </button>
@@ -41,20 +42,20 @@
                   v-on:click.prevent="clickCategory('飲品')"
                 >
                   <div>
-                    <img src="/public/images/餐點/飲品.jpg" alt="" />
+                    <font-awesome-icon :icon="['fas', 'champagne-glasses']" size="2xl"/>
                     <h3 class="category-title">飲品</h3>
                   </div>
                 </button>
 
                 <button
                   class="nav-link category-item swiper-slide"
-                  v-on:click.prevent="clickCategory('甜點')"
-                >
+                  v-on:click.prevent="clickCategory('甜點')">
                   <div>
-                    <img src="/public/images/餐點/甜點.jpg" alt="" />
+                    <font-awesome-icon :icon="['fas', 'ice-cream']" size="2xl"/>
                     <h3 class="category-title">甜點</h3>
                   </div>
                 </button>
+
               </div>
             </div>
           </div>
@@ -86,8 +87,6 @@
 
     <!-- 分頁按鈕 -->
     <div class="pagination-container">
-
-
       <ul class="pagination">
         <li class="page-item">
           <a class="page-link" :disabled="currentPage === 1" @click="changePage(currentPage - 1)"
@@ -95,11 +94,13 @@
           >
         </li>
         <!-- Page Numbers -->
-        <li v-for="page in totalPages"
+        <li
+          v-for="page in totalPages"
           :key="page"
           class="page-item"
-          :class="{ active: page === currentPage }">
-          <a class="page-link" href="#" @click.prevent="changePage(page)">
+          :class="{ active: page === currentPage }"
+        >
+          <a class="page-link" @click.prevent="changePage(page)">
             {{ page }}
           </a>
         </li>
@@ -113,8 +114,6 @@
           >
         </li>
       </ul>
-
-
     </div>
   </div>
 </template>
@@ -126,6 +125,7 @@ import MenuCommentModal from '@/components/MenuCommentModal.vue'
 import MenuDescribeModal from '@/components/MenuDescribeModal.vue'
 import PageComponent from '@/components/PageComponent.vue'
 import BannerTop from '@/components/BannerTop.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 export default {
   components: {
@@ -134,6 +134,7 @@ export default {
     MenuDescribeModal,
     PageComponent,
     BannerTop,
+    FontAwesomeIcon,
   },
 
   data() {
@@ -146,7 +147,7 @@ export default {
       title: '',
       //分頁
       currentPage: 1, // 當前頁面
-      menusPerPage: 6, // 每頁顯示的菜單數量
+      menusPerPage: 3, // 每頁顯示的菜單數量
       totalPages: 1,
     }
   },
@@ -253,6 +254,57 @@ export default {
   color: black;
 }
 
+.category-carousel .swiper-wrapper {
+  display: flex; /* 讓分類項目水平排列 */
+  justify-content: space-evenly; /* 水平均勻分布 */
+  align-items: center; /* 垂直居中對齊 */
+  flex-wrap: nowrap; /* 防止換行 */
+
+}
+
+.category-carousel .swiper-slide {
+  /* 限制每個分類項目的最小寬度，避免它們過小 */
+  min-width: 200px;
+  max-height: 180px;
+  text-align: center;
+}
+
+.swiper-wrapper {
+  display: flex; /* 讓分類項目水平排列 */
+  justify-content: space-evenly; /* 項目均勻分布 */
+  gap: 20px; /* 設定項目之間的間距 */
+}
+
+.category-item {
+  background: #ffffff;
+  border: 1px solid #fbfbfb;
+  box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+  text-align: center;
+  padding: 20px;
+  transition: box-shadow 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.category-item:hover {
+  transform: translate3d(0, -10px, 0);
+  box-shadow: 0px 21px 44px rgba(0, 0, 0, 0.08);
+}
+
+.category-title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: capitalize;
+  color: #222222;
+  margin-top: 15px;
+}
+
+.swiper-slide {
+  min-height: 63px;
+  display: flex;
+  justify-content: center; /* 垂直居中對齊 */
+}
+
 /* Swiper carousel */
 .swiper-slide:hover {
   /* transform: translateY(-20px)!important; */
@@ -267,6 +319,7 @@ export default {
   border-radius: 16px;
   text-align: center;
   padding: 60px 20px;
+
   margin: 20px 0;
   transition:
     box-shadow 0.3s ease-out,
@@ -330,11 +383,8 @@ export default {
 .nav-link {
   /* border: none; */
   border-bottom: 3px solid var(--accent-color);
-}
-img {
-  height: 80px;
+  width:120px;
 
-  width: 120px;
 }
 
 .swiper-wrapper {
@@ -361,6 +411,56 @@ img {
   justify-content: space-evenly; /* 水平均勻分布 */
   align-items: center;
   flex-wrap: nowrap; /* 防止換行 */
-  gap: 110px; /* 設定項目之間的間距 */
+  gap: 60px; /* 設定項目之間的間距 */
 }
+
+
+/* 分頁 */
+.pagination .page-link {
+  background: linear-gradient(45deg, #333, #000); /* 黑色漸變背景 */
+  color: white; /* 白字 */
+  border: 1px solid #555; /* 灰色邊框 */
+  border-radius: 5px; /* 圓角按鈕 */
+  padding: 8px 12px; /* 內邊距 */
+  margin: 0 5px; /* 間距 */
+  font-size: 16px; /* 字體大小 */
+  font-weight: bold; /* 粗體字 */
+  transition: all 0.3s ease; /* 動畫過渡 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 按鈕陰影 */
+}
+
+.pagination .page-link:hover {
+  background: linear-gradient(45deg, #444, #111); /* 懸停時的漸變 */
+  color: #ffd700; /* 懸停時的金色字體 */
+  transform: scale(1.1); /* 放大效果 */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* 加強陰影 */
+}
+
+.pagination .page-item.active .page-link {
+  background: linear-gradient(45deg, #ffd700, #ffa500); /* 活動按鈕金色漸變 */
+  color: black; /* 黑字 */
+  border: 1px solid #ff8c00; /* 橙色邊框 */
+  box-shadow: 0 6px 12px rgba(255, 140, 0, 0.4); /* 活動按鈕高光 */
+  transform: scale(1.15); /* 稍大 */
+}
+
+.pagination .page-item.disabled .page-link {
+  background: #555; /* 禁用按鈕深灰背景 */
+  color: #999; /* 灰字 */
+  pointer-events: none; /* 禁止點擊 */
+  opacity: 0.5; /* 降低透明度 */
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center;
+  margin: 20px 0; /* 外邊距 */
+}
+
+.pagination .page-item {
+  display: inline-block;
+}
+
+
 </style>

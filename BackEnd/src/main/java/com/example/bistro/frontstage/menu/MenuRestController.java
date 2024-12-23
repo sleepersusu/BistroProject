@@ -107,6 +107,12 @@ public class MenuRestController {
 
 	        // 扣減庫存
 	        int remainingStock = product.getProductCount() - dto.getCartCount();
+	        
+	        if(remainingStock<0) {
+	        	
+	        	 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("庫存不足");
+	        }
+	        
 	        product.setProductCount(remainingStock);  // 確保庫存不會低於 0
 	        menuService.updateMenu(product);
 

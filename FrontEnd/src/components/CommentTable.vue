@@ -18,7 +18,6 @@
           :read-only="true"
           :increment="1"
           :rounded-corners="true"
-          :border-width="4"
           :star-size="25"
           :show-rating="false"
           :star-points="[23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17]"
@@ -28,7 +27,7 @@
     </td>
 
     <!-- 評論內容 -->
-    <td data-label="評論內容" class="comment-content">
+    <td data-label="評論內容" class="comment-content" style="max-width: 300px;">
       {{ comment.commentMessage }}
     </td>
 

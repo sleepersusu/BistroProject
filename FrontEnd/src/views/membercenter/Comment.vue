@@ -6,12 +6,7 @@
         <div class="col-12">
           <div class="card border shadow-xs mb-4">
             <!-- 卡片標題 -->
-            <div class="card-header border-bottom pb-0">
-              <div class="d-sm-flex align-items-center">
-                <span class="h4 header-title">我的評論</span>
-                <div class="ms-auto d-flex"></div>
-              </div>
-            </div>
+
 
             <!-- 卡片內容 -->
             <div class="card-body px-0 py-0">
@@ -19,9 +14,9 @@
                 <table class="table align-items-center mb-0">
                   <thead class="bg-gray-100">
                     <tr>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7">餐點名稱</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 100px;">餐點名稱</th>
                       <th class="text-dark text-xs font-weight-semibold opacity-7">評價分數</th>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7">評論內容</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" >評論內容</th>
                       <th class="text-dark text-xs font-weight-semibold opacity-7">評論時間</th>
                       <th class="text-dark text-xs font-weight-semibold opacity-7"></th>
                     </tr>

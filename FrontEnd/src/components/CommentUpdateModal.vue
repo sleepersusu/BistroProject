@@ -120,7 +120,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="handleReset">重設</button>
+          <button type="button" class="btn btn-secondary" @click="handleReset" style="color: white; background-color: red;">重設</button>
           <button type="button" class="btn btn-primary" @click="handleSubmit()">確定</button>
         </div>
       </div>
@@ -286,5 +286,9 @@ export default {
 textarea {
   resize: vertical;
   min-height: 100px;
+}
+
+button{
+  border: none;
 }
 </style>
