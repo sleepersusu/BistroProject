@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { pointStore } from './pointStore'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -29,6 +30,8 @@ export const useUserStore = defineStore('userStore', {
       // localStorage.clear();
       this.isLoggedIn = false
       this.memberprofile = {}
+      const point = pointStore()
+      point.getMemberPoint()
     },
     async submitLogin(event) {
       try {
@@ -76,6 +79,9 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.username = username
         this.memberprofile.userAvatar = userAvatar
         this.memberprofile.userpoint = userpoint
+
+        const point = pointStore()
+      point.getMemberPoint()
       } catch (error) {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)
@@ -104,6 +110,12 @@ export const useUserStore = defineStore('userStore', {
     },
   },
   getters: {
-    memberId: () => Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId) || null,
+    memberId: (state) => {
+      if (state.isLoggedIn === true) {
+        return Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId)
+      } else {
+        return null
+      }
+    },
   },
 })

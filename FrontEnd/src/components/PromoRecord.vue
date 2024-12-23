@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid py-4">
+  <div class="container my-4">
     <div class="row justify-content-center">
       <div class="col-12">
         <div class="records-card">

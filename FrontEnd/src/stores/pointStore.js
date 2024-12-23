@@ -2,16 +2,16 @@ import { defineStore } from 'pinia'
 import { useUserStore } from './userStore'
 import axios from 'axios'
 
-const user = useUserStore()
-
 export const pointStore = defineStore('point', {
   state: () => ({
     pointPrizes: [],
     promoCode: null,
+    memberPointTotal: 0
   }),
   actions: {
     //判斷是否有此兌換碼
     async verifyPromoCode(inputPromoCode) {
+      const user = useUserStore()
       const api = `${import.meta.env.VITE_API}/api/showPromoCode/${user.memberId}`
       const response = await axios.get(api)
       this.promoCode = response.data
@@ -49,6 +49,25 @@ export const pointStore = defineStore('point', {
     // 刪除購物車獎品
     removePointPrize(item) {
       this.pointPrizes = this.pointPrizes.filter((prize) => prize.name !== item.name)
+    },
+
+    async getMemberPoint() {
+      const user = useUserStore()
+      try {
+        if (!user.memberId) {
+          this.memberPointTotal = 0
+          return
+        }
+
+        const api = `${import.meta.env.VITE_API}/api/getMemberPoint`
+        const response = await axios.get(api)
+        const currentMemberData = response.data.find((data) => data.members.id === user.memberId)
+
+        this.memberPointTotal = currentMemberData ? currentMemberData.pointsTotal : 0
+      } catch (error) {
+        console.error('獲取會員點數失敗:', error)
+        this.memberPointTotal = 0
+      }
     },
   },
 })
