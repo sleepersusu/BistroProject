@@ -149,7 +149,7 @@ public class CampaignController {
 	
 	 private void sendMessage(Campaign campaign) {
 	        String message = String.format(
-	            "🎉 活動通知 🎉\n\n" +
+	            "🎉 新活動通知 🎉\n\n" +
 	            "【%s】\n\n" +
 	            "📅 活動期間：\n%s ~ %s\n\n" +
 	            "✨ 活動內容：\n%s\n\n" +

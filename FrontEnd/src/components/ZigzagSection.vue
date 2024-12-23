@@ -2,37 +2,33 @@
   <div>
     <div class="container-fluid section-wrapper">
       <div class="row align-items-center">
-        <div class="col-md-6 p-0">
-          <img
-            src="https://images.unsplash.com/photo-1521215997172-95c11d778b86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Restaurant Interior"
-            class="img-fluid"
-          />
+        <div class="col-md-6 p-0" style="overflow: hidden">
+          <img src="/images/p8_0.jpg" alt="Restaurant Interior" class="img-fluid" />
         </div>
         <div class="col-md-6 text-content section-content primary-section">
-          <h4 class="section-title mb-4">經典義式饗宴</h4>
-          <p class="subtitle mb-3">融合當代美饌的義大利料理</p>
-          <p class="description">
-            由米其林主廚精心調製的手工義大利麵，<br />搭配經典紅酒，呈現完美的味覺平衡。
-          </p>
+          <div data-aos="fade-left" data-aos-duration="2000">
+            <h4 class="section-title mb-4">法式香草雞腿排奶油燉飯</h4>
+            <p class="subtitle mb-3">舒心的法式小餐館風味</p>
+            <p class="description">
+              香煎香草雞腿排佐以綿密奶油燉飯，<br />融入帕瑪森起司與白酒，層層交織出溫暖的味覺饗宴。
+            </p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="container-fluid section-wrapper">
+    <div class="container-fluid section-wrapper pt-0">
       <div class="row align-items-center">
         <div class="col-md-6 text-content section-content secondary-section">
-          <h4 class="section-title mb-4">極致牛排藝術</h4>
-          <p class="subtitle mb-3">靈魂料理・完美醬汁</p>
-          <p class="description">
-            嚴選PRIME等級肋眼牛排，<br />搭配主廚特製醬汁，締造無與倫比的美食體驗。
-          </p>
+          <div data-aos="fade-right" data-aos-duration="2000">
+            <h4 class="section-title mb-4">蟹黃煙燻臘腸風味麵</h4>
+            <p class="subtitle mb-3">歐陸風味・奢華重組</p>
+            <p class="description">
+              西班牙煙燻臘腸與濃郁蟹黃完美結合，<br />搭配手工現製麵條，譜出異國美味的層次饗宴。
+            </p>
+          </div>
         </div>
-        <div class="col-md-6 p-0">
-          <img
-            src="https://plus.unsplash.com/premium_photo-1669261882830-1e504a9abf1d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Restaurant Interior"
-            class="img-fluid"
-          />
+        <div class="col-md-6 p-0" style="overflow: hidden">
+          <img src="/images/p9_0.jpg" alt="Restaurant Interior" class="img-fluid" />
         </div>
       </div>
     </div>
@@ -47,7 +43,7 @@ export default {
 
 <style scoped>
 .section-wrapper {
-  margin: 2rem 0;
+  padding: 2rem;
 }
 
 .section-content {
@@ -60,7 +56,6 @@ export default {
 
 .primary-section {
   background-color: rgba(80, 121, 127, 0.1);
-
 }
 
 .secondary-section {
@@ -105,7 +100,7 @@ export default {
 }
 
 .img-fluid:hover {
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
 @media (max-width: 768px) {

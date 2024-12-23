@@ -9,33 +9,26 @@
           <button class="btn btn-outline-primary w-100" @click="handleAddToCart(menu.id)">加入購物車</button>
       </div>
   </div>
-
-
 </template>
-
 
 <script>
 import { mapActions } from 'pinia'
 import { cartStore } from '@/stores/cartStore.js'
 
 export default {
-  components:{
-
-
-
-  },
-  props:{
-    menu:{
+  components: {},
+  props: {
+    menu: {
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
-    }
-  },data() {
+    },
+  },
+  data() {
     return {
       menuSrc: '',
     }
   },
   methods: {
-
     async loadPicture(ID) {
       this.isLoading = true
 
@@ -60,13 +53,11 @@ export default {
         this.count = 1
       },
 
-
   },
   computed: {},
   watch: {},
   created() {
     this.loadPicture(this.menu.id)
-
   },
 }
 </script>

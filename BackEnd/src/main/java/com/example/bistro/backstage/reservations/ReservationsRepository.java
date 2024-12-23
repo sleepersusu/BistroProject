@@ -10,5 +10,6 @@ public interface ReservationsRepository extends  JpaRepository<Reservations, Int
 
 	@Query("from Reservations where reservationDate= :d and startTime= :t")
 	List<Reservations>findByReservationDateAndStartTime(@Param("d") Date reservationDate,@Param("t")String startTime);
-
+	
+	List<Reservations> findByContactPhone(String phone);
 }

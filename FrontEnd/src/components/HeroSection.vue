@@ -17,8 +17,8 @@
       >
         <div data-aos="fade-up" data-aos-duration="2300" data-aos-delay="2200">
           <h1 class="display-2 mb-4 title">品味驚喜</h1>
-          <h3 class="mb-3">2024 週年慶抽獎</h3>
-          <p class="lead">消費滿1000元 即可獲得抽獎機會</p>
+          <h3 class="mb-3">新年微醺 轉運夜語</h3>
+          <p class="lead">每消費 1,500 元可獲得一次神秘九宮格抽獎。</p>
         </div>
 
         <div class="mb-5">

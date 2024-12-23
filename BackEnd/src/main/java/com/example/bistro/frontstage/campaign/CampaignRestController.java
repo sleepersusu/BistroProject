@@ -39,6 +39,16 @@ public class CampaignRestController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到活動資訊");
 		}
 	}
+	
+	@GetMapping("/api/campaign/active")
+	public ResponseEntity<?> getActiveCampaign() {
+			List<Campaign> activeCampaign = campaignService.findActiveCampaign();
+			if(activeCampaign.size() == 0) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到進行中的活動");
+			}
+			return ResponseEntity.ok(activeCampaign);
+	}
+	
 
 	@GetMapping("/api/campaign/image/{id}")
 	public ResponseEntity<?> getCampaignImage(@PathVariable Integer id) {
@@ -55,16 +65,6 @@ public class CampaignRestController {
 			return ResponseEntity.internalServerError().build();
 		}
 
-	}
-
-	@GetMapping("/api/campaign/active")
-	public ResponseEntity<?> getActiveCampaigns() {
-		List<Campaign> activeCampaigns = campaignService.findActiveCampaign();
-		if (activeCampaigns != null) {
-			return ResponseEntity.ok(activeCampaigns);
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("找不到正在活躍的活動");
-		}
 	}
 
 }

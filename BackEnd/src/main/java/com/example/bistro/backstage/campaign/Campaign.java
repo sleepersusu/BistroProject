@@ -41,7 +41,7 @@ public class Campaign {
 	@Column(name = "campaignImg")
 	private byte[] campaignImg;
 	
-	@Column(name = "campaignDescription")
+	@Column(name = "campaignDescription", length = 1000)
 	private String campaignDescription;
 	
 	@Column(name = "campaignType")

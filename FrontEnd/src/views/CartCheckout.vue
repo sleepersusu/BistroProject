@@ -194,9 +194,11 @@ import axios from 'axios'
 import { useUserStore } from '@/stores/userStore.js'
 import { lotteryStore } from '@/stores/lotteryStore'
 import { statusStore } from '@/stores/statusStore'
+import { campaignStore } from '@/stores/campaignStore'
 
 const lottery = lotteryStore()
 const status = statusStore()
+const campaign = campaignStore()
 
 const user = useUserStore()
 export default defineComponent({
@@ -276,7 +278,12 @@ export default defineComponent({
         console.log(orderData.memberId)
         if (response.status === 200) {
           status.start()
-          const res = await lottery.addChance(4, user.memberId, this.calculateTotal)
+          const activeCampaign = await campaign.getActiveCampaign()
+          const res = await lottery.addChance(
+            activeCampaign[0].id,
+            user.memberId,
+            this.calculateTotal,
+          )
           if (res?.status === 200) {
             this.showAlert(res.data.newChances)
           }
