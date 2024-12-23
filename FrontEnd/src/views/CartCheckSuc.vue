@@ -18,15 +18,13 @@
       <h2 class="cta-heading">THANK YOU!</h2>
       <div class="d-flex justify-content-center">
         <p>
-
           <span class="order-number-highlight text-dark">
             訂單編號：<strong>{{ orderNumber }}</strong>
           </span>
-          您的訂單已成功完成！<br/>
-          我們將盡快為您準備並安排配送，<br/>
+          您的訂單已成功完成！<br />
+          我們將盡快為您準備並安排配送，<br />
           期待能為您提供一份令人滿意的體驗。
-          <br/>
-
+          <br />
         </p>
       </div>
       <div class="button-container">
@@ -44,6 +42,18 @@ import { defineComponent } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import Orders from '@/components/Orders.vue'
 import PageTop from '@/components/PageTop.vue'
+import { campaignStore } from '@/stores/campaignStore.js'
+import { lotteryStore } from '@/stores/lotteryStore.js'
+import { statusStore } from '@/stores/statusStore.js'
+import { useUserStore } from '@/stores/userStore.js'
+import { orderStore } from '@/stores/orderStore.js'
+
+
+const campaign = campaignStore()
+const lottery = lotteryStore()
+const status = statusStore()
+const user = useUserStore()
+const order = orderStore()
 
 export default defineComponent({
   name: 'CartCheckSuc',
@@ -54,7 +64,48 @@ export default defineComponent({
       orderNumber: this.$route.query.orderNumber || '未知',
     }
   },
-  mounted() {},
+  methods: {
+    async addMemberChance(){
+      status.start()
+      const orderData = await order.getOrderDetail(this.orderNumber)
+      console.log(orderData)
+      const sumPirce = orderData?.ordersSumPrice
+      const activeCampaign = await campaign.getActiveCampaign()
+      const res = await lottery.addChance(
+        activeCampaign[0].id,
+        user.memberId,
+        sumPirce,
+      )
+      if (res?.status === 200) {
+        this.showAlert(res.data.newChances)
+      }
+      status.finish()
+    },
+    showAlert(chances) {
+      Swal.fire({
+        toast: true,
+        position: 'bottom-end',
+        icon: 'success',
+        iconColor: 'black',
+        title: `恭喜！您已獲得${chances}次抽獎機會`,
+        text: '點擊立即前往抽獎',
+        showConfirmButton: false,
+        timer: 8000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+          toast.addEventListener('click', () => {
+            this.$router.push('/campaign')
+          })
+          toast.style.cursor = 'pointer'
+        },
+      })
+    },
+  },
+  async created() {
+    this.addMemberChance()
+  },
 })
 </script>
 
