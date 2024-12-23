@@ -24,7 +24,7 @@ export const pointStore = defineStore('point', {
         const pointPrizesName = filterCode[0].pointPrizes.pointPrizesName
         const pointPrizesImg = filterCode[0].pointPrizes.pointPrizesImg
         const promoCode = filterCode[0].promoCode
-        console.log(promoCode)
+        
 
         this.pointPrizes.push({
           name: pointPrizesName,

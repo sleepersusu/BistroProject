@@ -214,7 +214,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(cartStore, ['getCart', 'clearCart']),
-    ...mapActions(pointStore, ['removePointPrize', 'clearPointPrizes']),
+    ...mapActions(pointStore, ['removePointPrize', 'clearPointPrizes', 'verifyPromoCode']),
 
     validatePhone() {
       // 移除非數字的字
@@ -313,6 +313,31 @@ export default defineComponent({
             console.error('點數更新失敗:', error)
           }
 
+          try {
+            // 先檢查 pointPrizes 的內容
+            console.log('pointPrizes:', this.pointPrizes)
+
+            const requestData = {
+              memberId: user.memberId,
+              promoCodes: this.pointPrizes.map((prize) => prize.promoCode), // 將優惠碼轉為陣列
+              pointPrizesName: this.pointPrizes.map((prize) => prize.name), // 將獎品名稱轉為陣列
+            }
+            console.log(requestData.memberId)
+            console.log(requestData.promoCodes)
+            console.log(requestData.pointPrizesName)
+
+            const api = `${import.meta.env.VITE_API}/api/createPromoRecord`
+            const response = await this.axios.post(api, requestData)
+            if (response.status === 200 || response.status === 201) {
+              console.log('優惠券記錄新增成功！', response.data)
+            } else {
+              console.error('優惠券記錄新增失敗，請稍後再試', response.data)
+            }
+          } catch (error) {
+            console.error('發生錯誤', error)
+            alert('請求失敗，請檢查您的網路或稍後重試！')
+          }
+
           // 清空購物車
           this.clearCart()
 
@@ -340,23 +365,6 @@ export default defineComponent({
       }
 
       //紀錄消費者使用的優惠卷
-      try {
-        const requestData = {
-          memberId: user.memberId,
-          promoCodes: this.pointPrizes.map((prize) => prize.promoCode), // 將優惠碼轉為陣列
-          pointPrizesName: this.pointPrizes.map((prize) => prize.name), // 將獎品名稱轉為陣列
-        }
-        const api = `${import.meta.env.VITE_API}/api/createPromoRecord`
-        const response = await this.axios.post(api, requestData)
-        if (response.status === 200 || response.status === 201) {
-          console.log('優惠券記錄新增成功！', response.data)
-        } else {
-          console.error('優惠券記錄新增失敗，請稍後再試', response.data)
-        }
-      } catch (error) {
-        console.error('發生錯誤', error)
-        alert('請求失敗，請檢查您的網路或稍後重試！')
-      }
     },
 
     //all

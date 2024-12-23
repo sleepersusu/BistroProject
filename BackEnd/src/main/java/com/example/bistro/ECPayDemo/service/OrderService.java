@@ -25,8 +25,8 @@ public class OrderService {
         obj.setTradeDesc("訂購人：" + ordersName + " 電話：" + ordersTel);
         obj.setItemName("餐點訂單");
         // 設定回調 URL
-        obj.setReturnURL("     https://c164-36-236-213-175.ngrok-free.app/ecpay/callback");
-        obj.setOrderResultURL("https://c164-36-236-213-175.ngrok-free.app/payment-result");
+        obj.setReturnURL("http://localhost:8085/ecpay/callback");
+        obj.setOrderResultURL("http://localhost:8085/payment-result");
 
         obj.setNeedExtraPaidInfo("N");
 

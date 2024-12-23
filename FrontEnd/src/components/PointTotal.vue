@@ -5,8 +5,7 @@
         <div class="promo-card">
           <div class="promo-content">
             <h2 class="promo-title">優惠券列表</h2>
-            <div class="divider">
-            </div>
+            <div class="divider"></div>
 
             <div class="coupon-list">
               <ul class="coupon-items">
@@ -21,12 +20,15 @@
                     <button
                       class="use-btn"
                       @click="usePromoCode(item)"
-                      :disabled="!hasCartItems"
-                      :title="!hasCartItems ? '購物車需要至少一份餐點' : '使用優惠券'"
+                      :disabled="!hasCartItems || isPromoCodeUsed(item.promoCode)"
+                      :title="getButtonTitle(item.promoCode)"
                     >
-                      使用優惠券
+                      {{ isPromoCodeUsed(item.promoCode) ? '已加入購物車' : '使用優惠券' }}
                     </button>
                   </div>
+                </li>
+                <li v-if="memberPromoCode.length === 0" class="no-coupons">
+                  目前沒有可用的優惠券
                 </li>
               </ul>
             </div>
@@ -47,6 +49,7 @@ export default {
   data() {
     return {
       memberPromoCode: [],
+      usedPromoCodes: new Set(),
     }
   },
 
@@ -54,39 +57,68 @@ export default {
     ...mapActions(pointStore, ['addToCart']),
 
     async getPromoCode() {
-      const api = `${import.meta.env.VITE_API}/api/showPromoCode/${this.memberId}`
-      const response = await this.axios.get(api)
-      this.memberPromoCode = response.data
+      try {
+        const api = `${import.meta.env.VITE_API}/api/showPromoCode/${this.memberId}`
+        const response = await this.axios.get(api)
+        this.memberPromoCode = response.data
+      } catch (error) {
+        console.error('獲取優惠券失敗:', error)
+        window.Swal.fire({
+          icon: 'error',
+          title: '獲取優惠券失敗',
+          text: '請稍後再試',
+        })
+      }
+    },
+
+    isPromoCodeUsed(promoCode) {
+      return this.usedPromoCodes.has(promoCode)
+    },
+
+    getButtonTitle(promoCode) {
+      if (!this.hasCartItems) {
+        return '購物車需要至少一份餐點'
+      }
+      if (this.isPromoCodeUsed(promoCode)) {
+        return '此優惠券已加入購物車'
+      }
+      return '使用優惠券'
     },
 
     async usePromoCode(item) {
-      if (!this.hasCartItems) {
-        window.Swal.fire({
-          icon: 'warning',
-          title: '無法使用優惠券',
-          text: '購物車需要至少一份餐點才能使用優惠券',
-        })
+      if (!this.hasCartItems || this.isPromoCodeUsed(item.promoCode)) {
         return
       }
 
       try {
+        // 加入購物車
         await this.addToCart({
           name: item.pointPrizes.pointPrizesName,
           promoCode: item.promoCode,
           img: item.pointPrizes.pointPrizesImg,
         })
 
+        // 標記為已使用
+        this.usedPromoCodes.add(item.promoCode)
+
+        // 從列表中移除已使用的優惠券
+        this.memberPromoCode = this.memberPromoCode.filter(
+          promo => promo.promoCode !== item.promoCode
+        )
+
+        // 顯示成功訊息
         window.Swal.fire({
           icon: 'success',
           title: '已加入購物車',
+          text: '完成結帳後即可使用此優惠券',
           showConfirmButton: false,
           timer: 1500,
         })
       } catch (error) {
-        console.error('添加優惠券失敗:', error)
+        console.error('優惠券加入購物車失敗:', error)
         window.Swal.fire({
           icon: 'error',
-          title: '優惠券添加失敗',
+          title: '優惠券加入購物車失敗',
           text: '請稍後再試',
         })
       }
@@ -99,7 +131,7 @@ export default {
 
     hasCartItems() {
       return this.cartItems && this.cartItems.length > 0
-    },
+    }
   },
 
   created() {
@@ -295,5 +327,30 @@ export default {
     padding: 0.2rem 0.6rem;
     font-size: 0.8rem;
   }
+
+  .use-btn:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.use-btn[title] {
+  position: relative;
+}
+
+.use-btn[title]:hover:disabled::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  margin-bottom: 5px;
+}
 }
 </style>
