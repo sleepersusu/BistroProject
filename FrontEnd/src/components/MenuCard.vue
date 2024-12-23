@@ -62,8 +62,7 @@
         <div>
           <span class="rating">
             <svg width="24" height="24" class="text-primary">
-              <use xlink:href="#star-solid"></use>
-            </svg>{{ menu.avgScore }}
+              <use xlink:href="#star-solid"></use></svg>{{ menu.avgScore }}
           </span>
           <span style="padding-left: 5px">({{ commentPeople }})</span>
         </div>
@@ -90,6 +89,7 @@
               class="quantity-left-minus btn btn-danger btn-number"
               data-type="minus"
               v-on:click.prevent="minusOne"
+              :disabled="quantity <= 1"
             >
               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
             </button>
@@ -149,7 +149,7 @@ export default {
       menuSrc: '',
       memberSrc: '',
       isLoading: false,
-      count: 1,
+      count: 1||0,
       comments: [],
       commentPeople: 0,
       cartCount: 0,
@@ -217,7 +217,6 @@ export default {
     },
     handleAddToCart(id) {
       this.addToCart({ id, count: this.count })
-
       this.count = 1
     },
     updateQuantity(event) {
@@ -268,13 +267,19 @@ export default {
       return this.menu.productCount - this.cartCount - this.count
     },
   },
+  availableStock(newStock) {
+    if (newStock <= 0) {
+      this.count = 0;
+    }
+  },
 
-  async created() {
+   async created() {
     this.loadPicture(this.menu.id)
     await this.getCommentPeople()
     await this.getCartCount() // 初始化購物車數量
-  },
-  watch: {},
+    this.getProductStock(); // 初始化庫存數量
+  }
+
 }
 </script>
 

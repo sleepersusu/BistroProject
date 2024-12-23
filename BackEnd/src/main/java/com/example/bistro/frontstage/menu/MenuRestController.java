@@ -21,7 +21,7 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -82,36 +82,41 @@ public class MenuRestController {
 		return ResponseEntity.ok(topThreeMenu);
 	}
 
+
 	@Transactional
 	@PutMapping("/api/menu/minusCartStock/{id}")
 	public ResponseEntity<?> minusCartStock(@RequestBody CartItemDTO dto, @PathVariable Integer id) {
 	    try {
-	        // 檢查庫存是否足夠
+	        // 檢查產品是否存在
 	        Menu product = menuService.findMenuById(id);
 	        if (product == null) {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product ID " + id + " not found.");
 	        }
+
+	        // 檢查庫存是否足夠
+	        if (product.getProductCount() <= 0) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .body("Product ID " + id + " is out of stock.");
+	        }
+
+	        // 檢查庫存是否足夠扣減
 	        if (product.getProductCount() < dto.getCartCount()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .body("Product ID " + id + " has insufficient stock.");
 	        }
 
 	        // 扣減庫存
-	        product.setProductCount(product.getProductCount() - dto.getCartCount());
+	        int remainingStock = product.getProductCount() - dto.getCartCount();
+	        product.setProductCount(remainingStock);  // 確保庫存不會低於 0
 	        menuService.updateMenu(product);
 
-	        return ResponseEntity.ok(Map.of("success", true, "productCount", product.getProductCount()));
+	        // 返回成功結果
+	        return ResponseEntity.ok(Map.of("success", true, "productCount", remainingStock));
 	    } catch (Exception e) {
+	        
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 	                .body("Error processing request: " + e.getMessage());
 	    }
 	}
-	
-	
-	@GetMapping("path")
-	public String getMethodName(@RequestParam String param) {
-		return new String();
-	}
-	
 
 }
