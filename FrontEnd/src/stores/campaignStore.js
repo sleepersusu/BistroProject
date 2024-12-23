@@ -11,7 +11,17 @@ export const campaignStore = defineStore('campaign', {
       try {
         const res = await axios.get(api)
         console.log(res.data)
+
+        const statusPriority = {
+          IN_PROGRESS: 0,
+          NOT_STARTED: 1,
+          EXPIRED: 2,
+        }
+
         this.campaigns = res.data.sort((a, b) => b.id - a.id)
+        this.campaigns.sort((a, b) => {
+          return statusPriority[a.campaignStatus] - statusPriority[b.campaignStatus]
+        })
 
         this.campaigns = await Promise.all(
           this.campaigns.map(async (campaign) => {

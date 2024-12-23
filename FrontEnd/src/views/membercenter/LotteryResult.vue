@@ -121,14 +121,14 @@
               </p>
               <div class="ms-auto">
                 <button
-                  class="btn btn-sm btn-white mb-0"
+                  class="btn btn-sm btn-white mb-0 border-0"
                   :disabled="currentPage === 1"
                   @click="handlePageChange(currentPage - 1)"
                 >
                   Previous
                 </button>
                 <button
-                  class="btn btn-sm btn-white mb-0"
+                  class="btn btn-sm btn-white mb-0 border-0"
                   :disabled="currentPage === totalPages"
                   @click="handlePageChange(currentPage + 1)"
                 >

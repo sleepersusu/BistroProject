@@ -433,7 +433,6 @@ public class LineWebhookController {
              
                 sb.append("📌 點數說明：\n");
                 sb.append("- 每消費 100 元可獲得 1 點\n");
-                sb.append("- 每 100 點可折抵 100 元消費金額\n");
                 
                 
                 if (points >= 100) {

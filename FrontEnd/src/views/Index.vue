@@ -63,15 +63,17 @@
         <div class="hero-overlay d-flex flex-column justify-content-center">
           <div class="container text-white" data-aos="fade-up" data-aos-duration="1500">
             <h1 class="hero-title mb-md-4">
-              Welcome to <span class="highlight">Nightly Sips</span>
+              Welcome to
+              <span
+                class="highlight"
+                data-aos="fade-up"
+                data-aos-duration="3000"
+                data-aos-delay="500"
+                >Nightly Sips</span
+              >
             </h1>
             <p class="hero-subtitle mb-md-4 mb-3">用餐不只是味蕾的享受，更是一場難忘的夜晚</p>
-            <div
-              class="hero-buttons mb-md-5"
-              data-aos="fade-up"
-              data-aos-duration="1500"
-              data-aos-delay="500"
-            >
+            <div class="hero-buttons mb-md-5">
               <router-link to="/menu" class="btn btn-outline-light me-3">查看菜單</router-link>
               <router-link to="/reservations" class="btn btn-primary text-dark"
                 >立即訂位</router-link
@@ -234,15 +236,16 @@ export default {
 
 .hero-title {
   font-size: 2.5rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 1px;
 }
 
 .highlight {
   color: #ffdc35;
-  font-size: 3.5rem;
+  font-size: 4rem;
   text-shadow: 0 4px 35px #ffdc35;
   font-weight: 400;
+  font-family: 'Chakra Petch', cursive !important;
 }
 
 .hero-subtitle {
