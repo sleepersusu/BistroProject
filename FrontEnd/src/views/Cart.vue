@@ -160,6 +160,8 @@ import { ref } from 'vue'
 import { Notifications, notify } from '@kyvg/vue3-notification'
 import { useNotificationStore } from '@/stores/notificationStore'
 import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
+
+
 const user = useUserStore()
 export default {
   name: 'Cart',
