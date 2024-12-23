@@ -359,15 +359,23 @@ export default defineComponent({
 
     // 主要下單方法
     async placeOrder() {
-      if (this.isProcessing) return
-
+      // 防止重複提交
+      if (this.isProcessing) return;
+      this.isProcessing = true;
       try {
-        this.isProcessing = true
-
-        if (!this.validateOrderData()) {
-          this.isProcessing = false
-          return
-        }
+        // 重新執行姓名和電話驗證
+          this.validateName();
+          this.validatePhone();
+        // 如果有驗證錯誤，停止提交並返回
+          if (this.nameError || this.phoneError) {
+            this.isProcessing = false;
+            return;
+          }
+        // 確保其他必要的訂單數據都已正確填寫
+          if (!this.validateOrderData()) {
+            this.isProcessing = false
+            return
+          }
 
         Swal.fire({
           icon: 'info',
