@@ -15,14 +15,14 @@ public class OrdersService {
     @Autowired
     private MembersRepository membersRepositoryDao;
 
-
-
 //訂單邏輯
     //前台：使用者
         //使用者當購物車結完帳時候，新增一筆訂單
             public Orders insertOrders(Orders orders) {
                 return ordersRepository.save(orders);
             }
+
+
 
         // 根據電話查詢訂單
             public Optional<Orders> findOrderByPhone(String ordersTel) {

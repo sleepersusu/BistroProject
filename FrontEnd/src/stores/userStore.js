@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { lotteryStore } from './lotteryStore'
+import {cartStore} from '@/stores/cartStore.js'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -30,6 +31,9 @@ export const useUserStore = defineStore('userStore', {
       // localStorage.clear();
       this.isLoggedIn = false
       this.memberprofile = {}
+      //get cart again
+      const cart =cartStore()
+      cart.getCart()
     },
     async submitLogin(event) {
       try {

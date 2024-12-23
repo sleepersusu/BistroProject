@@ -56,11 +56,27 @@ export default {
     },
       ...mapActions(cartStore, ['addToCart']),
       handleAddToCart(id) {
+        const productName = this.menu.productName;
         this.addToCart({ id, count: this.count })
         this.count = 1
+        // 黑灰底白字的提示框
+        Swal.fire({
+          toast:true,
+          position:'top-end',
+          title: '成功加入購物車',
+          text: `「${productName}」已加入！`,
+          icon: 'success',
+          background: '#fff', // 黑灰底
+          color: '#000000',     // 白字
+          iconColor: '#000000', // 成功
+          showConfirmButton: false, //不顯示確認按鈕
+          timer: 1314, //時間
+          timerProgressBar: true, //進度條
+          didOpen: (toast) => {
+            toast.style.marginTop = '80px'; // 動態調整位置
+          },
+        });
       },
-
-
   },
   computed: {},
   watch: {},

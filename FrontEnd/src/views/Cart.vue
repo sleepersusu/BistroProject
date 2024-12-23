@@ -120,9 +120,7 @@
 
 <script>
 import { mapState, mapActions } from 'pinia'
-import CartButton from '@/components/cart/CartButton.vue'
-import CartTable from '@/components/cart/CartTable.vue'
-import CartTitle from '@/components/cart/CartTitle.vue'
+import { pointStore } from '@/stores/pointStore'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
@@ -131,6 +129,7 @@ import { useUserStore } from '@/stores/userStore.js'
 import { ref } from 'vue'
 import { Notifications, notify } from '@kyvg/vue3-notification'
 import { useNotificationStore } from '@/stores/notificationStore'
+import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
 const user = useUserStore()
 export default {
   name: 'Cart',
@@ -139,9 +138,7 @@ export default {
     PageTop,
     BannerTop,
     FontAwesomeIcon,
-    CartTitle,
-    CartTable,
-    CartButton,
+    VerifyPromoCode,
   },
   data() {
     return {
@@ -213,14 +210,41 @@ export default {
           // console.log("刪除商品成功");
           await this.fetchCartItems()
           // console.log("重新獲取購物車數據成功");
-          this.success('刪除商品成功')
+          // 成功提示框
+           Swal.fire({
+            toast: true,
+            position: 'top-end',
+            title: '刪除成功',
+            text: `商品 "${item.menu.productName}" 已成功從購物車移除！`,
+            icon: 'success',
+            background: '#fff', // 黑灰底
+            color: '#000000',     // 白字
+            iconColor: '#d60101', // 成功圖標顏色
+            showConfirmButton: false, //不顯示確認按鈕
+            timer: 2330, //時間
+            timerProgressBar: true, //進度條
+            didOpen: (toast) => {
+              toast.style.marginTop = '80px'; // 動態調整位置
+            },
+          });
+
         } catch (error) {
           console.error('刪除商品失敗:', error)
-          this.error('刪除商品失敗', error)
         }
       } else {
         console.error('未登入會員')
-        this.warn('請先登入會員')
+        Swal.fire({
+          title: '未登入會員',
+          text: '請先登入會員以刪除商品！',
+          icon: 'warning',
+          background: '#fff', // 黑灰底
+          color: '#000000',     // 白字
+          iconColor: '#f6b704', // 警告圖標顏色
+          confirmButtonText: '登入',
+          customClass: {
+            confirmButton: 'btn btn-primary text-white', // 自定義按鈕樣式
+          },
+        });
       }
     },
   },
@@ -239,6 +263,21 @@ export default {
 </script>
 
 <style scoped>
+
+/* 自定義 SweetAlert 按鈕樣式 */
+.custom-swal-btn {
+  background-color: #444444; /* 按鈕黑灰色 */
+  color: #ffffff;           /* 按鈕白字 */
+  border: none;             /* 移除邊框 */
+  border-radius: 5px;       /* 按鈕圓角 */
+  padding: 10px 20px;       /* 按鈕內邊距 */
+  font-size: 16px;          /* 字體大小 */
+  cursor: pointer;
+}
+
+.custom-swal-btn:hover {
+  background-color: #666666; /* 懸停效果 */
+}
 .step-indicator {
   display: flex;
   justify-content: center;
