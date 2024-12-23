@@ -178,7 +178,6 @@ export default {
       const day = String(d.getDate()).padStart(2, '0')
       return `${year}-${month}-${day}`
     },
-
     async displayTimes() {
       if (this.reservations.numberPeople === 0 || !this.reservations.reservationDate) {
         this.availableTimeslots = []
@@ -190,7 +189,6 @@ export default {
           reservationDate: this.reservations.reservationDate,
           numberPeople: this.reservations.numberPeople,
         })
-
         if (res.data.success) {
           this.availableTimeslots = res.data.availableTimeslots || []
         } else {
@@ -269,9 +267,7 @@ export default {
     const max = new Date()
     max.setDate(today.getDate() + 7)
     this.maxDate = max.toISOString().split('T')[0]
-
   },
-
   computed: {},
   watch: {
     'reservations.numberPeople': function () {

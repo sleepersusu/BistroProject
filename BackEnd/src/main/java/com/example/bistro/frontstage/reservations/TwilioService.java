@@ -1,7 +1,5 @@
 package com.example.bistro.frontstage.reservations;
 
-
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -39,7 +37,7 @@ public class TwilioService {
 	    public void sendReservationConfirmation(String toPhoneNumber, String reservationDate, String reservationTime, int numberPeople) {
 	    	String contactPhone = "+886" + toPhoneNumber.replaceFirst("^0", "");
 	    	   if (phoneNumberTest.equals(contactPhone)) {
-	              
+	            
 	    	LocalDate Date = LocalDate.now();   //要把格式改成
 			
 			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -53,7 +51,6 @@ public class TwilioService {
 
 	        sendSms(phoneNumberTest, messageContent);
 	    } else {
-            // 如果电话号码不是指定的，打印日志并不发送短信
             System.out.println("No SMS sent. The input phone number is not the test number.");
         }
 	    }
