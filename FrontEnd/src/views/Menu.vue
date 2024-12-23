@@ -2,51 +2,59 @@
   <div class="container">
     <BannerTop :title="' Menu'"></BannerTop>
     <section class="py-5 overflow-hidden">
-      <div class="container-fluid " style="overflow:auto">
-        <div class="row ">
-          <div class="col-md-12 ">
-            <div class="category-carousel swiper ">
+      <div class="container-fluid" style="overflow: auto">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-carousel swiper">
               <div class="swiper-wrapper">
-
-
                 <div>
-                <button class="nav-link category-item swiper-slide" @click="loadAllMenu()">
-                  <div>
-                    <img src="/public/images/餐點/全部.jpg" alt="" />
-                    <h3 class="category-title">全部</h3>
-                  </div>
-                </button>
-              </div>
+                  <button class="nav-link category-item swiper-slide" @click="loadAllMenu()">
+                    <div>
+                      <img src="/public/images/餐點/全部.jpg" alt="" />
+                      <h3 class="category-title">全部</h3>
+                    </div>
+                  </button>
+                </div>
 
-                <button class="nav-link category-item swiper-slide"v-on:click.prevent="clickCategory('開胃菜')">
+                <button
+                  class="nav-link category-item swiper-slide"
+                  v-on:click.prevent="clickCategory('開胃菜')"
+                >
                   <div>
                     <img src="/public/images/餐點/開胃菜.jpg" alt="" />
                     <h3 class="category-title">開胃菜</h3>
                   </div>
                 </button>
 
-                <button class="nav-link category-item swiper-slide"v-on:click.prevent="clickCategory('主菜')">
+                <button
+                  class="nav-link category-item swiper-slide"
+                  v-on:click.prevent="clickCategory('主菜')"
+                >
                   <div>
                     <img src="/public/images/餐點/主菜.jpg" alt="" />
                     <h3 class="category-title">主菜</h3>
                   </div>
                 </button>
 
-                <button class="nav-link category-item swiper-slide"v-on:click.prevent="clickCategory('飲品')">
+                <button
+                  class="nav-link category-item swiper-slide"
+                  v-on:click.prevent="clickCategory('飲品')"
+                >
                   <div>
                     <img src="/public/images/餐點/飲品.jpg" alt="" />
                     <h3 class="category-title">飲品</h3>
                   </div>
                 </button>
 
-                <button class="nav-link category-item swiper-slide"v-on:click.prevent="clickCategory('甜點')">
+                <button
+                  class="nav-link category-item swiper-slide"
+                  v-on:click.prevent="clickCategory('甜點')"
+                >
                   <div>
                     <img src="/public/images/餐點/甜點.jpg" alt="" />
                     <h3 class="category-title">甜點</h3>
                   </div>
                 </button>
-
-
               </div>
             </div>
           </div>
@@ -67,7 +75,6 @@
           @add-to-cart="handleAddToCart"
         >
         </MenuCard>
-
       </div>
       <MenuCommentModal
         ref="commentModal"
@@ -79,24 +86,36 @@
 
     <!-- 分頁按鈕 -->
     <div class="pagination-container">
-      <button
-        class="btn btn-primary"
-        :disabled="currentPage === 1"
-        @click="changePage(currentPage - 1)"
-      >
-        上一頁
-      </button>
-      <span class="mx-3">{{ currentPage }} / {{ totalPages }}</span>
-      <button
-        class="btn btn-primary"
-        :disabled="currentPage === totalPages"
-        @click="changePage(currentPage + 1)"
-      >
-        下一頁
-      </button>
+
+
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" :disabled="currentPage === 1" @click="changePage(currentPage - 1)"
+            >Previous</a
+          >
+        </li>
+        <!-- Page Numbers -->
+        <li v-for="page in totalPages"
+          :key="page"
+          class="page-item"
+          :class="{ active: page === currentPage }">
+          <a class="page-link" href="#" @click.prevent="changePage(page)">
+            {{ page }}
+          </a>
+        </li>
+
+        <li class="page-item">
+          <a
+            class="page-link"
+            :disabled="currentPage === totalPages"
+            @click="changePage(currentPage + 1)"
+            >Next</a
+          >
+        </li>
+      </ul>
+
+
     </div>
-
-
   </div>
 </template>
 
@@ -115,7 +134,6 @@ export default {
     MenuDescribeModal,
     PageComponent,
     BannerTop,
-
   },
 
   data() {
@@ -129,6 +147,7 @@ export default {
       //分頁
       currentPage: 1, // 當前頁面
       menusPerPage: 6, // 每頁顯示的菜單數量
+      totalPages: 1,
     }
   },
   methods: {
@@ -225,12 +244,7 @@ export default {
   created() {
     this.loadAllMenu()
   },
-
 }
-
-
-
-
 </script>
 
 <style scoped>
@@ -271,8 +285,6 @@ export default {
   color: #222222;
   margin-top: 20px;
 }
-
-
 
 .button-image:hover {
   transform: scale(1.1);
@@ -323,7 +335,6 @@ img {
   height: 80px;
 
   width: 120px;
-
 }
 
 .swiper-wrapper {
@@ -345,19 +356,11 @@ img {
   }
 }
 
-
 .category-carousel .swiper-wrapper {
-
-  display: flex;            /* 讓分類項目水平排列 */
+  display: flex; /* 讓分類項目水平排列 */
   justify-content: space-evenly; /* 水平均勻分布 */
   align-items: center;
-  flex-wrap: nowrap;        /* 防止換行 */
+  flex-wrap: nowrap; /* 防止換行 */
   gap: 110px; /* 設定項目之間的間距 */
 }
-
-
-
-
-
-
 </style>

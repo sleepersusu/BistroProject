@@ -62,7 +62,8 @@
         <div>
           <span class="rating">
             <svg width="24" height="24" class="text-primary">
-              <use xlink:href="#star-solid"></use></svg>{{ menu.avgScore }}
+              <use xlink:href="#star-solid"></use>
+            </svg>{{ menu.avgScore }}
           </span>
           <span style="padding-left: 5px">({{ commentPeople }})</span>
         </div>
@@ -78,7 +79,7 @@
 
       <div class="d-flex justify-content-between">
         <span class="price">${{ menu.productPrice }}</span>
-        <span class="fs-6"> 剩餘:{{ availableStock  }}份</span>
+        <span class="fs-6"> 剩餘:{{ availableStock }}份</span>
       </div>
 
       <div class="d-flex align-items-center justify-content-between">
@@ -234,24 +235,31 @@ export default {
     },
 
     async getCartCount() {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_API}/api/cart/list`);
-    const cartItems = response.data;
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API}/api/cart/list`)
+        const cartItems = response.data
 
-    // 更新當前商品的購物車數量
-    const item = cartItems.find((item) => item.id === this.menu.id);
-    console.log(item)
+        // 更新當前商品的購物車數量
+        const item = cartItems.find((item) => item.id === this.menu.id)
+        console.log(item)
 
-    this.cartCount = item ? item.cartCount : 0;
-  } catch (error) {
-    console.error('Error:', error);
-    if (error.response?.status === 401) {
-      this.cartCount = 0;
-    }
-  }
-},
-
-
+        this.cartCount = item ? item.cartCount : 0
+      } catch (error) {
+        console.error('Error:', error)
+        if (error.response?.status === 401) {
+          this.cartCount = 0
+        }
+      }
+    },
+    // 獲取最新庫存
+    async getProductStock() {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API}/api/${this.menu.id}/menu/`)
+        this.menu.productCount = response.data.productCount
+      } catch (error) {
+        console.error('獲取庫存失敗:', error)
+      }
+    },
   },
 
   computed: {
@@ -264,7 +272,7 @@ export default {
   async created() {
     this.loadPicture(this.menu.id)
     await this.getCommentPeople()
-    await this.getCartCount(); // 初始化購物車數量
+    await this.getCartCount() // 初始化購物車數量
   },
   watch: {},
 }

@@ -21,6 +21,8 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class MenuRestController {
@@ -83,27 +85,33 @@ public class MenuRestController {
 	@Transactional
 	@PutMapping("/api/menu/minusCartStock/{id}")
 	public ResponseEntity<?> minusCartStock(@RequestBody CartItemDTO dto, @PathVariable Integer id) {
-		try {
-			// 檢查庫存是否足夠
+	    try {
+	        // 檢查庫存是否足夠
+	        Menu product = menuService.findMenuById(id);
+	        if (product == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product ID " + id + " not found.");
+	        }
+	        if (product.getProductCount() < dto.getCartCount()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .body("Product ID " + id + " has insufficient stock.");
+	        }
 
-			Menu product = menuService.findMenuById(id);
-			if (product == null) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product ID " + id + " not found.");
-			}
-			if (product.getProductCount() < dto.getQuantity()) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-						.body("Product ID " + id + " has insufficient stock.");
-			}
+	        // 扣減庫存
+	        product.setProductCount(product.getProductCount() - dto.getCartCount());
+	        menuService.updateMenu(product);
 
-			// 扣減庫存
-			product.setProductCount(product.getProductCount() - dto.getQuantity());
-			menuService.updateMenu(product);
-
-			return ResponseEntity.ok(Map.of("success", true, "productCount", product.getProductCount()));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error processing request: " + e.getMessage());
-		}
+	        return ResponseEntity.ok(Map.of("success", true, "productCount", product.getProductCount()));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Error processing request: " + e.getMessage());
+	    }
 	}
+	
+	
+	@GetMapping("path")
+	public String getMethodName(@RequestParam String param) {
+		return new String();
+	}
+	
 
 }

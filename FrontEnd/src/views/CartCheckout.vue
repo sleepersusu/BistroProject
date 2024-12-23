@@ -285,6 +285,23 @@ export default defineComponent({
           console.log('Order created successfully:', response.data)
           // 清空購物車
           this.clearCart()
+
+          // 扣除庫存
+          for (const item of this.cartItems) {
+            const productData = {
+              menuId: item.menu.id,
+              cartCount: item.cartCount,
+            }
+            const stockResponse = await axios.put(
+              `${import.meta.env.VITE_API}/api/menu/minusCartStock/${item.menu.id}`,
+              productData,
+            )
+            if (stockResponse.status !== 200) {
+              console.error('Failed to deduct stock for product ID:', item.menu.id)
+              // 可以在這裡顯示錯誤訊息給用戶
+            }
+          }
+
           // 根據付款方式決定後續流程
           if (this.orderData.PaymentWay === 'ECPay') {
             // 如果是 ECPay，將訂單編號帶入跳轉
