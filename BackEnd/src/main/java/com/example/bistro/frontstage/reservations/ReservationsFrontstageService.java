@@ -1,8 +1,6 @@
 package com.example.bistro.frontstage.reservations;
 
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,9 +9,6 @@ import org.springframework.stereotype.Service;
 import com.example.bistro.backstage.reservations.Reservations;
 import com.example.bistro.backstage.reservations.ReservationsRepository;
 import com.example.bistro.backstage.reservations.SeatsCountRepository;
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
 
 @Service
 public class ReservationsFrontstageService {
@@ -23,9 +18,6 @@ public class ReservationsFrontstageService {
 
 	@Autowired
 	private SeatsCountRepository SeatsCountRepo;
-
-	
-	
 
 	public Reservations insert(ReservationDTO dto) {
 
@@ -202,7 +194,7 @@ public class ReservationsFrontstageService {
 			return OccupyTable(reservationDate, time);
 		} catch (ParseException e) {
 			e.printStackTrace();
-			return new Integer[] { 0, 0, 0 }; // 發生錯誤時返回空佔用數據
+			return new Integer[] { 0, 0, 0 }; 
 		}
 	}
 
