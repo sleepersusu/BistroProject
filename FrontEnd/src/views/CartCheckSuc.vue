@@ -1,5 +1,4 @@
 <template>
-
   <div class="text-center mt-5">
     <i class="bi bi-check-circle-fill" style="font-size: 5rem"></i>
   </div>
@@ -19,9 +18,15 @@
       <h2 class="cta-heading">THANK YOU!</h2>
       <div class="d-flex justify-content-center">
         <p>
+
+          <span class="order-number-highlight text-dark">
+            訂單編號：<strong>{{ orderNumber }}</strong>
+          </span>
           您的訂單已成功完成！<br/>
           我們將盡快為您準備並安排配送，<br/>
           期待能為您提供一份令人滿意的體驗。
+          <br/>
+
         </p>
       </div>
       <div class="button-container">
@@ -41,11 +46,26 @@ import Orders from '@/components/Orders.vue'
 import PageTop from '@/components/PageTop.vue'
 
 export default defineComponent({
+  name: 'CartCheckSuc',
   components: { PageTop, Orders, BannerTop },
+  data() {
+    return {
+      // 從路由參數中get訂單編號
+      orderNumber: this.$route.query.orderNumber || '未知',
+    }
+  },
+  mounted() {},
 })
 </script>
 
 <style scoped>
+.order-number-highlight {
+  font-size: 1.5rem; /* 字号增大 */
+  font-weight: bold; /* 加粗 */
+  margin: 20px 0; /* 上下增加间距 */
+  display: block; /* 设置为块级元素，便于控制间距 */
+}
+
 .step-indicator {
   display: flex;
   justify-content: center;
@@ -119,6 +139,7 @@ export default defineComponent({
   font-size: 1.25rem;
   padding: 12px 30px;
 }
+
 .button-container {
   display: flex;
   justify-content: center;
@@ -126,5 +147,4 @@ export default defineComponent({
   margin-top: 2rem;
   margin-bottom: 5rem;
 }
-
 </style>

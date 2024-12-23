@@ -87,6 +87,7 @@ const { modalRef, showModal, hideModal } = useModal()
 import { defineProps } from 'vue'
 import { utils } from '@/mixins/utils'
 const { formatDate, getStatusDisplay } = utils()
+
 const props = defineProps({
   campaign: {
     type: Object,

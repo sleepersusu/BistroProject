@@ -303,6 +303,7 @@
                 </legend>
                 <p style="display: none" id="shipId"></p>
                 <p style="display: none" id="isSend"></p>
+                <p style="display: none" id="winnerId"></p>
 
                 <div class="question">
                   <span class="title">姓名:</span>
@@ -335,7 +336,7 @@
                   type="button"
                   id="save"
                   class="formbutton"
-                  onclick="sendEmail()"
+                  onclick="send()"
                 >
                   <div
                     class="loading-spinner"
@@ -385,12 +386,12 @@
         }
       };
 
-      const sendEmail = async () => {
+      const send = async () => {
         const spinner = document.getElementById("emailSpinner");
         try {
           const id = document.getElementById("shipId").innerHTML;
+          const winnerId = document.getElementById("winnerId").innerHTML;
           const isSend = document.getElementById("isSend").innerHTML;
-          const api = `http://localhost:8085/api/shippingDetails/${id}/ship`;
 
           if (isSend === "true") {
             alert("你已經發送過了");
@@ -403,23 +404,30 @@
           }
 
           spinner.style.display = "inline-block";
-          const response = await fetch(api, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (response.ok) {
+
+          const [shipResponse, lineResponse] = await Promise.all([
+            fetch(`http://localhost:8085/api/shippingDetails/${id}/ship`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+            }),
+            fetch(`http://localhost:8085/line/send-message/${winnerId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+            }),
+          ]);
+
+          if (shipResponse.ok && lineResponse.ok) {
             alert("已通知得獎者");
             document.getElementById("isSend").innerHTML = "true";
           } else {
-            throw new Error(`寄送失敗: ${response.status}`);
+            throw new Error("寄送失敗");
           }
-        } catch (error) {
-          console.error("寄送郵件時發生錯誤:", error);
+        } catch (e) {
+          console.error("寄送時發生錯誤:", e);
           alert("寄送失敗，請稍後再試");
         } finally {
           spinner.style.display = "none";
+          document.getElementById("addEventModal2").style.display = "none";
         }
       };
 
@@ -433,6 +441,7 @@
 
       async function openEditModal(winnerId) {
         document.getElementById("addEventModal2").style.display = "block";
+        document.getElementById("winnerId").innerHTML = winnerId;
         const api = `http://localhost:8085/api/shippingDetails/${winnerId}`;
         const jsonData = await fetch(api);
         if (!jsonData.ok) {

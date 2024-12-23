@@ -1,6 +1,7 @@
 package com.example.bistro.ECPayDemo.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.example.bistro.ECPayDemo.service.OrderService;
+import com.example.bistro.backstage.orders.Orders;
+import com.example.bistro.backstage.orders.OrdersService;
 import com.example.bistro.ecpay.payment.integration.domain.AioCheckOutALL;
 
 
@@ -30,6 +33,9 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
+    
+    @Autowired
+    OrdersService ordersService;
 
     private static String paymentStatus;
 
@@ -78,9 +84,9 @@ public class OrderController {
         //進的去得
         System.out.println("=== 進入 payment-result ===");
         System.out.println("當前 paymentStatus: " + paymentStatus);
-
-
-        response.sendRedirect("http://localhost:5173/cartCheckSuc");
+        List<Orders> allOrders = ordersService.findAllOrders();
+        Orders orders = allOrders.get(allOrders.size() - 1);
+        response.sendRedirect("http://localhost:5173/cartCheckSuc?orderNumber=" + orders.getOrdersNumber());
     }
 
     @RequestMapping(value = {"/ecpay/callback", "/payment-result"}, method = RequestMethod.OPTIONS)

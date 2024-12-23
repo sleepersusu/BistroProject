@@ -68,10 +68,6 @@ const router = createRouter({
           component: () => import('../views/Cart.vue'),
         },
         {
-          path: '/order',
-          component: () => import('../views/Order.vue'),
-        },
-        {
           path: '/memberPoints',
           component: () => import('../views/MemberPoints.vue'),
         },
@@ -90,6 +86,10 @@ const router = createRouter({
         {
           path: '/cartCheckFail',
           component: () => import('../views/CartCheckFail.vue'),
+        },
+        {
+          path: '/reset-password/:email',
+          component: () => import('../views/ResetPassword.vue'),
         },
       ],
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row bg-primary">
-      <div class="col-md-4 overflow-hidden">
+      <div class="col-lg-4 overflow-hidden d-lg-block d-none">
         <img
           src="/images/wine.png"
           data-aos="fade-right"
@@ -10,15 +10,15 @@
         />
       </div>
       <div
-        class="col-md-4 my-5 text-center text-accent center-content"
+        class="col-lg-4 my-5 text-center text-accent center-content"
         data-aos="fade-up"
         data-aos-duration="2000"
         data-aos-delay="1500"
       >
         <div data-aos="fade-up" data-aos-duration="2300" data-aos-delay="2200">
           <h1 class="display-2 mb-4 title">品味驚喜</h1>
-          <h3 class="mb-3">2024 週年慶抽獎</h3>
-          <p class="lead">消費滿1000元 即可獲得抽獎機會</p>
+          <h3 class="mb-3">新年微醺 轉運夜語</h3>
+          <p class="lead">每消費 1,500 元可獲得一次神秘九宮格抽獎。</p>
         </div>
 
         <div class="mb-5">
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 position-relative overflow-hidden">
+      <div class="col-lg-4 position-relative overflow-hidden d-lg-block d-none">
         <div class="position-absolute end-0">
           <img
             src="/images/wine2.jpg"

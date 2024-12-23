@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
+import com.example.bistro.backstage.line.LineMember;
+import com.example.bistro.backstage.line.LineMemberRepository;
+import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.model.PushMessage;
+import com.linecorp.bot.model.message.TextMessage;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,6 +33,12 @@ public class CampaignController {
 
 	@Autowired
 	CampaignService campaignService;
+	
+	@Autowired
+	LineMemberRepository lineMemberRepo;
+	
+	 @Autowired
+	LineMessagingClient lineMessagingClient;
 	
 	@GetMapping("/Bistro/campaign/findAll")
 	public String getMethodName(Model model) {
@@ -55,7 +66,8 @@ public class CampaignController {
 							@RequestParam Integer minOrderAmount,
 							@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @RequestParam Date startDate,
 							@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @RequestParam Date endDate,
-							@RequestParam String note) throws IOException {
+							@RequestParam String note,
+							@RequestParam(defaultValue = "false") boolean sendNotification) throws IOException {
 		Campaign campaign = new Campaign();
 		campaign.setCampaignTitle(campaignTitle);
 		campaign.setCampaignImg(campaignImg.getBytes());
@@ -66,7 +78,14 @@ public class CampaignController {
 		campaign.setEndDate(endDate);
 		campaign.setNote(note);
 		
-		campaignService.insertCampaign(campaign);
+		Campaign savedCampaign = campaignService.insertCampaign(campaign);
+		if (sendNotification) {
+            try {
+                sendMessage(savedCampaign);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 		
 		return "redirect:/Bistro/campaign/findAll";
 	}
@@ -127,6 +146,43 @@ public class CampaignController {
 		campaignService.deleteCampaignById(id);
 		return "redirect:/Bistro/campaign/findAll";
 	}
+	
+	 private void sendMessage(Campaign campaign) {
+	        String message = String.format(
+	            "🎉 新活動通知 🎉\n\n" +
+	            "【%s】\n\n" +
+	            "📅 活動期間：\n%s ~ %s\n\n" +
+	            "✨ 活動內容：\n%s\n\n" +
+	            "💰 消費門檻：%d元\n\n" +
+	            "%s\n\n" + 
+	            "更多詳情請至官網查看\n" +
+	            "http://localhost:5173/campaign\n\n" +
+	            "酌夜語 敬上",
+	            campaign.getCampaignTitle(),
+	            formatDate(campaign.getStartDate()),
+	            formatDate(campaign.getEndDate()),
+	            campaign.getCampaignDescription(),
+	            campaign.getMinOrderAmount(),
+	            campaign.getNote()
+	        );
+
+	        List<LineMember> allLineMember = lineMemberRepo.findAll();
+	        
+	        for (LineMember member : allLineMember) {
+	            try {
+	                TextMessage textMessage = new TextMessage(message);
+	                PushMessage pushMessage = new PushMessage(member.getLineUserId(), textMessage);
+	                lineMessagingClient.pushMessage(pushMessage).get();
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+
+	    private String formatDate(Date date) {
+	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+	        return sdf.format(date);
+	    }
 	
 	
 	

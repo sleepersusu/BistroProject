@@ -5,91 +5,46 @@
       padding-left: 50px;
       padding-right: 50px;
     ">
-    <div class="row g-4 align-items-center justify-content-center">
-      <div class="col-lg-5 col-md-12" style="
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          margin-left: 50px;
-          margin-right: 25px;
-        ">
-        <div id="googlemap" class="mb-4" style="width: 90%; height: 350px;margin-left: 35px;">   <!--要調找架構 寬度 margin要改 -->
+    <div class="row g-4 justify-content-center d-flex align-items-center" style="min-height: 100vh">
+      <div class="col-lg-7 col-md-12">
+        <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw"
-            class="w-100 h-100" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
+            v-if="isMapVisible" class="w-100 h-100" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"
+            style="width: 100%; height: 100%"></iframe>
         </div>
-        <div id="inform" class="col-12" style="background-color: transparent; padding: 20px;">
-  <div class="row g-4 d-flex justify-content-center" style="gap: 30px;">
-    <div class="col-lg-5 col-md-12 mb-3" style="
-        background-color: white;
-        border-radius: 3px;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        position: relative;
-        
-      ">
-      <div class="phone text-black d-flex align-items-center w-100  ">
-        <div style="
-            background-color: #20c997;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            
-          ">
-          <font-awesome-icon :icon="['fas', 'phone']" style="color: white; font-size: 27px;"></font-awesome-icon>
+        <div id="inform" class="container py-4" style="background-color: transparent">
+          <div class="row g-4 justify-content-center">
+            <div class="col-lg-5 col-md-6 col-12">
+              <div class="card text-center p-4 position-relative">
+                <div
+                  class="position-absolute top-0 start-50 translate-middle bg-black text-white rounded-circle d-flex justify-content-center align-items-center"
+                  style="width: 60px; height: 60px; z-index: 10">
+                  <font-awesome-icon :icon="['fas', 'phone']" style="font-size: 27px"></font-awesome-icon>
+                </div>
+                <div class="mt-3">
+                  <h5 class="fw-bold">Phone Numbers</h5>
+                  <p>07-656-8106</p>
+                  <p>07-716-9502</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5 col-md-6 col-12">
+              <div class="card text-center p-4 position-relative">
+                <div
+                  class="position-absolute top-0 start-50 translate-middle bg-black text-white rounded-circle d-flex justify-content-center align-items-center"
+                  style="width: 60px; height: 60px; z-index: 10">
+                  <font-awesome-icon :icon="['far', 'envelope']" style="font-size: 27px"></font-awesome-icon>
+                </div>
+                <div class="mt-3">
+                  <h5 class="fw-bold">Emails</h5>
+                  <p>NightSips1223@gmail.com</p>
+                  <p>aiz777vic@gmail.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div style="padding-top: 40px; text-align: center;margin-left: 50px;">
-          <h5 class="fw-bold">Phone Numbers</h5>
-          <p>07-656-8106</p>
-          <p>07-716-9502</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-5 col-md-12 mb-3" style="
-        background-color: white;
-        border-radius: 3px;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        position: relative;
-      ">
-      <div class="message text-black d-flex align-items-center w-100">
-        <div style="
-            background-color: #20c997;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-          ">
-          <font-awesome-icon :icon="['far', 'envelope']" style="color: white; font-size: 27px;"></font-awesome-icon>
-        </div>
-        <div style="padding-top: 40px;margin-left: 30px;">
-          <h5 class="fw-bold" style="text-align: center;">Emails</h5>
-          <p>rest557@company.company</p>
-          <p>aiz777vic@company.com</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
       </div>
       <div id="app" class="col-lg-4 col-md-12" style="
           background-color: white;
@@ -97,14 +52,11 @@
           border-radius: 10px;
           box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
           color: black;
-          margin-left: 25px;
-          margin-right: 50px;
-          width: 30%;
         ">
-        <div class="mb-4 text-center" >
+        <div class="mb-4 text-center">
           <h4 class="fw-bold">訂位資訊</h4>
         </div>
-        <form @submit.prevent="submitReservation" >
+        <form @submit.prevent="submitReservation">
           <div class="mb-3">
             <label for="customerName" class="form-label">訂位人姓名</label>
             <input type="text" class="form-control frame" id="customerName" v-model="reservations.customerName"
@@ -139,6 +91,10 @@
                 <option value="2">2位</option>
                 <option value="3">3位</option>
                 <option value="4">4位</option>
+                <option value="5">5位</option>
+                <option value="6">6位</option>
+                <option value="7">7位</option>
+                <option value="8">8位</option>
               </select>
             </div>
             <div class="col-md-6">
@@ -151,24 +107,21 @@
             <label class="form-label">時段</label>
             <div>
               <button v-for="time in availableTimeslots" :key="time" :class="{
-                'btn-outline-success': selectedTime !== time,
-                'btn-success': selectedTime === time,
-              }"
-              :style="{
-              color: selectedTime === time ? '#fff' : '',
-            }"
-              class="btn btn-outline-success w-100 me-2 mb-2" @click="handleClick(time, $event)">
+                'btn-outline-black': selectedTime !== time,
+                'btn-black': selectedTime === time,
+              }" :style="{ color: selectedTime === time ? '#fff' : '' }" class="btn btn-black w-100 me-2 mb-2"
+                @click="handleClick(time, $event)">
                 {{ time }}
               </button>
             </div>
-            <input type="text" v-model="reservations.startTime" />
+            <input type="hidden" v-model="reservations.startTime" />
           </div>
           <div class="mb-3">
             <label for="notes" class="form-label">備註</label>
             <textarea class="form-control frame" id="notes" rows="4" v-model="reservations.notes"></textarea>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-success w-100">確認訂位</button>
+            <button type="submit" class="btn btn-black w-100">確認訂位</button>
           </div>
         </form>
       </div>
@@ -180,6 +133,7 @@
 export default {
   data() {
     return {
+      isMapVisible: false,
       reservations: {
         customerName: '',
         customerGender: '',
@@ -201,6 +155,10 @@ export default {
         title: '新增訂位成功!',
         icon: 'success',
         confirmButtonText: '確定',
+        confirmButtonColor: '#000000',
+        customClass: {
+          confirmButton: 'custom-button'
+        }
       })
     },
     handleClick(time, event) {
@@ -220,7 +178,6 @@ export default {
       const day = String(d.getDate()).padStart(2, '0')
       return `${year}-${month}-${day}`
     },
-
     async displayTimes() {
       if (this.reservations.numberPeople === 0 || !this.reservations.reservationDate) {
         this.availableTimeslots = []
@@ -232,7 +189,6 @@ export default {
           reservationDate: this.reservations.reservationDate,
           numberPeople: this.reservations.numberPeople,
         })
-
         if (res.data.success) {
           this.availableTimeslots = res.data.availableTimeslots || []
         } else {
@@ -258,20 +214,34 @@ export default {
         alert('請填寫所有必填欄位！')
         return
       }
-
       try {
         const api = `${import.meta.env.VITE_API}/api/Bistro/insert`
         const response = await this.axios.post(api, this.reservations)
         if (response.data.success) {
-          this.showSuccess()
-          this.reservations = {
-            customerName: '',
-            customerGender: '',
-            contactPhone: '',
-            reservationDate: new Date().toISOString().split('T')[0],
-            startTime: '',
-            numberPeople: 0,
-            notes: '',
+          //發送簡訊要取得的資料
+          const confirmationApi = `${import.meta.env.VITE_API}/api/Bistro/send`
+          const reservationData = {
+            contactPhone: this.reservations.contactPhone,
+            reservationDate: this.reservations.reservationDate,
+            startTime: this.reservations.startTime,
+            numberPeople: this.reservations.numberPeople,
+          }
+          const smsResponse = await this.axios.post(confirmationApi, reservationData)
+          if (smsResponse.data.success) {
+            this.showSuccess()
+            this.reservations = {
+              customerName: '',
+              customerGender: '',
+              contactPhone: '',
+              reservationDate: new Date().toISOString().split('T')[0],
+              startTime: '',
+              numberPeople: 0,
+              notes: '',
+            }
+            this.selectedTime = ''
+          } else {
+            const errorMessage = smsResponse.data.message || '訂位確認簡訊發送失敗，請稍後再試。'
+            alert(`錯誤: ${errorMessage}`)
           }
         } else {
           const errorMessage = response.data.message || '訂位失敗，請稍後再試。'
@@ -289,6 +259,9 @@ export default {
     },
   },
   mounted() {
+    this.$nextTick(() => {
+      this.isMapVisible = true;
+    });
     const today = new Date()
     this.minDate = today.toISOString().split('T')[0]
     const max = new Date()
@@ -310,4 +283,41 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.btn-black {
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+}
+
+.btn-outline-black {
+  background-color: white;
+  color: black;
+
+}
+
+.btn-black:hover {
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+
+.custom-button {
+  color: white;
+}
+
+@media (min-width: 992px) {
+  #googlemap iframe {
+    max-width: calc(100% - 250px);
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+}
+
+/* 手機版樣式 */
+@media (max-width: 991px) {
+  #googlemap iframe {
+    max-width: 100%;
+  }
+}
+</style>

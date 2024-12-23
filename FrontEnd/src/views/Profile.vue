@@ -2,16 +2,11 @@
   <div>
     <BannerTop v-bind:title="'About Us'"></BannerTop>
   </div>
-  <!-- About Start -->
   <div class="container-xxl py-5">
     <div class="container">
       <div class="row g-5 align-items-end">
         <div class="col-lg-3 col-md-5">
-          <img
-            class="img-fluid rounded"
-            data-wow-delay="0.1s"
-            src="/public/images/DSC_0450-1.jpg"
-          />
+          <img class="img-fluid rounded" data-wow-delay="0.1s" src="/public/images/aboutus.jpg" />
         </div>
         <div class="col-lg-6 col-md-7">
           <h1 class="display-1 text-primary mb-0" style="font-weight: bold; font-size: 8rem">10</h1>
@@ -98,13 +93,13 @@
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-              ><i class="bi bi-github fs-4"></i
+                ><i class="bi bi-github fs-4"></i
               ></a>
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-              ><i class="bi bi-linkedin fs-4"></i
+                ><i class="bi bi-linkedin fs-4"></i
               ></a>
             </div>
           </div>
@@ -120,35 +115,13 @@
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-              ><i class="bi bi-github fs-4"></i
+                ><i class="bi bi-github fs-4"></i
               ></a>
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-              ><i class="bi bi-linkedin fs-4"></i
-              ></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-          <div class="team-item rounded p-4">
-            <img class="img-fluid rounded mb-4" src="..." alt="" />
-            <h5>Jack Dawson</h5>
-            <p class="text-primary">Member</p>
-            <div class="d-flex justify-content-center pt-1">
-              <a
-                class="btn btn-square btn-outline-primary rounded-circle mx-1"
-                target="_blank"
-                href="https://www.facebook.com/"
-              ><i class="bi bi-github fs-4"></i
-              ></a>
-              <a
-                class="btn btn-square btn-outline-primary rounded-circle mx-1"
-                target="_blank"
-                href="https://www.facebook.com/"
-              ><i class="bi bi-linkedin fs-4"></i
+                ><i class="bi bi-linkedin fs-4"></i
               ></a>
             </div>
           </div>
@@ -164,35 +137,13 @@
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-              ><i class="bi bi-github fs-4"></i
+                ><i class="bi bi-github fs-4"></i
               ></a>
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-              ><i class="bi bi-linkedin fs-4"></i
-              ></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-          <div class="team-item rounded p-4">
-            <img class="img-fluid rounded mb-4" src="..." alt="" />
-            <h5>Jack Dawson</h5>
-            <p class="text-primary">Member</p>
-            <div class="d-flex justify-content-center pt-1">
-              <a
-                class="btn btn-square btn-outline-primary rounded-circle mx-1"
-                target="_blank"
-                href="https://www.facebook.com/"
-              ><i class="bi bi-github fs-4"></i
-              ></a>
-              <a
-                class="btn btn-square btn-outline-primary rounded-circle mx-1"
-                target="_blank"
-                href="https://www.facebook.com/"
-              ><i class="bi bi-linkedin fs-4"></i
+                ><i class="bi bi-linkedin fs-4"></i
               ></a>
             </div>
           </div>
@@ -208,13 +159,57 @@
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-              ><i class="bi bi-github fs-4"></i
+                ><i class="bi bi-github fs-4"></i
               ></a>
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
                 target="_blank"
                 href="https://www.facebook.com/"
-              ><i class="bi bi-linkedin fs-4"></i
+                ><i class="bi bi-linkedin fs-4"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+          <div class="team-item rounded p-4">
+            <img class="img-fluid rounded mb-4" src="..." alt="" />
+            <h5>Jack Dawson</h5>
+            <p class="text-primary">Member</p>
+            <div class="d-flex justify-content-center pt-1">
+              <a
+                class="btn btn-square btn-outline-primary rounded-circle mx-1"
+                target="_blank"
+                href="https://www.facebook.com/"
+                ><i class="bi bi-github fs-4"></i
+              ></a>
+              <a
+                class="btn btn-square btn-outline-primary rounded-circle mx-1"
+                target="_blank"
+                href="https://www.facebook.com/"
+                ><i class="bi bi-linkedin fs-4"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+          <div class="team-item rounded p-4">
+            <img class="img-fluid rounded mb-4" src="..." alt="" />
+            <h5>Jack Dawson</h5>
+            <p class="text-primary">Member</p>
+            <div class="d-flex justify-content-center pt-1">
+              <a
+                class="btn btn-square btn-outline-primary rounded-circle mx-1"
+                target="_blank"
+                href="https://www.facebook.com/"
+                ><i class="bi bi-github fs-4"></i
+              ></a>
+              <a
+                class="btn btn-square btn-outline-primary rounded-circle mx-1"
+                target="_blank"
+                href="https://www.facebook.com/"
+                ><i class="bi bi-linkedin fs-4"></i
               ></a>
             </div>
           </div>

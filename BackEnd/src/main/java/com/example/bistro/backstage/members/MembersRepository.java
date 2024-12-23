@@ -3,6 +3,8 @@ package com.example.bistro.backstage.members;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
 
 public interface MembersRepository extends JpaRepository<Members, Integer> {
 
@@ -11,6 +13,8 @@ public interface MembersRepository extends JpaRepository<Members, Integer> {
 
     // 根據會員電話查詢
     Optional<Members> findByMemberPhone(String memberPhone);
+    
+    Optional<Members> findByMemberEmail(String memberEmail);
 
     //根據資料查詢會員姓名和電話查詢
     Optional<Members> findByMemberNameAndMemberPhone(String memberName, String memberPhone);

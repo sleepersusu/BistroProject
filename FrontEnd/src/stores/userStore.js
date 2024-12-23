@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { pointStore } from './pointStore'
+import { lotteryStore } from './lotteryStore'
+import {cartStore} from '@/stores/cartStore.js'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -9,7 +11,7 @@ export const useUserStore = defineStore('userStore', {
     memberprofile: {},
   }),
   actions: {
-    setLoggedIn() {
+    async setLoggedIn() {
       let memberobj = localStorage.getItem('memberobj')
       this.isLoggedIn = true // 設置登入
       this.memberprofile.username = JSON.parse(memberobj).username
@@ -32,6 +34,9 @@ export const useUserStore = defineStore('userStore', {
       this.memberprofile = {}
       const point = pointStore()
       point.getMemberPoint()
+      //get cart again
+      const cart =cartStore()
+      cart.getCart()
     },
     async submitLogin(event) {
       try {
@@ -79,9 +84,10 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.username = username
         this.memberprofile.userAvatar = userAvatar
         this.memberprofile.userpoint = userpoint
-
         const point = pointStore()
-      point.getMemberPoint()
+        point.getMemberPoint()
+        const lottery = lotteryStore()
+        lottery.getAllChanceByMember()
       } catch (error) {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)
