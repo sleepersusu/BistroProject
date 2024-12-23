@@ -27,7 +27,7 @@ import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { Notifications } from '@kyvg/vue3-notification'
 import velocity from 'velocity-animate'
 
-library.add(faUserSecret, fas, faEnvelope)
+library.add(faUserSecret,fas,faEnvelope)
 
 axios.defaults.baseURL = import.meta.env.VITE_API
 axios.defaults.withCredentials = true

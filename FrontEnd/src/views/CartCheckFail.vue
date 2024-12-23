@@ -1,5 +1,4 @@
 <template>
-
   <div class="text-center mt-5">
     <i class="bi bi-x-circle-fill" style="font-size: 5rem"></i>
   </div>
@@ -26,7 +25,7 @@
         </p>
       </div>
       <br />
-      <a href="#" class="btn btn-primary cta-btn mt-5 mb-5">Back to Cart</a>
+      <a @click="goBackToCart" class="btn btn-primary cta-btn mt-5 mb-5">Back to Cart</a>
     </div>
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
   </section>
@@ -38,7 +37,15 @@ import PageTop from '@/components/PageTop.vue'
 
 export default defineComponent({
   components: { PageTop, BannerTop },
-})
+  mounted() {
+
+  },
+  methods: {
+    goBackToCart() {
+      this.$router.push('/cart');
+    },
+  },
+});
 </script>
 <style scoped>
 .step-indicator {

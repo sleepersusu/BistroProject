@@ -222,4 +222,6 @@ public class CartService {
             public void clearCartByMemberId(Integer memberId) {
                 cartRepository.deleteCartItemsByMemberId(memberId);
             }
+
+
 }

@@ -45,46 +45,157 @@ public class ReservationsFrontstageService {
 		return ReservationsRepo.save(reservations);
 	}
 
+	// 找到訂位日期時間每一筆 可以用get取出每一筆人數 調用JPA
 	public List<Reservations> findCount(Date reservationDate, String startTime) throws ParseException {
 
 		return ReservationsRepo.findByReservationDateAndStartTime(reservationDate, startTime);
 	}
 
+	// 調用JPA取得各類桌子總數
 	public int findSeatTypeCount(int id, String type) {
 		return SeatsCountRepo.findBySeatsTimeIdAndSeatType(id, type);
 	}
 
-	public int getReservedCount(Date reservationDate, String time) throws ParseException {
-		List<Reservations> reservationsList = findCount(reservationDate, time);
-		int count = 0;
-		for (Reservations reservation : reservationsList) {
-			count += reservation.getNumberPeople(); 
+	// 計算占用的桌類  
+	private Integer[] OccupyTable(Date reservationDate, String startTime) throws ParseException {
+
+		List<Reservations> reservationList = findCount(reservationDate, startTime);
+
+		Integer[] occupiedTables = { 0, 0, 0 };  // 初始化為 0
+
+		for (Reservations reservation : reservationList) {
+			int numberPeople = reservation.getNumberPeople();
+			allocate(occupiedTables, numberPeople); // 再調用方法 根據人數分配桌型
 		}
-		return count;
+		return occupiedTables;
 	}
 
-	public List<String> getAvailableTimeSlots(Date reservationDate, int numberPeople) throws ParseException {
-		int count1800 = getReservedCount(reservationDate, "18:00");
-		int count2000 = getReservedCount(reservationDate, "20:00");
-		int count2200 = getReservedCount(reservationDate, "22:00");
+	// 分配桌型計算該給哪種桌類
+	private void allocate(Integer[] occupiedTables, int numberPeople) {
+		// occupiedTables: [0]: 1人桌, [1]: 2人桌, [2]: 4人桌
+
+		// 初始化
+		if (occupiedTables[0] == null)
+			occupiedTables[0] = 0;
+		if (occupiedTables[1] == null)
+			occupiedTables[1] = 0;
+		if (occupiedTables[2] == null)
+			occupiedTables[2] = 0;
+
+		if (numberPeople <= 0)
+			return;
+
+		if (numberPeople > 6) {
+			occupiedTables[2] += 2;
+		} else if (numberPeople > 4) {
+			// 5-6人的情況  暫定一個4人桌和一個2人桌
+			occupiedTables[2] += 1;
+			occupiedTables[1] += 1;
+		} else if (numberPeople > 2) {
+			occupiedTables[2] += 1;
+		} else if (numberPeople == 2) {
+			occupiedTables[1] += 1;
+		} else {
+			occupiedTables[0] += 1;
+		}
+	}
+
+	// 用于判断是否可以在某个时段预定
+	private boolean canReserve(int fourSeat, int twoSeat, int oneSeat, int numberPeople) {
+
+		if (numberPeople <= 0 || numberPeople > 8) {
+			return false;
+		}
+
+		// 複製可用座位數，避免修改原始值
+		int availableFourSeat = fourSeat;
+		int availableTwoSeat = twoSeat;
+		int availableOneSeat = oneSeat;
+
+		// 針對不同人數進行檢查
+		if (numberPeople > 6) {
+			if (availableFourSeat >= 2) {
+				return true;
+			}
+		} else if (numberPeople > 4) {
+			// 5-6人 目前暫定一個4人桌加一個2人桌
+			if (availableFourSeat >= 1 && availableTwoSeat >= 1) {
+				return true;
+			}
+			// 也可以分配4人桌
+			if (availableFourSeat >= 2) {
+				return true;
+			}
+		} else if (numberPeople > 2) {
+			if (availableFourSeat >= 1) {
+				return true;
+			}
+			// 或者使用兩個2人桌
+			if (availableTwoSeat >= 2) {
+				return true;
+			}
+		} else if (numberPeople == 2) {
+			if (availableTwoSeat >= 1 || availableFourSeat >= 1) {
+				return true;
+			}
+			if (availableOneSeat >= 2) {
+				return true;
+			}
+		} else {
+			if (availableOneSeat >= 1 || availableTwoSeat >= 1 || availableFourSeat >= 1) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	// 取得日期人數 返回可以 選擇的時段
+	public List<String> getAvailableTimeSlots(Date reservationDate, int numberPeople) {
+		if (numberPeople <= 0 || numberPeople > 8) {
+			return new ArrayList<>(); // 人數超出範圍，返回空列表
+		}
 
 		int oneSeat = findSeatTypeCount(1, "1人桌");
 		int twoSeat = findSeatTypeCount(1, "2人桌");
 		int fourSeat = findSeatTypeCount(1, "4人桌");
-		int maxCapacity = oneSeat + twoSeat * 2 + fourSeat * 4;
 
+		String[] timeSlots = { "18:00", "20:00", "22:00" };
 		List<String> availableTimeslots = new ArrayList<>();
 
-		if ((maxCapacity - count1800) >= numberPeople) {
-			availableTimeslots.add("18:00");
-		}
-		if ((maxCapacity - count2000) >= numberPeople) {
-			availableTimeslots.add("20:00");
-		}
-		if ((maxCapacity - count2200) >= numberPeople) {
-			availableTimeslots.add("22:00");
+		for (String time : timeSlots) {
+			try {
+				if (isTimeSlotAvailable(reservationDate, time, oneSeat, twoSeat, fourSeat, numberPeople)) {
+					availableTimeslots.add(time);
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return availableTimeslots;
 	}
+
+	private boolean isTimeSlotAvailable(Date reservationDate, String time, int oneSeat, int twoSeat, int fourSeat,
+			int numberPeople) throws ParseException {
+		Integer[] occupied = safeOccupyTable(reservationDate, time);
+		int availableOneSeat = getAvailableSeats(oneSeat, occupied[0]);
+		int availableTwoSeat = getAvailableSeats(twoSeat, occupied[1]);
+		int availableFourSeat = getAvailableSeats(fourSeat, occupied[2]);
+		return canReserve(availableFourSeat, availableTwoSeat, availableOneSeat, numberPeople);
+	}
+	// 這裡計算總座位減去占用座位
+	private int getAvailableSeats(int totalSeats, Integer occupiedSeats) {
+		return Math.max(0, totalSeats - (occupiedSeats != null ? occupiedSeats : 0));
+	}
+
+	private Integer[] safeOccupyTable(Date reservationDate, String time) {
+		try {
+			return OccupyTable(reservationDate, time);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return new Integer[] { 0, 0, 0 }; 
+		}
+	}
+
 }

@@ -14,5 +14,4 @@ public interface PointsGetRepository extends JpaRepository<PointsGetBean, Intege
 	        + "join Members on Orders.memberId = Members.ID", nativeQuery = true)
 	List<Object[]> findMembersAllPointGet();
 	
-	
 }

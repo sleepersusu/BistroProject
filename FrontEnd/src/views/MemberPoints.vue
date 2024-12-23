@@ -1,42 +1,70 @@
 <template>
   <div>
-    <BannerTop :title="'PointShop'"></BannerTop>
+    <div>
+      <BannerTop v-bind:title="'Point Shop'"></BannerTop>
+    </div>
+    <!-- 登入顯示區塊 -->
 
-    <div class="container d-flex my-5">
-      <ul class="d-flex flex-wrap">
-        <li v-for="prize in pointPrizes" :key="prize.id" class="d-flex flex-column" style="width: 18rem; margin: 10px">
-          <div
-            v-if="prize.rewardsStatus == '上架中'"
-            class="card" style="height: 490px; position: relative" >
-            <!-- 動態綁定圖片的 Base64 編碼 -->
+    <!-- 未登入提示 -->
+    <div v-if="!user.memberId" class="d-flex justify-content-center align-items-center flex-column my-5">
+      <i class="bi bi-person-exclamation display-1 mb-3"></i>
+      <h3 class="mb-4">尚未登入會員</h3>
+    </div>
+
+
+    <!-- 點數顯示區塊 -->
+    <div class="container text-center my-4">
+      <div class="points-display">
+        <span class="points-text">目前總共有</span>
+        <span class="points-number">{{ memberPointTotal }}</span>
+        <span class="points-text">點</span>
+      </div>
+    </div>
+
+    <!-- 商品卡片區塊 -->
+    <div class="container my-5">
+      <ul class="prize-list">
+        <li
+          v-for="prize in pointPrizes"
+          :key="prize.id"
+          class="prize-item"
+          :class="{ 'insufficient-points': memberPointTotal < prize.pointPrizesPoints }"
+        >
+          <div v-if="prize.rewardsStatus == '上架中'" class="card">
             <img
               :src="'data:image/jpeg;base64,' + prize.base64Image"
-              class="card-img-top w-100"
+              class="card-img-top"
               alt="Prize Image"
-              style="height: 300px; object-fit: cover"
             />
-            <div class="card-body" style="overflow-y: auto; height: calc(100% - 300px)">
-              <div class="d-flex justify-content-between">
-                <h5 class="card-title">{{ prize.pointPrizesName }}</h5>
-                <h5 class="card-text" style="color: red">{{ prize.pointPrizesPoints }} 點</h5>
+            <div class="card-body">
+              <div class="prize-header">
+                <h5 class="prize-title">{{ prize.pointPrizesName }}</h5>
+                <h5 class="prize-points">{{ prize.pointPrizesPoints }} 點</h5>
               </div>
-              <p class="card-text">{{ prize.pointPrizesDescription }}</p>
-              <a
-                href="#"
-                class="btn btn-primary mt-auto"
-                style="position: absolute; bottom: 16px"
-                @click="redeemPrize(prize)">兌換商品
-              </a>
+              <p class="prize-description">{{ prize.pointPrizesDescription }}</p>
+              <div class="prize-footer">
+                <button
+                  class="btn"
+                  :class="
+                    memberPointTotal >= prize.pointPrizesPoints && prize.pointPrizesCount > 0
+                      ? 'btn-primary'
+                      : 'btn-secondary'
+                  "
+                  @click="redeemPrize(prize)"
+                  :disabled="
+                    memberPointTotal < prize.pointPrizesPoints || prize.pointPrizesCount === 0
+                  "
+                >
+                  {{ memberPointTotal >= prize.pointPrizesPoints ? '兌換商品' : '點數不足' }}
+                </button>
+                <span class="remaining-count">剩餘 {{ prize.pointPrizesCount }} 份</span>
+              </div>
             </div>
           </div>
         </li>
       </ul>
     </div>
-
-    <PointTotal :redeemed-prize="redeemedPrize" :memberId="memberId" ref="pointTotal" />
   </div>
-
-  <login ref="loginModal"></login>
 </template>
 
 <script>
@@ -44,6 +72,8 @@ import BannerTop from '@/components/BannerTop.vue'
 import PointTotal from '@/components/PointTotal.vue'
 import { useUserStore } from '@/stores/userStore'
 import login from '@/components/login.vue'
+import { pointStore } from '@/stores/pointStore'
+import { mapActions,mapState } from 'pinia'
 
 const user = useUserStore()
 
@@ -61,6 +91,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(pointStore,['getMemberPoint']),
     generateRandomCode() {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       let result = ''
@@ -70,145 +101,239 @@ export default {
       }
       return result
     },
-    openLoginModal() {
-      this.$refs.loginModal.openLoginModal()
-    },
 
     async getPointPrizes() {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
-
       const response = await this.axios.get(api)
-      // console.log("66666", response)
-      // console.log(localStorage)
-      // console.log(localStorage.memberId)
-
-      const memberId = user.memberId
       this.pointPrizes = response.data
     },
 
     async redeemPrize(prize) {
-      //確定兌換跳出視窗
+      if (prize.pointPrizesCount === 0) {
+        Swal.fire({
+          icon: 'error',
+          title: '商品已售完',
+          text: '很抱歉，此商品已經售完',
+          confirmButtonText: '確定',
+        })
+        return
+      }
+
       const result = await Swal.fire({
         icon: 'question',
         title: `確定要兌換${prize.pointPrizesName}嗎?`,
-        html: `<p>將會扣除 <span style="color: lightblue; font-size: 20px; font-weight: bold;">${prize.pointPrizesPoints}</span> 點，兌換後無法返還</p>`,
+        html: `
+          <p>您目前有 <span style="color: #007bff; font-size: 20px; font-weight: bold;">${this.memberPointTotal}</span> 點</p>
+          <p>將會扣除 <span style="color: #dc3545; font-size: 20px; font-weight: bold;">${prize.pointPrizesPoints}</span> 點</p>
+          <p>兌換後剩餘 <span style="color: #28a745; font-size: 20px; font-weight: bold;">${this.memberPointTotal - prize.pointPrizesPoints}</span> 點</p>
+          <p style="color: #6c757d; font-size: 14px;">兌換後無法返還</p>
+        `,
         showCancelButton: true,
         confirmButtonText: '兌換',
         cancelButtonText: '在想一下',
         reverseButtons: true,
       })
 
-      //if(兌換成功)產生兌換碼
-      if (result.isConfirmed) {
-        const promoCode = this.generateRandomCode()
+      if (!result.isConfirmed) {
+        return
+      }
 
-        // 調用子組件的方法更新優惠碼和商品信息
-        this.redeemedPrize = { name: prize.pointPrizesName, promoCode: promoCode }
+      const promoCode = this.generateRandomCode()
+      const requestData = {
+        memberId: user.memberId,
+        pointPrizesId: prize.id,
+        recordsDate: new Date().toISOString(),
+      }
 
-        const memberId = user.memberId
-        if (memberId) {
-          const requestData = {
-            memberId,
-            pointPrizesId: prize.id, // 商品 ID 來自按下的商品
-            recordsDate: new Date().toISOString(), // 使用當前時間作為兌換日期
-          }
+      const promoData = {
+        memberId: user.memberId,
+        pointPrizesId: prize.id,
+        promoCode,
+      }
 
-          const promoData = {
-            memberId,
-            pointPrizesId: prize.id,
-            promoCode,
-          }
+      try {
+        // 產生兌換紀錄
+        const api = `${import.meta.env.VITE_API}/api/pointRecord`
+        const response = await this.axios.post(api, requestData)
 
-          try {
-            //產生兌換紀錄
-            const api = `${import.meta.env.VITE_API}/api/pointRecord`
-            const response = await this.axios.post(api, requestData)
-            // console.log(response)
+        if (response.data.兌換狀態) {
+          // 執行所有後續操作
+          await Promise.all([
+            // 扣除獎品庫存
+            this.axios.post(`${import.meta.env.VITE_API}/api/MinusOnePrizesCount`, requestData),
+            // 儲存兌換碼
+            this.axios.post(`${import.meta.env.VITE_API}/api/promoCode`, promoData),
+            // 扣除會員點數
+            this.axios.post(`${import.meta.env.VITE_API}/api/minusMemberPoint`, requestData),
+          ])
 
-            //將會員各自的兌換碼存進SQL
-            const promoApi = `${import.meta.env.VITE_API}/api/promoCode`
-            const promoResponse = await fetch(promoApi, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(promoData),
-            })
-
-            //兌換商品後扣除相對應積分
-            const minusPointApi = `${import.meta.env.VITE_API}/api/minusMemberPoint`
-            const minusPointResponse = await this.axios.post(minusPointApi, requestData)
-            console.log(minusPointResponse)
-
-            if (response.data.兌換狀態) {
-              window.Swal.fire({
-                toast: true,
-                // position: 'top-end',
-                icon: 'success',
-                title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
-                html: `兌換碼是 : ${promoCode}<br>可前往會員資訊查看`,
-                timer: 5000,
-                showConfirmButton: false,
-                timerProgressBar: true,
-              })
-
-              // 觸發子組件重新獲取資料的方法
-              this.$refs.pointTotal.getPromoCode()
-
-              const MinusPrizesApi = `${import.meta.env.VITE_API}/api/MinusOnePrizesCount`
-              const MinusPrizesResponse = await fetch(MinusPrizesApi, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData), // 將資料轉換為 JSON 格式發送
-              })
-
-              if (MinusPrizesResponse.ok) {
-                console.log('庫存已減少')
-              } else {
-                console.error(
-                  '庫存減少失敗:',
-                  MinusPrizesResponse.status,
-                  await MinusPrizesResponse.text(),
-                )
-              }
-            } else {
-              console.error('Failed to record point:', response.status)
-            }
-          } catch (error) {
-            console.error('Error sending request:', error)
-          }
-        } else {
-          //if(不是會員)跳轉到登入畫面
           window.Swal.fire({
-            title: '兌換商品需要點數',
-            text: '請先登入會員，才能進行兌換。',
-            icon: 'warning',
-            showCancelButton: true, // 顯示取消按鈕
-            confirmButtonText: '跳轉至登入',
-            cancelButtonText: '取消',
-            reverseButtons: true, // 反轉按鈕的顯示順序
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // this.$router.push({ path: 'Login' })
-              this.openLoginModal()
-            } else {
-              console.log('User canceled the action')
-            }
+            toast: true,
+            icon: 'success',
+            title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
+            html: `兌換碼是 : ${promoCode}<br>可前往會員中心查看`,
+            timer: 5000,
+            showConfirmButton: false,
+            timerProgressBar: true,
           })
+          this.getPointPrizes()
+          this.getMemberPoint()
         }
-      } else {
-        console.log('User canceled redemption')
+      } catch (error) {
+        console.error('兌換處理失敗:', error)
+        Swal.fire({
+          icon: 'error',
+          title: '兌換失敗',
+          text: '請稍後再試',
+          confirmButtonText: '確定',
+        })
       }
     },
   },
-  computed: {},
-  watch: {},
+  watch: {
+
+  },
+  computed: {
+    ...mapState(pointStore,['memberPointTotal']),
+    user() {
+      return user
+    }
+  },
   created() {
     this.getPointPrizes()
+    this.getMemberPoint()
   },
 }
 </script>
 
 <style scoped>
-.card-body::-webkit-scrollbar {
-  display: none;
+.bi {
+  color: #6c757d;
+}
+
+h3 {
+  color: #6c757d;
+  font-weight: normal;
+}
+
+.points-display {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+  border-radius: 15px;
+  display: inline-block;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.points-number {
+  color: #007bff;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 10px;
+}
+
+.points-text {
+  color: #495057;
+  font-size: 18px;
+}
+
+.prize-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  max-width: 1320px; /* 可以根據需要調整 */
+  margin: 0 auto;
+}
+
+.prize-item {
+  width: 100%;
+  transition: transform 0.2s;
+}
+
+.prize-item:hover {
+  transform: translateY(-5px);
+}
+
+.card {
+  height: 490px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: contain;
+  background-color: #f8f9fa; /* 可選：設置背景色，讓留白部分不會太突兀 */
+  padding: 10px; /* 可選：加一點內邊距讓圖片不會貼邊 */
+}
+
+.card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.prize-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.prize-title {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.prize-points {
+  color: #dc3545;
+  margin: 0;
+}
+
+.prize-description {
+  flex-grow: 1;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+.prize-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.remaining-count {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-right: 15px;
+}
+
+.insufficient-points .card {
+  opacity: 0.8;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  cursor: not-allowed;
+}
+
+/* 隱藏滾動條但保持功能 */
+.prize-description::-webkit-scrollbar {
+  width: 0px;
 }
 </style>

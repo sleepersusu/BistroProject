@@ -17,4 +17,8 @@ public class PointGetFrontService {
 		return pointsGetRepo.findMembersAllPointGet();
 	}
 	
+	public String createPointGet(int memberId, int pointGetted) {
+		
+		return null;
+	}
 }

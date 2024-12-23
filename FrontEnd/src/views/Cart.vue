@@ -77,8 +77,35 @@
                     </button>
                   </div>
                 </div>
+                <!-- Point Prizes -->
+                <div v-for="item in pointPrizes" class="position-relative">
+                  <hr />
+                  <div class="filter"></div>
+                  <div class="row cart-item">
+                    <div class="col-md-3">
+                      <img
+                        :src="'data:image/jpeg;base64,' + item.img"
+                        alt="Product 2"
+                        class="img-fluid rounded"
+                        style="width: 100px; height: 100px; object-fit: cover"
+                      />
+                    </div>
+                    <div class="col-md-5 text-black">
+                      <h5 class="card-title">{{ item.name }}</h5>
+                      <p class="text-muted">積分獎品</p>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 text-end text-black">
+                      <p class="fw-bold"><del class="text-muted">$99.99 </del> $0</p>
+                      <button class="btn btn-lg btn-outline-danger" @click="removePointPrize(item)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+
             <!-- Continue Shopping Button -->
             <div class="text-start mb-4">
               <router-link to="/menu" class="btn btn-outline-primary">
@@ -111,6 +138,9 @@
                 </button>
               </div>
             </div>
+
+            <!-- Promo Code -->
+            <VerifyPromoCode />
           </div>
         </div>
       </div>
@@ -131,6 +161,7 @@ import { Notifications, notify } from '@kyvg/vue3-notification'
 import { useNotificationStore } from '@/stores/notificationStore'
 import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
 
+
 const user = useUserStore()
 export default {
   name: 'Cart',
@@ -149,6 +180,8 @@ export default {
   },
   methods: {
     ...mapActions(cartStore, ['getCart', 'CountCart', 'MinusCart', 'removeItem']),
+    ...mapActions(pointStore, ['removePointPrize']), // 確保從 pointStore 映射此方法
+
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
 
     //all
@@ -167,7 +200,14 @@ export default {
       }
     },
 
-    //++
+    handlePromoCodeTransmit(payload) {
+      console.log('從子組件收到的促銷碼名稱:', payload.name)
+      this.pointPrizes.push({
+        name: payload.name,
+        img: payload.image,
+      })
+    },
+
     async increaseQuantity(item) {
       try {
         // 確保傳遞完整的 menu 對象
@@ -211,20 +251,49 @@ export default {
           // console.log("刪除商品成功");
           await this.fetchCartItems()
           // console.log("重新獲取購物車數據成功");
-          this.success('刪除商品成功')
+          // 成功提示框
+           Swal.fire({
+            toast: true,
+            position: 'top-end',
+            title: '刪除成功',
+            text: `商品 "${item.menu.productName}" 已成功從購物車移除！`,
+            icon: 'success',
+            background: '#fff', // 黑灰底
+            color: '#000000',     // 白字
+            iconColor: '#d60101', // 成功圖標顏色
+            showConfirmButton: false, //不顯示確認按鈕
+            timer: 2330, //時間
+            timerProgressBar: true, //進度條
+            didOpen: (toast) => {
+              toast.style.marginTop = '80px'; // 動態調整位置
+            },
+          });
+
         } catch (error) {
           console.error('刪除商品失敗:', error)
-          this.error('刪除商品失敗', error)
         }
       } else {
         console.error('未登入會員')
-        this.warn('請先登入會員')
+        Swal.fire({
+          title: '未登入會員',
+          text: '請先登入會員以刪除商品！',
+          icon: 'warning',
+          background: '#fff', // 黑灰底
+          color: '#000000',     // 白字
+          iconColor: '#f6b704', // 警告圖標顏色
+          confirmButtonText: '登入',
+          customClass: {
+            confirmButton: 'btn btn-primary text-white', // 自定義按鈕樣式
+          },
+        });
       }
     },
   },
   computed: {
     //getter or state 放在computed
     ...mapState(cartStore, ['calculateSubtotal', 'calculateTax', 'calculateTotal']),
+    ...mapState(pointStore, ['pointPrizes']),
+
     hasCartItems() {
       return this.cartItems.length > 0 // 判斷購物車是否有資料
     },
@@ -237,6 +306,21 @@ export default {
 </script>
 
 <style scoped>
+
+/* 自定義 SweetAlert 按鈕樣式 */
+.custom-swal-btn {
+  background-color: #444444; /* 按鈕黑灰色 */
+  color: #ffffff;           /* 按鈕白字 */
+  border: none;             /* 移除邊框 */
+  border-radius: 5px;       /* 按鈕圓角 */
+  padding: 10px 20px;       /* 按鈕內邊距 */
+  font-size: 16px;          /* 字體大小 */
+  cursor: pointer;
+}
+
+.custom-swal-btn:hover {
+  background-color: #666666; /* 懸停效果 */
+}
 .step-indicator {
   display: flex;
   justify-content: center;

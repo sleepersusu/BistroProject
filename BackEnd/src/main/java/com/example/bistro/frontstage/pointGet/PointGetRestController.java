@@ -46,4 +46,10 @@ public class PointGetRestController {
         return ResponseEntity.ok("Points record created successfully! Points: " + request.getPointGetted());
     }
 
+    @PostMapping("/api/CreatePointGet")
+    public String PointGet(int memberId, int pointGetted) {
+    	
+    	
+    	return null;
+    }
 }
