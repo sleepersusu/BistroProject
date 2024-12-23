@@ -162,11 +162,14 @@
                                   <span>{{ item.odName }} x {{ item.odQuantity }}</span>
                                   <!-- 添加評論按鈕 -->
                                   <CommentPostButton
-                                  
                                     :item="item"
                                     :order="order"
                                     @open-add-commentmodal="handleOpenAddCommentModal"
-                                  />
+                                    :hidebutton="commentStatus[item.id]"
+
+                                    >
+                                  </CommentPostButton>
+
                                 </div>
                                 <span>NT$ {{ item.odSumPrice }}</span>
                               </div>
@@ -223,7 +226,11 @@
     </div>
   </div>
 
-  <CommentPostForm ref="commentPostModal" :item="currentItem"></CommentPostForm>
+  <CommentPostForm
+    ref="commentPostModal"
+    :item="currentItem"
+    @comment-submitted="handleCommentSubmitted"
+  ></CommentPostForm>
 </template>
 
 <script>
@@ -255,7 +262,8 @@ export default {
       pageSize: 10, // 每頁顯示數量
       expandedOrders: [], // 存儲已展開的訂單編號
       orderDetails: {}, // 存儲訂單詳情
-      currentItem: {}
+      currentItem: {},
+      commentStatus: {}
     }
   },
   methods: {
@@ -271,10 +279,35 @@ export default {
       // 阻止事件冒泡，避免觸發展開/收起
       event.stopPropagation()
       // 這裡實現打開評論modal的邏輯
-      this.currentItem = item
+      this.currentItem ={
+        id: item.id,
+        odName: item.odName,}
 
-      this.$refs.commentPostModal.show()
+      this.$refs.commentPostModal.showModal()
     },
+
+    //用來隱藏以評論按鈕
+
+
+    handleCommentSubmitted({ detailId, isCommented }) {
+
+      this.commentStatus[detailId] = isCommented
+      this.saveCommentStatus()
+      this.$refs.commentPostModal.hideModal()
+    },
+    // 添加保存方法
+saveCommentStatus() {
+  localStorage.setItem('commentStatus', JSON.stringify(this.commentStatus))
+},
+
+// 添加讀取方法
+loadCommentStatus() {
+  const savedStatus = localStorage.getItem('commentStatus')
+  if (savedStatus) {
+    this.commentStatus = JSON.parse(savedStatus)
+  }
+},
+
 
     async toggleOrderDetail(ordersNumber) {
       const index = this.expandedOrders.indexOf(ordersNumber)
@@ -330,6 +363,11 @@ export default {
       return this.orderItems.slice(start, end)
     },
   },
+  created() {
+  // 載入保存的評論狀態
+  this.loadCommentStatus()
+},
+
 }
 </script>
 

@@ -78,7 +78,7 @@
 
       <div class="d-flex justify-content-between">
         <span class="price">${{ menu.productPrice }}</span>
-        <span class="fs-6"> 剩餘:{{ menu.productCount }}份</span>
+        <span class="fs-6"> 剩餘:{{ availableStock  }}份</span>
       </div>
 
       <div class="d-flex align-items-center justify-content-between">
@@ -151,6 +151,7 @@ export default {
       count: 1,
       comments: [],
       commentPeople: 0,
+      cartCount: 0,
     }
   },
   methods: {
@@ -196,8 +197,8 @@ export default {
         })
       }
     },
-    async countCommentPeople(productName) {
-      let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
+    async getCommentPeople() {
+      let API_URL = `${import.meta.env.VITE_API}/api/${this.menu.productName}/comment/people`
       axios
         .get(API_URL)
         .then(async (response) => {
@@ -215,7 +216,7 @@ export default {
     },
     handleAddToCart(id) {
       this.addToCart({ id, count: this.count })
-      this.addToCartAndMinusStock(id, this.count)
+
       this.count = 1
     },
     updateQuantity(event) {
@@ -232,47 +233,38 @@ export default {
       }
     },
 
-    async addToCartAndMinusStock(productId, quantity) {
-      const API_URL = `${import.meta.env.VITE_API}/api/menu/minusCartStock/${productId}`
+    async getCartCount() {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API}/api/cart/list`);
+    const cartItems = response.data;
 
-      const payload = {
-        productId: productId,
-        quantity: quantity, // 減少的數量
-      }
-      try {
-        // 發送PUT請求到後端，更新庫存
-        const response = await axios.put(API_URL, payload)
+    // 更新當前商品的購物車數量
+    const item = cartItems.find((item) => item.id === this.menu.id);
+    console.log(item)
 
-        console.log(this.menu.productCount)
-        console.log('庫存已更新')
-        // 更新本地對應商品的庫存
-
-        if (response.data.success) {
-          // 更新本地庫存（確保 UI 與後端同步）
-          this.menu.productCount = response.data.productCount
-          Swal.fire({
-          text: '成功加入購物車',
-          icon: 'success',
-        })
-
-        } else {
-          throw new Error('庫存更新失敗')
-        }
+    this.cartCount = item ? item.cartCount : 0;
+  } catch (error) {
+    console.error('Error:', error);
+    if (error.response?.status === 401) {
+      this.cartCount = 0;
+    }
+  }
+},
 
 
-      } catch (error) {
-        console.error('更新庫存時發生錯誤:', error)
-        Swal.fire({
-          title: '錯誤',
-          text: '更新庫存時發生錯誤，請稍後再試。',
-          icon: 'error',
-        })
-      }
+  },
+
+  computed: {
+    // 計算實際可用庫存
+    availableStock() {
+      return this.menu.productCount - this.cartCount - this.count
     },
   },
-  created() {
+
+  async created() {
     this.loadPicture(this.menu.id)
-    this.countCommentPeople(this.menu.productName)
+    await this.getCommentPeople()
+    await this.getCartCount(); // 初始化購物車數量
   },
   watch: {},
 }

@@ -22,12 +22,7 @@
             <!-- 商品名稱 -->
             <div class="mb-3">
               <label class="form-label">商品名稱</label>
-              <input
-                class="form-control"
-                type="text"
-                :value="commentProduct"
-                readonly
-              />
+              <input class="form-control" type="text" :value="commentProduct" readonly />
             </div>
 
             <!-- 評分星星 -->
@@ -36,6 +31,7 @@
               <star-rating
                 :show-rating="false"
                 :rating="rating"
+                :star-size="25"
                 @update:rating="handleRatingUpdate"
                 :star-points="starPoints"
               ></star-rating>
@@ -56,18 +52,12 @@
                 v-model.trim="commentMessage"
                 placeholder="請分享您的使用心得..."
               ></textarea>
-
             </div>
 
             <!-- 評論時間 -->
             <div class="mb-3">
               <label class="form-label">評論時間</label>
-              <input
-                class="form-control"
-                type="text"
-                :value="currentDate"
-                readonly
-              />
+              <input class="form-control" type="text" :value="currentDate" readonly />
             </div>
           </form>
         </div>
@@ -94,12 +84,11 @@
   </div>
 </template>
 
-<script >
+<script>
 import StarRating from 'vue-star-rating'
 import modalMixinOption from '@/mixins/modalMixin-option'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { Modal } from 'bootstrap'
 
 export default {
   name: 'CommentForm',
@@ -125,13 +114,15 @@ export default {
       commentProduct: '',
       commentMessage: '',
       rating: 0,
+      isCommented:false,
       isSubmitting: false,
       currentDate: '',
       showValidationErrors: false,
       starPoints: [23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17],
-      modalInstance: null
     }
   },
+
+  emits:['comment-submitted'],
 
   computed: {
     currentRatingText() {
@@ -142,7 +133,7 @@ export default {
         4: '很好！令人滿意',
         3: '普通，還可以',
         2: '不太理想',
-        1: '非常不滿意'
+        1: '非常不滿意',
       }
 
       return ratingTexts[Math.floor(this.rating)] || '請選擇評分'
@@ -150,7 +141,7 @@ export default {
 
     isFormValid() {
       return this.rating > 0
-    }
+    },
   },
 
   watch: {
@@ -161,8 +152,8 @@ export default {
           this.commentProduct = newItem.odName
           this.handleReset()
         }
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -175,7 +166,7 @@ export default {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-        hour12: false
+        hour12: false,
       }
       return new Intl.DateTimeFormat('zh-TW', options).format(new Date()).replace(/\//g, '-')
     },
@@ -196,21 +187,17 @@ export default {
       this.updateCurrentDate()
     },
 
-    closeModal() {
-      if (this.modalInstance) {
-        this.modalInstance.hide()
-      }
-    },
 
     async handleSubmit() {
       if (this.isSubmitting) return
 
       this.showValidationErrors = true
-      if (!this.rating) {  // 檢查是否有評分
+      if (!this.rating) {
+        // 檢查是否有評分
         await Swal.fire({
           title: '請完整填寫',
           text: '請填寫評分',
-          icon: 'warning'
+          icon: 'warning',
         })
         return
       }
@@ -221,62 +208,50 @@ export default {
         this.updateCurrentDate()
 
         const addComment = {
-          commentMessage: this.commentMessage.trim() || '無評論內容',  // 如果沒有評論內容，使用預設文字
+          commentMessage: this.commentMessage.trim() || '無評論內容', // 如果沒有評論內容，使用預設文字
           commentRating: this.rating,
           commentProduct: this.commentProduct,
-          commentTime: this.currentDate
+          commentTime: this.currentDate,
         }
 
-        await axios.post(
-          `${import.meta.env.VITE_API}/api/comment/postComment`,
-          addComment
-        )
-        // 重置表單
-        this.handleReset()
-
-        // 關閉模態框
-        this.hideModal()
 
 
-
-        // 等待一小段時間確保模態框完全關閉
-        await new Promise(resolve => setTimeout(resolve, 100))
+        await axios.post(`${import.meta.env.VITE_API}/api/comment/postComment`, addComment)
 
         await Swal.fire({
           title: '感謝你的評論!',
           text: '提交評論成功。',
           icon: 'success',
-          focusConfirm: true,
-          returnFocus: false,
         })
 
-        // 發出評論提交事件
-        this.$emit('comment-submitted', addComment)
 
+
+        this.isCommented=true
+        // 向父組件發送評論狀態
+      this.$emit('comment-submitted', {
+        detailId: this.item.id,
+        isCommented: true
+      })
+
+        // 重置表單
+        this.handleReset()
       } catch (error) {
         console.error('Comment submission error:', error)
         await Swal.fire({
           title: '錯誤!',
           text: '評論星數最少1分，最多5分。',
           icon: 'error',
-          focusConfirm: true,
-          returnFocus: false,
-
         })
       } finally {
         this.isSubmitting = false
         this.showValidationErrors = false
       }
-    }
+    },
   },
 
   mounted() {
     this.updateCurrentDate()
-    // 初始化 Bootstrap Modal
-
-    const updateInterval = setInterval(this.updateCurrentDate, 1000)
-
-  }
+  },
 }
 </script>
 

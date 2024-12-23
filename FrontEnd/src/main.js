@@ -63,4 +63,5 @@ app.component('Form', Form)
 app.component('Field', Field)
 app.component('ErrorMessage', ErrorMessage)
 app.component('font-awesome-icon', FontAwesomeIcon)
+
 app.mount('#app')
