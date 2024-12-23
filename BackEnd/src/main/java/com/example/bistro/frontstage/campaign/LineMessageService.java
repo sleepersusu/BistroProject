@@ -253,7 +253,7 @@ public class LineMessageService {
        }
        
        sb.append("💡 詳細活動內容請至官網查看：\n");
-       sb.append("http://localhost:5173/campaign");
+       sb.append("http://nightlysips.com/campaign");
        
        return sb.toString();
    }
@@ -271,7 +271,7 @@ public class LineMessageService {
        
        if (reservations.isEmpty()) {
            String message = "目前查無您的訂位紀錄，立即預訂，享受專屬座位的貼心服務吧！\n" +
-                          "👉 線上訂位：http://localhost:5173/reservations";
+                          "👉 線上訂位：http://nightlysips.com/reservations";
            sendLineMessage(userId, message);
            return;
        }
@@ -343,7 +343,7 @@ public class LineMessageService {
        if (pointTotals == null) {
            String message = "您目前還沒有紅利點數！\n" +
                           "消費即可累積點數，快來享受會員專屬優惠 🛍\n" +
-                          "👉 立即訂位：http://localhost:5173/reservations";
+                          "👉 立即訂位：http://nightlysips.com/reservations";
            sendLineMessage(userId, message);
            return;
        }
