@@ -26,9 +26,6 @@
             <router-link class="nav-link" to="/profile">關於我們</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/order">立即點餐</router-link>
-          </li>
-          <li class="nav-item">
             <router-link class="nav-link position-relative" to="/campaign"
               >限時抽獎<span
                 v-if="memberId && allChances > 0"
