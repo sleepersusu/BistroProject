@@ -1,18 +1,20 @@
 <template>
   <div class="col card bg-light">
-    <!-- <img :src="menuSrc" class="card-img-top img-fixed" /> -->
-    <img src="/images/p9_0.jpg" class="card-img-top img-fixed" />
-    <div class="card-body text-primary">
-      <h6 class="card-title">
-        {{ menu.productName }}
-        <span class="float-end text-danger">${{ menu.productPrice }}</span>
-      </h6>
-      <a href="#" class="btn btn-outline-primary w-100">加入購物車</a>
-    </div>
+    <img :src="menuSrc" class="card-img-top img-fixed" alt=""/>
+      <div class="card-body text-primary">
+        <h6 class="card-title">
+          {{menu.productName}}
+            <span class="float-end text-danger">{{menu.productPrice}}</span>
+        </h6>
+          <button class="btn btn-outline-primary w-100" @click="handleAddToCart(menu.id)">加入購物車</button>
+      </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'pinia'
+import { cartStore } from '@/stores/cartStore.js'
+
 export default {
   components: {},
   props: {
@@ -45,6 +47,12 @@ export default {
           this.isLoading = false
         })
     },
+      ...mapActions(cartStore, ['addToCart']),
+      handleAddToCart(id) {
+        this.addToCart({ id, count: this.count })
+        this.count = 1
+      },
+
   },
   computed: {},
   watch: {},

@@ -1,5 +1,6 @@
 package com.example.bistro.backstage.orders;
 
+import com.example.bistro.backstage.members.MembersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,10 @@ public class OrdersService {
 
     @Autowired
     private OrdersRepository ordersRepository;
+    @Autowired
+    private MembersRepository membersRepositoryDao;
+
+
 
 //訂單邏輯
     //前台：使用者
