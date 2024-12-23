@@ -176,11 +176,13 @@ import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 import { lotteryStore } from '@/stores/lotteryStore'
 import { statusStore } from '@/stores/statusStore'
+import { campaignStore } from '@/stores/campaignStore.js'
 import axios from 'axios'
 
 const lottery = lotteryStore()
 const status = statusStore()
 const user = useUserStore()
+const campaign = campaignStore()
 
 export default defineComponent({
   name: 'CartCheckout',
@@ -266,7 +268,12 @@ export default defineComponent({
     async handleCashPayment(orderNumber) {
       try {
         status.start()
-        const res = await lottery.addChance(4, user.memberId, this.calculateTotal)
+        const activeCampaign = await campaign.getActiveCampaign()
+        const res = await lottery.addChance(
+          activeCampaign[0].id,
+          user.memberId,
+          this.calculateTotal,
+        )
         if (res?.status === 200) {
           this.showAlert(res.data.newChances)
         }
@@ -336,13 +343,6 @@ export default defineComponent({
 
         if (response.data?.paymentStatus === '成功') {
           await this.clearCart()
-
-          status.start()
-          const res = await lottery.addChance(4, user.memberId, this.calculateTotal)
-          if (res?.status === 200) {
-            this.showAlert(res.data.newChances)
-          }
-          status.finish()
 
           this.$router.push({
             path: '/cartCheckSuc',
