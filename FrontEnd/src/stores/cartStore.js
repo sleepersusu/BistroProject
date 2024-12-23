@@ -5,7 +5,6 @@ import axios from 'axios'
 axios.defaults.baseURL = import.meta.env.VITE_API
 axios.defaults.withCredentials = true
 
-const user = useUserStore()
 
 export const cartStore = defineStore('cart', {
   state: () => ({
@@ -35,6 +34,7 @@ export const cartStore = defineStore('cart', {
 
     //加入商品並傳給購物車
     async addToCart(menuItem) {
+      const user = useUserStore()
       if (!user.memberId) {
         //如果不存在用localstorage
       } else {
@@ -51,7 +51,10 @@ export const cartStore = defineStore('cart', {
 
     //找到購物車清單
     async getCart() {
+      const user = useUserStore()
       if (!user.memberId) {
+        console.log("123")
+        this.cartItems=[]
         return null // 確保返回值
       } else {
         try {
@@ -68,6 +71,7 @@ export const cartStore = defineStore('cart', {
     },
     //++購物車加一，沒有產品的話就幫他加一
     async CountCart(menuItem) {
+      const user = useUserStore()
       if (!user.memberId) {
         return null // 確保返回值
       } else {
@@ -84,6 +88,7 @@ export const cartStore = defineStore('cart', {
     },
     //--購物車減一，剩餘1再扣1直接刪除
     async MinusCart(menuItem) {
+      const user = useUserStore()
       if (!user.memberId) {
         return null // 確保返回值
       } else {
@@ -101,6 +106,7 @@ export const cartStore = defineStore('cart', {
     },
     //刪除此商品
     async removeItem(menuItem) {
+      const user = useUserStore()
       if (!user.memberId) {
         return null // 確保返回值
       }
@@ -117,8 +123,21 @@ export const cartStore = defineStore('cart', {
       }
     },
     //清空購物車
-    clearCart() {
-      this.cartItems = []
+    async clearCart() {
+      const user = useUserStore()
+      if (!user.memberId) {
+        this.cartItems = [];
+        return;
+      }
+      try {
+        // 調用後端 API 清除購物車
+        const url = `cart/clear/${user.memberId}`;
+        await axios.delete(url);
+        // 清除本地狀態
+        this.cartItems = [];
+      } catch (error) {
+        console.error('清除購物車失敗:', error);
+      }
     },
   },
 })

@@ -9,26 +9,33 @@
           <button class="btn btn-outline-primary w-100" @click="handleAddToCart(menu.id)">加入購物車</button>
       </div>
   </div>
+
+
 </template>
+
 
 <script>
 import { mapActions } from 'pinia'
 import { cartStore } from '@/stores/cartStore.js'
 
 export default {
-  components: {},
-  props: {
-    menu: {
+  components:{
+
+
+
+  },
+  props:{
+    menu:{
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
-    },
-  },
-  data() {
+    }
+  },data() {
     return {
       menuSrc: '',
     }
   },
   methods: {
+
     async loadPicture(ID) {
       this.isLoading = true
 
@@ -49,15 +56,33 @@ export default {
     },
       ...mapActions(cartStore, ['addToCart']),
       handleAddToCart(id) {
+        const productName = this.menu.productName;
         this.addToCart({ id, count: this.count })
         this.count = 1
+        // 黑灰底白字的提示框
+        Swal.fire({
+          toast:true,
+          position:'top-end',
+          title: '成功加入購物車',
+          text: `「${productName}」已加入！`,
+          icon: 'success',
+          background: '#fff', // 黑灰底
+          color: '#000000',     // 白字
+          iconColor: '#000000', // 成功
+          showConfirmButton: false, //不顯示確認按鈕
+          timer: 1314, //時間
+          timerProgressBar: true, //進度條
+          didOpen: (toast) => {
+            toast.style.marginTop = '80px'; // 動態調整位置
+          },
+        });
       },
-
   },
   computed: {},
   watch: {},
   created() {
     this.loadPicture(this.menu.id)
+
   },
 }
 </script>
