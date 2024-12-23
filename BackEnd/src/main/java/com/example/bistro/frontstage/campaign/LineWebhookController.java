@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import com.example.bistro.backstage.PointsTotal.PointsTotalBean;
+import com.example.bistro.backstage.PointsTotal.PointsTotalRepository;
+import com.example.bistro.backstage.PointsTotal.PointsTotalService;
 import com.example.bistro.backstage.campaign.Campaign;
 import com.example.bistro.backstage.line.LineMember;
 import com.example.bistro.backstage.line.LineMemberRepository;
@@ -57,6 +60,9 @@ public class LineWebhookController {
     
     @Autowired
     private ReservationsRepository reservationsRepo;
+    
+    @Autowired
+    private PointsTotalRepository pointsTotalRepo;
     
 
     @PostMapping("/line/webhook")
@@ -414,9 +420,11 @@ public class LineWebhookController {
         try {
             Optional<LineMember> lineMember = lineMemberRepo.findByLineUserId(userId);
             if (lineMember.isPresent()) {
-                Integer points = lineMember.get().getMember().getMemberPoint();
+                Members member = lineMember.get().getMember();
+                PointsTotalBean pointTotals = pointsTotalRepo.findByMembers(member);
+                
 
-                if(points == null) {
+                if(pointTotals == null) {
                     String message = "您目前還沒有紅利點數！\n" +
                                    "消費即可累積點數，快來享受會員專屬優惠 🛍\n" +
                                    "👉 立即訂位：http://localhost:5173/reservations";
@@ -425,7 +433,8 @@ public class LineWebhookController {
                     ).get();
                     return;
                 }
-
+                
+                Integer points = pointTotals.getPointsTotal();
                 StringBuilder sb = new StringBuilder();
                 sb.append("💰 您的紅利點數資訊\n\n");
                 sb.append("目前點數：").append(points).append(" 點\n\n");
