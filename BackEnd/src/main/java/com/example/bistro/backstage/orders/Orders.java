@@ -73,7 +73,6 @@ public class Orders {
                 }
             }
 
-
    //FK
         // 多對一：多個訂單可以來自同一個會員
             @ManyToOne(fetch = FetchType.LAZY)
@@ -97,8 +96,7 @@ public class Orders {
             private List<OrdersDetails> ordersDetails = new ArrayList<>();  // 訂單明細
 
 
-
-    // 一對多：一筆訂單可能有多筆付款紀錄(失敗重來之類)
+        // 一對多：一筆訂單可能有多筆付款紀錄(失敗重來之類)
             @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
             private List<Payment> payment = new ArrayList<>();  // 訂單與付款紀錄的一對多關聯
 
