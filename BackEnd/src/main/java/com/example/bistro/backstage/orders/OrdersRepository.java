@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import com.example.bistro.backstage.members.Members;
+
 
 public interface OrdersRepository extends JpaRepository<Orders, Integer> {
 
@@ -66,5 +68,6 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
 
     // 查詢特定時間範圍內的所有訂單，按照創建時間排序
     List<Orders> findByCreatedAtBetweenOrderByCreatedAtDesc(Date startDate, Date endDate);
-
+    
+    
 }

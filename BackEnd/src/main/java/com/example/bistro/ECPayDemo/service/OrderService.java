@@ -11,33 +11,27 @@ import com.example.bistro.ecpay.payment.integration.domain.AioCheckOutALL;
 
 @Service
 public class OrderService {
+    public String ecpayCheckout(String amount, String ordersName, String ordersTel) {
+        String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
+        AllInOne all = new AllInOne("");
+        AioCheckOutALL obj = new AioCheckOutALL();
 
-	public String ecpayCheckout() {
-		
-		String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
-
-		AllInOne all = new AllInOne("");
-
-		AioCheckOutALL obj = new AioCheckOutALL();
-		obj.setMerchantTradeNo(uuId);
-        // 使用現在時間
+        // 確保金額為整數字串
+        String totalAmount = String.valueOf(Math.round(Double.parseDouble(amount)));
+        obj.setMerchantTradeNo(uuId);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         obj.setMerchantTradeDate(sdf.format(new Date()));
-        
-		obj.setTotalAmount("50");
-		obj.setTradeDesc("test Description");
-		obj.setItemName("TestItem");
-		
-		// 設定本地測試用的回傳 URL
+        obj.setTotalAmount(totalAmount); // 使用處理過的整數金額
+        obj.setTradeDesc("訂購人：" + ordersName + " 電話：" + ordersTel);
+        obj.setItemName("餐點訂單");
+        // 設定回調 URL
         obj.setReturnURL("http://localhost:8085/ecpay/callback");
-        
-		obj.setNeedExtraPaidInfo("N");
-		
-        // ClientBackURL 是使用者付款完後，綠界會讓使用者的瀏覽器跳轉到這個網址
-        obj.setClientBackURL("http://localhost:8085/payment-result");
-        
-		String form = all.aioCheckOut(obj, null);
+        obj.setOrderResultURL("http://localhost:8085/payment-result");
 
-		return form;
-	}
+        obj.setNeedExtraPaidInfo("N");
+
+        String form = all.aioCheckOut(obj, null);
+        return form;
+    }
 }
+

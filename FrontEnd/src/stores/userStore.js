@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { pointStore } from './pointStore'
 import { lotteryStore } from './lotteryStore'
 import {cartStore} from '@/stores/cartStore.js'
 
@@ -31,6 +32,8 @@ export const useUserStore = defineStore('userStore', {
       // localStorage.clear();
       this.isLoggedIn = false
       this.memberprofile = {}
+      const point = pointStore()
+      point.getMemberPoint()
       //get cart again
       const cart =cartStore()
       cart.getCart()
@@ -81,6 +84,8 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.username = username
         this.memberprofile.userAvatar = userAvatar
         this.memberprofile.userpoint = userpoint
+        const point = pointStore()
+        point.getMemberPoint()
         const lottery = lotteryStore()
         lottery.getAllChanceByMember()
       } catch (error) {

@@ -77,8 +77,35 @@
                     </button>
                   </div>
                 </div>
+                <!-- Point Prizes -->
+                <div v-for="item in pointPrizes" class="position-relative">
+                  <hr />
+                  <div class="filter"></div>
+                  <div class="row cart-item">
+                    <div class="col-md-3">
+                      <img
+                        :src="'data:image/jpeg;base64,' + item.img"
+                        alt="Product 2"
+                        class="img-fluid rounded"
+                        style="width: 100px; height: 100px; object-fit: cover"
+                      />
+                    </div>
+                    <div class="col-md-5 text-black">
+                      <h5 class="card-title">{{ item.name }}</h5>
+                      <p class="text-muted">積分獎品</p>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 text-end text-black">
+                      <p class="fw-bold"><del class="text-muted">$99.99 </del> $0</p>
+                      <button class="btn btn-lg btn-outline-danger" @click="removePointPrize(item)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+
             <!-- Continue Shopping Button -->
             <div class="text-start mb-4">
               <router-link to="/menu" class="btn btn-outline-primary">
@@ -111,6 +138,9 @@
                 </button>
               </div>
             </div>
+
+            <!-- Promo Code -->
+            <VerifyPromoCode />
           </div>
         </div>
       </div>
@@ -148,6 +178,8 @@ export default {
   },
   methods: {
     ...mapActions(cartStore, ['getCart', 'CountCart', 'MinusCart', 'removeItem']),
+    ...mapActions(pointStore, ['removePointPrize']), // 確保從 pointStore 映射此方法
+
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
 
     //all
@@ -166,7 +198,14 @@ export default {
       }
     },
 
-    //++
+    handlePromoCodeTransmit(payload) {
+      console.log('從子組件收到的促銷碼名稱:', payload.name)
+      this.pointPrizes.push({
+        name: payload.name,
+        img: payload.image,
+      })
+    },
+
     async increaseQuantity(item) {
       try {
         // 確保傳遞完整的 menu 對象
@@ -251,6 +290,8 @@ export default {
   computed: {
     //getter or state 放在computed
     ...mapState(cartStore, ['calculateSubtotal', 'calculateTax', 'calculateTotal']),
+    ...mapState(pointStore, ['pointPrizes']),
+
     hasCartItems() {
       return this.cartItems.length > 0 // 判斷購物車是否有資料
     },

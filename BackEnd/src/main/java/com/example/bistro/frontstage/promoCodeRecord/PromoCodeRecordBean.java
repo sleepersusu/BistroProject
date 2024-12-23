@@ -1,4 +1,4 @@
-package com.example.bistro.backstage.PointsTotal;
+package com.example.bistro.frontstage.promoCodeRecord;
 
 import com.example.bistro.backstage.members.Members;
 
@@ -15,8 +15,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "PointsTotal")
-public class PointsTotalBean {
+@Table(name = "PromoRecord")
+public class PromoCodeRecordBean {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,8 @@ public class PointsTotalBean {
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Members members;
-       
-    private Integer PointsTotal;
     
+    private String pointPrizesName;
+    
+    private String promoCode;
 }

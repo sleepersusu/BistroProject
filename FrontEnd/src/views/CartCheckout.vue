@@ -33,12 +33,10 @@
                         maxlength="15"
                         @input="validateName"
                         :class="{ 'is-invalid': nameError }"
-
                       />
                       <small v-if="nameError" class="text-danger">{{ nameError }}</small>
                     </div>
                   </div>
-
                   <div class="col-lg-6">
                     <div class="checkout__input">
                       <p>電話<span>*</span></p>
@@ -46,7 +44,6 @@
                         type="text"
                         v-model="orderData.ordersTel"
                         placeholder="請輸入手機號碼，EX:0912345678"
-
                         maxlength="10"
                         @input="validatePhone"
                         :class="{ 'is-invalid': phoneError }"
@@ -131,11 +128,11 @@
                   </div>
 
                   <div class="checkout__input__checkbox align-middle">
-                    <label for="ECPay" >
+                    <label for="ECPay">
                       <img class="pay ms-3" src="../../public/images/ecpay2.png" alt="綠界支付" />
                       ECPay
                       <input type="radio" id="ECPay" value="ECPay" v-model="orderData.PaymentWay" />
-                      <span class="checkmark mt-3 "></span>
+                      <span class="checkmark mt-3"></span>
                     </label>
                   </div>
 
@@ -208,6 +205,7 @@ export default defineComponent({
 
   methods: {
     ...mapActions(cartStore, ['getCart', 'clearCart']),
+    ...mapActions(pointStore, ['removePointPrize', 'clearPointPrizes', 'verifyPromoCode']),
 
     // 驗證訂單數據
     validateOrderData() {
@@ -269,6 +267,25 @@ export default defineComponent({
       } catch (error) {
         console.error('現金支付處理失敗:', error)
         throw error
+      }
+    },
+    //處理Ecpay
+    async jumpEcpay() {
+      try {
+        // 將金額轉為整數（確保沒有小數點）
+        const integerAmount = Math.round(this.calculateTotal)
+        // 構建查詢字串
+        const queryParams = new URLSearchParams({
+          amount: integerAmount.toString(), // 轉為字串
+          ordersName: this.orderData.ordersName,
+          ordersTel: this.orderData.ordersTel,
+        }).toString()
+        // 使用查詢字串進行轉導
+        window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout?${queryParams}`
+        await this.clearCart()
+      } catch (error) {
+        console.error('綠界支付發生錯誤:', error)
+        this.$router.push('/cartCheckFail')
       }
     },
 
@@ -360,6 +377,7 @@ export default defineComponent({
             return
           }
 
+
         Swal.fire({
           icon: 'info',
           title: '訂單處理中...',
@@ -374,7 +392,7 @@ export default defineComponent({
           seatType: this.orderData.seatType,
           ordersRequest: this.orderData.ordersRequest,
           ordersSumPrice: Math.round(this.calculateTotal),
-          latestPaymentStatus: this.orderData.PaymentWay === 'Cash' ? '已付款' : '未付款',
+          latestPaymentStatus: this.orderData.PaymentWay === 'Cash' || this.orderData.PaymentWay === 'ECPay'? '已付款' : '未付款',
           memberId: user.memberId,
           ordersDetails: this.cartItems.map((item) => ({
             odName: item.menu.productName,
@@ -387,7 +405,7 @@ export default defineComponent({
             {
               paymentPrice: Math.round(this.calculateTotal),
               paymentWay: this.orderData.PaymentWay,
-              paymentStatus: this.orderData.PaymentWay === 'Cash' ? '成功' : '失敗',
+              paymentStatus: this.orderData.PaymentWay === 'Cash' || this.orderData.PaymentWay === 'ECPay' ? '成功' : '失敗',
             },
           ],
         }
@@ -398,6 +416,53 @@ export default defineComponent({
         )
 
         if (response.status === 200) {
+          //測試測試測試測試測試測試
+          // 記錄消費者獲得點數
+          try {
+            const pointRequestData = {
+              memberId: user.memberId,
+              pointGetted: Math.floor(actualTotal / 100), // 使用實際總金額計算點數
+            }
+
+            const pointResponse = await axios.post(
+              `${import.meta.env.VITE_API}/api/updateMemberPoint`,
+              pointRequestData,
+            )
+
+            if (pointResponse.status === 200) {
+              console.log('點數更新成功')
+            }
+          } catch (error) {
+            console.error('點數更新失敗:', error)
+          }
+
+          try {
+            // 先檢查 pointPrizes 的內容
+            console.log('pointPrizes:', this.pointPrizes)
+
+            const requestData = {
+              memberId: user.memberId,
+              promoCodes: this.pointPrizes.map((prize) => prize.promoCode), // 將優惠碼轉為陣列
+              pointPrizesName: this.pointPrizes.map((prize) => prize.name), // 將獎品名稱轉為陣列
+            }
+            console.log(requestData.memberId)
+            console.log(requestData.promoCodes)
+            console.log(requestData.pointPrizesName)
+
+            const api = `${import.meta.env.VITE_API}/api/createPromoRecord`
+            const response = await this.axios.post(api, requestData)
+            if (response.status === 200 || response.status === 201) {
+              console.log('優惠券記錄新增成功！', response.data)
+            } else {
+              console.error('優惠券記錄新增失敗，請稍後再試', response.data)
+            }
+          } catch (error) {
+            console.error('發生錯誤', error)
+            alert('請求失敗，請檢查您的網路或稍後重試！')
+          }
+          // 新增：清空點數獎品
+          this.clearPointPrizes()
+          //測試結束測試結束測試結束
           Swal.close() // 關閉進度提示框
           const orderNumber = response.data.ordersNumber
 
@@ -407,7 +472,7 @@ export default defineComponent({
               break
 
             case 'ECPay':
-              window.location.href = `${import.meta.env.VITE_API}/ecpayCheckout?orderNumber=${orderNumber}`
+              await this.jumpEcpay()
               break
 
             case 'Paypal':
