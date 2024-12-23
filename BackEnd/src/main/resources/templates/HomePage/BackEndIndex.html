@@ -6,29 +6,29 @@
 	<title>數據分析 - DINEEASE餐廳管理系統</title>
 
 	<!-- Favicon -->
-	<link rel="icon" th:href="@{/images/favicon.ico}" />
+		<link rel="icon" th:href="@{/images/favicon.ico}" />
 
 	<!-- Google Fonts -->
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet" />
 
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
 	<!-- DataTables -->
-	<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+		<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
 
 	<!-- Custom CSS -->
-	<link rel="stylesheet" th:href="@{/css/demo.css}" />
+		<link rel="stylesheet" th:href="@{/css/demo.css}" />
 
 	<!-- JavaScript Libraries -->
-	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+		<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+		<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 
 	<style>
-		/* 主要容器樣式 */
+		/* 主要樣式 */
 		.stats-container {
 			display: flex;
 			justify-content: space-between;
@@ -58,7 +58,7 @@
 
 		.stat-icon {
 			font-size: 2.5rem;
-			color: #0071e3;
+			color: #000000;
 			margin-bottom: 15px;
 		}
 
@@ -221,27 +221,26 @@
 		const revenueChart = echarts.init(document.getElementById('revenueChart'));
 		const topDishesChart = echarts.init(document.getElementById('topDishesChart'));
 
-		// 會員性別分布圖表配置
-		const memberPieOption = {
+		// 內用外帶分布圖表配置
+		const orderTypeOption = {
 			title: {
-				text: '會員性別分布',
+				text: '內用外帶分布',
 				left: 'center'
 			},
 			tooltip: {
-				trigger: 'item'
+				trigger: 'item',
+				formatter: '{b}: {c} ({d}%)'
 			},
 			legend: {
 				orient: 'horizontal',
 				bottom: 'bottom'
 			},
+			color: ['#42a5f5', '#ffa726'], // 修改饼图的颜色：第一个为内用，第二个为外带
 			series: [{
-				name: '會員性別',
+				name: '訂單類型',
 				type: 'pie',
 				radius: '50%',
-				data: [
-					{ value: 11, name: '男性', itemStyle: { color: '#66b3ff' } },
-					{ value: 9, name: '女性', itemStyle: { color: '#ff9999' } }
-				],
+				data: [], // 後端數據將填充這裡
 				emphasis: {
 					itemStyle: {
 						shadowBlur: 10,
@@ -259,21 +258,25 @@
 				left: 'center'
 			},
 			tooltip: {
-				trigger: 'axis'
+				trigger: 'axis',
+				formatter: '{b}<br/>營收：${c}'
 			},
 			xAxis: {
 				type: 'category',
-				data: ['1日', '2日', '3日', '4日', '5日', '6日', '7日'] // 示例數據
+				data: []
 			},
 			yAxis: {
 				type: 'value',
-				name: '營收（元）'
+				name: '營收（元）',
+				axisLabel: {
+					formatter: '${value}'
+				}
 			},
 			series: [{
 				name: '營收',
 				type: 'line',
 				smooth: true,
-				data: [3000, 4500, 5000, 4000, 6000, 5500, 7000], // 示例數據
+				data: [],
 				itemStyle: {
 					color: '#0071e3'
 				},
@@ -310,7 +313,7 @@
 			},
 			xAxis: {
 				type: 'category',
-				data: ['牛排', '義大利麵', '漢堡', '沙拉', '披薩'], // 示例數據
+				data: [],
 				axisLabel: {
 					interval: 0,
 					rotate: 30
@@ -323,56 +326,80 @@
 			series: [{
 				name: '銷售量',
 				type: 'bar',
-				data: [120, 100, 80, 70, 60], // 示例數據
+				data: [],
 				itemStyle: {
-					color: '#0071e3'
+					color: function (params) {
+						// 根据分类设置颜色
+						const colors = ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc', '#ef5350'];
+						return colors[params.dataIndex % colors.length];
+					}
 				}
 			}]
 		};
 
-		// 設置圖表配置
-		memberPieChart.setOption(memberPieOption);
+		// 設置圖表初始配置
+		memberPieChart.setOption(orderTypeOption);
 		revenueChart.setOption(revenueOption);
 		topDishesChart.setOption(topDishesOption);
 
 		// 獲取數據的函數
 		async function fetchDashboardData() {
 			try {
+				console.log('開始獲取數據...');
 				const response = await fetch('/api/dashboard');
 				const data = await response.json();
+				console.log('獲取到的數據:', data);
+
 
 				// 更新統計卡片
-				document.getElementById('memberCount').textContent = data.totalMembers || 0;
-				document.getElementById('monthlyRevenue').textContent = `$${(data.monthlyRevenue || 0).toLocaleString()}`;
-				document.getElementById('monthlyOrders').textContent = data.monthlyOrders || 0;
+				document.getElementById('memberCount').textContent =
+						(data.totalMembers || 0).toLocaleString();
 
-				// 更新圖表數據
-				if (data.genderDistribution) {
+				document.getElementById('monthlyRevenue').textContent =
+						`$${(data.monthlyRevenue || 0).toLocaleString()}`;
+
+				document.getElementById('monthlyOrders').textContent =
+						(data.monthlyOrders || 0).toLocaleString();
+
+				// 更新內用外帶分布圖
+				if (data.orderTypeDistribution && Array.isArray(data.orderTypeDistribution)) {
 					memberPieChart.setOption({
 						series: [{
-							data: data.genderDistribution
+							data: data.orderTypeDistribution
 						}]
 					});
 				}
 
-				if (data.revenueData) {
+				// 更新營收趨勢圖
+				if (data.revenueData && data.revenueData.dates) {
 					revenueChart.setOption({
 						xAxis: {
-							data: data.revenueData.dates
+							data: data.revenueData.dates || []
 						},
 						series: [{
-							data: data.revenueData.values
+							data: data.revenueData.values || []
 						}]
 					});
 				}
 
-				if (data.topDishes) {
+				// 更新熱門餐點圖
+				if (data.topDishes && data.topDishes.names) {
+					const categories = data.topDishes.names;
+					const values = data.topDishes.values;
+
+					// 为每个数据点动态设置颜色
+					const chartData = categories.map((name, index) => ({
+						value: values[index],
+						itemStyle: {
+							color: ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc', '#ef5350'][index % 5] // 不同分类颜色
+						}
+					}));
 					topDishesChart.setOption({
 						xAxis: {
-							data: data.topDishes.names
+							data: data.topDishes.names || []
 						},
 						series: [{
-							data: data.topDishes.values
+							data: data.topDishes.values || []
 						}]
 					});
 				}
@@ -384,8 +411,8 @@
 		// 初始加載數據
 		fetchDashboardData();
 
-		// 設置定時更新
-		setInterval(fetchDashboardData, 60000); // 每分鐘更新一次
+		// 設置定時更新（每分鐘更新一次）
+		setInterval(fetchDashboardData, 30000);
 
 		// 響應式處理
 		window.addEventListener('resize', function() {
