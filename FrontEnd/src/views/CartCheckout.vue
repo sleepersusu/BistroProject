@@ -174,15 +174,9 @@ import { mapState, mapActions } from 'pinia'
 import { pointStore } from '@/stores/pointStore'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
-import { lotteryStore } from '@/stores/lotteryStore'
-import { statusStore } from '@/stores/statusStore'
-import { campaignStore } from '@/stores/campaignStore.js'
 import axios from 'axios'
-
-const lottery = lotteryStore()
-const status = statusStore()
 const user = useUserStore()
-const campaign = campaignStore()
+
 
 export default defineComponent({
   name: 'CartCheckout',
@@ -267,18 +261,6 @@ export default defineComponent({
     // 處理現金支付
     async handleCashPayment(orderNumber) {
       try {
-        status.start()
-        const activeCampaign = await campaign.getActiveCampaign()
-        const res = await lottery.addChance(
-          activeCampaign[0].id,
-          user.memberId,
-          this.calculateTotal,
-        )
-        if (res?.status === 200) {
-          this.showAlert(res.data.newChances)
-        }
-        status.finish()
-
         await this.clearCart()
         this.$router.push({
           path: '/cartCheckSuc',
@@ -315,6 +297,7 @@ export default defineComponent({
             if (paypalWindow.closed) {
               clearInterval(checkPaypal)
               await this.checkPaymentStatus(orderNumber)
+
             }
           }, 1000)
         } else {
@@ -454,28 +437,6 @@ export default defineComponent({
       } finally {
         this.isProcessing = false
       }
-    },
-
-    showAlert(chances) {
-      Swal.fire({
-        toast: true,
-        position: 'bottom-end',
-        icon: 'success',
-        iconColor: 'black',
-        title: `恭喜！您已獲得${chances}次抽獎機會`,
-        text: '點擊立即前往抽獎',
-        showConfirmButton: false,
-        timer: 8000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-          toast.addEventListener('click', () => {
-            this.$router.push('/campaign')
-          })
-          toast.style.cursor = 'pointer'
-        },
-      })
     },
 
     // 獲取購物車項目
