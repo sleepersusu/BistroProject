@@ -244,7 +244,7 @@ export default {
   color: #ffdc35;
   font-size: 4rem;
   text-shadow: 0 4px 35px #ffdc35;
-  font-weight: 400;
+  font-weight: 500;
   font-family: 'Chakra Petch', cursive !important;
 }
 

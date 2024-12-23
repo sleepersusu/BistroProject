@@ -107,7 +107,7 @@
 
         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
           <div class="team-item rounded p-4">
-            <img class="img-fluid rounded mb-4" src="..." alt="" />
+            <img class="img-fluid rounded mb-4" src="/images/修大頭照.jpg" alt="" />
             <h5>Darren Xiao</h5>
             <p class="text-primary">Team Technology Officer</p>
             <div class="d-flex justify-content-center pt-1">
@@ -239,3 +239,11 @@ export default {
   created() {},
 }
 </script>
+
+<style scoped>
+.img-fluid {
+  height: 500px;
+  width: 100%;
+  object-fit: cover;
+}
+</style>
