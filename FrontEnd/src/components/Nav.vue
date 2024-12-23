@@ -74,7 +74,7 @@
               ></div>
               <div class="d-flex align-items-center d-none d-lg-block">
                 <!-- 會員名稱 -->
-                <span class="text-light ms-2">{{ memberprofile?.userName }}</span>
+                <span class="text-light ms-2">{{ memberprofile.navName }}</span>
               </div>
             </div>
           </li>
@@ -126,6 +126,7 @@ export default {
     window.addEventListener('scroll', this.navShadow)
     this.navShadow()
     this.getAllChanceByMember()
+    this.memberprofile.navName=JSON.parse(localStorage.getItem('memberobj')).userName
   },
   unmounted() {
     window.removeEventListener('scroll', this.navShadow)

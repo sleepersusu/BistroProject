@@ -71,10 +71,24 @@ public class MembersRestController {
 	}
 	
 	@PutMapping("/{id}")
-	public String putMethodName(@PathVariable String id, @RequestBody String entity) {
-		//TODO: process PUT request
-		
-		return entity;
+	public ResponseEntity<Map<String, String>> updateMemberProfile(@PathVariable Integer id, @RequestBody memberProfileDTO memberProfileDTO) {
+		Optional<Members> resultData = memberFronetService.findMemberById(id);
+		Map<String, String> response = new HashMap<>();
+		if(resultData.isPresent()) {
+			Members memberData = resultData.get();
+			memberData.setMemberName(memberProfileDTO.getUserName());
+			memberData.setMemberEmail(memberProfileDTO.getUserEmail());
+			memberData.setMemberPhone(memberProfileDTO.getUserPhone());
+			memberData.setMemberFavor(memberProfileDTO.getUserFavor());
+			memberData.setMemberSex(memberProfileDTO.getUserGender());
+			memberData.setMemberAddress(memberProfileDTO.getUserAddress());
+			memberData.setMemberBirthday(memberProfileDTO.getUserBirthdate());
+			memberFronetService.updateMember(memberData);
+			response.put("status", "success");
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		}
+		response.put("status", "fail");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 	
 	@DeleteMapping("/{id}")

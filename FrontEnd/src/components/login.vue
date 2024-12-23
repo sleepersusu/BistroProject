@@ -104,9 +104,9 @@
 </template>
 <script>
 import { useUserStore } from '@/stores/userStore'
+import { mapActions } from 'pinia'
 import { email } from '@vee-validate/rules'
 import Modal from 'bootstrap/js/dist/modal'
-import { mapActions } from 'pinia'
 export default {
     data() {
         return {
@@ -178,6 +178,7 @@ export default {
                         console.log('登入成功，回應內容：', response);
                         this.handleGoogleLogin(response.credential)
                     },
+                    redirect_uri: "http://localhost:5173/callback"
                 })
                 // 渲染 Google 按鈕
                 google.accounts.id.renderButton(
@@ -202,7 +203,7 @@ export default {
                         shape: "pill"              // 圓角樣式
                     }
                 )
-                google.accounts.id.prompt();
+
             } else {
                 console.error("Google API client not loaded.")
             }
