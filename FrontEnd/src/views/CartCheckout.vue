@@ -262,25 +262,6 @@ export default defineComponent({
     // 處理現金支付
     async handleCashPayment(orderNumber) {
       try {
-        // 逐一處理購物車中的商品
-        for (const item of this.cartItems) {
-          try {
-            // 發送扣庫存請求，包含購買數量
-            await axios.put(`${import.meta.env.VITE_API}/api/menu/minusCartStock/${item.menu.id}`, {
-              cartCount: item.cartCount, // 傳遞購買數量
-            })
-          } catch (error) {
-            // 如果扣庫存失敗，顯示錯誤訊息
-            Swal.fire({
-              icon: 'error',
-              title: '訂單處理失敗',
-              text: error.response?.data || '商品庫存不足',
-              confirmButtonText: '確定',
-            })
-            throw error
-          }
-        }
-
         await this.clearCart()
         this.$router.push({
           path: '/cartCheckSuc',
@@ -338,6 +319,9 @@ export default defineComponent({
               await this.checkPaymentStatus(orderNumber)
             }
           }, 1000)
+
+
+
         } else {
           throw new Error('PayPal 付款連結獲取失敗')
         }
@@ -507,6 +491,7 @@ export default defineComponent({
           }
           // 僅支付成功時彈出成功提示
           if (response.data.paymentStatus === '成功') {
+
             Swal.fire({
               icon: 'success',
               title: '交易成功！',

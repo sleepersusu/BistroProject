@@ -164,8 +164,6 @@ export default {
   },
 
   methods: {
-
-
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
 
@@ -200,6 +198,8 @@ export default {
           title: '已到達庫存上限',
           text: '請重新選擇數量',
           icon: 'error',
+          confirmButtonColor: 'black',
+          confirmButtonText: '確定',
         })
       }
     },
@@ -218,6 +218,8 @@ export default {
           title: '已到達庫存上限',
           text: '請重新選擇數量',
           icon: 'error',
+          confirmButtonColor: 'black',
+          confirmButtonText: '確定',
         })
         this.count = this.menu.productCount
       }
@@ -244,6 +246,7 @@ export default {
           Swal.fire({
             text: '成功加入購物車',
             icon: 'success',
+
           })
         } else {
           throw new Error('庫存更新失敗')
@@ -254,6 +257,8 @@ export default {
           title: '錯誤',
           text: '更新庫存時發生錯誤，請稍後再試。',
           icon: 'error',
+          confirmButtonColor: 'black',
+          confirmButtonText: '確定',
         })
       }
     },
@@ -312,11 +317,9 @@ product-qty {
   min-width: 130px;
 }
 
-
 .product-item .product-qty {
   width: 85px;
 }
-
 
 .btn-primary {
   --bs-btn-color: #fff;
@@ -411,8 +414,6 @@ product-qty {
   color: #222;
   padding: 0;
 }
-
-
 
 .nav-link {
   --bs-nav-pills-link-active-color: #111;

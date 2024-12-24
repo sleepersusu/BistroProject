@@ -29,8 +29,6 @@
 
 <script>
 import ModalMixin from '@/mixins/modalMixin-option'
-import axios from 'axios'
-import Swal from 'sweetalert2'
 export default {
   props: {
     comment: {

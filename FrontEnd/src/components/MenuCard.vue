@@ -46,11 +46,11 @@
   <div class="col" v-if="!isLoading">
     <div class="product-item">
       <div>
-        <figure>
+        <figure style="overflow: hidden; height: 250px; width: 100%;" >
           <img
             :src="menuSrc"
             @error="menuSrc = 'public/images/avatar.jpg'"
-            class="img-fixed tab-image"
+            class="img-fixed "
             v-on:click.prevent.stop="viewDescribeModal(menu)"
           />
         </figure>
@@ -78,7 +78,7 @@
 
       <div class="d-flex justify-content-between">
         <span class="price">NT${{ menu.productPrice }}</span>
-        <span class="fs-6"> 剩餘:{{ menu.productCount }}份</span>
+
       </div>
 
       <div class="d-flex align-items-center justify-content-between">
@@ -164,7 +164,14 @@ export default {
       comments: [],
       commentPeople: 0,
       cartCount: 0,
-      isAddDisabled:false
+      isAddDisabled:false,
+
+
+      totalCount:0
+
+
+
+
     }
   },
   methods: {
@@ -205,7 +212,9 @@ export default {
         Swal.fire({
           title: '已達庫存上限',
           text: `購物車已有 ${this.cartCount} 份，庫存剩餘 ${this.remainingStock} 份`,
-          icon: 'warning'
+          icon: 'warning',
+          confirmButtonColor: 'black',
+          confirmButtonText: '確定',
         })
       }
     },
@@ -267,6 +276,10 @@ export default {
           title: '已到達庫存上限',
           text: '請重新選擇數量',
           icon: 'error',
+
+          confirmButtonColor: 'black',
+          confirmButtonText: '確定',
+
         })
         this.count = this.menu.productCount
       }
@@ -305,7 +318,7 @@ export default {
     isAddDisabled() {
       // 當前選擇數量 + 購物車數量 >= 總庫存，或當前選擇數量 > 剩餘庫存
       return (this.count + this.cartCount > this.menu.productCount) ||
-             (this.count >= this.remainingStock)
+            (this.count >= this.remainingStock)
     }
   }, watch: {
     // 監聽商品數量變化
@@ -325,13 +338,14 @@ export default {
 
 <style scoped>
 .img-fixed {
-  width: 100%; /* 讓圖片寬度符合卡片寬度 */
-  height: 200px; /* 固定高度 */
-  object-fit: cover; /* 圖片裁切，確保不變形 */
-  border-radius: 5px; /* 可選：讓圖片有圓角效果 */
+  min-height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px;
 }
 .card {
   margin-bottom: 5px;
+  overflow: hidden;
 }
 
 figure > img {

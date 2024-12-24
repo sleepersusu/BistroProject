@@ -148,7 +148,7 @@ export default {
       title: '',
       //分頁
       currentPage: 1, // 當前頁面
-      menusPerPage: 3, // 每頁顯示的菜單數量
+      menusPerPage: 6, // 每頁顯示的菜單數量
       totalPages: 1,
 
 
@@ -225,7 +225,7 @@ export default {
     },
 
 
-    
+
   },
 
   computed: {
@@ -425,30 +425,30 @@ export default {
 
 /* 分頁 */
 .pagination .page-link {
-  background: linear-gradient(45deg, #333, #000); /* 黑色漸變背景 */
-  color: white; /* 白字 */
-  border: 1px solid #555; /* 灰色邊框 */
+  background: linear-gradient( #fffefe); /* 黑色漸變背景 */
+  color: rgb(0, 0, 0); /* 白字 */
+  border: 1px solid #ffffff; /* 灰色邊框 */
   border-radius: 5px; /* 圓角按鈕 */
   padding: 8px 12px; /* 內邊距 */
   margin: 0 5px; /* 間距 */
   font-size: 16px; /* 字體大小 */
   font-weight: bold; /* 粗體字 */
   transition: all 0.3s ease; /* 動畫過渡 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 按鈕陰影 */
+
 }
 
 .pagination .page-link:hover {
   background: linear-gradient(45deg, #444, #111); /* 懸停時的漸變 */
-  color: #ffd700; /* 懸停時的金色字體 */
+  color: #ffffff; /* 懸停時的金色字體 */
   transform: scale(1.1); /* 放大效果 */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* 加強陰影 */
+
 }
 
 .pagination .page-item.active .page-link {
-  background: linear-gradient(45deg, #ffd700, #ffa500); /* 活動按鈕金色漸變 */
+  background: linear-gradient(45deg, #ffffff, #ffffff); /* 活動按鈕金色漸變 */
   color: black; /* 黑字 */
-  border: 1px solid #ff8c00; /* 橙色邊框 */
-  box-shadow: 0 6px 12px rgba(255, 140, 0, 0.4); /* 活動按鈕高光 */
+  border: 1px solid #000000; /* 橙色邊框 */
+
   transform: scale(1.15); /* 稍大 */
 }
 

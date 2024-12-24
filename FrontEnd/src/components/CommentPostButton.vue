@@ -13,12 +13,10 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import StarRating from 'vue-star-rating'
 import LoadingVue from 'vue3-loading-overlay'
-import { mapActions } from 'pinia'
-import { cartStore } from '@/stores/cartStore'
-import { useNotificationStore } from '@/stores/notificationStore.js'
+
 
 export default {
   components: {
@@ -47,21 +45,6 @@ export default {
   },
   methods: {
     async openAddCommentModal($event, item) {
-      if (this.order.latestPaymentStatus !== '已付款') {
-        await Swal.fire({
-          title: '無法評論',
-          text: '請先完成付款後再進行評論',
-          icon: 'warning',
-          confirmButtonText: '確定',
-          confirmButtonColor: 'black',
-        customClass: {
-          confirmButton: 'custom-button'
-        }
-
-        })
-        return
-      }
-
       this.$emit('open-add-commentmodal', $event, item)
     },
   },

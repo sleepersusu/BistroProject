@@ -6,7 +6,7 @@
     aria-labelledby="exampleModalLabel"
     ref="modal"
   >
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-2" id="exampleModalLabel">{{ productName }}</h1>
@@ -131,32 +131,80 @@ export default {
 </script>
 
 <style scoped>
+
+@media (max-width: 768px) {
+  /* 調整模態框寬度與間距 */
+  .modal-dialog {
+    max-width: 90%; /* 適應手機螢幕的寬度 */
+    margin: 10px auto; /* 上下左右居中，並留點間距 */
+  }
+
+  /* 標題大小與排版 */
+  .modal-title {
+    font-size: 1.5rem; /* 減小標題字體大小 */
+    text-align: center; /* 標題置中 */
+  }
+
+  /* 關閉按鈕 */
+  .btn-close {
+    position: absolute;
+    top: 10px; /* 向上縮進 */
+    right: 10px; /* 向右縮進 */
+    z-index: 1051;
+  }
+
+  /* 分頁按鈕調整 */
+  .pagination-container {
+    padding: 10px 0; /* 增加上下間距 */
+    text-align: center; /* 置中對齊 */
+  }
+
+  .pagination .page-link {
+    font-size: 0.9rem; /* 減小字體大小 */
+    padding: 5px 10px; /* 減少按鈕內間距 */
+  }
+
+  /* 評論內容排版 */
+  .modal-body {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+
+  .star-rating {
+    font-size: 1.2rem;
+  }
+}
+
+
+
+
 /* 分頁 */
 .pagination .page-link {
-  background: linear-gradient(45deg, #333, #000); /* 黑色漸變背景 */
-  color: white; /* 白字 */
-  border: 1px solid #555; /* 灰色邊框 */
+  background: linear-gradient( #fffefe); /* 黑色漸變背景 */
+  color: rgb(0, 0, 0); /* 白字 */
+  border: 1px solid #ffffff; /* 灰色邊框 */
   border-radius: 5px; /* 圓角按鈕 */
   padding: 8px 12px; /* 內邊距 */
   margin: 0 5px; /* 間距 */
   font-size: 16px; /* 字體大小 */
   font-weight: bold; /* 粗體字 */
   transition: all 0.3s ease; /* 動畫過渡 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 按鈕陰影 */
+
 }
 
 .pagination .page-link:hover {
   background: linear-gradient(45deg, #444, #111); /* 懸停時的漸變 */
-  color: #ffd700; /* 懸停時的金色字體 */
+  color: #ffffff; /* 懸停時的金色字體 */
   transform: scale(1.1); /* 放大效果 */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* 加強陰影 */
+
 }
 
 .pagination .page-item.active .page-link {
-  background: linear-gradient(45deg, #ffd700, #ffa500); /* 活動按鈕金色漸變 */
+  background: linear-gradient(45deg, #ffffff, #ffffff); /* 活動按鈕金色漸變 */
   color: black; /* 黑字 */
-  border: 1px solid #ff8c00; /* 橙色邊框 */
-  box-shadow: 0 6px 12px rgba(255, 140, 0, 0.4); /* 活動按鈕高光 */
+  border: 1px solid #000000; /* 橙色邊框 */
+
   transform: scale(1.15); /* 稍大 */
 }
 

@@ -140,20 +140,27 @@ public class CommentRestController {
 		for (Comment comment : comments) {
 			String memberName = comment.getMembers().getMemberName();
 			String firstName;
+			
+			if (memberName != null && !memberName.isEmpty()) {
+			    if (memberName.startsWith("Mr.") || memberName.startsWith("Ms.")) {
+			        memberName = memberName.substring(3).trim();
+			    }
 
-			if (memberName.length() > 3) {
-				firstName = memberName.substring(0, 2);
-			} else {
-				firstName = memberName.substring(0, 1);
-			}
+			    if (memberName.length() > 3) {
+			    	firstName = memberName.substring(0, 2);
+			    } else {
+			    	firstName = memberName.substring(0, 1);
+			    }
 
-			if (comment.getMembers().getMemberSex() == 1) {
-				memberName = (firstName + "先生").trim();
-			} else {
-				memberName = (firstName + "小姐").trim();
-			}
+			    if (comment.getMembers().getMemberSex() == 1) {
+			    	memberName = ("Mr."+firstName).trim();
+			    } else {
+			    	memberName = ("Ms."+firstName).trim();
+			    }
 			comment.getMembers().setMemberName(memberName);
+			}
 		}
+			
 		return ResponseEntity.ok(comments);
 	}
 
