@@ -60,7 +60,7 @@
           <div class="mb-3">
             <label for="customerName" class="form-label">訂位人姓名</label>
             <input type="text" class="form-control frame" id="customerName" v-model="reservations.customerName"
-              required />
+              maxlength="10" required />
           </div>
           <div class="mb-3">
             <label class="form-label">性別</label>
@@ -80,7 +80,7 @@
           <div class="mb-3">
             <label for="contactPhone" class="form-label">電話</label>
             <input type="tel" class="form-control frame" id="contactPhone" v-model="reservations.contactPhone"
-             maxlength="10"  required />
+              maxlength="10" required />
           </div>
           <div class="row g-3">
             <div class="col-md-6">
@@ -130,6 +130,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -151,13 +152,15 @@ export default {
   },
   methods: {
     showSuccess() {
-      Swal.fire({
+      window.Swal.fire({
         title: '新增訂位成功!',
+        iconColor: '#000000',
         icon: 'success',
         confirmButtonText: '確定',
         confirmButtonColor: '#000000',
         customClass: {
-          confirmButton: 'custom-button'
+          confirmButton: 'custom-button',
+          icon: 'custom-icon' 
         }
       })
     },
@@ -169,14 +172,6 @@ export default {
         this.selectedTime = time
       }
       this.reservations.startTime = this.selectedTime
-    },
-    formatDate(date) {
-      if (!date) return ''
-      const d = new Date(date)
-      const year = d.getFullYear()
-      const month = String(d.getMonth() + 1).padStart(2, '0')
-      const day = String(d.getDate()).padStart(2, '0')
-      return `${year}-${month}-${day}`
     },
     async displayTimes() {
       if (this.reservations.numberPeople === 0 || !this.reservations.reservationDate) {
@@ -262,11 +257,12 @@ export default {
     this.$nextTick(() => {
       this.isMapVisible = true;
     });
-    const today = new Date()
-    this.minDate = today.toISOString().split('T')[0]
-    const max = new Date()
-    max.setDate(today.getDate() + 7)
-    this.maxDate = max.toISOString().split('T')[0]
+    const today = new Date();
+    const localToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    this.minDate = localToday.toLocaleDateString('zh-TW').split('/').join('-');
+    const max = new Date(localToday);
+    max.setDate(localToday.getDate() + 7);
+    this.maxDate = max.toLocaleDateString('zh-TW').split('/').join('-');
   },
   computed: {},
   watch: {
@@ -304,6 +300,7 @@ export default {
 .custom-button {
   color: white;
 }
+
 
 @media (min-width: 992px) {
   #googlemap iframe {
