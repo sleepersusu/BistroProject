@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container h-100" >
 
     <div class="col-12">
       <BannerTop :title="'My Comment'"></BannerTop>
@@ -16,9 +16,9 @@
                   <thead class="bg-gray-100">
                     <tr>
                       <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 100px;">餐點名稱</th>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7">評價分數</th>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7" >評論內容</th>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7">評論時間</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 150px;">評價分數</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 300px;">評論內容</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 200px;">評論時間</th>
                       <th class="text-dark text-xs font-weight-semibold opacity-7"></th>
                     </tr>
                   </thead>
@@ -178,6 +178,8 @@ export default {
   padding: 1.5rem;
 }
 
+
+
 .header-title {
   margin: 0;
   font-size: 1.25rem;
@@ -213,131 +215,4 @@ export default {
   font-size: 1rem;
 }
 
-/* 平板響應式 (768px - 1024px) */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .comment-container {
-    padding: 1.25rem 1rem;
-  }
-
-  .card {
-    border-radius: 0.75rem;
-    margin-bottom: 1rem !important;
-  }
-
-  .card-header {
-    padding: 1.25rem 1rem;
-  }
-
-  /* 表格調整 */
-  .table th {
-    padding: 0.75rem;
-    font-size: 0.875rem;
-  }
-
-  .table td {
-    padding: 1rem 0.75rem;
-  }
-
-  /* 評論內容欄位寬度控制 */
-  .table td:nth-child(3) {
-    max-width: 200px;
-    white-space: normal;
-    word-wrap: break-word;
-  }
-
-  /* 日期欄位寬度 */
-  .table td:nth-child(4) {
-    white-space: nowrap;
-  }
-
-  /* 分頁控制器 */
-  .pagination-container {
-    padding: 1rem;
-  }
-
-  .pagination-info {
-    font-size: 0.875rem;
-  }
-
-  .pagination-btn {
-    padding: 0.5rem 0.875rem;
-  }
-}
-
-/* 手機響應式 (< 768px) */
-@media (max-width: 767px) {
-  .comment-container {
-    padding: 1rem 0.5rem;
-  }
-
-  .card {
-    border-radius: 0.5rem;
-    margin: 0 !important;
-  }
-
-  .card-header {
-    padding: 1rem;
-  }
-
-  .header-title {
-    font-size: 1.125rem;
-  }
-
-  thead {
-    display: none;
-  }
-
-  .comment-list > tr {
-    display: block;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #dee2e6;
-  }
-
-  .pagination-container {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem 0.5rem;
-  }
-
-  .pagination-info {
-    text-align: center;
-    width: 100%;
-  }
-
-  .pagination-controls {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-/* 小平板響應式 (600px - 767px) */
-@media (min-width: 600px) and (max-width: 767px) {
-  .comment-container {
-    padding: 1rem;
-  }
-
-  .card {
-    margin: 0 0.5rem !important;
-  }
-
-  .table td::before {
-    width: 120px;  /* 標籤寬度調整 */
-  }
-}
-
-/* 超小螢幕 (< 600px) */
-@media (max-width: 599px) {
-  .comment-container {
-    padding: 0.5rem 0;
-  }
-
-  .card {
-    border: none;
-    box-shadow: none;
-  }
-
-  .pagination-btn {
-    padding: 0.375rem 0.75rem;
-  }
-}
 </style>

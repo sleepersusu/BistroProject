@@ -63,7 +63,7 @@
                         class="btn btn-outline-secondary btn-sm"
                         type="button"
                         @click="increaseQuantity(item)"
-                        :disabled="item.cartCount >= item.menu.productCount"
+
                       >
                         +
                       </button>

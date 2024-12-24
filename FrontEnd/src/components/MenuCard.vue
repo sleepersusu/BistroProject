@@ -108,7 +108,7 @@
               type="button"
               class="quantity-right-plus btn btn-success btn-number"
               data-type="plus"
-              :disabled="isAddDisabled"
+
             >
               <svg width="16" height="16" v-on:click.prevent="addOne">
                 <use xlink:href="#plus"></use>
@@ -205,18 +205,10 @@ export default {
 
     // 加一的方法需要考慮購物車數量
     async addOne() {
-      if (this.count + this.cartCount < this.menu.productCount) {
+
         this.count += 1
         this.$emit('update-count', this.count)
-      } else {
-        Swal.fire({
-          title: '已達庫存上限',
-          text: `購物車已有 ${this.cartCount} 份，庫存剩餘 ${this.remainingStock} 份`,
-          icon: 'warning',
-          confirmButtonColor: 'black',
-          confirmButtonText: '確定',
-        })
-      }
+
     },
     async getCommentPeople() {
       let API_URL = `${import.meta.env.VITE_API}/api/${this.menu.productName}/comment/people`
@@ -237,11 +229,7 @@ export default {
       this.$emit('view-menudescribe', menu)
     },
     handleAddToCart(id) {
-      if (this.count + this.cartCount > this.menu.productCount) {
-        // 這裡使用你的提示框組件
-        console.warn('超過庫存限制')
-        return
-      }
+
 
       const productName = this.menu.productName
       this.addToCart({ id, count: this.count })
@@ -284,26 +272,14 @@ export default {
         this.count = this.menu.productCount
       }
     },
-    updateCartCount() {
-      const item = this.cartItems.find(item => item.id === this.menu.id)
-      this.cartCount = item ? item.quantity : 0
-      console.log('yy:'+this.cartCount)
-    }
   },
 
-  computed: {
 
-  },
-  availableStock(newStock) {
-    if (newStock <= 0) {
-      this.count = 0
-    }
-  },
 
   async created() {
     this.loadPicture(this.menu.id)
     await this.getCommentPeople()
-    // await this.getCartCount() // 初始化購物車數量
+
 
   },
 
@@ -321,16 +297,7 @@ export default {
             (this.count >= this.remainingStock)
     }
   }, watch: {
-    // 監聽商品數量變化
-    // 'menu.productCount': {
-    //   immediate: true,
-    //   handler(newCount) {
-    //     if (this.count > newCount - this.cartCount) {
-    //       this.isAddDisabled=false
-    //       this.count = Math.max(0, newCount - this.cartCount)
-    //     }
-    //   }
-    // }
+
   }
 
 }
