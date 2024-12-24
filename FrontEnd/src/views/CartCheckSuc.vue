@@ -47,7 +47,7 @@ import { lotteryStore } from '@/stores/lotteryStore.js'
 import { statusStore } from '@/stores/statusStore.js'
 import { useUserStore } from '@/stores/userStore.js'
 import { orderStore } from '@/stores/orderStore.js'
-
+import Swal from 'sweetalert2'
 
 const campaign = campaignStore()
 const lottery = lotteryStore()
@@ -65,17 +65,13 @@ export default defineComponent({
     }
   },
   methods: {
-    async addMemberChance(){
+    async addMemberChance() {
       status.start()
       const orderData = await order.getOrderDetail(this.orderNumber)
       console.log(orderData)
       const sumPirce = orderData?.ordersSumPrice
       const activeCampaign = await campaign.getActiveCampaign()
-      const res = await lottery.addChance(
-        activeCampaign[0].id,
-        user.memberId,
-        sumPirce,
-      )
+      const res = await lottery.addChance(activeCampaign[0].id, user.memberId, sumPirce)
       if (res?.status === 200) {
         this.showAlert(res.data.newChances)
       }
@@ -97,6 +93,7 @@ export default defineComponent({
           toast.addEventListener('mouseleave', Swal.resumeTimer)
           toast.addEventListener('click', () => {
             this.$router.push('/campaign')
+            Swal.close()
           })
           toast.style.cursor = 'pointer'
         },
