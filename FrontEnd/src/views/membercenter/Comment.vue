@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+
     <div class="col-12">
       <BannerTop :title="'My Comment'"></BannerTop>
       <div class="container-fluid comment-container">
@@ -42,8 +43,8 @@
 
               <!-- 分頁控制 -->
               <div class="border-top pagination-container">
-                <p class="pagination-info">
-                  第 {{ currentPage }} 頁，共 {{ totalPages }} 頁
+                <p class="font-weight-semibold mb-0 text-dark text-sm">
+                  Page {{ currentPage }} of {{ totalPages }}
                 </p>
                 <div class="pagination-controls">
                   <button

@@ -81,6 +81,7 @@
         ref="commentModal"
         :comments="comments"
         :productName="currentProduct"
+        :cart-items="cartItems"
       ></MenuCommentModal>
       <MenuDescribeModal ref="menuDescribeModal" :menu="menu"></MenuDescribeModal>
     </div>
@@ -149,6 +150,10 @@ export default {
       currentPage: 1, // 當前頁面
       menusPerPage: 3, // 每頁顯示的菜單數量
       totalPages: 1,
+
+
+
+      cartItems: [] // 購物車項目列表
     }
   },
   methods: {
@@ -218,6 +223,9 @@ export default {
     async viewDescribeModal(menu) {
       this.$emit('view-menudescribe', menu)
     },
+
+
+    
   },
 
   computed: {

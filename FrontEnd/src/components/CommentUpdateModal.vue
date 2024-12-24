@@ -109,7 +109,7 @@
             <div class="mb-3">
               <input
                 class="form-control"
-                style="display: none;"
+                style="display: none"
                 type="datetime-local"
                 :value="currentDate"
                 aria-label="評論時間"
@@ -120,7 +120,14 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="handleReset" style="color: white; background-color: red;">重設</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="handleReset"
+            style="color: white; background-color: red"
+          >
+            重設
+          </button>
           <button type="button" class="btn btn-primary" @click="handleSubmit()">確定</button>
         </div>
       </div>
@@ -247,6 +254,10 @@ export default {
               title: '感謝你的評論!',
               text: '提交評論成功。',
               icon: 'success',
+              confirmButtonText: '確定',
+              confirmButtonColor: 'black',
+              iconColor:'black',
+
             })
           })
         } catch (error) {
@@ -255,6 +266,11 @@ export default {
             title: '錯誤!',
             text: '提交評論時發生錯誤。',
             icon: 'error',
+            iconColor:'black',
+            customClass: {
+                confirmButton: 'custom-button',
+                icon:'custom-button',
+              },
           })
         }
       }
@@ -288,7 +304,7 @@ textarea {
   min-height: 100px;
 }
 
-button{
+button {
   border: none;
 }
 </style>

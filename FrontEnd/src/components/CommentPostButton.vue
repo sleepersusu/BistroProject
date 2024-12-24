@@ -52,7 +52,12 @@ export default {
           title: '無法評論',
           text: '請先完成付款後再進行評論',
           icon: 'warning',
-          confirmButtonText: '確定'
+          confirmButtonText: '確定',
+          confirmButtonColor: 'black',
+        customClass: {
+          confirmButton: 'custom-button'
+        }
+
         })
         return
       }

@@ -138,7 +138,11 @@
 
                   <div class="checkout__input__checkbox">
                     <label for="paypal">
-                      <img class="pay ms-3" src="https://i.imgur.com/cMk1MtK.jpg" alt="PayPal支付" />
+                      <img
+                        class="pay ms-3"
+                        src="https://i.imgur.com/cMk1MtK.jpg"
+                        alt="PayPal支付"
+                      />
                       Paypal
                       <input
                         type="radio"
@@ -174,7 +178,6 @@ import { useUserStore } from '@/stores/userStore.js'
 import axios from 'axios'
 const user = useUserStore()
 
-
 export default defineComponent({
   name: 'CartCheckout',
   components: { BannerTop },
@@ -182,7 +185,7 @@ export default defineComponent({
   data() {
     return {
       nameError: '',
-      phoneError:'',
+      phoneError: '',
       cartItems: [],
       isProcessing: false,
       orderData: {
@@ -259,6 +262,25 @@ export default defineComponent({
     // 處理現金支付
     async handleCashPayment(orderNumber) {
       try {
+        // 逐一處理購物車中的商品
+        for (const item of this.cartItems) {
+          try {
+            // 發送扣庫存請求，包含購買數量
+            await axios.put(`${import.meta.env.VITE_API}/api/menu/minusCartStock/${item.menu.id}`, {
+              cartCount: item.cartCount, // 傳遞購買數量
+            })
+          } catch (error) {
+            // 如果扣庫存失敗，顯示錯誤訊息
+            Swal.fire({
+              icon: 'error',
+              title: '訂單處理失敗',
+              text: error.response?.data || '商品庫存不足',
+              confirmButtonText: '確定',
+            })
+            throw error
+          }
+        }
+
         await this.clearCart()
         this.$router.push({
           path: '/cartCheckSuc',
@@ -314,7 +336,6 @@ export default defineComponent({
             if (paypalWindow.closed) {
               clearInterval(checkPaypal)
               await this.checkPaymentStatus(orderNumber)
-
             }
           }, 1000)
         } else {
@@ -360,23 +381,22 @@ export default defineComponent({
     // 主要下單方法
     async placeOrder() {
       // 防止重複提交
-      if (this.isProcessing) return;
-      this.isProcessing = true;
+      if (this.isProcessing) return
+      this.isProcessing = true
       try {
         // 重新執行姓名和電話驗證
-          this.validateName();
-          this.validatePhone();
+        this.validateName()
+        this.validatePhone()
         // 如果有驗證錯誤，停止提交並返回
-          if (this.nameError || this.phoneError) {
-            this.isProcessing = false;
-            return;
-          }
+        if (this.nameError || this.phoneError) {
+          this.isProcessing = false
+          return
+        }
         // 確保其他必要的訂單數據都已正確填寫
-          if (!this.validateOrderData()) {
-            this.isProcessing = false
-            return
-          }
-
+        if (!this.validateOrderData()) {
+          this.isProcessing = false
+          return
+        }
 
         Swal.fire({
           icon: 'info',
@@ -392,7 +412,10 @@ export default defineComponent({
           seatType: this.orderData.seatType,
           ordersRequest: this.orderData.ordersRequest,
           ordersSumPrice: Math.round(this.calculateTotal),
-          latestPaymentStatus: this.orderData.PaymentWay === 'Cash' || this.orderData.PaymentWay === 'ECPay'? '已付款' : '未付款',
+          latestPaymentStatus:
+            this.orderData.PaymentWay === 'Cash' || this.orderData.PaymentWay === 'ECPay'
+              ? '已付款'
+              : '未付款',
           memberId: user.memberId,
           ordersDetails: this.cartItems.map((item) => ({
             odName: item.menu.productName,
@@ -405,7 +428,10 @@ export default defineComponent({
             {
               paymentPrice: Math.round(this.calculateTotal),
               paymentWay: this.orderData.PaymentWay,
-              paymentStatus: this.orderData.PaymentWay === 'Cash' || this.orderData.PaymentWay === 'ECPay' ? '成功' : '失敗',
+              paymentStatus:
+                this.orderData.PaymentWay === 'Cash' || this.orderData.PaymentWay === 'ECPay'
+                  ? '成功'
+                  : '失敗',
             },
           ],
         }

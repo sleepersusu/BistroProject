@@ -64,7 +64,7 @@
             <svg width="24" height="24" class="text-primary">
               <use xlink:href="#star-solid"></use></svg>{{ menu.avgScore }}
           </span>
-          <span style="padding-left: 5px">({{ commentPeople }})</span>
+          <span style="padding-left: 5px; font-size: smaller">({{ commentPeople }})</span>
         </div>
 
         <li
@@ -89,7 +89,7 @@
               class="quantity-left-minus btn btn-danger btn-number"
               data-type="minus"
               v-on:click.prevent="minusOne"
-              :disabled="this.count==0"
+              :disabled="this.count == 0"
             >
               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
             </button>
@@ -107,7 +107,8 @@
             <button
               type="button"
               class="quantity-right-plus btn btn-success btn-number"
-              data-type="plus" :disabled="this.count==menu.productCount"
+              data-type="plus"
+              :disabled="isAddDisabled"
             >
               <svg width="16" height="16" v-on:click.prevent="addOne">
                 <use xlink:href="#plus"></use>
@@ -116,7 +117,13 @@
           </span>
         </div>
 
-        <button class="btn btn-primary mt-3" @click="handleAddToCart(menu.id)" :disabled="this.count==0">Add to Cart</button>
+        <button
+          class="btn btn-primary mt-3"
+          @click="handleAddToCart(menu.id)"
+          :disabled="count <= 0 "
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   </div>
@@ -140,6 +147,10 @@ export default {
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
     },
+    cartItems: {
+      type: Array,
+      required: true,
+    },
   },
 
   emits: ['update-count', 'addToCart', 'image-loaded', 'view-comment', 'view-menudescribe'],
@@ -153,6 +164,7 @@ export default {
       comments: [],
       commentPeople: 0,
       cartCount: 0,
+      isAddDisabled:false
     }
   },
   methods: {
@@ -184,17 +196,16 @@ export default {
       }
     },
 
+    // 加一的方法需要考慮購物車數量
     async addOne() {
-      if (this.count < this.menu.productCount) {
+      if (this.count + this.cartCount < this.menu.productCount) {
         this.count += 1
         this.$emit('update-count', this.count)
       } else {
-        this.count = this.menu.productCount
-        this.$emit('update-count', this.count)
         Swal.fire({
-          title: '已到達庫存上限',
-          text: '請重新選擇數量',
-          icon: 'error',
+          title: '已達庫存上限',
+          text: `購物車已有 ${this.cartCount} 份，庫存剩餘 ${this.remainingStock} 份`,
+          icon: 'warning'
         })
       }
     },
@@ -209,6 +220,7 @@ export default {
           console.error('Error fetching commentPeople:', error)
         })
     },
+
     async viewComment(menu) {
       this.$emit('view-comment', menu)
     },
@@ -216,26 +228,35 @@ export default {
       this.$emit('view-menudescribe', menu)
     },
     handleAddToCart(id) {
-      const productName = this.menu.productName;
+      if (this.count + this.cartCount > this.menu.productCount) {
+        // 這裡使用你的提示框組件
+        console.warn('超過庫存限制')
+        return
+      }
+
+      const productName = this.menu.productName
       this.addToCart({ id, count: this.count })
+
+
       this.count = 1
       // 黑灰底白字的提示框
       Swal.fire({
-        toast:true,
+        toast: true,
         title: `「${productName}」成功加入購物車！`,
-        position:'top-end',
+        position: 'top-end',
         icon: 'success',
         background: '#fff', // 黑灰底
-        color: '#000000',     // 白字
+        color: '#000000', // 白字
         iconColor: '#000000', // 成功
         showConfirmButton: false, //不顯示確認按鈕
         timer: 2330, //時間
         timerProgressBar: true, //進度條
         didOpen: (toast) => {
-          toast.style.marginTop = '80px'; // 動態調整位置
+          toast.style.marginTop = '80px' // 動態調整位置
         },
+      })
 
-      });
+
     },
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
@@ -250,52 +271,59 @@ export default {
         this.count = this.menu.productCount
       }
     },
-
-    async getCartCount() {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_API}/api/cart/list`)
-        const cartItems = response.data
-
-        // 更新當前商品的購物車數量
-        const item = cartItems.find((item) => item.id === this.menu.id)
-        console.log(item)
-
-        this.cartCount = item ? item.cartCount : 0
-      } catch (error) {
-        console.error('Error:', error)
-        if (error.response?.status === 401) {
-          this.cartCount = 0
-        }
-      }
-    },
-
+    updateCartCount() {
+      const item = this.cartItems.find(item => item.id === this.menu.id)
+      this.cartCount = item ? item.quantity : 0
+      console.log('yy:'+this.cartCount)
+    }
   },
 
   computed: {
-    // 計算實際可用庫存
-    // availableStock() {
-    //   return this.menu.productCount - this.cartCount - this.count
-    // },
+
   },
   availableStock(newStock) {
     if (newStock <= 0) {
-      this.count = 0;
+      this.count = 0
     }
   },
 
   async created() {
     this.loadPicture(this.menu.id)
     await this.getCommentPeople()
-    await this.getCartCount() // 初始化購物車數量
-    this.getProductStock(); // 初始化庫存數量
+    // await this.getCartCount() // 初始化購物車數量
+
+  },
+
+
+  computed: {
+    // 計算剩餘可添加的庫存數量
+    remainingStock() {
+      return this.menu.productCount - this.cartCount
+    },
+
+    // 判斷是否應該禁用添加按鈕
+    isAddDisabled() {
+      // 當前選擇數量 + 購物車數量 >= 總庫存，或當前選擇數量 > 剩餘庫存
+      return (this.count + this.cartCount > this.menu.productCount) ||
+             (this.count >= this.remainingStock)
+    }
+  }, watch: {
+    // 監聽商品數量變化
+    // 'menu.productCount': {
+    //   immediate: true,
+    //   handler(newCount) {
+    //     if (this.count > newCount - this.cartCount) {
+    //       this.isAddDisabled=false
+    //       this.count = Math.max(0, newCount - this.cartCount)
+    //     }
+    //   }
+    // }
   }
 
 }
 </script>
 
 <style scoped>
-
-
 .img-fixed {
   width: 100%; /* 讓圖片寬度符合卡片寬度 */
   height: 200px; /* 固定高度 */
@@ -452,8 +480,8 @@ product-qty {
 .product-item {
   position: relative;
   padding: 16px;
-  background: #FFFFFF;
-  border: 1px solid #FBFBFB;
+  background: #ffffff;
+  border: 1px solid #fbfbfb;
   box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.04);
   border-radius: 16px;
   margin-bottom: 30px;
@@ -473,7 +501,7 @@ product-qty {
   margin: 0;
 }
 .product-item figure {
-  background: #F9F9F9;
+  background: #f9f9f9;
   border-radius: 12px;
   text-align: center;
 }
@@ -505,7 +533,7 @@ product-qty {
   line-height: 18px;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: #9D9D9D;
+  color: #9d9d9d;
 }
 .product-item .rating {
   font-weight: 600;
@@ -515,7 +543,7 @@ product-qty {
   color: #222222;
 }
 .product-item .rating iconify-icon {
-  color: #FFC43F;
+  color: #ffc43f;
 }
 .product-item .price {
   display: block;
@@ -545,8 +573,8 @@ product-qty {
   height: 26px;
   line-height: 1;
   text-align: center;
-  background: #FFFFFF;
-  border: 1px solid #E2E2E2;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
   border-radius: 6px;
   color: #222;
   padding: 0;

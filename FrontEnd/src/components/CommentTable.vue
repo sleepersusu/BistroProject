@@ -1,5 +1,4 @@
 <template>
-
   <tr>
     <!-- 商品名稱 -->
     <td data-label="餐點名稱">
@@ -11,7 +10,7 @@
     </td>
 
     <!-- 評分星星 -->
-    <td data-label="評價分數">
+    <td data-label="評價分數" style="max-width: 10px">
       <div class="rating-wrapper">
         <star-rating
           :rating="comment.commentRating"
@@ -20,14 +19,16 @@
           :rounded-corners="true"
           :star-size="25"
           :show-rating="false"
-          :star-points="[23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17]"
+          :star-points="[
+            23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17,
+          ]"
         >
         </star-rating>
       </div>
     </td>
 
     <!-- 評論內容 -->
-    <td data-label="評論內容" class="comment-content" style="max-width: 300px;">
+    <td data-label="評論內容" class="comment-content" style="max-width: 115px">
       {{ comment.commentMessage }}
     </td>
 
@@ -36,31 +37,26 @@
       <span class="time-text">{{ comment.commentTime }}</span>
     </td>
 
-
     <div class="action-wrapper">
-        <div class="btn-group">
-          <button
-            class="btn btn-sm action-btn"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i class="bi bi-three-dots"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-              <button class="dropdown-item" @click.prevent="updateComment(comment)">
-                編輯
-              </button>
-            </li>
-            <li>
-              <button class="dropdown-item" @click.prevent="deleteComment(comment)">
-                刪除
-              </button>
-            </li>
-          </ul>
-        </div>
+      <div class="btn-group">
+        <button
+          class="btn btn-sm action-btn"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-three-dots"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <button class="dropdown-item" @click.prevent="updateComment(comment)">編輯</button>
+          </li>
+          <li>
+            <button class="dropdown-item" @click.prevent="deleteComment(comment)">刪除</button>
+          </li>
+        </ul>
       </div>
+    </div>
   </tr>
 </template>
 
@@ -90,13 +86,18 @@ export default {
 
     async deleteComment(comment) {
       const result = await Swal.fire({
-        icon: 'question',
+        icon: 'warning',
+        iconColor: 'black',
         title: `確定要刪除嗎?`,
         html: `<p>刪除後無法還原</p>`,
         showCancelButton: true,
         confirmButtonText: '確定',
         cancelButtonText: '取消',
         reverseButtons: true,
+        confirmButtonColor: 'red',
+        customClass: {
+          confirmButton: 'custom-button',
+        },
       })
 
       if (result.isConfirmed) {
@@ -109,8 +110,13 @@ export default {
             this.$emit('delete-comment-modal')
             await Swal.fire({
               icon: 'success',
+              iconColor: 'black',
               title: `刪除成功`,
               showCancelButton: false,
+              confirmButtonColor: 'black',
+              customClass: {
+                confirmButton: 'custom-button',
+              },
             })
           })
           .catch(async (error) => {
@@ -125,7 +131,6 @@ export default {
 </script>
 
 <style scoped>
-
 .myComment {
   word-wrap: break-word;
 }
@@ -144,7 +149,6 @@ export default {
 
 /* 響應式樣式 */
 @media (max-width: 768px) {
-
   thead {
     display: none;
   }
@@ -283,7 +287,6 @@ export default {
 
 /* 超小螢幕調整 */
 @media (max-width: 576px) {
-
   thead {
     display: none;
   }
@@ -315,5 +318,13 @@ export default {
   .table-responsive thead {
     display: none;
   }
+}
+s .action-wrapper {
+  padding: 0;
+}
+
+td,
+tr {
+  max-width: 150px;
 }
 </style>

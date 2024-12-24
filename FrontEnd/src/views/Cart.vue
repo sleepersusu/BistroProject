@@ -63,7 +63,7 @@
                         class="btn btn-outline-secondary btn-sm"
                         type="button"
                         @click="increaseQuantity(item)"
-                        :disabled="item.cartCount==0"
+                        :disabled="item.cartCount >= item.menu.productCount"
                       >
                         +
                       </button>
@@ -176,6 +176,7 @@ export default {
     return {
       cartItems: [],
       isLoading: ref(false),
+      tooManyProduct:false
     }
   },
   methods: {
@@ -214,6 +215,7 @@ export default {
         const result = await this.CountCart(item.menu)
         if (result && result.data) {
           this.cartItems = result.data
+          console.log('result:'+this.cartItems)
         }
       } catch (error) {
         console.error('Failed to increase quantity:', error)
@@ -298,7 +300,10 @@ export default {
       return this.cartItems.length > 0 // 判斷購物車是否有資料
     },
   },
-  watch: {},
+  watch: {
+
+
+  },
   created() {
     this.fetchCartItems()
   },

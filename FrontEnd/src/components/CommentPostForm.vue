@@ -67,7 +67,7 @@
             class="btn btn-secondary"
             @click="handleReset"
             :disabled="isSubmitting"
-            style="color:white; background-color: red;"
+            style="color: white; background-color: red"
           >
             重設
           </button>
@@ -115,7 +115,7 @@ export default {
       commentProduct: '',
       commentMessage: '',
       rating: 0,
-      isCommented:false,
+      isCommented: false,
       isSubmitting: false,
       currentDate: '',
       showValidationErrors: false,
@@ -123,7 +123,7 @@ export default {
     }
   },
 
-  emits:['comment-submitted'],
+  emits: ['comment-submitted'],
 
   computed: {
     currentRatingText() {
@@ -188,7 +188,6 @@ export default {
       this.updateCurrentDate()
     },
 
-
     async handleSubmit() {
       if (this.isSubmitting) return
 
@@ -199,6 +198,11 @@ export default {
           title: '請完整填寫',
           text: '請填寫評分',
           icon: 'warning',
+          confirmButtonColor: 'black',
+          iconColor:'black',
+          customClass: {
+            confirmButton: 'custom-button',
+          },
         })
         return
       }
@@ -215,37 +219,31 @@ export default {
           commentTime: this.currentDate,
         }
 
-
-
         await axios.post(`${import.meta.env.VITE_API}/api/comment/postComment`, addComment)
 
         await Swal.fire({
           title: '感謝你的評論!',
           text: '提交評論成功。',
           icon: 'success',
-          confirmButtonColor: "#000000",
-
+          confirmButtonText: '確定',
+          confirmButtonColor: 'black',
+          iconColor:'black',
+          customClass: {
+            confirmButton: 'custom-button',
+          },
         })
 
-
-
-        this.isCommented=true
+        this.isCommented = true
         // 向父組件發送評論狀態
-      this.$emit('comment-submitted', {
-        detailId: this.item.id,
-        isCommented: true
-      })
+        this.$emit('comment-submitted', {
+          detailId: this.item.id,
+          isCommented: true,
+        })
 
         // 重置表單
         this.handleReset()
       } catch (error) {
         console.error('Comment submission error:', error)
-        await Swal.fire({
-          title: '錯誤!',
-          text: '評論星數最少1分，最多5分。',
-          icon: 'error',
-
-        })
       } finally {
         this.isSubmitting = false
         this.showValidationErrors = false
@@ -272,7 +270,7 @@ export default {
   display: block;
 }
 
-button{
+button {
   border: none;
 }
 </style>
