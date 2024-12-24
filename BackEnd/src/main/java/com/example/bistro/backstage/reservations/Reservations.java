@@ -19,8 +19,10 @@ public class Reservations {
 	@Column(name="ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer  id;
+
 	@Column(insertable = false, updatable = false)
 	private String formattedId;
+
 	private String customerName;
 	private String customerGender;
 	private String contactPhone;
