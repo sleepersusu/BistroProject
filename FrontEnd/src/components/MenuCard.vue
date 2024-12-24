@@ -261,7 +261,7 @@ export default {
   },
 
   async created() {
-    this.loadPicture(this.menu.id)
+    await this.loadPicture(this.menu.id)
     await this.getCommentPeople()
   },
 
@@ -279,8 +279,6 @@ export default {
       )
     },
   },
-  watch: {},
-}
 </script>
 
 <style scoped>
