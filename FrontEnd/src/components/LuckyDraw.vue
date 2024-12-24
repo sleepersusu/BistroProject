@@ -126,7 +126,11 @@ const endCallBack = async (prize) => {
   prize.fonts[1].text = `剩餘: ${currentQuantity - 1}`
   await window.Swal.fire({
     title: `${prize.fonts[0].text === '銘謝惠顧' ? '再接再厲' : '恭喜中獎!'}`,
-    text: `獲得：${prize.fonts[0].text}！`,
+    html: `${
+      prize.fonts[0].text === '銘謝惠顧'
+        ? `獲得：${prize.fonts[0].text}！`
+        : `獲得：<span style="color: #B8860B; font-weight: bold; font-size: 1.2em;">${prize.fonts[0].text}</span>！<br>請至中獎紀錄填寫配送資訊，以利我們寄送獎品。`
+    }`,
     imageUrl: `${prize.imgs[0].src}`,
     imageWidth: 200,
     imageHeight: 200,
@@ -134,7 +138,7 @@ const endCallBack = async (prize) => {
     showCancelButton: true,
     confirmButtonColor: '#B8860B',
     cancelButtonColor: '#666',
-    confirmButtonText: '查看中獎紀錄',
+    confirmButtonText: '填寫配送資訊',
     cancelButtonText: '關閉',
     background: '#000',
     color: '#fff',

@@ -21,4 +21,5 @@ public interface PointsTotalRepository extends JpaRepository<PointsTotalBean, In
   
     // 增加根據會員ID查詢點數的方法
   Optional<PointsTotalBean> findByMembersId(Integer memberId);
+}
 
