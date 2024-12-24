@@ -143,8 +143,42 @@ public class CampaignController {
 	
 	@PostMapping("/Bistro/campaign/delete")
 	public String deleteById(@RequestParam Integer id) {
-		campaignService.deleteCampaignById(id);
-		return "redirect:/Bistro/campaign/findAll";
+	    Campaign campaign = campaignService.findCampaignById(id);
+	    
+	    if (campaign != null) {
+	        try {
+	            sendDeleteMessage(campaign);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        
+	        campaignService.deleteCampaignById(id);
+	    }
+	    
+	    return "redirect:/Bistro/campaign/findAll";
+	}
+	
+	private void sendDeleteMessage(Campaign campaign) {
+	    String message = String.format(
+	        "❌ 活動結束通知 ❌\n\n" +
+	        "【%s】活動已結束\n\n" +
+	        "感謝您的支持與參與！\n" +
+	        "請持續關注我們的最新活動。\n\n" +
+	        "酌夜語 敬上",
+	        campaign.getCampaignTitle()
+	    );
+
+	    List<LineMember> allLineMember = lineMemberRepo.findAll();
+	    
+	    for (LineMember member : allLineMember) {
+	        try {
+	            TextMessage textMessage = new TextMessage(message);
+	            PushMessage pushMessage = new PushMessage(member.getLineUserId(), textMessage);
+	            lineMessagingClient.pushMessage(pushMessage).get();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 	}
 	
 	 private void sendMessage(Campaign campaign) {
@@ -156,7 +190,7 @@ public class CampaignController {
 	            "💰 消費門檻：%d元\n\n" +
 	            "%s\n\n" + 
 	            "更多詳情請至官網查看\n" +
-	            "http://localhost:5173/campaign\n\n" +
+	            "http://nightlysips.com/campaign\n\n" +
 	            "酌夜語 敬上",
 	            campaign.getCampaignTitle(),
 	            formatDate(campaign.getStartDate()),

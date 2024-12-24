@@ -9,8 +9,9 @@ import router from './router'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import Swal from 'sweetalert2'
-import 'sweetalert2/dist/sweetalert2.min.css';
+import 'sweetalert2/dist/sweetalert2.min.css'
 import 'aos/dist/aos.css'
+import 'animate.css'
 import AOS from 'aos'
 import { Form, Field, ErrorMessage, defineRule, configure } from 'vee-validate'
 import { required, email, min, max, regex } from '@vee-validate/rules'
@@ -22,10 +23,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { Notifications } from '@kyvg/vue3-notification'
 import velocity from 'velocity-animate'
-
 
 library.add(faUserSecret,fas,faEnvelope)
 
@@ -52,7 +52,7 @@ AOS.init()
 app.use(createPinia())
 app.use(router)
 app.use(VueAxios, axios)
-app.use(Notifications,{velocity})
+app.use(Notifications, { velocity })
 
 app.use(VueLuckyCanvas)
 

@@ -1,4 +1,4 @@
-package com.example.bistro.backstage.config;
+package com.example.bistro.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

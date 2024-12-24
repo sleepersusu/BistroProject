@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import com.example.bistro.backstage.members.Members;
+
 
 public interface PointsTotalRepository extends JpaRepository<PointsTotalBean, Integer> {
 
@@ -14,6 +16,10 @@ public interface PointsTotalRepository extends JpaRepository<PointsTotalBean, In
             nativeQuery = true)
 	List<Object[]> findPointsTotal();
 	
+
+	PointsTotalBean findByMembers(Members members);
+  
     // 增加根據會員ID查詢點數的方法
-    Optional<PointsTotalBean> findByMembersId(Integer memberId);
+  Optional<PointsTotalBean> findByMembersId(Integer memberId);
 }
+

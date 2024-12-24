@@ -39,6 +39,29 @@
 			<artifactId>line-bot-spring-boot</artifactId>
 			<version>5.0.3</version>
 		</dependency>
+
+		<!--GOOGLE 登入套件-->
+		<dependency>
+    		<groupId>com.google.auth</groupId>
+    		<artifactId>google-auth-library-oauth2-http</artifactId>
+   			<version>1.23.0</version>
+		</dependency>	
+		<dependency>
+		    <groupId>com.google.apis</groupId>
+		    <artifactId>google-api-services-oauth2</artifactId>
+		    <version>v2-rev151-1.25.0</version>
+		</dependency>
+	    <dependency><!-- Jackson JSON Gson  (for Google API client) -->
+	        <groupId>com.google.http-client</groupId>
+	        <artifactId>google-http-client-gson</artifactId>
+	        <version>1.40.1</version> <!-- 或選擇最新版本 -->
+	    </dependency>
+	    <dependency><!-- HTTP transport library (for making requests) -->
+	        <groupId>com.google.http-client</groupId>
+	        <artifactId>google-http-client</artifactId>
+	        <version>1.40.1</version> 
+	    </dependency>
+
 		<dependency><!--密碼加密用套件-->
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-crypto</artifactId>

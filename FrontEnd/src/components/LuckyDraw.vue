@@ -44,14 +44,19 @@
 
 <script setup>
 import { onUnmounted, computed, defineExpose, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { campaignPrizeStore } from '@/stores/campaignPrizeStore'
 import { lotteryStore } from '@/stores/lotteryStore'
 import { storeToRefs } from 'pinia'
 import { useLuckyCanvas } from '@/mixins/luckyCanvasMixin'
 import { useModal } from '@/mixins/modalMixin'
+import confetti from 'canvas-confetti'
+window.confetti = confetti
+
 const { buttons, blocks, activeStyle, myLucky } = useLuckyCanvas()
 const { modalRef, showModal, hideModal } = useModal()
 
+const router = useRouter()
 const prizeStore = campaignPrizeStore()
 const lottery = lotteryStore()
 const { prizes } = storeToRefs(prizeStore)
@@ -121,13 +126,57 @@ const endCallBack = async (prize) => {
   prize.fonts[1].text = `剩餘: ${currentQuantity - 1}`
   await window.Swal.fire({
     title: `${prize.fonts[0].text === '銘謝惠顧' ? '再接再厲' : '恭喜中獎!'}`,
-    text: `獲得：${prize.fonts[0].text}！`,
+    html: `${
+      prize.fonts[0].text === '銘謝惠顧'
+        ? `獲得：${prize.fonts[0].text}！`
+        : `獲得：<span style="color: #B8860B; font-weight: bold; font-size: 1.2em;">${prize.fonts[0].text}</span>！<br>請至中獎紀錄填寫配送資訊，以利我們寄送獎品。`
+    }`,
     imageUrl: `${prize.imgs[0].src}`,
     imageWidth: 200,
     imageHeight: 200,
     imageAlt: `${prize.fonts[0].text}`,
-    confirmButtonColor: 'black',
-    confirmButtonText: '確定',
+    showCancelButton: true,
+    confirmButtonColor: '#B8860B',
+    cancelButtonColor: '#666',
+    confirmButtonText: '填寫配送資訊',
+    cancelButtonText: '關閉',
+    background: '#000',
+    color: '#fff',
+    backdrop: `rgba(0,0,0,0.8)`,
+    showClass: {
+      popup: 'animate__animated animate__jackInTheBox',
+    },
+    hideClass: {
+      popup: 'animate__animated animate__rollOut',
+    },
+    didOpen: () => {
+      console.log('didOpen 被觸發了')
+      if (prize.fonts[0].text !== '銘謝惠顧') {
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 }
+        confetti({
+          ...defaults,
+          particleCount: 50,
+          origin: { x: 0.5, y: 0.3 },
+        })
+        setTimeout(() => {
+          confetti({
+            ...defaults,
+            particleCount: 30,
+            origin: { x: 0.3, y: 0.5 },
+          })
+          confetti({
+            ...defaults,
+            particleCount: 30,
+            origin: { x: 0.7, y: 0.5 },
+          })
+        }, 250)
+      }
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      hideModal()
+      router.push('/membercenter/lotteryresult')
+    }
   })
   emits('update-chance', currentCampaignId.value)
 }

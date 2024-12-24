@@ -22,10 +22,14 @@ public class ReservationsFrontstageService {
 	public Reservations insert(ReservationDTO dto) {
 
 		if (dto.getCustomerName() == null || dto.getCustomerName().trim().isEmpty()) {
-			throw new IllegalArgumentException("姓名不能為空白");
+		    throw new IllegalArgumentException("姓名不能為空白");
+		} else if (dto.getCustomerName().length() > 15) {
+		    throw new IllegalArgumentException("姓名不能超過15個字元");
+		} else if (!dto.getCustomerName().matches("^[\\u4e00-\\u9fa5]{1,15}$")) {
+		    throw new IllegalArgumentException("姓名只能包含中文字符，且長度不能超過15個字元");
 		}
-		if (dto.getContactPhone() == null || !dto.getContactPhone().matches("\\d{10}")) {
-			throw new IllegalArgumentException("電話號碼必須是10個數字");
+		if (dto.getContactPhone() == null || !dto.getContactPhone().matches("^09\\d{8}$")) {
+		    throw new IllegalArgumentException("電話號碼必須是09開頭，且包含10個數字");
 		}
 		if (dto.getStartTime() == null) {
 			throw new IllegalArgumentException("請你選擇訂位時段");
@@ -100,7 +104,7 @@ public class ReservationsFrontstageService {
 		}
 	}
 
-	// 用于判断是否可以在某个时段预定
+	// 用於判斷是否可以在某個时段訂位
 	private boolean canReserve(int fourSeat, int twoSeat, int oneSeat, int numberPeople) {
 
 		if (numberPeople <= 0 || numberPeople > 8) {
@@ -175,7 +179,7 @@ public class ReservationsFrontstageService {
 
 		return availableTimeslots;
 	}
-
+	//用來判斷 調用兩個方法 可以找出能訂位的時段
 	private boolean isTimeSlotAvailable(Date reservationDate, String time, int oneSeat, int twoSeat, int fourSeat,
 			int numberPeople) throws ParseException {
 		Integer[] occupied = safeOccupyTable(reservationDate, time);

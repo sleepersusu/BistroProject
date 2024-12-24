@@ -49,8 +49,8 @@ export default {
       }
 
       try {
-        const email = this.$route.params.email
-        await this.axios.post(`/api/reset-password/${email}/${this.password}`)
+        const encryptedEmail = this.$route.params.encryptedEmail
+        await this.axios.post(`/api/reset-password/${encryptedEmail}/${this.password}`)
 
         Swal.fire({
           icon: 'success',

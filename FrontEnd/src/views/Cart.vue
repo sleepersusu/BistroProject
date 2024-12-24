@@ -254,7 +254,7 @@ export default {
           await this.fetchCartItems()
           // console.log("重新獲取購物車數據成功");
           // 成功提示框
-           Swal.fire({
+          Swal.fire({
             toast: true,
             position: 'top-end',
             title: '刪除成功',

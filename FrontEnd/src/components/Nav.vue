@@ -73,11 +73,8 @@
               ></div>
               <div class="d-flex align-items-center d-none d-lg-block">
                 <!-- 會員名稱 -->
-                <span class="text-light ms-2">{{ memberprofile?.username }}</span>
+                <span class="text-light ms-2">{{ memberprofile.navName }}</span>
               </div>
-              <!-- <router-link to="/membercenter/index" class="d-flex align-items-center d-none d-lg-block">
-                <span class="text-light ms-2">{{ memberprofile?.username }}</span>
-              </router-link> -->
             </div>
           </li>
         </ul>
@@ -135,8 +132,7 @@ export default {
       }
     },
 
-    triggerOffcanvas() {
-      // 通过 $refs 访问子组件并触发显示 Offcanvas
+    triggerOffcanvas() {//觸發會員右側欄
       const avatarProfileComponent = this.$refs.avatarProfile
       avatarProfileComponent.openOffcanvas()
     },
@@ -145,6 +141,7 @@ export default {
     window.addEventListener('scroll', this.navShadow)
     this.navShadow()
     this.getAllChanceByMember()
+    this.memberprofile.navName=JSON.parse(localStorage.getItem('memberobj'))?.userName
   },
   unmounted() {
     window.removeEventListener('scroll', this.navShadow)

@@ -20,7 +20,9 @@
         <Form v-slot="{ errors }" @submit="handleSubmit" ref="formRef">
           <div class="modal-body">
             <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
+              <label for="email" class="form-label"
+                >Email <small class="text-danger">*</small></label
+              >
               <Field
                 type="email"
                 class="form-control"
@@ -34,7 +36,7 @@
               <ErrorMessage name="Email" class="invalid-feedback"></ErrorMessage>
             </div>
             <div class="mb-3">
-              <label for="name" class="form-label">姓名</label>
+              <label for="name" class="form-label">姓名 <small class="text-danger">*</small></label>
               <Field
                 type="text"
                 class="form-control"
@@ -48,7 +50,9 @@
               <ErrorMessage name="姓名" class="invalid-feedback"></ErrorMessage>
             </div>
             <div class="mb-3">
-              <label for="phone" class="form-label">電話</label>
+              <label for="phone" class="form-label"
+                >電話 <small class="text-danger">*</small></label
+              >
               <Field
                 type="text"
                 class="form-control"
@@ -62,7 +66,9 @@
               <ErrorMessage name="電話" class="invalid-feedback"></ErrorMessage>
             </div>
             <div class="mb-3">
-              <label for="address" class="form-label">配送地址</label>
+              <label for="address" class="form-label"
+                >配送地址 <small class="text-danger">*</small></label
+              >
               <Field
                 type="text"
                 class="form-control"

@@ -62,7 +62,7 @@
 
         <div class="hero-overlay d-flex flex-column justify-content-center">
           <div class="container text-white" data-aos="fade-up" data-aos-duration="1500">
-            <h1 class="hero-title mb-md-4">
+            <h1 class="hero-title mb-md-3">
               Welcome to
               <span
                 class="highlight"
@@ -72,7 +72,10 @@
                 >Nightly Sips</span
               >
             </h1>
-            <p class="hero-subtitle mb-md-4 mb-3">用餐不只是味蕾的享受，更是一場難忘的夜晚</p>
+            <p class="hero-subtitle mb-md-4 mb-3">
+              用餐不只是味蕾的享受，更是一場難忘的夜晚
+              <br />在這裡，每道料理都是故事，每個夜晚都值得紀念。
+            </p>
             <div class="hero-buttons mb-md-5">
               <router-link to="/menu" class="btn btn-outline-light me-3">查看菜單</router-link>
               <router-link to="/reservations" class="btn btn-primary text-dark"
@@ -244,7 +247,7 @@ export default {
   color: #ffdc35;
   font-size: 4rem;
   text-shadow: 0 4px 35px #ffdc35;
-  font-weight: 400;
+  font-weight: 500;
   font-family: 'Chakra Petch', cursive !important;
 }
 

@@ -1,4 +1,4 @@
-package com.example.bistro.backstage.config;
+package com.example.bistro.config;
 
 import java.io.IOException;
 

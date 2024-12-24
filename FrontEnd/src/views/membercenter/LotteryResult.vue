@@ -9,7 +9,7 @@
     <h3 class="mb-5">目前還沒有抽獎紀錄!</h3>
     <router-link to="/campaign" class="btn btn-primary btn-lg py-3 px-5">來試試手氣吧!</router-link>
   </div>
-  <div class="container-fulid py-4 px-5" v-else>
+  <div class="container py-4 px-5" v-else>
     <div class="row">
       <div class="col-12">
         <div class="input-group mb-3">
@@ -23,6 +23,34 @@
             aria-label="搜尋獎品"
             v-model="searchInput"
           />
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6 mb-md-0 mb-3">
+            <div class="input-group input-group-custom">
+              <span class="input-group-text bg-dark px-4">
+                <i class="bi bi-calendar text-light fs-5"></i>
+              </span>
+              <input
+                type="date"
+                class="form-control shadow-none"
+                v-model="dateRange.start"
+                :max="dateRange.end"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group input-group-custom">
+              <span class="input-group-text bg-dark px-4">
+                <i class="bi bi-calendar text-light fs-5"></i>
+              </span>
+              <input
+                type="date"
+                class="form-control shadow-none"
+                v-model="dateRange.end"
+                :min="dateRange.start"
+              />
+            </div>
+          </div>
         </div>
         <div class="card border shadow-xs mb-4">
           <div class="card-body px-0 py-0">
@@ -218,11 +246,33 @@ const getResults = async () => {
 }
 getResults()
 
+const dateRange = ref({
+  start: '',
+  end: '',
+})
+
 const searchInput = ref('')
 const filterResults = ref([])
 watchEffect(() => {
   filterResults.value = lotteryResults.value.filter((item) => {
-    return item.prizeName.toLowerCase().includes(searchInput.value.toLowerCase())
+    const matchesSearch = item.prizeName.toLowerCase().includes(searchInput.value.toLowerCase())
+
+    let matchesDate = true
+    if (dateRange.value.start || dateRange.value.end) {
+      const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0)
+
+      if (dateRange.value.start) {
+        const startDate = new Date(dateRange.value.start).setHours(0, 0, 0, 0)
+        matchesDate = matchesDate && itemDate >= startDate
+      }
+
+      if (dateRange.value.end) {
+        const endDate = new Date(dateRange.value.end).setHours(23, 59, 59, 999)
+        matchesDate = matchesDate && itemDate <= endDate
+      }
+    }
+
+    return matchesSearch && matchesDate
   })
 })
 

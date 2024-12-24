@@ -58,7 +58,7 @@ public class EmployeeLoginController {
 			//Session紀錄資訊
 			return "/HomePage/BackEndIndex";
 		}else {
-			System.out.println("登入失敗");
+			System.out.println("員工登入失敗");
 			model.addAttribute("errorMsg","登入失敗");
 			return "/login/login";
 		}
