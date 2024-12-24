@@ -89,7 +89,7 @@ export default {
 .offcanvas-header {
   background: linear-gradient(135deg, #222527 0%, #1a1a1a 100%);
   color: white;
-  padding: 1rem;
+  padding: 0.9rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
