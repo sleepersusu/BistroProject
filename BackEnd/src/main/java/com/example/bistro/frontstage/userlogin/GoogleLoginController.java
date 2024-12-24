@@ -1,4 +1,4 @@
-package com.example.bistro.oauth2;
+package com.example.bistro.frontstage.userlogin;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,35 +6,27 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.bistro.backstage.members.Members;
-import com.example.bistro.backstage.members.MembersService;
 import com.example.bistro.config.GoogleConfig;
 import com.example.bistro.frontstage.members.MemberFrontService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.json.webtoken.JsonWebSignature;
-import com.google.auth.oauth2.IdToken;
-import com.google.auth.oauth2.TokenVerifier;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class GoogleOAuthController {
+public class GoogleLoginController {
 
 	@Autowired
 	private GoogleConfig googleConfig;
@@ -120,11 +112,8 @@ public class GoogleOAuthController {
 			response.put("status", "success");
 			response.put("memberId", resultData.getId().toString());
 			response.put("memberName", resultData.getMemberName());
-			if (resultData.getMemberPoint() == null) {
-				response.put("memberPoint", "0");
-			} else {
-				response.put("memberPoint", resultData.getMemberPoint().toString());
-			}
+			response.put("memberPoint", "0");
+
 		}
 		return ResponseEntity.ok(response);
 	}

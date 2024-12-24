@@ -9,6 +9,7 @@
                             :style="{ backgroundImage: `url(${store.memberprofile.userAvatar})` }"
                             @click="handleAvatarClick">
                         </div>
+                        <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange" />
                     </div>
                 </form>
                 <form class="needs-validation" @submit.prevent="handleSubmit" novalidate>
@@ -144,11 +145,11 @@ export default {
         const validationErrors = reactive({})
         const selectedCity = ref(store.memberprofile.city)
         const selectedDistrict = ref(store.memberprofile.district)
+        const fileInput = ref(null);
 
         watch(
             () => store.getProfile,
             (newProfile) => {
-                console.log(newProfile)
                 if (!newProfile.userName) {
                     validationErrors.userName = '請輸入姓名';
                 } else {
@@ -198,15 +199,15 @@ export default {
                 let checkValue = validateForm()
                 if (!checkValue) {
                     window.Swal.fire({
-                            toast: false,
-                            position: 'top',
-                            icon: 'warning',
-                            iconColor: 'red',
-                            title: `資料格式驗證失敗！`,
-                            timer: 1500,
-                            showConfirmButton: false,
-                            timerProgressBar: true,
-                        })
+                        toast: false,
+                        position: 'top',
+                        icon: 'warning',
+                        iconColor: 'red',
+                        title: `資料格式驗證失敗！`,
+                        timer: 1500,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    })
                     return
                 } else {
                     let response = await store.submitProfile()
@@ -258,16 +259,18 @@ export default {
                 validationErrors.value.userEmail = '請輸入有效的 email 地址'
                 isValid = false
             }
-
-            console.log(isValid)
             return isValid
         }
 
         // 處理頭像點擊
         const handleAvatarClick = () => {
-            
-            console.log('Avatar clicked')
+            console.log('觸發圖片上傳');
+            if (fileInput.value) {
+                fileInput.value.click();  // 通过 ref 触发文件选择
+                console.log('Avatar clicked');
+            }
         }
+
 
         return {
             store,
@@ -280,9 +283,10 @@ export default {
             handleSubmit,
             handleAvatarClick,
             updateAddress,
-            updateDistricts
+            updateDistricts,
+            fileInput
         }
-    },
+    }
 }
 const cities = {
     台北市: ['中正區', '大安區', '士林區', '北投區', '內湖區', '南港區', '信義區', '文山區', '松山區', '大同區', '中山區'],

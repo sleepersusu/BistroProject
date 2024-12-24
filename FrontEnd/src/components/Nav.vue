@@ -112,7 +112,7 @@ export default {
     ...mapState(cartStore, ['totalCartItems']),
   },
   methods: {
-    ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn']),
+    ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn','loadMemberData']),
     ...mapActions(lotteryStore, ['getAllChanceByMember']),
     ...mapActions(cartStore, ['getCart']),
     ...mapActions(pointStore,['getMemberPoint']),
@@ -134,6 +134,7 @@ export default {
 
     triggerOffcanvas() {//觸發會員右側欄
       const avatarProfileComponent = this.$refs.avatarProfile
+      this.loadMemberData(this.memberId)
       avatarProfileComponent.openOffcanvas()
     },
   },

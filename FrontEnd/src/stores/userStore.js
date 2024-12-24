@@ -13,6 +13,7 @@ export const useUserStore = defineStore('userStore', {
       userName: '',
       userEmail: '',
       userPhone: '',
+      userPoint: '',
       userShip: '',
       userAvatar: '', // 默认值为空字符串，或者给一个默认头像
       userGender: null,
@@ -56,20 +57,22 @@ export const useUserStore = defineStore('userStore', {
         this.isLoggedIn = false // 清除登入
       }
     },
+    async updateUserPhoto(){
+
+    },
     async loadMemberData(memberId) {
       //會員資料頁面撈資訊
       try {
         await axios.get(`${this.apiUrl}/api/members/${memberId}`)
           .then((response) => {
-            console.log(response.data)
             this.memberprofile.userName = response.data.memberName
             this.memberprofile.userEmail = response.data.memberEmail
             this.memberprofile.userPhone = response.data.memberPhone
             this.memberprofile.userGender = response.data.memberSex
             this.memberprofile.userFavor = response.data.memberFavor
             this.memberprofile.userAddress = response.data.memberAddress
+            this.memberprofile.userPoint = response.data.memberPoint
             this.memberprofile.userBirthdate = response.data.memberBirthday
-            console.log(response.data.memberName)
             // console.log(response.data.memberAccount)
             // console.log(response.data.memberFavor)
             // console.log(response.data.memberImg)
@@ -125,7 +128,6 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.city=cityMatch[0]
         this.memberprofile.district=districtMatch[0]
 
-        
       }
     },
     clearLoggedIn() {
@@ -152,7 +154,6 @@ export const useUserStore = defineStore('userStore', {
         let imgData = await axios.get(imgUrl, {
           responseType: 'blob',
         })
-
         if (imgData.data.size === 0) {
           //判斷有無圖片，切換預設頭像
           userAvatar = '/images/avatar.jpg'
@@ -256,16 +257,6 @@ export const useUserStore = defineStore('userStore', {
       } catch (error) {
         console.error('登入失敗', error)
       }
-    },
-    async userProfileAccess(event) {
-      let Profile_URL = `${this.apiUrl}/google/login`
-      let form = new FormData(event.target)
-      let formData = {}
-      form.forEach((value, key) => {
-        formData[key] = value
-      })
-      let response = await axios.post(Profile_URL, formData)
-      console.log(response.data)
     },
   },
 })

@@ -5,10 +5,10 @@
             <div class="offcanvas-header">
                 <div class="d-flex flex-column">
                     <h5 class="offcanvas-title" id="staticBackdropLabel">
-                        Welcome! {{ memberprofile.username }}
+                        Welcome! {{ memberprofile.userName }}
                     </h5>
                     <h5 class="offcanvas-title" id="staticBackdropLabel">
-                        紅利點數 {{ memberprofile.userpoint }}
+                        紅利點數 {{ memberprofile.userPoint }}
                     </h5>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
