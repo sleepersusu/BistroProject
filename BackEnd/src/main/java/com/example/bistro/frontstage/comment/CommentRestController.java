@@ -154,8 +154,10 @@ public class CommentRestController {
 
 			    if (comment.getMembers().getMemberSex() == 1) {
 			    	memberName = ("Mr."+firstName).trim();
-			    } else {
+			    } else if(comment.getMembers().getMemberSex() == 0) {
 			    	memberName = ("Ms."+firstName).trim();
+			    }else {
+			    	comment.getMembers().setMemberName(memberName);
 			    }
 			comment.getMembers().setMemberName(memberName);
 			}
