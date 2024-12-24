@@ -1,113 +1,218 @@
 <template>
+  <div class="container h-100" >
 
-  <div class="container-fluid">
-    <div class="row">
-
-      <main class="col-md-9 col-lg-10 p-4">
-        <h1 class="text-center">我的評論</h1>
-        <div class="container-fluid py-4 px-5">
-          <div class="row">
-            <div class="col-12">
-              <div class="card border shadow-xs mb-4">
-                <div class="card-header border-bottom pb-0">
-                  <div class="d-sm-flex align-items-center">
-                    <span class="h4">我的評論</span>
-                    <div class="ms-auto d-flex"></div>
-                  </div>
-                </div>
-                <div class="card-body px-0 py-0">
-                  <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0">
-                      <thead class="bg-gray-100">
-                        <tr>
-                          <th class="text-dark text-xs font-weight-semibold opacity-7">餐點名稱</th>
-                          <th class="text-dark text-xs font-weight-semibold opacity-7">評價分數</th>
-                          <th class="text-dark text-xs font-weight-semibold opacity-7">評論內容</th>
-                          <th class="text-dark text-xs font-weight-semibold opacity-7">用餐日期</th>
-                        </tr>
-                      </thead>
-
-                      <tbody v-if="!NoComment" v-for="comment in comments" :key="comment.id">
-                        <CommentTable
-                          :comment="comment"
-                          @update-comment-modal="openUpdateCommentModal"
-                        >
-                        </CommentTable>
-                      </tbody>
+    <div class="col-12">
+      <BannerTop :title="'My Comment'"></BannerTop>
+      <div class="container-fluid comment-container">
+        <div class="col-12">
+          <div class="card border shadow-xs mb-4">
+            <!-- 卡片標題 -->
 
 
-                      <tbody v-if="NoComment">
-                        <tr>
-                          <td colspan="4">目前尚未有評論</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="border-top py-3 px-3 d-flex align-items-center">
-                    <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
-                    <div class="ms-auto">
-                      <button class="btn btn-sm btn-white mb-0">Previous</button>
-                      <button class="btn btn-sm btn-white mb-0">Next</button>
-                    </div>
-                  </div>
+            <!-- 卡片內容 -->
+            <div class="card-body px-0 py-0">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 100px;">餐點名稱</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 150px;">評價分數</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 300px;">評論內容</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 200px;">評論時間</th>
+                      <th class="text-dark text-xs font-weight-semibold opacity-7"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody v-if="!NoComment" class="comment-list">
+                    <CommentTable
+                      v-for="comment in displayedComment"
+                      :key="comment.id"
+                      :comment="comment"
+                      @update-comment-modal="openUpdateCommentModal"
+                      @delete-comment-modal="deleteReload"
+                    />
+                  </tbody>
+
+                  <tbody v-if="NoComment">
+                    <tr>
+                      <td colspan="5" class="text-center py-3 no-comment">目前尚未有評論</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- 分頁控制 -->
+              <div class="border-top pagination-container">
+                <p class="font-weight-semibold mb-0 text-dark text-sm">
+                  Page {{ currentPage }} of {{ totalPages }}
+                </p>
+                <div class="pagination-controls">
+                  <button
+                    class="btn btn-sm btn-white pagination-btn"
+                    :disabled="currentPage === 1"
+                    @click="previousPage"
+                  >
+                    <font-awesome-icon :icon="['fas', 'angle-double-left']" />
+                  </button>
+                  <button
+                    class="btn btn-sm btn-white pagination-btn"
+                    :disabled="currentPage === totalPages || totalPages === 0"
+                    @click="nextPage"
+                  >
+                    <font-awesome-icon :icon="['fas', 'angle-double-right']" />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   </div>
 
-
-  <CommentUpdateModal ref="commentUpdateModal" :currentComment="currentComment"></CommentUpdateModal>
+  <CommentUpdateModal
+    ref="commentUpdateModal"
+    :comment="currentComment"
+    @update-table="loadAllCommentByMember"
+  />
 </template>
 
 <script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import CommentTable from '@/components/CommentTable.vue'
 import CommentUpdateModal from '@/components/CommentUpdateModal.vue'
-import { comment } from 'postcss';
-
+import CommentDeleteModal from '@/components/CommentDeleteModal.vue'
+import BannerTop from '@/components/BannerTop.vue'
 
 export default {
+  name: 'CommentList',
+
   components: {
     CommentTable,
     CommentUpdateModal,
+    CommentDeleteModal,
+    BannerTop,
+    FontAwesomeIcon
   },
 
   data() {
     return {
       comments: [],
       NoComment: true,
-      currentComment:{},
+      currentComment: {},
+      deleteComment: {},
+      currentPage: 1,
+      pageSize: 5
     }
   },
+
+  computed: {
+    totalPages() {
+      return Math.ceil(this.comments.length / this.pageSize) || 1
+    },
+    displayedComment() {
+      const start = (this.currentPage - 1) * this.pageSize
+      const end = start + this.pageSize
+      return this.comments.slice(start, end)
+    }
+  },
+
   methods: {
     async loadAllCommentByMember() {
-      let API_URL = `${import.meta.env.VITE_API}/api/member/comment`
-
-      this.axios
-        .get(API_URL)
-        .then(async (response) => {
-
-          this.comments = response.data
-          this.NoComment = false
-        })
-        .catch((error) => {
-          console.error('Error fetching comments:', error)
-          this.NoComment = true
-        })
+      try {
+        const response = await this.axios.get(
+          `${import.meta.env.VITE_API}/api/member/comment`
+        )
+        this.comments = response.data
+        this.NoComment = this.comments.length === 0
+      } catch (error) {
+        console.error('Error fetching comments:', error)
+        this.NoComment = true
+        this.comments = []
+      }
     },
+
     async openUpdateCommentModal(comment) {
       this.currentComment = comment
       this.$refs.commentUpdateModal.showModal()
     },
+
+    async deleteReload() {
+      await this.loadAllCommentByMember()
+    },
+
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++
+      }
+    },
+
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--
+      }
+    }
+  },
+
+  watch: {
+    comments: {
+      handler(newVal) {
+        this.NoComment = newVal.length === 0
+        if (this.currentPage > this.totalPages) {
+          this.currentPage = Math.max(1, this.totalPages)
+        }
+      },
+      deep: true
+    }
   },
 
   created() {
     this.loadAllCommentByMember()
-  },
+  }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+/* 基本樣式 (桌面版) */
+.comment-container {
+  padding: 1.5rem;
+}
+
+
+
+.header-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.pagination-container {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pagination-info {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  padding: 0.375rem 0.75rem;
+  border: none;
+  background: transparent;
+}
+
+.no-comment {
+  padding: 2rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+</style>

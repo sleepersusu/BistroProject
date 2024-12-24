@@ -25,12 +25,12 @@ public class MemberLoginController {
 	private MembersService membersService;
 	
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginPost(@RequestBody Map<String,String> userRequest,HttpSession httpSession) {
+    public ResponseEntity<Map<String, Object>> loginPost(@RequestBody Map<String,String> userRequest,HttpSession httpSession) {
     	String memberAccount = userRequest.get("Account");
     	String memberPassword = userRequest.get("Password");
     	Optional<Members> checkResult = membersService.checkLogin(memberAccount, memberPassword);//撈這筆資料
 
-    	Map<String, String> response = new HashMap<>();
+    	Map<String, Object> response = new HashMap<>();
 		if (checkResult.isPresent()) {
 			Members memberData = checkResult.get();
 			long currentTime = System.currentTimeMillis();
