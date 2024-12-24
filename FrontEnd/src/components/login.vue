@@ -5,7 +5,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">會員登入</h5>
+                    <h5 class="modal-title fs-4" style="font-family: 'Chakra Petch', cursive !important;" id="loginModalLabel">Nightly Sips</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -54,7 +54,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="registerModalLabel">會員註冊</h5>
+                    <h5 class="modal-title fs-4" style="font-family: 'Chakra Petch', cursive !important;" id="loginModalLabel">Nightly Sips</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -84,8 +84,8 @@
                         </div>
                     </form>
                     <div class="text-center">
-                        <span>Already have an account? </span>
-                        <a data-bs-toggle="modal" href="#loginModal" class="text-secondary">Login</a>
+                        <span>已經有帳號了? </span>
+                        <a data-bs-toggle="modal" href="#loginModal" class="text-secondary">前往登入</a>
                     </div>
                     <div class="division">
                         <div class="line l"></div>
@@ -105,7 +105,6 @@
 <script>
 import { useUserStore } from '@/stores/userStore'
 import { mapActions } from 'pinia'
-import { email } from '@vee-validate/rules'
 import Modal from 'bootstrap/js/dist/modal'
 export default {
     data() {

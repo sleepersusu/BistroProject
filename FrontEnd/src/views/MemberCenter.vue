@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <nav class="col-md-3 col-lg-2 p-3 bg-light">
+      <aside class="col-md-3 col-lg-2 p-3 bg-light">
         <MembercenterNav class="d-none d-lg-block"></MembercenterNav>
-      </nav>
+      </aside>
       <main class="col-md-9 col-lg-10 p-4">
         <router-view></router-view>
       </main>

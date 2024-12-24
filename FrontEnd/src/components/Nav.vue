@@ -141,7 +141,7 @@ export default {
     window.addEventListener('scroll', this.navShadow)
     this.navShadow()
     this.getAllChanceByMember()
-    this.memberprofile.navName=JSON.parse(localStorage.getItem('memberobj')).userName
+    this.memberprofile.navName=JSON.parse(localStorage.getItem('memberobj'))?.userName
   },
   unmounted() {
     window.removeEventListener('scroll', this.navShadow)
