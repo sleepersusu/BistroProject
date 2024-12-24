@@ -1,8 +1,6 @@
 <template>
     <div class="container">
         <BannerTop :title="'Member Center'"></BannerTop>
-        <div class="mb-3 d-flex justify-content-center w-100 background-container d-none d-lg-block">
-        </div>
         <div class="row">
             <div class="col-lg-6 col-12 mb-4">
                 <div class="card h-100">
@@ -97,32 +95,6 @@ export default {
 </script>
 
 <style scoped>
-.background-container {
-    position: relative;
-    width: 100%;
-    height: 300px;
-
-    background-image: url('/images/banner3.jpg');
-
-    background-size: cover;
-    background-position: center;
-    justify-content: center;
-
-    align-items: center;
-
-}
-
-.background-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1;
-}
-
 .card {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
