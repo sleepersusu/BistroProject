@@ -149,20 +149,20 @@ body {
 									<th>聯絡電話</th>
 									<th>電子信箱</th>
 									<th>會員圖片</th>
-									<th>會員點數</th>
+									<th>點數</th>
+									<th>類型</th>
 									<th>狀態</th>
-									<th>帳戶</th>
 									<th>操作</th>
 								</tr>
 							</thead>
 							<tbody id="event-list">
 								<tr th:each="members : ${allMembers}">
 										<td th:text="${members.id}"></td>
-										<td th:text="${members.memberAccount}"></td>
-										<td th:text="${members.memberPassword==null?'無':members.memberPassword }"></td>
+										<td th:text="${members.memberAccount == null ? '無' : #strings.substringBefore(members.memberAccount, '@')+'@信箱'}"></td>
+										<td class="password-cell" th:text="${members.memberPassword==null?'無':members.memberPassword }"></td>
 										<td th:text="${members.memberName}"></td>
-										<td th:text="${members.memberSex==1 ? '男' : '女'}"
-										th:style="'color: ' + (${members.memberSex} == 1 ? '#0072E3' : 'red')"></td>
+										<td th:text="${members.memberSex == null ? '無' : (members.memberSex == 1 ? '男' : (members.memberSex == 0 ? '女' : '未知')) }"
+										th:style="${members.memberSex == null ? 'color: black;' : (members.memberSex == 1 ? 'color: #0072E3;' : 'color: red;')}"></td>
 										<td th:text="${members.memberBirthday==null?'無':members.memberBirthday}"></td>
 										<td th:text="${members.memberFavor==1 ? '外向' : '內向'}"></td>
 										<td th:text="${members.memberAddress==null?'無':members.memberAddress}"></td>
@@ -170,8 +170,8 @@ body {
 										<td th:text="${members.memberEmail==null?'無':members.memberEmail}"></td>
 										<td><img alt="無圖片" th:src="@{/Bistro/download?type=member&(ID=${members.id})}"></td>
 										<td th:text="${members.memberPoint==null?'無':members.memberPoint}"></td>
-										<td th:text="${members.memberStatus}" th:style="'color:'+(${members.memberStatus} == '啟用' ? '#0072E3' : 'red')"></td>
 										<td th:text="${members.memberShip}" th:style="'color:'+(${members.memberShip} == '會員' ? '#0072E3' : 'red')"></td>
+										<td th:text="${members.memberStatus}" th:style="'color:'+(${members.memberStatus} == '啟用' ? '#0072E3' : 'red')"></td>
 
 										<td>
 										<!-- th:data-start-date="${#dates.format(members.memberBirthday, 'yyyy-MM-dd')}" -->
@@ -422,7 +422,7 @@ body {
 				autoWidth: false,
 		        "columnDefs": [
 		            {"width": "45px","targets": 0},
-		            {"width": "70px","targets": 1,className: 'ellipsis'},
+		            {"width": "70px","targets": 1,},
 		            {"width": "70px","targets": 2,className: 'ellipsis'},
 		            {"width": "70px","targets": 3},
 		            {"width": "70px","targets": 4},
@@ -494,5 +494,18 @@ body {
 	    	    document.getElementById("edituserphone").value = btnData.dataset.phone;
 	    	    document.getElementById("edituseremail").value = btnData.dataset.email;
 	    	    }
+	    	    
+			document.addEventListener("DOMContentLoaded", function() {
+			    // 取所有"password-cell"
+			    document.querySelectorAll('.password-cell').forEach(function(passwordElement) {
+			      var password = passwordElement.textContent.trim();
+			
+			      if (password && password.length > 2) {
+			        var firstChar = password.substring(0, 1);  // 取第一字
+			        var lastChar = password.substring(password.length - 1);  // 取最後字
+			        passwordElement.textContent = firstChar + "***" + lastChar;
+			      }
+			    });
+			  });
 
 	    </script>

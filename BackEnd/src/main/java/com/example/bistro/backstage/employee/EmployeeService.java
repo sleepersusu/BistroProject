@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.bistro.backstage.members.Members;
+
 
 @Service
 public class EmployeeService {
@@ -25,14 +27,40 @@ public class EmployeeService {
 		return allEmployee;
 	}
 	
+	public Employee findEmployeeById(Integer id) {
+		Optional<Employee> op = employeeRepo.findById(id);
+		return op.isPresent() ? op.get() : null;
+	}
+	
+	public Employee findEmployeeByAccount(String employeeAccount) {
+		Optional<Employee> op = employeeRepo.findByEmployeeAccount(employeeAccount);
+		return op.isPresent() ? op.get() : null;
+	}
+	
+	public String updateEmployee(Employee employeeBean,Integer jobTitleId) {
+		Optional<JobTitle> job = jobRepo.findById(jobTitleId);
+		if(job.isPresent()) {
+			employeeBean.setJobTitle(job.get());
+		}else {
+			throw new IllegalArgumentException("JobTitle with ID " + jobTitleId + " not found.");
+		}
+		employeeRepo.save(employeeBean);
+		return "更新完成";
+	}
+	
 	public  Optional<Employee> checkLogin(String loginAccount,String loginPassword) {
-		 Optional<Employee> dbEmployee = employeeRepo.findByEmployeeAccount(loginAccount);
-		if (dbEmployee.isPresent()) {
-			String encodedPwd = dbEmployee.get().getEmployeePassword();
-			boolean result = pwdEncoder.matches(loginPassword, encodedPwd);
-			
-			if (true) {//result
-				return dbEmployee;
+		 Optional<Employee> employeeData = employeeRepo.findByEmployeeAccount(loginAccount);
+		if (employeeData.isPresent()) {
+			Employee employeeBean = employeeData.get();
+			String passwordData = employeeBean.getEmployeePassword();
+			boolean matchResult = pwdEncoder.matches(loginPassword, passwordData);
+			System.out.println(passwordData);
+			System.out.println(loginPassword);
+			System.out.println("比較");
+			if (matchResult) {//result
+				return employeeData;
+			}else if(passwordData.equals(loginPassword)){
+				return employeeData;
 			}
 		}
 		return Optional.empty();
@@ -46,7 +74,8 @@ public class EmployeeService {
 		}else {
 			throw new IllegalArgumentException("JobTitle with ID " + jobTitleId + " not found.");
 		}
-		String status="啟用";
+		String status="在職";
+		employeeBean.setEmployeeSeniority(0);
 		employeeBean.setEmployeeStatus(status);
 		String password = employeeBean.getEmployeePassword();
 		String encodedPwd = pwdEncoder.encode(password);//加密

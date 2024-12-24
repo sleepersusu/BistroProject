@@ -19,7 +19,7 @@
 
       <li class="nav-item">
         <router-link to="/membercenter/comment" class="nav-link">
-          <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 我的評論
+          <span class="icon-circle"><i class="bi bi-chat-square-text-fill"></i></span> 我的評論
         </router-link>
       </li>
 
@@ -43,7 +43,7 @@
 
       <li class="nav-item">
         <router-link to="/index" v-on:click="clearLoggedIn" class="nav-link">
-          <span class="icon-circle"><i class="bi bi-envelope-fill"></i></span> 登出
+          <span class="icon-circle"><i class="bi bi-door-closed-fill"></i></span> 登出
         </router-link>
       </li>
     </ul>
@@ -98,12 +98,5 @@ export default {
 
 .membernav {
   height: 100vh;
-
-  @media (max-width: 768px) {
-    height: 50vh;
-  }
-  @media (max-width: 576px) {
-    height: 70vh;
-  }
 }
 </style>

@@ -93,4 +93,7 @@ export default {
 .nav-link:hover {
     background-color: #f1f1f1;
 }
+.offcanvas-title{
+    font-size: 17px
+}
 </style>

@@ -18,6 +18,14 @@ public class MembersService {
 	private MembersRepository memberRepo;
 	
 	public Members insertMember(Members memberBean) {
+		String memberShip="會員";
+		String memberStatus="啟用";
+		memberBean.setMemberShip(memberShip);
+		memberBean.setMemberPoint(0);
+		memberBean.setMemberStatus(memberStatus);
+		String password = memberBean.getMemberPassword();
+		String encodedPwd = pwdEncoder.encode(password);
+		memberBean.setMemberPassword(encodedPwd);
 		return memberRepo.save(memberBean);
 	}
 	
@@ -25,6 +33,21 @@ public class MembersService {
     public Members findMembersById(Integer id) {
         Optional<Members> op = memberRepo.findById(id);
         return op.isPresent() ? op.get() : null;
+    }
+    //確認密碼
+    public boolean checkMembersPWD(Members memberBean) {
+    	Optional<Members> resultData = memberRepo.findById(memberBean.getId());
+    	if(resultData.isPresent()) {
+    		Members memberData = resultData.get();
+    		String encodedPwd = memberData.getMemberPassword();
+    		boolean result = pwdEncoder.matches(memberBean.getMemberPassword(), encodedPwd);
+    		if(!result) {
+    			memberBean.getMemberPassword();
+    		}
+    		return result;
+    	}else {
+    		return false;
+    	}
     }
 
 	//根據姓名或電話查詢會員
@@ -43,6 +66,7 @@ public class MembersService {
 		return memberRepo.findAll();
 	}
 	
+	
 	public Optional<Members> checkLogin(String loginAccount,String loginPassword) {
 		 Optional<Members> dbMember = memberRepo.findByMemberAccount(loginAccount);
 		if (dbMember.isPresent()) {
@@ -60,5 +84,10 @@ public class MembersService {
 		memberRepo.save(memberBean);
 		return "更新完成";
 	}
+	public Optional<Members> findMemberByAccount(String loginAccount) {
+		Optional<Members> memberData = memberRepo.findByMemberAccount(loginAccount);
+	return memberData;
+	}
+	
 	
 }

@@ -169,7 +169,7 @@ select:hover {
 								<tr th:each="employees : ${allEmployees}">
 										<td th:text="${employees.id}"></td>
 										<td th:text="${employees.employeeAccount}"></td>
-										<td th:text="${employees.employeePassword==null?'無':employees.employeePassword }"></td>
+										<td class="password-cell" th:text="${employees.employeePassword==null?'無':employees.employeePassword }"></td>
 										<td th:text="${employees.employeeName}"></td>
 										<td th:text="${employees.employeeGender}"
 										th:style="'color: ' + (${employees.employeeGender} == '男' ? '#0072E3' : 'red')"></td>
@@ -195,16 +195,16 @@ select:hover {
 												th:data-salary="${employees.employeeSalary}"
 												th:data-status="${employees.employeeStatus}"
 												onclick="openEditModal(this)">編輯</button>
-											<th:block th:if="${employees.employeeStatus!='註銷'}">
-												<form th:action="@{/Bistro/employee/cancel}" method="post"
+											<th:block th:if="${employees.employeeStatus!='離職'}">
+												<form th:action="@{/Bistro/Employee/cancel}" method="post"
 													style="display: inline;">
 													<input type="hidden" name="id" th:value="${employees.id}">
 													<button type="submit" id="delete"
-														onclick="return confirm('確定切換離職員工狀態嗎？');">註銷</button>
+														onclick="return confirm('確定註銷為離職員工嗎？');">註銷</button>
 												</form>
 											</th:block>
 											<th:block th:if="${employees.employeeStatus!='在職'}">
-												<form th:action="@{/Bistro/employee/active}" method="post"
+												<form th:action="@{/Bistro/Employee/active}" method="post"
 													style="display: inline;">
 													<input type="hidden" name="id" th:value="${employees.id}">
 													<button type="submit" id="active">啟用</button>
@@ -396,7 +396,7 @@ select:hover {
 		        "columnDefs": [
 		            {"width": "45px","targets": 0},
 		            {"width": "100px","targets": 1,className: 'ellipsis'},
-		            {"width": "100px","targets": 2,className: 'ellipsis'},
+		            {"width": "70px","targets": 2,className: 'ellipsis'},
 		            {"width": "100px","targets": 3},
 		            {"width": "70px","targets": 4},
 		            {"width": "100px","targets": 5},
@@ -456,5 +456,17 @@ select:hover {
 	    	    document.getElementById("editemployeesalary").value = btnData.dataset.salary;
 	    	    }
 	    	    
+	    	 document.addEventListener("DOMContentLoaded", function() {
+			    // 取所有"password-cell"
+			    document.querySelectorAll('.password-cell').forEach(function(passwordElement) {
+			      var password = passwordElement.textContent.trim();
+			
+			      if (password && password.length > 2) {
+			        var firstChar = password.substring(0, 1);  // 取第一字
+			        var lastChar = password.substring(password.length - 1);  // 取最後字
+			        passwordElement.textContent = firstChar + "***" + lastChar;
+			      }
+			    });
+			  });
 
 	    </script>
