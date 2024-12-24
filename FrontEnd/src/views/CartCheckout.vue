@@ -84,7 +84,7 @@
                     <span>${{ calculateSubtotal }}</span>
                   </div>
                   <div class="checkout__order__total">
-                    稅金
+                    服務費(10%)
                     <span style="color: #1c1c1c">${{ calculateTax }}</span>
                   </div>
                   <div class="checkout__order__total">
