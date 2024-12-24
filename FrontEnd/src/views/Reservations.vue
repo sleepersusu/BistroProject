@@ -8,8 +8,9 @@
     <div class="row g-4 justify-content-center d-flex align-items-center" style="min-height: 100vh">
       <div class="col-lg-7 col-md-12">
         <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
+          
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4673315461455!2d121.5401541!3d25.0521449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abde34f7352d%3A0xb2db9881628011f6!2zMTA0OTHlj7DljJfluILkuK3lsbHljYDljZfkuqzmnbHot6_kuInmrrUxMjPomZ8!5e0!3m2!1szh-TW!2stw!4v1735012291613!5m2!1szh-TW!2stw"
             v-if="isMapVisible" class="w-100 h-100" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"
             style="width: 100%; height: 100%"></iframe>
         </div>
@@ -24,8 +25,8 @@
                 </div>
                 <div class="mt-3">
                   <h5 class="fw-bold">Phone Numbers</h5>
-                  <p>07-656-8106</p>
-                  <p>07-716-9502</p>
+                  <p>02-656-8106</p>
+                 
                 </div>
               </div>
             </div>
@@ -39,7 +40,7 @@
                 <div class="mt-3">
                   <h5 class="fw-bold">Emails</h5>
                   <p>NightSips1223@gmail.com</p>
-                  <p>aiz777vic@gmail.com</p>
+                
                 </div>
               </div>
             </div>
@@ -60,7 +61,11 @@
           <div class="mb-3">
             <label for="customerName" class="form-label">訂位人姓名</label>
             <input type="text" class="form-control frame" id="customerName" v-model="reservations.customerName"
-              maxlength="10" required />
+              maxlength="10" 
+              @input="validateName"
+              :class="{ 'is-invalid': nameError }"
+              />
+              <small v-if="nameError" class="text-danger">{{ nameError }}</small>
           </div>
           <div class="mb-3">
             <label class="form-label">性別</label>
@@ -79,8 +84,12 @@
           </div>
           <div class="mb-3">
             <label for="contactPhone" class="form-label">電話</label>
-            <input type="tel" class="form-control frame" id="contactPhone" v-model="reservations.contactPhone"
-              maxlength="10" required />
+            <input type="tel" class="form-control frame" id="contactPhone" 
+            v-model="reservations.contactPhone"
+              maxlength="10" required
+              @input="validatePhone"
+              :class="{ 'is-invalid': phoneError }" />
+              <small v-if="phoneError" class="text-danger">{{ phoneError }}</small>
           </div>
           <div class="row g-3">
             <div class="col-md-6">
@@ -133,7 +142,10 @@
 
 export default {
   data() {
+    
     return {
+      nameError: '',
+      phoneError:'',
       isMapVisible: false,
       reservations: {
         customerName: '',
@@ -163,6 +175,27 @@ export default {
           icon: 'custom-icon' 
         }
       })
+    },
+    // 驗證電話格式
+    validatePhone() {
+      const phoneRegex = /^09\d{8}$/ // 09開頭,8位數字
+      if (!this.reservations.contactPhone.trim()) {
+        this.phoneError = '電話為必填'
+      } else if (!phoneRegex.test(this.reservations.contactPhone)) {
+        this.phoneError = '電話格式錯誤，請輸入正確的手機號碼'
+      } else {
+        this.phoneError = ''
+      }
+    },
+    validateName() {
+      const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s]{2,15}$/ // 允许中文、英文、空格，长度2~15
+      if (!this.reservations.customerName.trim()) {
+        this.nameError = '姓名為必填'
+      } else if (!nameRegex.test(this.reservations.customerName)) {
+        this.nameError = '姓名格式錯誤，請輸入2-15個字的中文或英文'
+      } else {
+        this.nameError = ''
+      }
     },
     handleClick(time, event) {
       event.preventDefault() // 阻止按鈕的默認行為，防止它觸發表單提交
@@ -210,6 +243,8 @@ export default {
         return
       }
       try {
+        this.validatePhone();
+        this.validateName()
         const api = `${import.meta.env.VITE_API}/api/Bistro/insert`
         const response = await this.axios.post(api, this.reservations)
         if (response.data.success) {
@@ -245,10 +280,10 @@ export default {
       } catch (error) {
         if (error.response && error.response.data) {
           const errorMessage = error.response.data.message || '提交訂位資料時發生錯誤，請稍後再試。'
-          alert(`格式輸入錯誤: ${errorMessage}`)
+         
         } else {
           console.error('錯誤:', error)
-          alert('提交訂位資料時發生錯誤，請稍後再試。')
+          
         }
       }
     },
