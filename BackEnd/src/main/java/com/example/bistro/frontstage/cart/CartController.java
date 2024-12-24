@@ -24,15 +24,13 @@ public class CartController {
         @GetMapping("/list")
 
         public ResponseEntity<List<Cart>>shoppingCart(HttpSession httpSession) {
-
             Integer loginUserId = (Integer) httpSession.getAttribute("membersId");
-
             // 如果是空的，請他先登入
-            if (loginUserId == null) {
-                return ResponseEntity.status(401).body(null);
-            }
-            List<Cart> shoppingCart = cartService.findMemberCart(loginUserId);
-            return ResponseEntity.ok(shoppingCart);
+                if (loginUserId == null) {
+                    return ResponseEntity.status(401).body(null);
+                }
+                List<Cart> shoppingCart = cartService.findMemberCart(loginUserId);
+                return ResponseEntity.ok(shoppingCart);
 
         }
     //會員新增購物車 ---------OK ++++
@@ -88,7 +86,12 @@ public class CartController {
             cartService.deleteCartItem(memberId, menuId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
+    // 清空購物車
+        @DeleteMapping("/clear/{memberId}")
+        public ResponseEntity<Void> clearCart(@PathVariable Integer memberId) {
+            cartService.clearCartByMemberId(memberId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
 
 

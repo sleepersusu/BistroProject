@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { pointStore } from './pointStore'
+import { lotteryStore } from './lotteryStore'
+import {cartStore} from '@/stores/cartStore.js'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -27,9 +30,17 @@ export const useUserStore = defineStore('userStore', {
     checkLogin: (state) => state.isLoggedIn,
 
     memberId: () => Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId) || null,
+
+    memberId: (state) => {
+      if (state.isLoggedIn === true) {
+        return Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId)
+      } else {
+        return null
+      }
+    },
   },
   actions: {
-    setLoggedIn() {
+    async setLoggedIn() {
       let memberobj = localStorage.getItem('memberobj')
       this.isLoggedIn = true // 設置登入
       this.memberprofile.userName = JSON.parse(memberobj).userName
@@ -58,7 +69,7 @@ export const useUserStore = defineStore('userStore', {
             this.memberprofile.userFavor = response.data.memberFavor
             this.memberprofile.userAddress = response.data.memberAddress
             this.memberprofile.userBirthdate = response.data.memberBirthday
-
+            console.log(response.data.memberName)
             // console.log(response.data.memberAccount)
             // console.log(response.data.memberFavor)
             // console.log(response.data.memberImg)
@@ -101,7 +112,6 @@ export const useUserStore = defineStore('userStore', {
         return response;
       }catch(error){
         console.log("axios出問題");
-        
       }
     },
     parseAddress(Address) {
@@ -122,6 +132,11 @@ export const useUserStore = defineStore('userStore', {
       localStorage.removeItem('memberobj')
       this.isLoggedIn = false
       this.memberprofile = {}
+      const point = pointStore()
+      point.getMemberPoint()
+      //get cart again
+      const cart =cartStore()
+      cart.getCart()
     },
     async handleGoogleLogin(idToken) {
       try {
@@ -156,6 +171,7 @@ export const useUserStore = defineStore('userStore', {
         localStorage.setItem('memberobj', JSON.stringify(memberObj))
         this.isLoggedIn = true // 設置登入
         this.memberprofile.userName = userName
+        this.memberprofile.navName = userName
         this.memberprofile.userAvatar = userAvatar
         this.memberprofile.userPoint = userPoint
       } catch (error) {
@@ -204,8 +220,13 @@ export const useUserStore = defineStore('userStore', {
         localStorage.setItem('memberobj', JSON.stringify(memberObj))
         this.isLoggedIn = true // 設置登入
         this.memberprofile.userName = userName
+        this.memberprofile.navName = userName
         this.memberprofile.userAvatar = userAvatar
         this.memberprofile.userPoint = userPoint
+        const point = pointStore()
+        point.getMemberPoint()
+        const lottery = lotteryStore()
+        lottery.getAllChanceByMember()
       } catch (error) {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)

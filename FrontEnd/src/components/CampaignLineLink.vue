@@ -1,13 +1,14 @@
 <template>
-  <div class="line-chat-bubble">
-    <div class="chat-content">
+  <div v-if="!isClosed" class="line-chat-bubble">
+    <div class="chat-content position-relative">
+      <div class="close-button" @click="closeBubble">×</div>
       <p class="chat-text">
         Hey！想收到最新優惠資訊嗎？<br />
         快來加入我們的好友吧<span class="typing-dots"></span>
       </p>
     </div>
     <div class="line-button">
-      <a href="https://line.me/R/ti/p/@750umglq">
+      <a href="https://line.me/R/ti/p/@750umglq" target="_blank">
         <img
           height="36"
           src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
@@ -17,6 +18,15 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+
+const isClosed = ref(false)
+const closeBubble = () => {
+  isClosed.value = true
+}
+</script>
 
 <style scoped>
 .line-chat-bubble {
@@ -99,5 +109,43 @@
   75% {
     content: '...';
   }
+}
+
+@media (max-width: 768px) {
+  .line-chat-bubble {
+    right: 2px;
+    bottom: 10px;
+  }
+  .chat-content {
+    display: none;
+  }
+
+  .line-button {
+    padding: 5px;
+    animation: bounce 2s infinite;
+  }
+
+  .line-button img {
+    height: 32px;
+  }
+}
+
+.close-button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 15px;
+  height: 15px;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 15px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  background: rgba(0, 0, 0, 0.4);
 }
 </style>

@@ -1,63 +1,100 @@
 package com.example.bistro.ECPayDemo.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.bistro.ECPayDemo.service.OrderService;
 
+import com.example.bistro.ECPayDemo.service.OrderService;
+import com.example.bistro.backstage.orders.Orders;
+import com.example.bistro.backstage.orders.OrdersService;
+import com.example.bistro.ecpay.payment.integration.domain.AioCheckOutALL;
+
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class OrderController {
 
-	@Autowired
-	OrderService orderService;
+    @Autowired
+    OrderService orderService;
+    
+    @Autowired
+    OrdersService ordersService;
 
-	@GetMapping("/ecpayCheckout")
-	public String ecpayCheckout() {
-		System.out.println("有進到後端");
-		String aioCheckOutALLForm = orderService.ecpayCheckout();
+    private static String paymentStatus;
 
-		return aioCheckOutALLForm;
-	}
-	
-
-    // 新增：處理綠界的回調
+    @GetMapping("/ecpayCheckout")
+    public String ecpayCheckout(
+            @RequestParam(required = false, defaultValue = "0") String amount,
+            @RequestParam(required = false, defaultValue = "") String ordersName,
+            @RequestParam(required = false, defaultValue = "") String ordersTel) {
+        try {
+            System.out.println("有進到後端");
+            String aioCheckOutALLForm = orderService.ecpayCheckout(amount, ordersName, ordersTel);
+            return aioCheckOutALLForm;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
     @PostMapping("/ecpay/callback")
-    public String handleCallback(@RequestBody Map<String, String> response) {
-    	System.out.println("有進到callback");
-        String status = response.get("RtnCode");
-        // 這裡可以加入交易記錄的處理邏輯
-        return status;
+    public ResponseEntity<String> handleCallback(
+            @RequestBody(required = false) Map<String, String> postData,
+            @RequestParam Map<String, String> getData,
+            HttpServletRequest request
+    ) {
+        //進不去的
+        System.out.println("=== 進入 callback ===");
+
+        Map<String, String> responseData;
+        if (request.getMethod().equals("POST")) {
+            responseData = postData != null ? postData : getData;
+        } else {
+            responseData = getData;
+        }
+        System.out.println("收到的 response: " + responseData);
+
+        String rtnCode = responseData.get("RtnCode");
+
+        paymentStatus = rtnCode;
+
+        System.out.println("Callback 設置 paymentStatus: " + paymentStatus);
+        // 必須回應 "1|OK"
+        return ResponseEntity.ok("1|OK");
     }
 
-    // 處理付款結果的重定向
-    @GetMapping("/payment-result")
+    @PostMapping("/payment-result")
     public void handlePaymentResult(HttpServletResponse response) throws IOException {
-    	System.out.println("有進到payment-result");
-//        if ("1".equals(RtnCode)) {
-//            response.sendRedirect("http://localhost:5173/cartCheckSuc");
-//        } else {
-//            response.sendRedirect("http://localhost:5173/cartCheckFail");
-//        }
-    	response.sendRedirect("http://localhost:5173/cartCheckSuc");
+        //進的去得
+        System.out.println("=== 進入 payment-result ===");
+        System.out.println("當前 paymentStatus: " + paymentStatus);
+        List<Orders> allOrders = ordersService.findAllOrders();
+        Orders orders = allOrders.get(allOrders.size() - 1);
+        response.sendRedirect("http://localhost:5173/cartCheckSuc?orderNumber=" + orders.getOrdersNumber());
     }
-} 
-//	
-//    // 這個是給使用者瀏覽器導向的端點
-//    @GetMapping("/payment-result")
-//    public void handlePaymentResult(@RequestParam String RtnCode, HttpServletResponse response) throws IOException {
-//        // 根據交易結果重新導向到前端的成功或失敗頁面
-//        if ("1".equals(RtnCode)) {
-//            response.sendRedirect("http://localhost:8080/cartCheckSuc");
-//        } else {
-//            response.sendRedirect("http://localhost:8080/cartCheckFail");
-//        }
-//    }
+
+    @RequestMapping(value = {"/ecpay/callback", "/payment-result"}, method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> handleOptions() {
+        return ResponseEntity.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+                .header("Access-Control-Allow-Headers", "*")
+                .build();
+    }
+}

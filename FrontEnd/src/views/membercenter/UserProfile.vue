@@ -6,7 +6,7 @@
                 <form class="needs-validation" @submit.prevent="imageSubmit" novalidate>
                     <div class="col-12 d-flex justify-content-center">
                         <div class="circle-avatar"
-                            :style="{ backgroundImage: `url(${store.memberprofile.userAvatar || '/default-avatar.png'})` }"
+                            :style="{ backgroundImage: `url(${store.memberprofile.userAvatar})` }"
                             @click="handleAvatarClick">
                         </div>
                     </div>
@@ -148,6 +148,7 @@ export default {
         watch(
             () => store.getProfile,
             (newProfile) => {
+                console.log(newProfile)
                 if (!newProfile.userName) {
                     validationErrors.userName = '請輸入姓名';
                 } else {
@@ -159,14 +160,8 @@ export default {
                 } else {
                     validationErrors.userEmail = '';
                 }
-
-                if (!newProfile.userPhone) {
-                    validationErrors.userPhone = '請輸入電話號碼';
-                } else {
-                    validationErrors.userPhone = '';
-                }
             },
-            { immediate: true, deep: true } // `deep` 用于监听嵌套对象的变化
+            { immediate: true, deep: true } // deep深度監聽內部數據變化
         );
 
         // 初始化表單資料
@@ -270,7 +265,7 @@ export default {
 
         // 處理頭像點擊
         const handleAvatarClick = () => {
-            // 實作頭像上傳邏輯
+            
             console.log('Avatar clicked')
         }
 

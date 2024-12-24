@@ -102,7 +102,7 @@ export default {
     width: 100%;
     height: 300px;
 
-    background-image: url('/images/DSC_9550-1.jpg');
+    background-image: url('/images/banner3.jpg');
 
     background-size: cover;
     background-position: center;

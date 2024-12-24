@@ -114,6 +114,7 @@ public class OrdersFrontService {
 
         // 儲存付款資訊
             List<Payment> payments = new ArrayList<>();
+            boolean allPaymentSuc = false;
             for (PaymentDTO paymentDTO : ordersDTO.getPayments()) {
                 Payment payment = new Payment();
                 payment.setPaymentPrice(paymentDTO.getPaymentPrice());
@@ -122,17 +123,25 @@ public class OrdersFrontService {
                 payment.setOrders(savedOrder);  // 設定對應的訂單
                 paymentRepository.save(payment);  // 儲存付款資訊
                 payments.add(payment);
+
+                if("成功".equals(paymentDTO.getPaymentStatus())) {
+                    allPaymentSuc =true;
+                }
             }
             savedOrder.setPayment(payments);
-
-            if (ordersDTO.getMemberId() != null) {
-                cartService.clearCartByMemberId(ordersDTO.getMemberId());
-            }
-
+            //判斷成功或失敗才刪除
+                if ( allPaymentSuc && ordersDTO.getMemberId() != null) {
+                    cartService.clearCartByMemberId(ordersDTO.getMemberId());
+                }
 
         // 返回儲存的訂單
             return ordersRepository.save(newOrder);
     }
+
+    // 根據 memberId 查找所有訂單
+        public List<Orders> findAllOrdersByMemberId(Integer memberId) {
+            return ordersRepository.findByMembersId(memberId);
+        }
 
 
 }

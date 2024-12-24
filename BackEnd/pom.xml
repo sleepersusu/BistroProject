@@ -34,11 +34,13 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-		<dependency>
-		    <groupId>io.jsonwebtoken</groupId>
-		    <artifactId>jjwt-api</artifactId>
-		    <version>0.11.5</version>
+		<dependency><!-- line bot -->
+			<groupId>com.linecorp.bot</groupId>
+			<artifactId>line-bot-spring-boot</artifactId>
+			<version>5.0.3</version>
 		</dependency>
+
+		<!--GOOGLE 登入套件-->
 		<dependency>
     		<groupId>com.google.auth</groupId>
     		<artifactId>google-auth-library-oauth2-http</artifactId>
@@ -49,26 +51,17 @@
 		    <artifactId>google-api-services-oauth2</artifactId>
 		    <version>v2-rev151-1.25.0</version>
 		</dependency>
-
-	    
-	    <!-- Jackson JSON processing library (for Google API client) -->
-	    <dependency>
+	    <dependency><!-- Jackson JSON Gson  (for Google API client) -->
 	        <groupId>com.google.http-client</groupId>
 	        <artifactId>google-http-client-gson</artifactId>
 	        <version>1.40.1</version> <!-- 或選擇最新版本 -->
 	    </dependency>
-	    
-	    <!-- HTTP transport library (for making requests) -->
-	    <dependency>
+	    <dependency><!-- HTTP transport library (for making requests) -->
 	        <groupId>com.google.http-client</groupId>
 	        <artifactId>google-http-client</artifactId>
-	        <version>1.40.1</version>  <!-- 或選擇其他版本 -->
+	        <version>1.40.1</version> 
 	    </dependency>
-		<dependency><!-- line bot -->
-			<groupId>com.linecorp.bot</groupId>
-			<artifactId>line-bot-spring-boot</artifactId>
-			<version>5.0.3</version>
-		</dependency>
+
 		<dependency><!--密碼加密用套件-->
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-crypto</artifactId>
@@ -131,20 +124,33 @@
 		</dependency>
 		
 		<!--綠界金流-->
-		<!-- <https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api> -->
+			<!-- <https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api> -->
+			<dependency>
+			    <groupId>javax.servlet</groupId>
+			    <artifactId>javax.servlet-api</artifactId>
+			    <version>3.0.1</version>
+			    <scope>provided</scope>
+			</dependency>
+
+			<!-- <https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core> -->
+			<dependency>
+			    <groupId>org.apache.logging.log4j</groupId>
+			    <artifactId>log4j-core</artifactId>
+			    <version>2.17.1</version>
+			</dependency>
+		<!--Paypal-->
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.0.1</version>
-		    <scope>provided</scope>
+			<groupId>com.paypal.sdk</groupId>
+			<artifactId>paypal-core</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.paypal.sdk</groupId>
+			<artifactId>rest-api-sdk</artifactId>
+			<version>1.14.0</version>
 		</dependency>
 
-		<!-- <https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core> -->
-		<dependency>
-		    <groupId>org.apache.logging.log4j</groupId>
-		    <artifactId>log4j-core</artifactId>
-		    <version>2.17.1</version>
-		</dependency>
+
 
 		<!--Json-->
 		<dependency>
@@ -152,6 +158,17 @@
 			<artifactId>gson</artifactId>
 			<version>2.8.9</version>
 		</dependency>
+		<!--Twilio-->
+		<!-- https://mvnrepository.com/artifact/com.twilio.sdk/twilio -->
+		<dependency>
+   			<groupId>com.twilio.sdk</groupId>
+    		<artifactId>twilio</artifactId>
+    		<version>10.6.4</version>
+		</dependency>
+
+
+
+
 
 	</dependencies>
 

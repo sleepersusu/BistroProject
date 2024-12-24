@@ -12,10 +12,7 @@
 </template>
 
 <script>
-
 import MembercenterNav from '@/components/memberCenter/membercenterNav.vue';
-import { useUserStore } from '@/stores/userStore';
-const userStore = useUserStore();
 
 export default {
   data() {

@@ -1,49 +1,55 @@
 <template>
-  <div class="pt-2 mb-0 bg-light ">
-    <h3 class="text-dark text-center mb-3 fs-2" style="font-family: 'Chakra Petch', cursive !important" > Location</h3>
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9583749490967!2d120.22380107477024!3d23.025300516227354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e771f2995cba5%3A0x3bfd449f1e46ffef!2z5Y2X6Ie656eR5oqA5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1734080088780!5m2!1szh-TW!2stw" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-  </div>
-    <div class=" bg-dark">
+  <div class="bg-dark">
     <div class="container">
       <footer class="py-5 text-light">
         <div class="row">
-          <div class="col-2">
-            <h5>Section</h5>
+          <div class="col-md-2 col-4">
+            <h5>探索</h5>
             <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Home</a></li>
+              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">首頁</a></li>
               <li class="nav-item mb-2">
-                <a href="#" class="nav-link p-0 text-light">Features</a>
+                <a href="#" class="nav-link p-0 text-light">關於酌夜</a>
               </li>
-
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-light">最新消息</a>
+              </li>
             </ul>
           </div>
 
-          <div class="col-2">
-            <h5>Section</h5>
+          <div class="col-md-2 col-4">
+            <h5>美食饗宴</h5>
             <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Home</a></li>
               <li class="nav-item mb-2">
-                <a href="#" class="nav-link p-0 text-light">Features</a>
+                <a href="#" class="nav-link p-0 text-light">菜單一覽</a>
               </li>
-
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-light">主廚推薦</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-light">季節限定</a>
+              </li>
             </ul>
           </div>
 
-          <div class="col-2">
-            <h5>Section</h5>
+          <div class="col-md-2 col-4">
+            <h5>聯絡資訊</h5>
             <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Home</a></li>
               <li class="nav-item mb-2">
-                <a href="#" class="nav-link p-0 text-light">Features</a>
+                <span class="nav-link p-0 text-light">營業時間：17:00-23:00</span>
               </li>
-
+              <li class="nav-item mb-2">
+                <span class="nav-link p-0 text-light">電話：02-2345-6789</span>
+              </li>
+              <li class="nav-item mb-2">
+                <span class="nav-link p-0 text-light">地址：台北市中山區南京東路三段123號</span>
+              </li>
             </ul>
           </div>
 
-          <div class="col-4 offset-1">
+          <div class="col-lg-4 offset-1 ms-0 mt-3 mt-lg-0 ms-lg-5">
             <form>
-              <h5>Subscribe to our newsletter</h5>
-              <p>Monthly digest of whats new and exciting from us.</p>
+              <h5>訂閱最新消息</h5>
+              <p>訂閱電子報，隨時掌握最新優惠及活動資訊</p>
               <div class="d-flex w-100 gap-2">
                 <label for="newsletter1" class="visually-hidden">Email address</label>
                 <input
@@ -59,20 +65,20 @@
         </div>
 
         <div class="d-flex justify-content-between py-4 my-4 border-top border-primary">
-          <p>&copy; 2024 Bistro, Inc. All rights reserved.</p>
+          <p>&copy; 2024 酌夜語 Nightly Sips. All rights reserved.</p>
           <ul class="list-unstyled d-flex">
             <li class="ms-4">
-              <a class="link-primary" target="_blank" href="https://www.facebook.com/"
+              <a class="link-light" target="_blank" href="https://www.facebook.com/"
                 ><i class="bi bi-facebook fs-4"></i
               ></a>
             </li>
             <li class="ms-4">
-              <a class="link-primary" target="_blank" href="https://www.instagram.com/"
+              <a class="link-light" target="_blank" href="https://www.instagram.com/"
                 ><i class="bi bi-instagram fs-4"></i
               ></a>
             </li>
             <li class="ms-4">
-              <a class="link-primary" target="_blank" href="https://www.threads.net/"
+              <a class="link-light" target="_blank" href="https://www.threads.net/"
                 ><i class="bi bi-threads fs-4"></i
               ></a>
             </li>

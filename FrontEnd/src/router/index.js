@@ -45,6 +45,14 @@ const router = createRouter({
               path: 'lotteryresult',
               component: () => import('../views/membercenter/LotteryResult.vue'),
             },
+            {
+              path: 'MerberOwnPrize',
+              component: () => import('../views/membercenter/MerberOwnPrize.vue'),
+            },
+            {
+              path: 'PromoRecord',
+              component: () => import('../views/membercenter/MemberPromoRecord.vue'),
+            },
           ],
         },
         {
@@ -58,10 +66,6 @@ const router = createRouter({
         {
           path: '/cart',
           component: () => import('../views/Cart.vue'),
-        },
-        {
-          path: '/order',
-          component: () => import('../views/Order.vue'),
         },
         {
           path: '/memberPoints',

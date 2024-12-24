@@ -1,5 +1,6 @@
 package com.example.bistro.backstage.orders;
 
+import com.example.bistro.backstage.members.MembersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,8 @@ public class OrdersService {
 
     @Autowired
     private OrdersRepository ordersRepository;
+    @Autowired
+    private MembersRepository membersRepositoryDao;
 
 //訂單邏輯
     //前台：使用者
@@ -19,14 +22,16 @@ public class OrdersService {
                 return ordersRepository.save(orders);
             }
 
+
+
         // 根據電話查詢訂單
             public Optional<Orders> findOrderByPhone(String ordersTel) {
                 return ordersRepository.findByOrdersTel(ordersTel);
             }
         // 根據ordersNumber查詢訂單
-        public Optional<Orders> findOrderByOrdersNumber(String ordersNumber) {
-            return ordersRepository.findByOrdersNumber(ordersNumber);
-        }
+            public Optional<Orders> findOrderByOrdersNumber(String ordersNumber) {
+                return ordersRepository.findByOrdersNumber(ordersNumber);
+            }
 
     //使用者看到目前自己擁有的訂單
         //使用者點擊該筆訂單ID時候，會出現訂單詳情
