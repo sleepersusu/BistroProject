@@ -199,8 +199,12 @@ public class LineMessageService {
            sb.append("🎁 獎品：").append(winner.fetchPrizeName()).append("\n");
            
            ShippingDetails details = winner.getShippingDetails();
-           if (details != null) {
-               sb.append("📦 狀態：已出貨\n");
+           if (details != null ) {
+        	   if(details.getIsSend()) {
+        		   sb.append("📦 狀態：已出貨\n");
+        	   }else if(details.getLotteryWinner().isShippingCompleted()) {
+        		   sb.append("⏳ 狀態：處理中\n");
+        	   }               
                sb.append("🏠 配送地址：").append(details.getAddress()).append("\n");
            } else {
                sb.append("⏳ 狀態：待處理\n");
@@ -389,6 +393,7 @@ public class LineMessageService {
    }
 
    private String createShippingMessage(ShippingDetails details) {
+	   details.setIsSend(true);
        return String.format(
            "親愛的 %s 您好 🎉\n\n" +
            "您的獎品已經出貨了！ 📦\n" +
