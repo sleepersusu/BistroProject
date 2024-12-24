@@ -6,7 +6,7 @@
           {{menu.productName}}
             <span class="float-end text-danger">{{menu.productPrice}}</span>
         </h6>
-          <button class="btn btn-outline-primary w-100" @click="handleAddToCart(menu.id)">加入購物車</button>
+          <button class="btn btn-outline-primary w-100" @click="handleAddToCart()">加入購物車</button>
       </div>
   </div>
 
@@ -54,10 +54,10 @@ export default {
           this.isLoading = false
         })
     },
-      ...mapActions(cartStore, ['addToCart']),
-      handleAddToCart(id) {
+      ...mapActions(cartStore, ['CountCart']),
+      handleAddToCart() {
         const productName = this.menu.productName;
-        this.addToCart({ id, count: this.count })
+        this.CountCart(this.menu)
         this.count = 1
         // 黑灰底白字的提示框
         Swal.fire({

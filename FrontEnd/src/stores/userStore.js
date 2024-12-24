@@ -174,6 +174,8 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.navName = userName
         this.memberprofile.userAvatar = userAvatar
         this.memberprofile.userPoint = userPoint
+        const cart = cartStore()
+        cart.getCart()
       } catch (error) {
         console.error('Google發送後端失敗', error)
       }
@@ -223,6 +225,8 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.navName = userName
         this.memberprofile.userAvatar = userAvatar
         this.memberprofile.userPoint = userPoint
+        const cart = cartStore()
+        cart.getCart()
         const point = pointStore()
         point.getMemberPoint()
         const lottery = lotteryStore()

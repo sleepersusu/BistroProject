@@ -84,24 +84,6 @@ public class GoogleOAuthController {
 			e.printStackTrace();
 		}
 
-//		String queryBody = UriComponentsBuilder.newInstance().queryParam("code", code)
-//				.queryParam("grant_type", "authorization_code").queryParam("client_id", googleConfig.getClientId())
-//				.queryParam("client_secret", googleConfig.getClientSecret())
-//				.queryParam("redirect_uri", googleConfig.getRedirectUris()).build().getQuery();
-//		String credentials = restClient.post().uri("https://oauth2.googleapis.com/token")
-//				.contentType(MediaType.APPLICATION_FORM_URLENCODED).body(queryBody).retrieve().body(String.class);
-//		System.out.println("證書接收:" + credentials);
-//
-//		JsonNode jsonNode = new ObjectMapper().readTree(credentials);
-//		String accessToken = jsonNode.get("access_token").asText();
-//		String idToken = jsonNode.get("id_token").asText();
-//
-//		String result = restClient.get().uri("https://www.googleapis.com/oauth2/v2/userinfo")
-//				.header("Authorization", "Bearer " + idToken).retrieve().body(String.class);
-//		System.out.println("再發TOKEN結果返回:" + result);
-//		JsonNode jsonResultNode = new ObjectMapper().readTree(result);
-//		String userEmail = jsonResultNode.get("email").asText();
-//		System.out.println("取得信箱:" + userEmail);
 		Optional<Members> Result = membersFrontService.findMemberByAccount(useremail);
 		if (Result.isPresent()) {
 			Members memberData = Result.get();
@@ -121,16 +103,49 @@ public class GoogleOAuthController {
 			} else {
 				response.put("memberPoint", memberData.getMemberPoint().toString());
 			}
-			
 		} else {
 			System.out.println("GOOGLE登入，沒有此帳號，註冊帳號");
 			Members memberBean = new Members();
 			memberBean.setMemberAccount(useremail);
 			memberBean.setMemberName(username);
 			memberBean.setMemberEmail(useremail);
-			membersFrontService.insertMember(memberBean);
+			Members resultData = membersFrontService.insertMember(memberBean);
+			System.out.println("建立後開始登入，建立Session");
+			long currentTime = System.currentTimeMillis();
+			httpSession.setMaxInactiveInterval(3600);// session存活時間sec
+			httpSession.setAttribute("lastAccessTime", currentTime);// Session紀錄資訊
+			System.out.println("GOOGLE新增的ID"+resultData.getId());
+			httpSession.setAttribute("membersId", resultData.getId());// Session紀錄資訊
+			System.out.println("session有取到" + httpSession.getAttribute("membersId"));
+			response.put("status", "success");
+			response.put("memberId", resultData.getId().toString());
+			response.put("memberName", resultData.getMemberName());
+			if (resultData.getMemberPoint() == null) {
+				response.put("memberPoint", "0");
+			} else {
+				response.put("memberPoint", resultData.getMemberPoint().toString());
+			}
 		}
 		return ResponseEntity.ok(response);
 	}
 
 }
+
+//		String queryBody = UriComponentsBuilder.newInstance().queryParam("code", code)
+//				.queryParam("grant_type", "authorization_code").queryParam("client_id", googleConfig.getClientId())
+//				.queryParam("client_secret", googleConfig.getClientSecret())
+//				.queryParam("redirect_uri", googleConfig.getRedirectUris()).build().getQuery();
+//		String credentials = restClient.post().uri("https://oauth2.googleapis.com/token")
+//				.contentType(MediaType.APPLICATION_FORM_URLENCODED).body(queryBody).retrieve().body(String.class);
+//		System.out.println("證書接收:" + credentials);
+//
+//		JsonNode jsonNode = new ObjectMapper().readTree(credentials);
+//		String accessToken = jsonNode.get("access_token").asText();
+//		String idToken = jsonNode.get("id_token").asText();
+//
+//		String result = restClient.get().uri("https://www.googleapis.com/oauth2/v2/userinfo")
+//				.header("Authorization", "Bearer " + idToken).retrieve().body(String.class);
+//		System.out.println("再發TOKEN結果返回:" + result);
+//		JsonNode jsonResultNode = new ObjectMapper().readTree(result);
+//		String userEmail = jsonResultNode.get("email").asText();
+//		System.out.println("取得信箱:" + userEmail);

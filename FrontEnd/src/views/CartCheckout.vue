@@ -421,7 +421,7 @@ export default defineComponent({
           try {
             const pointRequestData = {
               memberId: user.memberId,
-              pointGetted: Math.floor(actualTotal / 100), // 使用實際總金額計算點數
+              pointGetted: Math.floor(this.calculateTotal / 100), // 使用實際總金額計算點數
             }
 
             const pointResponse = await axios.post(
