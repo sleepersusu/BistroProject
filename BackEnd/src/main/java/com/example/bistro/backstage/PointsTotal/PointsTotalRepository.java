@@ -23,4 +23,3 @@ public interface PointsTotalRepository extends JpaRepository<PointsTotalBean, In
   Optional<PointsTotalBean> findByMembersId(Integer memberId);
 }
 
-}
