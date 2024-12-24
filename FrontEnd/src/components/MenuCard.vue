@@ -277,10 +277,8 @@ export default {
 
 
   async created() {
-    this.loadPicture(this.menu.id)
+    await this.loadPicture(this.menu.id)
     await this.getCommentPeople()
-
-
   },
 
 
@@ -296,7 +294,8 @@ export default {
       return (this.count + this.cartCount > this.menu.productCount) ||
             (this.count >= this.remainingStock)
     }
-  }, watch: {
+  },
+  watch: {
 
   }
 
