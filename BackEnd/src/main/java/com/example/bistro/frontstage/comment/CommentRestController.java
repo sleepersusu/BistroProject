@@ -130,40 +130,47 @@ public class CommentRestController {
 	@GetMapping("/api/{productName}/comment")
 	public ResponseEntity<?> findAllCommentByProductName(@PathVariable String productName) {
 
-		// 根據商品找評論
-		List<Comment> comments = commentService.findCommentByProductName(productName);
+	    // 根據商品找評論
+	    List<Comment> comments = commentService.findCommentByProductName(productName);
 
-		if (comments.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("該商品目前無任何評論。");
-		}
+	    if (comments.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("該商品目前無任何評論。");
+	    }
 
-		for (Comment comment : comments) {
-			String memberName = comment.getMembers().getMemberName();
-			String firstName;
-			
-			if (memberName != null && !memberName.isEmpty()) {
-			    if (memberName.startsWith("Mr.") || memberName.startsWith("Ms.")) {
-			        memberName = memberName.substring(3).trim();
-			    }
+	    for (Comment comment : comments) {
+	        Members member = comment.getMembers();
+	        if (member == null) {
+	            continue; // 若無成員資訊，跳過該評論
+	        }
 
-			    if (memberName.length() > 3) {
-			    	firstName = memberName.substring(0, 2);
-			    } else {
-			    	firstName = memberName.substring(0, 1);
-			    }
+	        String memberName = member.getMemberName();
+	        if (memberName == null || memberName.isEmpty()) {
+	            continue; // 若名字為空，跳過該評論
+	        }
 
-			    if (comment.getMembers().getMemberSex() == 1) {
-			    	memberName = ("Mr."+firstName).trim();
-			    } else if(comment.getMembers().getMemberSex() == 0) {
-			    	memberName = ("Ms."+firstName).trim();
-			    }else {
-			    	comment.getMembers().setMemberName(memberName);
-			    }
-			comment.getMembers().setMemberName(memberName);
-			}
-		}
-			
-		return ResponseEntity.ok(comments);
+	        // 要先去除 "Mr." 或 "Ms."否則之後會變成Mr.Mr
+	        if (memberName.startsWith("Mr.") || memberName.startsWith("Ms.")) {
+	            memberName = memberName.substring(3).trim();
+	        }
+
+	        // 取得名字的前綴
+	        String firstName = memberName.length() > 3 ? memberName.substring(0, 2) : memberName.substring(0, 1);
+
+	        // 根據性別設定稱謂
+	        Short memberSex = member.getMemberSex();
+	        if (memberSex != null) {
+	            if (memberSex == 1) {
+	                memberName = ("Mr." + firstName).trim();
+	            } else if (memberSex == 0) {
+	                memberName = ("Ms." + firstName).trim();
+	            }
+	        }
+
+	        // 更新名字
+	        member.setMemberName(memberName);
+	    }
+
+	    return ResponseEntity.ok(comments);
 	}
 
 	@GetMapping("/api/member/{memberId}/avatar")

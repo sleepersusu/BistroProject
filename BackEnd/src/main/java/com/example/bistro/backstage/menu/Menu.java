@@ -48,6 +48,7 @@ public class Menu {
 	private String productName;
 
 	@Lob
+	@JsonIgnore
 	private byte[] productImg;
 
     private Integer productPrice;
