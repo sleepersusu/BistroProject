@@ -63,6 +63,7 @@
                         class="btn btn-outline-secondary btn-sm"
                         type="button"
                         @click="increaseQuantity(item)"
+
                       >
                         +
                       </button>
@@ -160,8 +161,7 @@ import { ref } from 'vue'
 import { Notifications, notify } from '@kyvg/vue3-notification'
 import { useNotificationStore } from '@/stores/notificationStore'
 import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
-
-
+import { isDisabled } from 'bootstrap/js/dist/util'
 const user = useUserStore()
 export default {
   name: 'Cart',
@@ -176,6 +176,7 @@ export default {
     return {
       cartItems: [],
       isLoading: ref(false),
+      tooManyProduct:false
     }
   },
   methods: {
@@ -214,6 +215,7 @@ export default {
         const result = await this.CountCart(item.menu)
         if (result && result.data) {
           this.cartItems = result.data
+          console.log('result:'+this.cartItems)
         }
       } catch (error) {
         console.error('Failed to increase quantity:', error)
@@ -252,7 +254,7 @@ export default {
           await this.fetchCartItems()
           // console.log("重新獲取購物車數據成功");
           // 成功提示框
-           Swal.fire({
+          Swal.fire({
             toast: true,
             position: 'top-end',
             title: '刪除成功',
@@ -298,7 +300,10 @@ export default {
       return this.cartItems.length > 0 // 判斷購物車是否有資料
     },
   },
-  watch: {},
+  watch: {
+
+
+  },
   created() {
     this.fetchCartItems()
   },

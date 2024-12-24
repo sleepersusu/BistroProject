@@ -88,7 +88,7 @@ public class ImageService {
 
 				String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
 
-				MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM; // 默認為通用二進位流
+				MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
 
 				if (fileExtension.equalsIgnoreCase("png")) {
 					mediaType = MediaType.IMAGE_PNG;

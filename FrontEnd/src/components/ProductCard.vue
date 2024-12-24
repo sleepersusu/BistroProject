@@ -4,7 +4,7 @@
       <div class="card-body text-primary">
         <h6 class="card-title">
           {{menu.productName}}
-            <span class="float-end text-danger">{{menu.productPrice}}</span>
+            <span class="float-end text-danger">NT${{menu.productPrice}}</span>
         </h6>
           <button class="btn btn-outline-primary w-100" @click="handleAddToCart()">加入購物車</button>
       </div>
