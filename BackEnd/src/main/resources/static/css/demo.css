@@ -152,7 +152,7 @@ header{
     display: flex;
     justify-content: flex-end;
     align-content: center;
-    padding-bottom: 10px;
+    padding: 10px;
     z-index:1;
 }
 
@@ -190,8 +190,8 @@ main h2{
 
 
 main{
-    width: 90%;
-    padding-left: 100px;
+    width: 100%;
+    padding-left: 150px;
     padding-top:60px;
     padding-bottom: 5%;
     z-index: 0.9;
@@ -373,7 +373,7 @@ div.dt-container .dt-paging .dt-paging-button {
 /* 頁數 */
 
 .dt-layout-cell.dt-layout-end{
-    margin-right: 100px;
+    margin-right: 115px;
 }/* 搜尋區容器 */
 
 div.dt-container .dt-search input{ 
@@ -583,4 +583,8 @@ body .modal .modal-content {
 }
 .center {
 text-align: center;
+}
+
+fieldset{
+	padding: 0.5rem 1rem ;
 }
