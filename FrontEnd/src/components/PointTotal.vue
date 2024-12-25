@@ -27,9 +27,7 @@
                     </button>
                   </div>
                 </li>
-                <li v-if="memberPromoCode.length === 0" class="no-coupons">
-                  目前沒有可用的優惠券
-                </li>
+                <li v-if="memberPromoCode.length === 0" class="no-coupons">目前沒有可用的優惠券</li>
               </ul>
             </div>
           </div>
@@ -65,6 +63,7 @@ export default {
         console.error('獲取優惠券失敗:', error)
         window.Swal.fire({
           icon: 'error',
+          iconColor: 'black',
           title: '獲取優惠券失敗',
           text: '請稍後再試',
         })
@@ -103,12 +102,13 @@ export default {
 
         // 從列表中移除已使用的優惠券
         this.memberPromoCode = this.memberPromoCode.filter(
-          promo => promo.promoCode !== item.promoCode
+          (promo) => promo.promoCode !== item.promoCode,
         )
 
         // 顯示成功訊息
         window.Swal.fire({
           icon: 'success',
+          iconColor: 'black',
           title: '已加入購物車',
           text: '完成結帳後即可使用此優惠券',
           showConfirmButton: false,
@@ -118,6 +118,7 @@ export default {
         console.error('優惠券加入購物車失敗:', error)
         window.Swal.fire({
           icon: 'error',
+          iconColor: 'black',
           title: '優惠券加入購物車失敗',
           text: '請稍後再試',
         })
@@ -131,7 +132,7 @@ export default {
 
     hasCartItems() {
       return this.cartItems && this.cartItems.length > 0
-    }
+    },
   },
 
   created() {
@@ -329,28 +330,28 @@ export default {
   }
 
   .use-btn:disabled {
-  background: #e0e0e0;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
+    background: #e0e0e0;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 
-.use-btn[title] {
-  position: relative;
-}
+  .use-btn[title] {
+    position: relative;
+  }
 
-.use-btn[title]:hover:disabled::after {
-  content: attr(title);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  margin-bottom: 5px;
-}
+  .use-btn[title]:hover:disabled::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin-bottom: 5px;
+  }
 }
 </style>
