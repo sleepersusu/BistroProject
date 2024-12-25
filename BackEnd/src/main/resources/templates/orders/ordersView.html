@@ -429,7 +429,7 @@
 			{ data: 'createdAt', width: '150px' },
 			{
 				data: 'ID',
-				width: '40px',
+				width: '60px',
 				render: function(data) {
 					return `<form action="/Bistro/Orders/deleteOrders" method="post" style="display: inline;">
                     <input type="hidden" name="id" value="${data}">
@@ -442,16 +442,9 @@
 			processing: "處理中...",
 			lengthMenu: "顯示 _MENU_ 筆資料",
 			zeroRecords: "沒有符合的結果",
-			info: "顯示第 _START_ 至 _END_ 筆資料，共 _TOTAL_ 筆",
-			infoEmpty: "顯示第 0 至 0 筆資料，共 0 筆",
 			infoFiltered: "(從 _MAX_ 筆資料中過濾)",
 			search: "搜尋:",
-			paginate: {
-				first: "第一頁",
-				previous: "上一頁",
-				next: "下一頁",
-				last: "最後一頁"
-			}
+
 		}
 	});
 	// Modal 控制
