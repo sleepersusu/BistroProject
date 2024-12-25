@@ -85,7 +85,7 @@ export const useUserStore = defineStore('userStore', {
     async loadMemberData(memberId) {
       //會員資料頁面撈資訊
       try {
-        await axios.get(`${this.apiUrl}/api/members/${memberId}`).then((response) => {
+        await axios.get(`${this.apiUrl}/api/frontend/members/${memberId}`).then((response) => {
           this.memberprofile.userName = response.data.memberName
           this.memberprofile.userEmail = response.data.memberEmail
           this.memberprofile.userPhone = response.data.memberPhone
@@ -95,7 +95,7 @@ export const useUserStore = defineStore('userStore', {
           this.memberprofile.userPoint = response.data.memberPoint
           this.memberprofile.userBirthdate = response.data.memberBirthday
           // console.log(response.data.memberAccount)
-          // console.log(response.data.memberFavor)
+          console.log(response.data.memberEmail)
           // console.log(response.data.memberImg)
           // console.log(response.data.memberPassword)
           // console.log(response.data.memberShip)
@@ -125,7 +125,7 @@ export const useUserStore = defineStore('userStore', {
         localStorage.setItem('memberobj', JSON.stringify(memberobj))
         this.memberprofile.navName = this.memberprofile.userName
 
-        let Profile_Url = `${this.apiUrl}/api/members/${memberId}`
+        let Profile_Url = `${this.apiUrl}/api/frontend/members/${memberId}`
         let response = await axios.put(Profile_Url, JSON.stringify(formData), {
           headers: {
             'Content-Type': 'application/json',
@@ -151,8 +151,10 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.district = districtMatch[0]
       }
     },
-    clearLoggedIn() {
+    async clearLoggedIn() {
       localStorage.removeItem('memberobj')
+      let response=await axios.get(`${this.apiUrl}/user/logout`)
+      console.log('會員登出'+response.data.status)
       this.isLoggedIn = false
       this.memberprofile = {}
       const point = pointStore()
@@ -259,7 +261,7 @@ export const useUserStore = defineStore('userStore', {
     },
     async submitRegister(event) {
       try {
-        let API_URL = `${this.apiUrl}/api/members/create`
+        let API_URL = `${this.apiUrl}/api/frontend/members/create`
         let form = new FormData(event.target)
         let formData = {}
         form.forEach((value, key) => {
