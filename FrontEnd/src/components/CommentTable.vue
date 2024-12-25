@@ -1,5 +1,5 @@
 <template>
-  <tr style="overflow: none;">
+  <tr>
     <!-- 商品名稱 -->
     <td data-label="餐點名稱" >
       <div class="d-flex">
@@ -47,7 +47,7 @@
         >
           <i class="bi bi-three-dots"></i>
         </button>
-        <ul class="dropdown-menu dropdown-menu-start"style="z-index: 1050;"
+        <ul class="dropdown-menu dropdown-menu-start" style="z-index: 10;"
         data-bs-offset="0,10">
           <li>
             <button class="dropdown-item" @click.prevent="updateComment(comment)">編輯</button>
@@ -103,7 +103,7 @@ export default {
 
       if (result.isConfirmed) {
         comment = this.comment
-        let API_URL = `${import.meta.env.VITE_API}/api/Bistro/deleteComment/${this.comment.id}`
+        let API_URL = `${import.meta.env.VITE_API}/api/frontend/Bistro/deleteComment/${this.comment.id}`
 
         this.axios
           .delete(API_URL)
@@ -157,6 +157,9 @@ export default {
 
 .action-wrapper {
   padding: 0;
+}
+td{
+  padding: 50px 0px 50px 0px;
 }
 
 

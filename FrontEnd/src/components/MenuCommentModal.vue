@@ -26,11 +26,13 @@
               </div>
             </div>
           </div>
+
           <div v-else>
             <div v-for="comment in paginatedComment" :key="comment.id" class="modal-body">
               <CommentModalBody :comment="comment"></CommentModalBody>
             </div>
           </div>
+          
         </div>
         <!-- 分頁按鈕 -->
         <div class="pagination-container">

@@ -219,7 +219,7 @@ export default {
           commentTime: this.currentDate,
         }
 
-        await axios.post(`${import.meta.env.VITE_API}/api/comment/postComment`, addComment)
+        await axios.post(`${import.meta.env.VITE_API}/api/frontend/comment/postComment`, addComment)
 
         await Swal.fire({
           title: '感謝你的評論!',

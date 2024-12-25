@@ -23,7 +23,7 @@
                     </tr>
                   </thead>
 
-                  <tbody v-if="!NoComment" class="comment-list">
+                  <tbody v-if="!NoComment" class="comment-list" style="overflow: none;" >
                     <CommentTable
                       v-for="comment in displayedComment"
                       :key="comment.id"
@@ -121,7 +121,7 @@ export default {
     async loadAllCommentByMember() {
       try {
         const response = await this.axios.get(
-          `${import.meta.env.VITE_API}/api/member/comment`
+          `${import.meta.env.VITE_API}/api/frontend/member/comment`
         )
         this.comments = response.data
         this.NoComment = this.comments.length === 0
@@ -214,5 +214,7 @@ export default {
   color: #666;
   font-size: 1rem;
 }
+
+
 
 </style>
