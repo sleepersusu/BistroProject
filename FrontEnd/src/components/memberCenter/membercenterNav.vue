@@ -3,12 +3,12 @@
     <ul class="nav flex-column">
       <li class="nav-item">
         <router-link to="/membercenter/index" class="nav-link">
-          <span class="icon-circle"><i class="bi bi-house-door-fill"></i></span> 會員中心
+          <span class="icon-circle"><i class="bi bi-house-heart-fill"></i></span> 會員中心
         </router-link>
       </li>
       <li class="nav-item">
         <router-link to="/membercenter/profile" class="nav-link">
-          <span class="icon-circle"><i class="bi bi-person-fill"></i></span> 會員資料
+          <span class="icon-circle"><i class="bi bi-person-vcard-fill"></i></span> 會員資料
         </router-link>
       </li>
       <li class="nav-item">
@@ -25,19 +25,19 @@
 
       <li class="nav-item">
         <router-link to="/membercenter/lotteryresult" class="nav-link">
-          <span class="icon-circle"><i class="bi bi-briefcase-fill"></i></span> 抽獎結果
+          <span class="icon-circle"><i class="bi bi-dice-5-fill"></i></span> 抽獎結果
         </router-link>
       </li>
 
       <li class="nav-item">
         <router-link to="/membercenter/MerberOwnPrize" class="nav-link">
-          <span class="icon-circle"><i class="bi bi-envelope-fill"></i></span> 會員優惠卷
+          <span class="icon-circle"><i class="bi bi-cash-stack"></i></span> 會員優惠卷
         </router-link>
       </li>
 
       <li class="nav-item">
         <router-link to="/membercenter/PromoRecord" class="nav-link">
-          <span class="icon-circle"><i class="bi bi-envelope-fill"></i></span> 兌換紀錄
+          <span class="icon-circle"><i class="bi bi-gift-fill"></i></span> 兌換紀錄
         </router-link>
       </li>
 

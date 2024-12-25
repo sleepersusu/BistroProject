@@ -1,379 +1,611 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>訂單管理 - DINEEASE餐廳管理系統</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>訂單管理 - DINEEASE餐廳管理系統</title>
 
-<link rel="icon" th:href="@{/images/favicon.ico}" />
+	<link rel="icon" th:href="@{/images/favicon.ico}" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+	<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+	<link rel="stylesheet" th:href="@{/css/demo.css}" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
-	rel="stylesheet" />
+	<style th:inline="css">
+		body {
+			font-family: "Noto Sans TC", sans-serif;
+		}
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+		#edit, #delete {
+			padding: 0.3rem 0.75rem;
+			cursor: pointer;
+			color: white;
+			border: none;
+			border-radius: 10px;
+		}
 
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
-<link rel="stylesheet" th:href="@{/css/demo.css}" />
-<style th:inline="css">
-body {
-	font-family: "Noto Sans TC", sans-serif;
-}
+		#edit {
+			background-color: #0071e3;
+			margin-bottom: 0.3rem;
+		}
 
-#edit, #delete {
-	padding: 0.3rem 0.75rem;
-	cursor: pointer;
-	color: white;
-	border: none;
-	border-radius: 10px
-}
+		#edit:hover {
+			background-color: #2894FF;
+		}
 
-#edit {
-	background-color: #0071e3;
-	margin-bottom: 0.3rem;
-}
+		#delete {
+			background-color: #CE0000;
+		}
 
-#edit:hover {
-	background-color: #2894FF;
-}
+		#delete:hover {
+			background-color: #FF5151;
+		}
 
-#delete {
-	background-color: #CE0000;
-}
+		#dt-search-0 {
+			margin-right: 2rem;
+		}
 
-#delete:hover {
-	background-color: #FF5151;
-}
+		#dt-search-0:focus {
+			outline: none;
+		}
 
-#dt-search-0 {
-	margin-right: 2rem
-}
+		#addData {
+			padding: 0.5rem 1.25rem !important;
+			font-size: 1rem !important;
+			width: auto;
+			height: auto;
+			color: white;
+			background-color: #0071e3;
+			border: none;
+			border-radius: 0;
+			font-weight: normal;
+		}
 
-#dt-search-0:focus {
-	outline: none;
-}
+		#addData:hover {
+			background-color: #2894FF;
+		}
 
-#addData {
-	padding: 0.5rem 1.25rem !important;
-	font-size: 1rem !important;
-	width: auto;
-	height: auto;
-	color: white;
-	background-color: #0071e3;
-	border: none;
-	border-radius: 0;
-	font-weight: normal;
-}
+		.modal-content {
+			min-width: 700px;
+			height: 700px;
+			overflow: auto;
+		}
 
-#addData:hover {
-	background-color: #2894FF;
-}
+		body .modal .modal-content form textarea {
+			width: 350px;
+		}
 
-.modal-content {
-	min-width: 700px;
-	height: 700px;
-	overflow: auto;
-}
+		#save {
+			background-color: #0071e3;
+			border-radius: 10px;
+			color: white;
+			width: auto;
+			border: none;
+			font-size: 1rem;
+			padding: 0.4rem 2rem;
+		}
 
-body .modal .modal-content form textarea {
-	width: 350px
-}
+		#save:hover {
+			background-color: #2894FF;
+		}
 
-#save {
-	background-color: #0071e3;
-	border-radius: 10px;
-	color: white;
-	width: auto;
-	border: none;
-	font-size: 1rem;
-	padding: 0.4rem 2rem;
-}
+		#reset {
+			border-radius: 10px;
+			background-color: white;
+			color: #0071e3;
+			border: 1px solid #0071e3;
+			height: auto;
+			width: auto;
+			font-size: 1rem;
+			padding: 0.3rem 2rem;
+		}
 
-#save:hover {
-	background-color: #2894FF;
-}
+		#reset:hover {
+			text-decoration: none;
+		}
 
-#reset {
-	border-radius: 10px;
-	background-color: white;
-	color: #0071e3;
-	border: 1px solid #0071e3;
-	height: auto;
-	width: auto;
-	font-size: 1rem;
-	padding: 0.3rem 2rem;
-}
+		#buttonbox {
+			margin-top: 0.5rem;
+		}
 
-#reset:hover {
-	text-decoration: none;
-}
+		/* 菜單項目樣式 */
+		.menu-item {
+			background-color: #f8f9fa;
+			border-radius: 8px;
+			padding: 15px;
+			margin-bottom: 15px;
+			border: 1px solid #dee2e6;
+		}
 
-#buttonbox {
-	margin-top: 0.5rem
-}
-</style>
+		.menu-item select,
+		.menu-item input {
+			width: 200px;
+			padding: 8px;
+			margin: 5px 0;
+			border: 1px solid #ced4da;
+			border-radius: 4px;
+		}
 
+		.menu-item label {
+			display: inline-block;
+			width: 80px;
+			margin-right: 10px;
+		}
 
+		.remove-item {
+			background-color: #dc3545;
+			color: white;
+			border: none;
+			padding: 6px 12px;
+			border-radius: 4px;
+			cursor: pointer;
+			margin-top: 10px;
+		}
+
+		.remove-item:hover {
+			background-color: #c82333;
+		}
+
+		#addMenuItem {
+			background-color: #0071e3;
+			color: white;
+			border: none;
+			padding: 8px 16px;
+			border-radius: 4px;
+			cursor: pointer;
+			margin: 10px 0;
+		}
+
+		#addMenuItem:hover {
+			background-color: #2894FF;
+		}
+	</style>
 </head>
 
 <body>
-	<!-- DataTable Scripts -->
-	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<!-- DataTable Scripts -->
+<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
-	<div id="page">
+<div id="page">
+	<div th:replace="~{layout/navbar}"></div>
+	<div id="right">
+		<div th:replace="~{layout/headerlogout.html}"></div>
 
-		<div th:replace="~{layout/navbar}"></div>
-		<div id="right">
-			<div th:replace="~{layout/headerlogout.html}"></div>
-
-			<main>
-				<h2>訂單管理</h2>
-				<section id="workspace">
-					<div>
-						<button type="submit" class="dataButton" id="addData">
-							新增訂單</button>
-					</div>
-				</section>
-
-
-
-				<section>
-					<div>
-						<!--套件功能 class="display" 務必保留 如果資料需要跳行顯示可刪除nowrap-->
-						<table id="table" class="display">
-							<thead>
-								<tr>
-									<th>訂單編號</th>
-									<th>會員編號</th>
-									<th>姓名</th>
-									<th>電話</th>
-									<th>用餐方式</th>
-									<th>總金額</th>
-									<th>獲得點數</th>
-									<th>訂單狀態</th>
-									<th>特殊要求</th>
-									<th>付款狀態</th>
-									<th>建立時間</th>
-									<th>操作</th>
-								</tr>
-							</thead>
-							<tbody id="event-list">
-								<tr  th:each="orders:${allOrders}">
-									<td th:text="${orders.ID}"></td>
-									<td th:text="${orders.members != null ? orders.members.id : '非會員'}"></td>
-									<td th:text="${orders.ordersName}"></td>
-									<td th:text="${orders.ordersTel}"></td>
-									<td th:text="${orders.seatType}"></td>
-									<td th:text="${orders.ordersSumPrice}"></td>
-									<td th:text="${orders.pointGetted}"></td>
-									<td th:text="${orders.ordersStatus}"></td>
-									<td th:text="${orders.ordersRequest}"></td>
-									<td th:text="${orders.latestPaymentStatus}"></td>
-									<td th:text="${orders.createdAt}"></td>
-									<td>
-										<form th:action="@{/Bistro/Orders/deleteOrders}" method="post"
-											style="display: inline;">
-											<input type="hidden" name="id" th:value="${orders.ID}">
-											<button type="submit" id="delete"
-												onclick="return confirm('確定要刪除嗎？');">刪除</button>
-										</form>
-									</td>
-								</tr>
-								<tr th:if="${#lists.isEmpty(allOrders)}">
-									<td colspan="8">沒有活動資料</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
-			</main>
-
-			<!--  新增訂單視窗 -->
-			<div id="addEventModal" class="modal">
-				<div class="modal-content">
-					<span class="close">&times;</span>
-					<h1>新增訂單</h1>
-					<form th:action="@{/Bistro/Orders/createOrders}" method="post"
-						id="dataForm">
-						<fieldset>
-							<!-- 區域1 -->
-
-							<legend style="margin-bottom: 1rem; font-weight: bold">
-								訂單資訊 </legend>
-
-							<!-- 訂購人姓名 -->
-							<div class="question">
-								<label for="ordersName" class="form-label">
-									<span class="title">姓名</span>
-								</label>
-								<input type="text" id="ordersName"
-									name="ordersName"
-									value="" placeholder="請輸入訂購人姓名" required
-									aria-required="true"
-								/>
-							</div>
-
-							<!-- 聯絡電話 -->
-							<div class="question">
-								<label for="ordersTel" class="form-label">
-									<span class="title">電話</span>
-								</label>
-								<input type="text" id="ordersTel"
-									   name="ordersTel"
-									   value="" placeholder="請輸入訂購人電話" required
-									   aria-required="true"
-								/>
-							</div>
-
-							<div class="question">
-								<label for="seatType" class="form-label">
-									<span class="title">用餐方式</span>
-								</label>
-								<select class="form-select" id="seatType" name="seatType" required>
-									<option value="內用">內用</option>
-									<option value="外帶">外帶</option>
-								</select>
-							</div>
-
-
-							<div class="question">
-								<label for="seatsId" class="form-label">
-									<span class="title">座位編號 </span>
-								</label>
-								<input type="number"
-									   class="form-control"
-									   id="seatsId"
-									   name="seatsId"
-									   value="0"
-									   min="0"
-									   max="20"
-								>
-							</div>
-
-							<!-- 總金額 -->
-							<div class="question">
-								<label for="ordersSumPrice" class="form-label">
-									<span class="title">總金額</span>
-								</label>
-								<input type="number" id="ordersSumPrice"
-									   name="ordersSumPrice"
-									   value="" placeholder="請輸入總金額" required
-									   aria-required="true"
-								/>
-							</div>
-							<!-- 訂單狀態 -->
-							<div class="question">
-								<label for="ordersStatus" class="form-label">
-									<span class="title">訂單狀態</span>
-								</label>
-								<select class="form-select" id="ordersStatus" name="ordersStatus" required>
-									<option value="已確認">已確認</option>
-									<option value="已取消">已取消</option>
-								</select>
-							</div>
-
-
-
-							<div class="question">
-								<label for="ordersRequest" class="form-label">
-									<span class="title">特殊要求</span>
-								</label>
-								<textarea name="ordersRequest" class="form-control" id="ordersRequest" >無</textarea>
-							</div>
-
-							<!-- 付款資訊 -->
-							<div class="question">
-								<label for="paymentWay" class="form-label">
-									<span class="title">付款資訊</span>
-								</label>
-								<select class="form-select" id="paymentWay" name="paymentWay" required>
-									<option value="現金">現金</option>
-								</select>
-							</div>
-							<!-- 付款狀態 -->
-							<div class="question">
-								<label for="paymentWay" class="form-label">
-									<span class="title">付款狀態</span>
-								</label>
-								<select class="form-select" id="paymentStatus" name="paymentStatus" required>
-									<option value="已完成">已完成</option>
-									<option value="已取消">已取消</option>
-								</select>
-							</div>
-
-							<!-- 付款金額 -->
-							<div class="question">
-								<label for="paymentPrice" class="form-label">
-									<span class="title">付款金額</span>
-								</label>
-								<input type="number" id="paymentPrice"
-									   name="paymentPrice"
-									   value="" placeholder="請輸入付款金額" required
-									   aria-required="true"
-								/>
-							</div>
-						</fieldset>
-						<!---------------------------底下為按鈕區---------------------------------------------- -->
-						<div id="buttonbox">
-							<button type="submit" id="save" class="formbutton">儲存</button>
-							<button type="reset" id="reset" class="formbutton">重設</button>
-						</div>
-					</form>
+		<main>
+			<h2>訂單管理</h2>
+			<section id="workspace">
+				<div>
+					<button type="submit" class="dataButton" id="addData">新增訂單</button>
 				</div>
-				<!-- modal-content -->
+			</section>
+
+			<section>
+				<div>
+					<table id="table" class="display">
+						<thead>
+						<tr>
+							<th>訂單編號</th>
+							<th>訂單號碼</th>
+							<th>會員編號</th>
+							<th>姓名</th>
+							<th>電話</th>
+							<th>用餐方式</th>
+							<th>總金額</th>
+							<th>獲得點數</th>
+							<th>特殊要求</th>
+							<th>付款狀態</th>
+							<th>建立時間</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody id="event-list">
+						<tr th:each="orders:${allOrders}">
+							<td th:text="${orders.ID}"></td>
+							<td th:text="${orders.ordersNumber}"></td>
+							<td th:text="${orders.members != null ? orders.members.id : '非會員'}"></td>
+							<td th:text="${orders.ordersName}"></td>
+							<td th:text="${orders.ordersTel}"></td>
+							<td th:text="${orders.seatType}"></td>
+							<td th:text="${orders.ordersSumPrice}"></td>
+							<td th:text="${orders.pointGetted}"></td>
+							<td th:text="${orders.ordersRequest}"></td>
+							<td th:text="${orders.latestPaymentStatus}"></td>
+							<td th:text="${orders.createdAt}"></td>
+							<td>
+								<form th:action="@{/Bistro/Orders/deleteOrders}" method="post" style="display: inline;">
+									<input type="hidden" name="id" th:value="${orders.ID}">
+									<button type="submit" id="delete" onclick="return confirm('確定要刪除嗎？');">刪除</button>
+								</form>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</main>
+
+		<!-- 新增訂單視窗 -->
+		<div id="addEventModal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h1>新增訂單</h1>
+				<form th:action="@{/Bistro/Orders/createOrders}" method="post" id="dataForm">
+					<fieldset>
+						<legend style="margin-bottom: 1rem; font-weight: bold">訂單資訊</legend>
+
+						<!-- 會員ID隱藏欄位 -->
+							<input type="hidden" id="memberId" name="memberId" value="0">
+
+						<!-- 電話欄位（移到最前面） -->
+						<div class="question">
+							<label for="ordersTel" class="form-label">
+								<span class="title">電話</span>
+							</label>
+							<input type="text" id="ordersTel" name="ordersTel"
+								   placeholder="請輸入訂購人電話" required />
+							<span id="memberStatus"></span>
+						</div>
+
+						<!-- 訂購人資訊 -->
+						<div class="question">
+							<label for="ordersName" class="form-label">
+								<span class="title">姓名</span>
+							</label>
+							<input type="text" id="ordersName" name="ordersName"
+								   placeholder="請輸入訂購人姓名" required />
+						</div>
+
+
+						<div class="question">
+							<label for="seatType" class="form-label">
+								<span class="title">用餐方式</span>
+							</label>
+							<select class="form-select" id="seatType" name="seatType" required>
+								<option value="內用">內用</option>
+								<option value="外帶">外帶</option>
+							</select>
+						</div>
+
+						<div class="question">
+							<label for="seatsId" class="form-label">
+								<span class="title">座位編號</span>
+							</label>
+							<input type="number" class="form-control" id="seatsId"
+								   name="seatsId" value="0" min="0" max="20">
+						</div>
+
+						<!-- 菜單區域 -->
+						<button type="button" id="addMenuItem">新增菜單</button>
+						<div id="menuItems">
+							<!-- 菜單項目將由 JavaScript 動態生成 -->
+						</div>
+
+						<br>
+						<br>
+
+				<!-- 訂單金額 -->
+						<div class="question">
+							<label for="ordersSumPrice" class="form-label">
+								<span class="title">總金額</span>
+							</label>
+							<input type="number" id="ordersSumPrice" name="ordersSumPrice"
+								   placeholder="自動計算總金額" readonly required />
+						</div>
+
+						<div class="question">
+							<label for="ordersRequest" class="form-label">
+								<span class="title">特殊要求</span>
+							</label>
+							<textarea name="ordersRequest" class="form-control"
+									  id="ordersRequest">無</textarea>
+						</div>
+
+						<!-- 付款資訊 -->
+						<div class="question">
+							<label for="paymentWay" class="form-label">
+								<span class="title">付款資訊</span>
+							</label>
+							<select class="form-select" id="paymentWay" name="paymentWay" required>
+								<option value="現金">現金</option>
+							</select>
+						</div>
+
+						<div class="question">
+							<label for="paymentStatus" class="form-label">
+								<span class="title">付款狀態</span>
+							</label>
+							<select class="form-select" id="paymentStatus" name="paymentStatus" required>
+								<option value="已付款">已付款</option>
+								<option value="已取消">已取消</option>
+							</select>
+						</div>
+
+						<div class="question">
+							<label for="paymentPrice" class="form-label">
+								<span class="title">付款金額</span>
+							</label>
+							<input type="number" id="paymentPrice" name="paymentPrice"
+								   placeholder="自動同步總金額" readonly required />
+						</div>
+					</fieldset>
+
+					<div id="buttonbox">
+						<button type="submit" id="save" class="formbutton">儲存</button>
+						<button type="reset" id="reset" class="formbutton">重設</button>
+					</div>
+				</form>
 			</div>
-
-			<footer> &copy; Made by TeamWork </footer>
 		</div>
+
+		<footer>&copy; Made by TeamWork</footer>
 	</div>
+</div>
 
+<script th:inline="javascript">
+	// 從 Thymeleaf 獲取菜單數據
+		const menuData = /*[[${allMenus}]]*/ [];
+		console.log('Menu Data:', menuData);
 
+	// 防抖函數
+		function debounce(func, wait) {
+			let timeout;
+			return function(...args) {
+				clearTimeout(timeout);
+				timeout = setTimeout(() => func.apply(this, args), wait);
+			};
+		}
+	// 電話輸入框事件處理
+		document.getElementById('ordersTel').addEventListener('input', debounce(function(e) {
+			const memberPhone = e.target.value.trim();
+			if (memberPhone.length >= 10) {
+				fetch(`/Bistro/Orders/findMemberByPhone?memberPhone=${memberPhone}`)
+						.then(response => response.json())
+						.then(data => {
+							const memberStatus = document.getElementById('memberStatus');
+							const ordersName = document.getElementById('ordersName');
+							const memberId = document.getElementById('memberId');
+							if (data && data.id) {
+								// 找到會員
+								memberStatus.textContent = '✓ 會員';
+								memberStatus.className = 'member-found';
+								ordersName.value = data.memberName;
+								memberId.value = data.id;
+								ordersName.readOnly = true;
+							} else {
+								// 非會員
+								memberStatus.textContent = '非會員';
+								memberStatus.className = 'non-member';
+								ordersName.value = '';
+								memberId.value = '0';
+								ordersName.readOnly = false;
+							}
+						})
+						.catch(error => {
+							console.error('Error:', error);
+						});
+			}
+		}, 500));
 
-	<script>
-		$("#table").DataTable({
-			scrollX : "90%",
-			scrollY : "500px",
-			paging: true, // 如果希望有分頁功能
-			searching: true, // 如果需要啟用搜尋功能
-			responsive: true, // 如果希望在不同尺寸螢幕上調整表格
-			
-		})		
-		document.getElementById('ordersSumPrice').addEventListener('input',function () {
-			const totalPrice = this.value;
-			document.getElementById('paymentPrice').value = totalPrice>0 ? totalPrice:'';
-		});
-		
-		// jquery寫法 end
-		
+	// DataTable 初始化
+	$("#table").DataTable({
+		scrollX: "90%",
+		scrollY: "500px",
+		paging: true,
+		searching: true,
+		responsive: true
+	});
+
+	// Modal 控制
 		document.getElementById("addData").addEventListener("click", () => {
-        	document.getElementById("addEventModal").style.display = "block";
-     	 });
+			document.getElementById("addEventModal").style.display = "block";
+		});
 
 		document.querySelectorAll(".close").forEach(closeButton => {
-		    closeButton.addEventListener("click", () => {
-		        document.getElementById("addEventModal").style.display = "none";
-		        document.getElementById("addEventModal2").style.display = "none";
-		    });
+			closeButton.addEventListener("click", () => {
+				document.getElementById("addEventModal").style.display = "none";
+			});
 		});
 
-	      window.onclick = function (event) {
-	        const modal = document.getElementById("addEventModal");
-	        const modal2 = document.getElementById("addEventModal2");
-	        if (event.target === modal || event.target === modal2) {
-	          document.getElementById("addEventModal").style.display = "none";
-	          document.getElementById("addEventModal2").style.display = "none";
-	        }
-	      };
-	      
+		window.onclick = function(event) {
+			const modal = document.getElementById("addEventModal");
+			if (event.target === modal) {
+				modal.style.display = "none";
+			}
+		};
 
-	      
-      
-      
-	</script>
+	// 初始化菜單選擇器
+	function createMenuSelect() {
+		const select = document.createElement('select');
+		select.className = 'menuSelect form-select';
+		select.name = 'menuId[]';  // 修正名稱
+		select.required = true;
+
+		const defaultOption = document.createElement('option');
+		defaultOption.value = '';
+		defaultOption.textContent = '請選擇菜色';
+		select.appendChild(defaultOption);
+
+		menuData.forEach(menu => {
+			const option = document.createElement('option');
+			option.value = menu.id;
+			option.textContent = menu.productName;
+			option.dataset.price = menu.productPrice;
+			select.appendChild(option);
+		});
+
+		return select;
+	}
+
+	// 新增菜單項目
+	document.getElementById('addMenuItem').addEventListener('click', function() {
+		const menuItems = document.getElementById('menuItems');
+		const newItem = document.createElement('div');
+		newItem.className = 'menu-item';
+
+		const menuSelect = createMenuSelect();
+
+		newItem.innerHTML = `
+                <div class="form-group">
+                    <label>菜色名稱：</label>
+                    <div class="select-container"></div>
+                    <input type="hidden" name="menuId[]" class="menuIdInput">
+                </div>
+
+                <div class="form-group">
+                    <label>數量：</label>
+                    <input type="number" name="quantities" class="quantityInput"
+                           min="1" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>價格：</label>
+                    <input type="text" class="priceDisplay" readonly>
+                    <input type="hidden" name="prices[]" class="priceInput">
+                </div>
+
+                <button type="button" class="remove-item" onclick="removeMenuItem(this)">刪除</button>
+            `;
+
+		// 插入菜單選擇器
+		newItem.querySelector('.select-container').appendChild(menuSelect);
+		menuItems.appendChild(newItem);
+
+		// 綁定事件
+		bindMenuItemEvents(newItem);
+	});
+
+	// 綁定菜單項目事件
+	function bindMenuItemEvents(menuItem) {
+		const select = menuItem.querySelector('.menuSelect');
+		const quantityInput = menuItem.querySelector('.quantityInput');
+		const priceDisplay = menuItem.querySelector('.priceDisplay');
+		const priceInput = menuItem.querySelector('.priceInput');
+		const menuIdInput = menuItem.querySelector('.menuIdInput');
+
+		function updatePrice() {
+			const selectedOption = select.options[select.selectedIndex];
+			if (selectedOption && selectedOption.value) {
+				const price = parseInt(selectedOption.dataset.price);
+				const quantity = parseInt(quantityInput.value) || 1;
+				const total = price * quantity;
+
+				priceDisplay.value = `${total} 元`;
+				priceInput.value = price;
+				menuIdInput.value = selectedOption.value;
+			} else {
+				priceDisplay.value = '';
+				priceInput.value = '';
+				menuIdInput.value = '';
+			}
+			updateTotalAmount();
+		}
+
+		select.addEventListener('change', updatePrice);
+		quantityInput.addEventListener('input', updatePrice);
+		updatePrice();
+	}
+
+	// 移除菜單項目
+	function removeMenuItem(button) {
+		button.closest('.menu-item').remove();
+		updateTotalAmount();
+	}
+
+	// 更新總金額
+	function updateTotalAmount() {
+		let total = 0;
+		document.querySelectorAll('.priceDisplay').forEach(display => {
+			const value = display.value.replace(/[^0-9.-]+/g, '');
+			total += parseInt(value) || 0;
+		});
+
+		document.getElementById('ordersSumPrice').value = total;
+		document.getElementById('paymentPrice').value = total;
+	}
+
+	// 表單提交前的驗證
+	// 表單提交前的驗證
+	document.getElementById('dataForm').addEventListener('submit', function(e) {
+		e.preventDefault();
+
+		const menuItems = document.querySelectorAll('.menu-item');
+		if (menuItems.length === 0) {
+			alert('請至少新增一項菜單項目');
+			return;
+		}
+
+		// 基本驗證
+		const name = document.getElementById('ordersName').value.trim();
+		if (!name) {
+			alert('請輸入姓名');
+			return;
+		}
+
+		const phone = document.getElementById('ordersTel').value.trim();
+		if (phone.length < 10) {
+			alert('請輸入有效的電話號碼');
+			return;
+		}
+
+		// 收集菜單項目數據
+		const menuIds = [];
+		const quantities = [];
+		const prices = [];
+
+		let isValid = true;
+		menuItems.forEach(item => {
+			const menuSelect = item.querySelector('.menuSelect');
+			const quantity = item.querySelector('.quantityInput');
+			const price = item.querySelector('.priceInput');
+
+			if (!menuSelect.value) {
+				alert('請選擇所有菜色');
+				isValid = false;
+				return;
+			}
+
+			menuIds.push(menuSelect.value);
+			quantities.push(quantity.value);
+			prices.push(price.value);
+		});
+
+		if (!isValid) return;
+
+		// 將收集到的數據添加到表單
+		menuIds.forEach((id, index) => {
+			this.appendChild(createHiddenInput('menuId', id));
+			this.appendChild(createHiddenInput('quantities', quantities[index]));
+			this.appendChild(createHiddenInput('prices', prices[index]));
+		});
+
+		// 付款資訊
+		// const paymentStatus = document.getElementById('paymentStatus').value;
+		// const paymentWay = document.getElementById('paymentWay').value;
+		// const paymentPrice = document.getElementById('paymentPrice').value;
+		//
+		// this.appendChild(createHiddenInput('paymentStatus', paymentStatus));
+		// this.appendChild(createHiddenInput('paymentWay', paymentWay));
+		// this.appendChild(createHiddenInput('paymentPrice', paymentPrice));
+
+		// 提交表單
+		this.submit();
+	});
+
+	// 創建隱藏的表單欄位
+	function createHiddenInput(name, value) {
+		const input = document.createElement('input');
+		input.type = 'hidden';
+		input.name = name;
+		input.value = value;
+		return input;
+	}
+	// 頁面載入時自動新增一個菜單項目
+		document.addEventListener('DOMContentLoaded', function() {
+			document.getElementById('addMenuItem').click();
+		});
+</script>
 </body>
 </html>

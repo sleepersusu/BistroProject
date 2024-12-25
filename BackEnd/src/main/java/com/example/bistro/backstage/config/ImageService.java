@@ -23,16 +23,22 @@ public class ImageService {
 	@Autowired
 	private MenuRepository menuRepo;
 
-	public void imageUpload(String type, Integer id, byte[] fileByte) {
+	public ResponseEntity<byte[]> imageUpload(String type, Integer id, byte[] fileByte) {
 		switch (type) {
-		case "member": {
+		case "members": {
+			MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
 			Optional<Members> op = memberRepo.findById(id);
 			if(op.isPresent()) {
 				Members member = op.get();
 				member.setMemberImg(fileByte);
 				memberRepo.save(member);
+				byte[] Membersbyte = member.getMemberImg();
+				mediaType = getImageMediaType(Membersbyte);
+				HttpHeaders httpHeaders = new HttpHeaders();
+				httpHeaders.setContentType(mediaType);
+				return new ResponseEntity<byte[]>(Membersbyte, httpHeaders, HttpStatus.OK);
 			}						
-			break;
+			return null;
 		}
 
 		case "menu": {
@@ -43,7 +49,7 @@ public class ImageService {
 				menuRepo.save(menu);
 			}
 			
-			break;
+			return null;
 		
 		}
 		default:
@@ -54,7 +60,7 @@ public class ImageService {
 
 	public ResponseEntity<byte[]> imageDownload(String type, Integer id) {
 		switch (type) {
-		case "member": {
+		case "members": {
 			Optional<Members> op = memberRepo.findById(id);
 
 			if (op.isPresent()) {

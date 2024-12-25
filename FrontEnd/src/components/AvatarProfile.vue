@@ -6,14 +6,14 @@
         <div class="profile-container">
           <div class="avatar-wrapper">
             <div class="avatar">
-              {{ memberprofile.username ? memberprofile.username.charAt(0).toUpperCase() : 'U' }}
+              {{ memberprofile.userName ? memberprofile.userName.charAt(0).toUpperCase() : 'U' }}
             </div>
           </div>
           <div class="user-info">
-            <h5 class="username">{{ memberprofile.username }}</h5>
+            <h5 class="username">{{ memberprofile.userName }}</h5>
             <div class="points">
-              <i class="fas fa-coins"></i>
-              <span>{{ memberprofile.userpoint }} 點</span>
+              <font-awesome-icon :icon="['fas', 'copyright']" bounce style="color: #FFD43B;" />
+              <span>{{ memberprofile.userPoint }} 點</span>
             </div>
           </div>
         </div>
@@ -24,14 +24,26 @@
         <ul class="nav flex-column">
           <li class="nav-item">
             <router-link to="/membercenter/index" @click="closeOffcanvas" class="nav-link">
-              <i class="bi bi-person-fill"></i>
+              <font-awesome-icon :icon="['fas', 'house']" />
               <span>會員中心</span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/membercenter/profile" @click="closeOffcanvas" class="nav-link">
-              <i class="bi bi-person-square"></i>
+              <font-awesome-icon :icon="['fas', 'address-card']" />
               <span>個人資料</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/memberPoints" @click="closeOffcanvas" class="nav-link">
+              <font-awesome-icon :icon="['fas', 'dumpster']" />
+              <span>紅利兌換</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/membercenter/MerberOwnPrize" @click="closeOffcanvas" class="nav-link">
+              <font-awesome-icon :icon="['fas', 'money-bill-1']" />
+              <span>會員優惠卷</span>
             </router-link>
           </li>
           <li class="nav-item logout-item">
@@ -102,7 +114,7 @@ export default {
 
 .avatar-wrapper {
   padding: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.281);
   border-radius: 50%;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
@@ -110,14 +122,14 @@ export default {
 .avatar {
   width: 48px;
   height: 48px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(255, 255, 255);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
   font-weight: 600;
-  color: white;
+  color: rgb(5, 5, 5);
   text-transform: uppercase;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 }

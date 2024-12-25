@@ -21,4 +21,13 @@ public class BistroConfig {
         registrationBean.addUrlPatterns("/Bistro/*");  // 配置過濾 URL 模式
         return registrationBean;
     }
+    
+    @Bean
+    public FilterRegistrationBean<LoggingFrontEndFilter> loggingFrontEndFilter() {
+        FilterRegistrationBean<LoggingFrontEndFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new LoggingFrontEndFilter());  // 註冊自定義的過濾器
+        registrationBean.addUrlPatterns("/api/frontend/*");  // 配置過濾 URL 模式
+        return registrationBean;
+    }
+    
 }

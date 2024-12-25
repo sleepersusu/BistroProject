@@ -15,6 +15,7 @@ import com.example.bistro.backstage.PointsRecords.PointsRecordsBean;
 import com.example.bistro.backstage.PointsRecords.PointsRecordsRepository;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.members.MembersRepository;
+import com.example.bistro.backstage.members.MembersService;
 import com.example.bistro.backstage.pointPrizes.PointPrizesBean;
 import com.example.bistro.backstage.pointPrizes.PointPrizesRepository;
 
@@ -28,6 +29,9 @@ public class PointRecordFrontService {
 
 	@Autowired
 	private PointPrizesRepository pointPrizesRepository;
+	
+    @Autowired
+    private MembersService membersService;
 
 	public List<Object[]> findAllPointsRecords() {
 		return pointsRecordsRepository.findMembersAllPointRecord();
@@ -81,6 +85,10 @@ public class PointRecordFrontService {
 	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到該獎品"));
 
 	        int deletePoints = pointPrizesBean.getPointPrizesPoints();
+	        Members membersDate = membersService.findMembersById(memberId);
+	        Integer PointDate = membersDate.getMemberPoint();
+	        membersDate.setMemberPoint(PointDate-deletePoints);
+	        membersService.updateMember(membersDate);
 
 	        pointsRecordsRepository.minusMemberPoint(deletePoints, memberId);
 	    } catch (Exception e) {

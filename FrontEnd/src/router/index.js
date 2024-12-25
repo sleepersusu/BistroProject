@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/userStore';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -95,5 +96,20 @@ const router = createRouter({
     },
   ],
 })
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+
+  // 檢查是否訪問的是 membercenter 路徑
+  if (to.path.startsWith('/membercenter')) {
+    if (userStore.memberId) {
+      next();
+    } else {
+      next('/index');
+    }
+  } else {
+    next();
+  }
+});
 
 export default router
