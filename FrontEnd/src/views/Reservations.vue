@@ -8,7 +8,7 @@
     <div class="row g-4 justify-content-center d-flex align-items-center" style="min-height: 100vh">
       <div class="col-lg-7 col-md-12">
         <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
-          
+
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4673315461455!2d121.5401541!3d25.0521449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abde34f7352d%3A0xb2db9881628011f6!2zMTA0OTHlj7DljJfluILkuK3lsbHljYDljZfkuqzmnbHot6_kuInmrrUxMjPomZ8!5e0!3m2!1szh-TW!2stw!4v1735012291613!5m2!1szh-TW!2stw"
             v-if="isMapVisible" class="w-100 h-100" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"
@@ -26,7 +26,7 @@
                 <div class="mt-3">
                   <h5 class="fw-bold">Phone Numbers</h5>
                   <p>02-656-8106</p>
-                 
+
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
                 <div class="mt-3">
                   <h5 class="fw-bold">Emails</h5>
                   <p>NightSips1223@gmail.com</p>
-                
+
                 </div>
               </div>
             </div>
@@ -61,11 +61,8 @@
           <div class="mb-3">
             <label for="customerName" class="form-label">訂位人姓名</label>
             <input type="text" class="form-control frame" id="customerName" v-model="reservations.customerName"
-              maxlength="10" 
-              @input="validateName"
-              :class="{ 'is-invalid': nameError }"
-              />
-              <small v-if="nameError" class="text-danger">{{ nameError }}</small>
+              maxlength="10" @input="validateName" :class="{ 'is-invalid': nameError }" />
+            <small v-if="nameError" class="text-danger">{{ nameError }}</small>
           </div>
           <div class="mb-3">
             <label class="form-label">性別</label>
@@ -84,17 +81,14 @@
           </div>
           <div class="mb-3">
             <label for="contactPhone" class="form-label">電話</label>
-            <input type="tel" class="form-control frame" id="contactPhone" 
-            v-model="reservations.contactPhone"
-              maxlength="10" required
-              @input="validatePhone"
-              :class="{ 'is-invalid': phoneError }" />
-              <small v-if="phoneError" class="text-danger">{{ phoneError }}</small>
+            <input type="tel" class="form-control frame" id="contactPhone" v-model="reservations.contactPhone"
+              maxlength="10" required @input="validatePhone" :class="{ 'is-invalid': phoneError }" />
+            <small v-if="phoneError" class="text-danger">{{ phoneError }}</small>
           </div>
           <div class="row g-3">
             <div class="col-md-6">
               <label for="numberPeople" class="form-label">訂位人數</label>
-              <select class="form-select frame" id="numberPeople" v-model.number="reservations.numberPeople" required>
+              <select class="form-select frame" id="numberPeople" v-model.number="reservations.numberPeople">
                 <option value="0" selected>選擇人數</option>
                 <option value="1">1位</option>
                 <option value="2">2位</option>
@@ -109,7 +103,8 @@
             <div class="col-md-6">
               <label for="reservationDate" class="form-label">日期</label>
               <input type="date" class="form-control frame" id="reservationDate" v-model="reservations.reservationDate"
-                v-bind:min="minDate" v-bind:max="maxDate" required />
+                v-bind:min="minDate" v-bind:max="maxDate" @input="validateDate" :class="{ 'is-invalid': dateError }" />
+              <small v-if="dateError" class="text-danger">{{ dateError }}</small>
             </div>
           </div>
           <div class="mb-4 mt-3">
@@ -121,6 +116,7 @@
               }" :style="{ color: selectedTime === time ? '#fff' : '' }" class="btn btn-black w-100 me-2 mb-2"
                 @click="handleClick(time, $event)">
                 {{ time }}
+
               </button>
             </div>
             <input type="hidden" v-model="reservations.startTime" />
@@ -142,11 +138,14 @@
 
 export default {
   data() {
-    
+
     return {
       nameError: '',
-      phoneError:'',
-      isMapVisible: false,
+      phoneError: '',
+      genderError: '',
+      dateError: '',
+      timeError: '',
+    
       reservations: {
         customerName: '',
         customerGender: '',
@@ -172,11 +171,10 @@ export default {
         confirmButtonColor: '#000000',
         customClass: {
           confirmButton: 'custom-button',
-          icon: 'custom-icon' 
+          icon: 'custom-icon'
         }
       })
     },
-    // 驗證電話格式
     validatePhone() {
       const phoneRegex = /^09\d{8}$/ // 09開頭,8位數字
       if (!this.reservations.contactPhone.trim()) {
@@ -197,6 +195,15 @@ export default {
         this.nameError = ''
       }
     },
+    validateDate() {
+      if (!this.reservations.reservationDate.trim()) {
+        this.dateError = '日期為必填'
+      } else {
+        this.dateError = ''
+      }
+    },
+
+
     handleClick(time, event) {
       event.preventDefault() // 阻止按鈕的默認行為，防止它觸發表單提交
       if (this.selectedTime === time) {
@@ -244,7 +251,11 @@ export default {
       }
       try {
         this.validatePhone();
-        this.validateName()
+        this.validateName();
+        this.validateGender();
+        this.validateDate();
+        this.validateTime();
+        this.validatePeople();
         const api = `${import.meta.env.VITE_API}/api/Bistro/insert`
         const response = await this.axios.post(api, this.reservations)
         if (response.data.success) {
@@ -280,10 +291,10 @@ export default {
       } catch (error) {
         if (error.response && error.response.data) {
           const errorMessage = error.response.data.message || '提交訂位資料時發生錯誤，請稍後再試。'
-         
+
         } else {
           console.error('錯誤:', error)
-          
+
         }
       }
     },
