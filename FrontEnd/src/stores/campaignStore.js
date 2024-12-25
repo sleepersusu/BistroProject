@@ -19,6 +19,7 @@ export const campaignStore = defineStore('campaign', {
         }
 
         this.campaigns = res.data.sort((a, b) => b.id - a.id)
+        this.campaigns = this.campaigns.slice(0, 6)
         this.campaigns.sort((a, b) => {
           return statusPriority[a.campaignStatus] - statusPriority[b.campaignStatus]
         })
