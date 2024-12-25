@@ -29,6 +29,7 @@
     "canvas-confetti": "^1.9.3",
     "fireworks-js": "^2.10.8",
     "gsap": "^3.12.5",
+    "mitt": "^3.0.1",
     "pinia": "^2.2.6",
     "sweetalert2": "^11.14.5",
     "vee-validate": "^4.14.7",
