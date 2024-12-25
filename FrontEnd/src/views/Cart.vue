@@ -7,7 +7,6 @@
       group="cart"
       width="30%"
     />
-    <Loading :active="isLoading"></Loading>
     <BannerTop v-bind:title="'Shopping Cart'"></BannerTop>
     <!-- 判斷是否有購物車 -->
     <div
@@ -69,9 +68,7 @@
                     </div>
                   </div>
                   <div class="col-md-2 text-end text-black">
-                    <p class="fw-bold">
-                      ${{ (item.cartCount * item.menu.productPrice) }}
-                    </p>
+                    <p class="fw-bold">${{ item.cartCount * item.menu.productPrice }}</p>
                     <button class="btn btn-lg btn-outline-danger" @click="removeFromCart(item)">
                       <i class="bi bi-trash"></i>
                     </button>
@@ -129,11 +126,11 @@
                     <span>金額</span>
                   </div>
                   <ul class="list-unstyled">
-                    <li v-for="item in cartItems" :key="item.menu.id" class="py-2 ">
+                    <li v-for="item in cartItems" :key="item.menu.id" class="py-2">
                       <div class="d-flex justify-content-between align-items-center">
                         <span>{{ item.menu.productName }}</span>
                         <span class="text-end fw-medium">
-                          ${{ (item.cartCount * item.menu.productPrice) }}
+                          ${{ item.cartCount * item.menu.productPrice }}
                         </span>
                       </div>
                     </li>
@@ -178,20 +175,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'pinia'
+import { mapState, mapActions, storeToRefs } from 'pinia'
 import { pointStore } from '@/stores/pointStore'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import BannerTop from '@/components/BannerTop.vue'
 import PageTop from '@/components/PageTop.vue'
 import { cartStore } from '@/stores/cartStore.js'
 import { useUserStore } from '@/stores/userStore.js'
-import { ref } from 'vue'
 import { Notifications, notify } from '@kyvg/vue3-notification'
 import { useNotificationStore } from '@/stores/notificationStore'
 import VerifyPromoCode from '@/components/VerifyPromoCode.vue'
-import { isDisabled } from 'bootstrap/js/dist/util'
 
 const user = useUserStore()
+
 export default {
   name: 'Cart',
   components: {
@@ -204,8 +200,8 @@ export default {
   data() {
     return {
       cartItems: [],
-      isLoading: ref(false),
       tooManyProduct: false,
+      isLoading: false,
     }
   },
   methods: {
@@ -219,12 +215,12 @@ export default {
       try {
         const result = await this.getCart()
         if (result?.data) {
-          this.cartItems = result.data.map(item => ({
+          this.cartItems = result.data.map((item) => ({
             ...item,
             menu: {
               ...item.menu,
-              imageUrl: `${import.meta.env.VITE_API}/api/menu/photo/${item.menu.id}`
-            }
+              imageUrl: `${import.meta.env.VITE_API}/api/menu/photo/${item.menu.id}`,
+            },
           }))
         }
       } catch (error) {
@@ -395,9 +391,9 @@ export default {
 }
 
 .cart-summary {
-  background-color: #fff;  /* 保持和其他卡片一樣的白色背景 */
-  border: 1px solid rgba(0, 0, 0, 0.125);  /* Bootstrap 卡片的標準邊框 */
-  border-radius: 0.375rem;  /* Bootstrap 卡片的標準圓角 */
+  background-color: #fff; /* 保持和其他卡片一樣的白色背景 */
+  border: 1px solid rgba(0, 0, 0, 0.125); /* Bootstrap 卡片的標準邊框 */
+  border-radius: 0.375rem; /* Bootstrap 卡片的標準圓角 */
 }
 
 .cart-summary h4 {
@@ -407,7 +403,7 @@ export default {
 /* 自定義小計上方邊框 */
 .subtotal-border {
   position: relative;
-  padding-top: 15px;  /* 調整上方間距 */
+  padding-top: 15px; /* 調整上方間距 */
 }
 
 .subtotal-border::before {
@@ -417,7 +413,7 @@ export default {
   left: 0;
   right: 0;
   height: 1px;
-  background-color: rgba(0, 0, 0, 0.1);  /* 邊框顏色 */
+  background-color: rgba(0, 0, 0, 0.1); /* 邊框顏色 */
 }
 .summary-section ul li {
   color: #ffffff;
