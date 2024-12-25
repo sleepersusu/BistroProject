@@ -12,7 +12,7 @@
           <div class="user-info">
             <h5 class="username">{{ memberprofile.userName }}</h5>
             <div class="points">
-              <i class="bi bi-p-circle-fill fs-5"></i>
+              <font-awesome-icon :icon="['fas', 'copyright']" bounce style="color: #FFD43B;" />
               <span>{{ memberprofile.userPoint }} 點</span>
             </div>
           </div>
@@ -24,14 +24,26 @@
         <ul class="nav flex-column">
           <li class="nav-item">
             <router-link to="/membercenter/index" @click="closeOffcanvas" class="nav-link">
-              <i class="bi bi-person-fill"></i>
+              <font-awesome-icon :icon="['fas', 'house']" />
               <span>會員中心</span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/membercenter/profile" @click="closeOffcanvas" class="nav-link">
-              <i class="bi bi-person-square"></i>
+              <font-awesome-icon :icon="['fas', 'address-card']" />
               <span>個人資料</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/memberPoints" @click="closeOffcanvas" class="nav-link">
+              <font-awesome-icon :icon="['fas', 'dumpster']" />
+              <span>紅利兌換</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/membercenter/MerberOwnPrize" @click="closeOffcanvas" class="nav-link">
+              <font-awesome-icon :icon="['fas', 'money-bill-1']" />
+              <span>會員優惠卷</span>
             </router-link>
           </li>
           <li class="nav-item logout-item">

@@ -82,7 +82,7 @@ public class GoogleLoginController {
 			long currentTime = System.currentTimeMillis();
 			
 			System.out.println("登入成功，建立Session");
-			httpSession.setMaxInactiveInterval(10);// session存活時間sec
+			httpSession.setMaxInactiveInterval(10800);// session存活時間sec
 			httpSession.setAttribute("lastAccessTime", currentTime);// Session紀錄資訊
 			httpSession.setAttribute("membersId", memberData.getId());// Session紀錄資訊
 			System.out.println("Google登入下session有取到" + httpSession.getAttribute("membersId"));
@@ -104,7 +104,7 @@ public class GoogleLoginController {
 			Members resultData = membersFrontService.insertMember(memberBean);
 			System.out.println("建立後開始登入，建立Session");
 			long currentTime = System.currentTimeMillis();
-			httpSession.setMaxInactiveInterval(10);// session存活時間sec
+			httpSession.setMaxInactiveInterval(10800);// session存活時間sec
 			httpSession.setAttribute("lastAccessTime", currentTime);// Session紀錄資訊
 			System.out.println("GOOGLE新增的ID"+resultData.getId());
 			httpSession.setAttribute("membersId", resultData.getId());// Session紀錄資訊
