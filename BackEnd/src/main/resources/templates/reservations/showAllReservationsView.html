@@ -208,7 +208,7 @@ body .modal .modal-content form textarea {
 
 
 											<form
-												th:action="@{/Bistro/deleteReservations(id=${reservations.Id})}"
+												th:action="@{/Bistro/deleteReservations(id=${reservations.id})}"
 												method="post" style="display: inline;">
 												<input type="hidden" name="reservationsId"
 													th:value="${reservations.Id}">
@@ -321,7 +321,7 @@ body .modal .modal-content form textarea {
 						<!-- 區域1 -->
 						<legend>訂位資訊</legend>
 
-						<label for="id2"></label> <input type="hidden" name="id" id="id2"
+						<label for="id2"></label> <input type="hidden" name="id2" id="id2"
 							readonly>
 
 						<div class="question">
@@ -436,14 +436,13 @@ body .modal .modal-content form textarea {
         }
       };
       
-      function openEditModal(reservations) {
-      
+      function openEditModal(reservations) {    	
       	const gender = reservations.customerGender;
     	document.getElementById("addEventModal2").style.display = "block";
     	document.getElementById("id2").value =reservations.id;
 	   	document.getElementById("customerName2").value = reservations.customerName;
 	    document.getElementById("contactPhone2").value = reservations.contactPhone;
-	    document.getElementById("reservationDate2").value = reservations.reservationDate;
+		document.getElementById("reservationDate2").value = reservations.reservationDate;
 	    document.getElementById("startTime2").value = reservations.startTime;    
 	    document.getElementById("numberPeople2").value = reservations.numberPeople;
 	    document.getElementById("notes2").value = reservations.notes;
@@ -453,12 +452,8 @@ body .modal .modal-content form textarea {
     } else if (gender === "女") {
         document.getElementById('female').checked = true;
     }
-	    
-	 
-	   
-	}
-	
-	    
+
+}  
 
 
 	</script>
