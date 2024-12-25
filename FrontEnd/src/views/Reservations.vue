@@ -8,7 +8,6 @@
     <div class="row g-4 justify-content-center d-flex align-items-center" style="min-height: 100vh">
       <div class="col-lg-7 col-md-12">
         <div id="googlemap" class="mb-4" style="width: 100%; height: 350px">
-
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4673315461455!2d121.5401541!3d25.0521449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abde34f7352d%3A0xb2db9881628011f6!2zMTA0OTHlj7DljJfluILkuK3lsbHljYDljZfkuqzmnbHot6_kuInmrrUxMjPomZ8!5e0!3m2!1szh-TW!2stw!4v1735012291613!5m2!1szh-TW!2stw"
             v-if="isMapVisible" class="w-100 h-100" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"
@@ -26,7 +25,6 @@
                 <div class="mt-3">
                   <h5 class="fw-bold">Phone Numbers</h5>
                   <p>02-656-8106</p>
-
                 </div>
               </div>
             </div>
@@ -40,7 +38,6 @@
                 <div class="mt-3">
                   <h5 class="fw-bold">Emails</h5>
                   <p>NightSips1223@gmail.com</p>
-
                 </div>
               </div>
             </div>
@@ -66,29 +63,31 @@
           </div>
           <div class="mb-3">
             <label class="form-label">性別</label>
-            <div class="d-flex">
+            <div class="d-flex " :class="{ 'is-invalid': genderError }">
               <div class="form-check me-3">
                 <input type="radio" class="form-check-input" name="customerGender" v-model="reservations.customerGender"
-                  value="男" id="genderMale" required />
+                  value="男" id="genderMale" @change="validateGender" />
                 <label class="form-check-label" for="genderMale">男</label>
               </div>
               <div class="form-check">
                 <input type="radio" class="form-check-input" name="customerGender" v-model="reservations.customerGender"
-                  value="女" id="genderFemale" required />
+                  value="女" id="genderFemale" @change="validateGender" />
                 <label class="form-check-label" for="genderFemale">女</label>
               </div>
             </div>
+            <small v-if="genderError" class="text-danger">{{ genderError }}</small>
           </div>
           <div class="mb-3">
             <label for="contactPhone" class="form-label">電話</label>
             <input type="tel" class="form-control frame" id="contactPhone" v-model="reservations.contactPhone"
-              maxlength="10" required @input="validatePhone" :class="{ 'is-invalid': phoneError }" />
+              maxlength="10" @input="validatePhone" :class="{ 'is-invalid': phoneError }" />
             <small v-if="phoneError" class="text-danger">{{ phoneError }}</small>
           </div>
           <div class="row g-3">
             <div class="col-md-6">
               <label for="numberPeople" class="form-label">訂位人數</label>
-              <select class="form-select frame" id="numberPeople" v-model.number="reservations.numberPeople">
+              <select class="form-select frame" id="numberPeople" v-model.number="reservations.numberPeople"
+                :class="{ 'is-invalid': peopleError }" @change="validatePeople">
                 <option value="0" selected>選擇人數</option>
                 <option value="1">1位</option>
                 <option value="2">2位</option>
@@ -99,6 +98,7 @@
                 <option value="7">7位</option>
                 <option value="8">8位</option>
               </select>
+              <small v-if="peopleError" class="text-danger">{{ peopleError }}</small>
             </div>
             <div class="col-md-6">
               <label for="reservationDate" class="form-label">日期</label>
@@ -113,12 +113,13 @@
               <button v-for="time in availableTimeslots" :key="time" :class="{
                 'btn-outline-black': selectedTime !== time,
                 'btn-black': selectedTime === time,
+                'is-invalid': timeError && selectedTime === '',
               }" :style="{ color: selectedTime === time ? '#fff' : '' }" class="btn btn-black w-100 me-2 mb-2"
                 @click="handleClick(time, $event)">
                 {{ time }}
-
               </button>
             </div>
+            <small v-if="timeError" class="text-danger">{{ timeError }}</small>
             <input type="hidden" v-model="reservations.startTime" />
           </div>
           <div class="mb-3">
@@ -135,14 +136,15 @@
 </template>
 
 <script>
-
 export default {
   data() {
 
     return {
+      isMapVisible: false,
       nameError: '',
-      phoneError: '',
       genderError: '',
+      phoneError: '',
+      peopleError: '',
       dateError: '',
       timeError: '',
     
@@ -195,6 +197,20 @@ export default {
         this.nameError = ''
       }
     },
+    validateGender() {
+      if (!this.reservations.customerGender) {
+        this.genderError = '請選擇性別';
+      } else {
+        this.genderError = '';
+      }
+    },
+    validatePeople() {
+      if (this.reservations.numberPeople === 0) {
+        this.peopleError = '請選擇人數';
+      } else {
+        this.peopleError = '';
+      }
+    },
     validateDate() {
       if (!this.reservations.reservationDate.trim()) {
         this.dateError = '日期為必填'
@@ -202,7 +218,13 @@ export default {
         this.dateError = ''
       }
     },
-
+    validateTime() {
+      if (!this.selectedTime) {
+        this.timeError = '請選擇時段';
+      } else {
+        this.timeError = '';
+      }
+    },
 
     handleClick(time, event) {
       event.preventDefault() // 阻止按鈕的默認行為，防止它觸發表單提交
@@ -212,6 +234,7 @@ export default {
         this.selectedTime = time
       }
       this.reservations.startTime = this.selectedTime
+      this.timeError = "";
     },
     async displayTimes() {
       if (this.reservations.numberPeople === 0 || !this.reservations.reservationDate) {
@@ -219,7 +242,7 @@ export default {
         return
       }
       try {
-        const api = `${import.meta.env.VITE_API}/api/Bistro/remaining`
+        const api = `${import.meta.env.VITE_API}/api/remaining`
         let res = await this.axios.post(api, {
           reservationDate: this.reservations.reservationDate,
           numberPeople: this.reservations.numberPeople,
@@ -238,29 +261,20 @@ export default {
       this.reservations.startTime = time
     },
     async submitReservation() {
-      if (
-        !this.reservations.customerName ||
-        !this.reservations.customerGender ||
-        !this.reservations.contactPhone ||
-        !this.reservations.reservationDate ||
-        !this.reservations.startTime ||
-        !this.reservations.numberPeople
-      ) {
-        alert('請填寫所有必填欄位！')
-        return
-      }
+
       try {
         this.validatePhone();
         this.validateName();
-        this.validateGender();
         this.validateDate();
-        this.validateTime();
+        this.validateGender();
         this.validatePeople();
-        const api = `${import.meta.env.VITE_API}/api/Bistro/insert`
+        this.validateTime();
+
+        const api = `${import.meta.env.VITE_API}/api/frontend/insert`
         const response = await this.axios.post(api, this.reservations)
         if (response.data.success) {
           //發送簡訊要取得的資料
-          const confirmationApi = `${import.meta.env.VITE_API}/api/Bistro/send`
+          const confirmationApi = `${import.meta.env.VITE_API}/api/frontend/send`
           const reservationData = {
             contactPhone: this.reservations.contactPhone,
             reservationDate: this.reservations.reservationDate,
@@ -294,7 +308,6 @@ export default {
 
         } else {
           console.error('錯誤:', error)
-
         }
       }
     },
