@@ -50,8 +50,11 @@ public class CommentRestController {
 	
 	@Autowired
 	private CommentRepository commentRepo;
+	
 
-	@PostMapping("/api/comment/postComment")
+	
+
+	@PostMapping("/api/frontend/comment/postComment")
 	public ResponseEntity<?> createComment(@RequestBody CommentDTO dto, HttpSession httpSession) {
 	    try {
 	        // 從 session 中取得會員 ID
@@ -75,6 +78,13 @@ public class CommentRestController {
 
 	        // 創建評論物件並填充屬性
 	        Comment newComment = new Comment();
+	        
+	        Double newAvgScore = menuService.countOneMenuAvgScore(menu.getProductName());
+	        
+	        double roundedNewAvgScore=Math.round(newAvgScore * 10.0) / 10.0;
+	        
+	        menu.setAvgScore(roundedNewAvgScore);
+	        
 	        newComment.setMenu(menu);
 	        newComment.setMembers(member);
 	        newComment.setCommentMessage(dto.getCommentMessage());
@@ -109,7 +119,7 @@ public class CommentRestController {
 
 	
 
-	@GetMapping("/api/member/comment") // 根據會員取得評論
+	@GetMapping("/api/frontend/member/comment") // 根據會員取得評論
 	public ResponseEntity<?> findAllCommentByMember(HttpSession httpSession) {
 
 //		 從 HttpSession 獲取會員 ID
@@ -131,38 +141,47 @@ public class CommentRestController {
 	@GetMapping("/api/{productName}/comment")
 	public ResponseEntity<?> findAllCommentByProductName(@PathVariable String productName) {
 
-		// 根據商品找評論
-		List<Comment> comments = commentService.findCommentByProductName(productName);
+	    // 根據商品找評論
+	    List<Comment> comments = commentService.findCommentByProductName(productName);
 
-		if (comments.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("該商品目前無任何評論。");
-		}
+	    if (comments.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("該商品目前無任何評論。");
+	    }
 
-		for (Comment comment : comments) {
-			String memberName = comment.getMembers().getMemberName();
-			String firstName;
-			
-			if (memberName != null && !memberName.isEmpty()) {
-			    if (memberName.startsWith("Mr.") || memberName.startsWith("Ms.")) {
-			        memberName = memberName.substring(3).trim();
-			    }
+	    for (Comment comment : comments) {
+	        Members member = comment.getMembers();
+	        if (member == null) {
+	            continue; // 若無成員資訊，跳過該評論
+	        }
 
-			    if (memberName.length() > 3) {
-			    	firstName = memberName.substring(0, 2);
-			    } else {
-			    	firstName = memberName.substring(0, 1);
-			    }
+	        String memberName = member.getMemberName();
+	        if (memberName == null || memberName.isEmpty()) {
+	            continue; // 若名字為空，跳過該評論
+	        }
 
-			    if (comment.getMembers().getMemberSex() == 1) {
-			    	memberName = ("Mr."+firstName).trim();
-			    } else {
-			    	memberName = ("Ms."+firstName).trim();
-			    }
-			comment.getMembers().setMemberName(memberName);
-			}
-		}
-			
-		return ResponseEntity.ok(comments);
+	        // 要先去除 "Mr." 或 "Ms."否則之後會變成Mr.Mr
+	        if (memberName.startsWith("Mr.") || memberName.startsWith("Ms.")) {
+	            memberName = memberName.substring(3).trim();
+	        }
+
+	        // 取得名字的前綴
+	        String firstName = memberName.length() > 3 ? memberName.substring(0, 2) : memberName.substring(0, 1);
+
+	        // 根據性別設定稱謂
+	        Short memberSex = member.getMemberSex();
+	        if (memberSex != null) {
+	            if (memberSex == 1) {
+	                memberName = ("Mr." + firstName).trim();
+	            } else if (memberSex == 0) {
+	                memberName = ("Ms." + firstName).trim();
+	            }
+	        }
+
+	        // 更新名字
+	        member.setMemberName(memberName);
+	    }
+
+	    return ResponseEntity.ok(comments);
 	}
 
 	@GetMapping("/api/member/{memberId}/avatar")
@@ -190,7 +209,7 @@ public class CommentRestController {
 	}
 
 	@Transactional
-	@DeleteMapping("/api/Bistro/deleteComment/{ID}")
+	@DeleteMapping("/api/frontend/Bistro/deleteComment/{ID}")
 	public ResponseEntity<String> deleteComment(@PathVariable Integer ID, HttpSession httpSession) {
 
 		Integer memberId = (Integer) httpSession.getAttribute("membersId");
@@ -202,12 +221,27 @@ public class CommentRestController {
 		if (ID == null) {
 			ResponseEntity.badRequest().body("評論ID無效");
 		}
-
+		
+		Comment comment = commentService.findCommentById(ID);
+		
+		String commentProduct = comment.getCommentProduct();
+		
+		Menu menu = menuService.findMenuByProductName(commentProduct);	
+		
 		boolean deleteComment = commentService.deleteComment(ID);
 
 		if (!deleteComment) {
 			ResponseEntity.status(HttpStatus.NOT_FOUND).body("未找到評論，刪除失敗");
 
+		}else {
+			Double newAvgScore = menuService.countOneMenuAvgScore(commentProduct);
+	        
+	        double roundedNewAvgScore=Math.round(newAvgScore * 10.0) / 10.0;
+	        
+	        menu.setAvgScore(roundedNewAvgScore);
+	        
+	        comment.setMenu(menu);
+			
 		}
 
 		return ResponseEntity.ok("評論已刪除");
@@ -215,7 +249,7 @@ public class CommentRestController {
 	}
 
 	@Transactional
-	@PutMapping("/api/put/comment/{ID}")
+	@PutMapping("/api/frontend/put/comment/{ID}")
 	public ResponseEntity<Map<String, Object>> updateComment(@PathVariable Integer ID, @RequestBody CommentDTO dto,
 			HttpSession httpSession) {
 		try {
@@ -248,6 +282,14 @@ public class CommentRestController {
 
 			Members members = op.get();
 
+			
+			Double newAvgScore = menuService.countOneMenuAvgScore(menu.getProductName());
+			
+			double roundedNewAvgScore=Math.round(newAvgScore * 10.0) / 10.0;
+	        
+	        menu.setAvgScore(roundedNewAvgScore);
+	        
+		
 			// 5. 更新評論資料
 			comment.setMenu(menu);
 			comment.setMembers(members);

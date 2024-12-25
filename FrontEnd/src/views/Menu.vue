@@ -7,11 +7,10 @@
           <div class="col-md-12">
             <div class="category-carousel swiper">
               <div class="swiper-wrapper">
-
                 <div>
                   <button class="nav-link category-item swiper-slide" @click="loadAllMenu()">
                     <div>
-                      <font-awesome-icon :icon="['fas', 'list']"size="2xl" />
+                      <font-awesome-icon :icon="['fas', 'list']" size="2xl" />
                       <h3 class="category-title">全部</h3>
                     </div>
                   </button>
@@ -22,7 +21,7 @@
                   v-on:click.prevent="clickCategory('開胃菜')"
                 >
                   <div>
-                    <font-awesome-icon :icon="['fas', 'plate-wheat']"size="2xl" />
+                    <font-awesome-icon :icon="['fas', 'plate-wheat']" size="2xl" />
                     <h3 class="category-title">開胃菜</h3>
                   </div>
                 </button>
@@ -32,7 +31,7 @@
                   v-on:click.prevent="clickCategory('主菜')"
                 >
                   <div>
-                    <font-awesome-icon :icon="['fas', 'utensils']" size="2xl"/>
+                    <font-awesome-icon :icon="['fas', 'utensils']" size="2xl" />
                     <h3 class="category-title">主菜</h3>
                   </div>
                 </button>
@@ -42,20 +41,20 @@
                   v-on:click.prevent="clickCategory('飲品')"
                 >
                   <div>
-                    <font-awesome-icon :icon="['fas', 'champagne-glasses']" size="2xl"/>
+                    <font-awesome-icon :icon="['fas', 'champagne-glasses']" size="2xl" />
                     <h3 class="category-title">飲品</h3>
                   </div>
                 </button>
 
                 <button
                   class="nav-link category-item swiper-slide"
-                  v-on:click.prevent="clickCategory('甜點')">
+                  v-on:click.prevent="clickCategory('甜點')"
+                >
                   <div>
-                    <font-awesome-icon :icon="['fas', 'ice-cream']" size="2xl"/>
+                    <font-awesome-icon :icon="['fas', 'ice-cream']" size="2xl" />
                     <h3 class="category-title">甜點</h3>
                   </div>
                 </button>
-
               </div>
             </div>
           </div>
@@ -151,9 +150,7 @@ export default {
       menusPerPage: 6, // 每頁顯示的菜單數量
       totalPages: 1,
 
-
-
-      cartItems: [] // 購物車項目列表
+      cartItems: [], // 購物車項目列表
     }
   },
   methods: {
@@ -223,9 +220,6 @@ export default {
     async viewDescribeModal(menu) {
       this.$emit('view-menudescribe', menu)
     },
-
-
-
   },
 
   computed: {
@@ -243,15 +237,16 @@ export default {
   watch: {
     menus: {
       handler(newVal) {
+        // 如果當前頁面大於總頁數，重置為最後一頁
         if (this.currentPage > this.totalPages) {
-          this.currentPage = Math.max(1, this.totalPages) // 如果當前頁面大於總頁數，重置為最後一頁
+          this.currentPage = Math.max(1, this.totalPages)
         }
       },
       deep: true,
     },
   },
   created() {
-    this.loadAllMenu()
+    this.loadAllMenu() // 組件創建時執行一次菜單加載
   },
 }
 </script>
@@ -267,7 +262,6 @@ export default {
   justify-content: space-evenly; /* 水平均勻分布 */
   align-items: center; /* 垂直居中對齊 */
   flex-wrap: nowrap; /* 防止換行 */
-
 }
 
 .category-carousel .swiper-slide {
@@ -290,7 +284,9 @@ export default {
   border-radius: 16px;
   text-align: center;
   padding: 20px;
-  transition: box-shadow 0.3s ease-out, transform 0.3s ease-out;
+  transition:
+    box-shadow 0.3s ease-out,
+    transform 0.3s ease-out;
 }
 
 .category-item:hover {
@@ -391,8 +387,7 @@ export default {
 .nav-link {
   /* border: none; */
   border-bottom: 3px solid var(--accent-color);
-  width:120px;
-
+  width: 120px;
 }
 
 .swiper-wrapper {
@@ -422,10 +417,9 @@ export default {
   gap: 60px; /* 設定項目之間的間距 */
 }
 
-
 /* 分頁 */
 .pagination .page-link {
-  background: linear-gradient( #fffefe); /* 黑色漸變背景 */
+  background: linear-gradient(#fffefe); /* 黑色漸變背景 */
   color: rgb(0, 0, 0); /* 白字 */
   border: 1px solid #ffffff; /* 灰色邊框 */
   border-radius: 5px; /* 圓角按鈕 */
@@ -434,14 +428,12 @@ export default {
   font-size: 16px; /* 字體大小 */
   font-weight: bold; /* 粗體字 */
   transition: all 0.3s ease; /* 動畫過渡 */
-
 }
 
 .pagination .page-link:hover {
   background: linear-gradient(45deg, #444, #111); /* 懸停時的漸變 */
   color: #ffffff; /* 懸停時的金色字體 */
   transform: scale(1.1); /* 放大效果 */
-
 }
 
 .pagination .page-item.active .page-link {
@@ -469,6 +461,4 @@ export default {
 .pagination .page-item {
   display: inline-block;
 }
-
-
 </style>

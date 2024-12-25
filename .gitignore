@@ -9,3 +9,5 @@ node_modules/
 
 # 忽略环境配置文件
 .env
+.json
+

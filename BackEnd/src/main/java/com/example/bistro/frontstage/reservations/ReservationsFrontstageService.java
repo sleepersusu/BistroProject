@@ -3,7 +3,10 @@ package com.example.bistro.frontstage.reservations;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.bistro.backstage.reservations.Reservations;
@@ -21,20 +24,33 @@ public class ReservationsFrontstageService {
 
 	public Reservations insert(ReservationDTO dto) {
 
+		Map<String, String> errors = new HashMap<>();
+		
 		if (dto.getCustomerName() == null || dto.getCustomerName().trim().isEmpty()) {
-		    throw new IllegalArgumentException("姓名不能為空白");
+			 errors.put("customerName", "姓名不能為空白");
 		} else if (dto.getCustomerName().length() > 15) {
-		    throw new IllegalArgumentException("姓名不能超過15個字元");
-		} else if (!dto.getCustomerName().matches("^[\\u4e00-\\u9fa5]{1,15}$")) {
-		    throw new IllegalArgumentException("姓名只能包含中文字符，且長度不能超過15個字元");
+			  errors.put("customerName", "姓名不能超過15個字元");
+		}
+		if (dto.getCustomerGender() == null) {
+			 errors.put("customerGender", "請你選擇性別");
+		}
+		if (dto.getNumberPeople() == 0) {
+			  errors.put("numberpeople", "請你選擇人數");		
 		}
 		if (dto.getContactPhone() == null || !dto.getContactPhone().matches("^09\\d{8}$")) {
-		    throw new IllegalArgumentException("電話號碼必須是09開頭，且包含10個數字");
+			errors.put("contactPhone", "電話號碼必須是09開頭，且包含10個數字");
+		}
+		if (dto.getReservationDate() == null) {
+			 errors.put("reservationDate", "請你選擇訂位日期");
 		}
 		if (dto.getStartTime() == null) {
-			throw new IllegalArgumentException("請你選擇訂位時段");
+			  errors.put("startTime", "選擇的時段無效，請選擇可用的時段");		
 		}
-
+		
+		 if (!errors.isEmpty()) {
+		        throw new IllegalArgumentException(errors.toString());
+		    }
+		 
 		Reservations reservations = new Reservations();
 		reservations.setCustomerName(dto.getCustomerName());
 		reservations.setCustomerGender(dto.getCustomerGender());
@@ -97,10 +113,20 @@ public class ReservationsFrontstageService {
 			occupiedTables[1] += 1;
 		} else if (numberPeople > 2) {
 			occupiedTables[2] += 1;
-		} else if (numberPeople == 2) {
-			occupiedTables[1] += 1;
-		} else {
-			occupiedTables[0] += 1;
+		}else if (numberPeople == 2) {
+		    if (occupiedTables[1] > 0) {
+		        occupiedTables[1] += 1;
+		    } else {
+		        // 如果沒有2人桌，使用兩個1人桌
+		        occupiedTables[0] += 2; // 兩人使用兩個1人桌。
+		    }
+		}else {
+		    if (occupiedTables[0] > 0) {
+		        occupiedTables[0] += 1;
+		    } else {
+		        // 如果沒有1人桌，使用2人桌。
+		        occupiedTables[1] += 1; // 一人使用2人桌。
+		    }
 		}
 	}
 
@@ -117,41 +143,42 @@ public class ReservationsFrontstageService {
 		int availableOneSeat = oneSeat;
 
 		// 針對不同人數進行檢查
-		if (numberPeople > 6) {
-			if (availableFourSeat >= 2) {
-				return true;
-			}
-		} else if (numberPeople > 4) {
-			// 5-6人 目前暫定一個4人桌加一個2人桌
-			if (availableFourSeat >= 1 && availableTwoSeat >= 1) {
-				return true;
-			}
-			// 也可以分配4人桌
-			if (availableFourSeat >= 2) {
-				return true;
-			}
-		} else if (numberPeople > 2) {
-			if (availableFourSeat >= 1) {
-				return true;
-			}
-			// 或者使用兩個2人桌
-			if (availableTwoSeat >= 2) {
-				return true;
-			}
-		} else if (numberPeople == 2) {
-			if (availableTwoSeat >= 1 || availableFourSeat >= 1) {
-				return true;
-			}
-			if (availableOneSeat >= 2) {
-				return true;
-			}
-		} else {
-			if (availableOneSeat >= 1 || availableTwoSeat >= 1 || availableFourSeat >= 1) {
-				return true;
-			}
-		}
+		  if (numberPeople > 6) {
+		        // 需要兩張4人桌
+		        if (availableFourSeat >= 2) {
+		            return true;
+		        }
+		    } else if (numberPeople > 4) {
+		        // 需要一張4人桌和一張2人桌
+		        if (availableFourSeat >= 1 && availableTwoSeat >= 1) {
+		            return true;
+		        }
+		    } else if (numberPeople > 2) {
+		        // 3-4人的情況，使用一張4人桌
+		        if (availableFourSeat >= 1) {
+		            return true;
+		        }
+		    } else if (numberPeople == 2) {
+		        // 優先檢查2人桌
+		        if (availableTwoSeat >= 1) {
+		            return true;
+		        }
+		        // 如果沒有2人桌，檢查兩張1人桌
+		        if (availableOneSeat >= 2) {
+		            return true;
+		        }
+		    } else {
+		        // 1人的情況，優先使用1人桌
+		        if (availableOneSeat >= 1) {
+		            return true;
+		        }
+		        // 如果沒有1人桌，檢查2人桌是否可用
+		        if (availableTwoSeat >= 1) {
+		            return true;
+		        }
+		    }
 
-		return false;
+		    return false; // 無法分配座位
 	}
 
 	// 取得日期人數 返回可以 選擇的時段

@@ -1,5 +1,7 @@
 package com.example.bistro.backstage.orders;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -68,6 +70,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
 
     // 查詢特定時間範圍內的所有訂單，按照創建時間排序
     List<Orders> findByCreatedAtBetweenOrderByCreatedAtDesc(Date startDate, Date endDate);
-    
-    
+
+    // Add this method for pagination
+    Page<Orders> findAll(Pageable pageable);
 }

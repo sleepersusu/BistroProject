@@ -15,9 +15,9 @@ export const useUserStore = defineStore('userStore', {
       userPhone: '',
       userPoint: '',
       userShip: '',
-      userAvatar: '', // 默认值为空字符串，或者给一个默认头像
+      userAvatar: '/images/avatar.jpg', 
       userGender: null,
-      userAddress: '', // 默认值为空字符串
+      userAddress: '', 
       userBirthdate: '',
       city: '',
       district: '',
@@ -95,7 +95,7 @@ export const useUserStore = defineStore('userStore', {
           this.memberprofile.userPoint = response.data.memberPoint
           this.memberprofile.userBirthdate = response.data.memberBirthday
           // console.log(response.data.memberAccount)
-          console.log(response.data.memberEmail)
+          // console.log(response.data.memberEmail)
           // console.log(response.data.memberImg)
           // console.log(response.data.memberPassword)
           // console.log(response.data.memberShip)
@@ -167,7 +167,7 @@ export const useUserStore = defineStore('userStore', {
       try {
         let response = await axios.get(`${this.apiUrl}/google`, {
           params: {
-            idToken: idToken, // 將 code 作為請求參數發送
+            idToken: idToken, // 將 idToken 作為請求參數發送
           },
         })
         const token = response.data.token
