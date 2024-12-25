@@ -165,11 +165,8 @@ export default {
         if (response.data.兌換狀態) {
           // 執行所有後續操作
           await Promise.all([
-            // 扣除獎品庫存
             this.axios.post(`${import.meta.env.VITE_API}/api/MinusOnePrizesCount`, requestData),
-            // 儲存兌換碼
             this.axios.post(`${import.meta.env.VITE_API}/api/promoCode`, promoData),
-            // 扣除會員點數
             this.axios.post(`${import.meta.env.VITE_API}/api/minusMemberPoint`, requestData),
           ])
 
@@ -187,7 +184,6 @@ export default {
                 Swal.close()
               })
               toast.style.cursor = 'pointer'
-
             },
           })
           this.getPointPrizes()
