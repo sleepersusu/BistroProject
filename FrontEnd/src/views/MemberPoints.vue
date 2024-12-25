@@ -118,15 +118,18 @@ export default {
       if (prize.pointPrizesCount === 0) {
         Swal.fire({
           icon: 'error',
+          iconColor: 'black',
           title: '商品已售完',
           text: '很抱歉，此商品已經售完',
           confirmButtonText: '確定',
+          confirmButtonColor: 'black',
         })
         return
       }
 
       const result = await Swal.fire({
         icon: 'question',
+        iconColor: 'black',
         title: `確定要兌換${prize.pointPrizesName}嗎?`,
         html: `
           <p>您目前有 <span style="color: #007bff; font-size: 20px; font-weight: bold;">${this.memberPointTotal}</span> 點</p>
@@ -136,6 +139,7 @@ export default {
         `,
         showCancelButton: true,
         confirmButtonText: '兌換',
+        confirmButtonColor: 'black',
         cancelButtonText: '在想一下',
         reverseButtons: true,
       })
@@ -176,6 +180,7 @@ export default {
           window.Swal.fire({
             toast: true,
             icon: 'success',
+            iconColor: 'black',
             title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
             html: `兌換碼是 : ${promoCode}<br>可前往會員中心查看`,
             timer: 5000,
@@ -187,7 +192,6 @@ export default {
                 Swal.close()
               })
               toast.style.cursor = 'pointer'
-
             },
           })
           this.getPointPrizes()
@@ -197,9 +201,11 @@ export default {
         console.error('兌換處理失敗:', error)
         Swal.fire({
           icon: 'error',
+          iconColor: 'black',
           title: '兌換失敗',
           text: '請稍後再試',
           confirmButtonText: '確定',
+          confirmButtonColor: 'black',
         })
       }
     },
