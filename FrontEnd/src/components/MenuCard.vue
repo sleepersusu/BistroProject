@@ -62,8 +62,7 @@
         <div>
           <span class="rating">
             <svg width="24" height="24" class="text-primary">
-              <use xlink:href="#star-solid"></use></svg
-            >{{ menu.avgScore }}
+              <use xlink:href="#star-solid"></use></svg>{{ menu.avgScore }}
           </span>
           <span style="padding-left: 5px; font-size: smaller">({{ commentPeople }})</span>
         </div>
@@ -258,6 +257,8 @@ export default {
         this.count = this.menu.productCount
       }
     },
+
+  
   },
 
   async created() {
