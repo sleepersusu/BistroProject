@@ -30,7 +30,7 @@ import { statusStore } from '@/stores/statusStore'
 import { lotteryStore } from '@/stores/lotteryStore'
 import { campaignPrizeStore } from '@/stores/campaignPrizeStore'
 import { storeToRefs } from 'pinia'
-import { onUnmounted, onMounted, ref } from 'vue'
+import { onUnmounted, onMounted, ref, watch } from 'vue'
 import BannerTop from '@/components/BannerTop.vue'
 import { useFireWorks } from '@/mixins/fireWorkMixin'
 import CampaignModal from '@/components/CampaignModal.vue'
@@ -46,6 +46,7 @@ const prize = campaignPrizeStore()
 const user = useUserStore()
 const { campaigns } = storeToRefs(store)
 const { isLoading } = storeToRefs(status)
+const { isLoggedIn } = storeToRefs(user)
 const { getCampaigns, clearCampaignImages } = store
 const { getChancesByCampaign } = lottery
 const { getPrizesByCampaign } = prize
@@ -82,6 +83,26 @@ onMounted(async () => {
     console.error(e)
   } finally {
     status.finish()
+  }
+})
+
+watch(isLoggedIn, async (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    try {
+      console.log('更新活動')
+      if (newValue === false) {
+        lottery.chance = {}
+      } else {
+        status.start()
+        for (const campaign of campaigns.value) {
+          await getChancesByCampaign(user.memberId, campaign.id)
+        }
+      }
+    } catch (e) {
+      console.error('重新載入活動資料失敗:', e)
+    } finally {
+      status.finish()
+    }
   }
 })
 

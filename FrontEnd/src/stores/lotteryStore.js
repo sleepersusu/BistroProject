@@ -10,6 +10,8 @@ export const lotteryStore = defineStore('lottery', {
   }),
   actions: {
     async getChancesByCampaign(memberId, campaignId) {
+      const user = useUserStore()
+      if (!user.memberId) return
       const api = `${import.meta.env.VITE_API}/api/lotteryChance/${memberId}/${campaignId}`
       try {
         const res = await axios.get(api)

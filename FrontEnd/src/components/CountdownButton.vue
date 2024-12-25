@@ -2,7 +2,7 @@
   <button
     type="button"
     class="btn btn-primary w-100 rounded-0 rounded-bottom"
-    :disabled="!isActive"
+    :disabled="!isActive || !user.memberId"
     @click="$emit('handle-draw')"
   >
     <div v-if="status === 'NOT_STARTED'">
@@ -29,7 +29,15 @@
       </span>
     </div>
     <span v-else>
-      {{ status === 'IN_PROGRESS' ? '立即抽獎' : status === 'EXPIRED' ? '活動已結束' : '' }}
+      {{
+        !user.memberId
+          ? '請先登入會員'
+          : status === 'EXPIRED'
+            ? '活動已結束'
+            : status === 'IN_PROGRESS'
+              ? '立即抽獎'
+              : ''
+      }}
       <span v-if="count > 0 && props.isActive" class="badge bg-danger">
         {{ count }}
       </span>
@@ -39,6 +47,8 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref, defineProps } from 'vue'
+import { useUserStore } from '@/stores/userStore'
+const user = useUserStore()
 
 const props = defineProps({
   endDate: {
