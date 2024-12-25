@@ -19,7 +19,7 @@
         </div>
 
         <div>
-          <div v-if="noComment">
+          <div v-if="paginatedComment.length===0">
             <div class="container">
               <div class="row">
                 <h4 style="text-align: center; padding-top: 10px">目前沒有評論</h4>
@@ -100,7 +100,6 @@ export default {
       currentPage: 1, // 當前頁面
       commentPerPage: 5, // 每頁顯示的數量
 
-      noComment: true,
     }
   },
   methods: {
@@ -140,6 +139,7 @@ export default {
       return Math.ceil(this.comments.length / this.commentPerPage)
     },
   },
+
 }
 </script>
 
