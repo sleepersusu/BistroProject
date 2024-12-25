@@ -26,44 +26,45 @@
     <!-- 商品卡片區塊 -->
     <div class="container my-5">
       <ul class="prize-list">
-        <li
-          v-for="prize in pointPrizes"
-          :key="prize.id"
-          class="prize-item"
-          :class="{ 'insufficient-points': memberPointTotal < prize.pointPrizesPoints }"
-        >
-          <div v-if="prize.rewardsStatus == '上架中'" class="card">
-            <img
-              :src="'data:image/jpeg;base64,' + prize.base64Image"
-              class="card-img-top"
-              alt="Prize Image"
-            />
-            <div class="card-body">
-              <div class="prize-header">
-                <h5 class="prize-title">{{ prize.pointPrizesName }}</h5>
-                <h5 class="prize-points">{{ prize.pointPrizesPoints }} 點</h5>
-              </div>
-              <p class="prize-description">{{ prize.pointPrizesDescription }}</p>
-              <div class="prize-footer">
-                <button
-                  class="btn"
-                  :class="
-                    memberPointTotal >= prize.pointPrizesPoints && prize.pointPrizesCount > 0
-                      ? 'btn-primary'
-                      : 'btn-secondary'
-                  "
-                  @click="redeemPrize(prize)"
-                  :disabled="
-                    memberPointTotal < prize.pointPrizesPoints || prize.pointPrizesCount === 0
-                  "
-                >
-                  {{ memberPointTotal >= prize.pointPrizesPoints ? '兌換商品' : '點數不足' }}
-                </button>
-                <span class="remaining-count">剩餘 {{ prize.pointPrizesCount }} 份</span>
+        <template v-for="prize in pointPrizes" :key="prize.id">
+          <li
+            v-if="prize.rewardsStatus == '上架中'"
+            class="prize-item"
+            :class="{ 'insufficient-points': memberPointTotal < prize.pointPrizesPoints }"
+          >
+            <div class="card">
+              <img
+                :src="'data:image/jpeg;base64,' + prize.base64Image"
+                class="card-img-top"
+                alt="Prize Image"
+              />
+              <div class="card-body">
+                <div class="prize-header">
+                  <h5 class="prize-title">{{ prize.pointPrizesName }}</h5>
+                  <h5 class="prize-points">{{ prize.pointPrizesPoints }} 點</h5>
+                </div>
+                <p class="prize-description">{{ prize.pointPrizesDescription }}</p>
+                <div class="prize-footer">
+                  <button
+                    class="btn"
+                    :class="
+                      memberPointTotal >= prize.pointPrizesPoints && prize.pointPrizesCount > 0
+                        ? 'btn-primary'
+                        : 'btn-secondary'
+                    "
+                    @click="redeemPrize(prize)"
+                    :disabled="
+                      memberPointTotal < prize.pointPrizesPoints || prize.pointPrizesCount === 0
+                    "
+                  >
+                    {{ memberPointTotal >= prize.pointPrizesPoints ? '兌換商品' : '點數不足' }}
+                  </button>
+                  <span class="remaining-count">剩餘 {{ prize.pointPrizesCount }} 份</span>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
+          </li>
+        </template>
       </ul>
     </div>
   </div>
@@ -118,18 +119,15 @@ export default {
       if (prize.pointPrizesCount === 0) {
         Swal.fire({
           icon: 'error',
-          iconColor: 'black',
           title: '商品已售完',
           text: '很抱歉，此商品已經售完',
           confirmButtonText: '確定',
-          confirmButtonColor: 'black',
         })
         return
       }
 
       const result = await Swal.fire({
         icon: 'question',
-        iconColor: 'black',
         title: `確定要兌換${prize.pointPrizesName}嗎?`,
         html: `
           <p>您目前有 <span style="color: #007bff; font-size: 20px; font-weight: bold;">${this.memberPointTotal}</span> 點</p>
@@ -139,7 +137,6 @@ export default {
         `,
         showCancelButton: true,
         confirmButtonText: '兌換',
-        confirmButtonColor: 'black',
         cancelButtonText: '在想一下',
         reverseButtons: true,
       })
@@ -169,18 +166,14 @@ export default {
         if (response.data.兌換狀態) {
           // 執行所有後續操作
           await Promise.all([
-            // 扣除獎品庫存
             this.axios.post(`${import.meta.env.VITE_API}/api/MinusOnePrizesCount`, requestData),
-            // 儲存兌換碼
             this.axios.post(`${import.meta.env.VITE_API}/api/promoCode`, promoData),
-            // 扣除會員點數
             this.axios.post(`${import.meta.env.VITE_API}/api/minusMemberPoint`, requestData),
           ])
 
           window.Swal.fire({
             toast: true,
             icon: 'success',
-            iconColor: 'black',
             title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
             html: `兌換碼是 : ${promoCode}<br>可前往會員中心查看`,
             timer: 5000,
@@ -201,11 +194,9 @@ export default {
         console.error('兌換處理失敗:', error)
         Swal.fire({
           icon: 'error',
-          iconColor: 'black',
           title: '兌換失敗',
           text: '請稍後再試',
           confirmButtonText: '確定',
-          confirmButtonColor: 'black',
         })
       }
     },

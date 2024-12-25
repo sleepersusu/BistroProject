@@ -29,5 +29,4 @@ public class BistroConfig {
         registrationBean.addUrlPatterns("/api/frontend/*");  // 配置過濾 URL 模式
         return registrationBean;
     }
-    
 }
