@@ -242,7 +242,7 @@ export default {
         return
       }
       try {
-        const api = `${import.meta.env.VITE_API}/api/Bistro/remaining`
+        const api = `${import.meta.env.VITE_API}/api/remaining`
         let res = await this.axios.post(api, {
           reservationDate: this.reservations.reservationDate,
           numberPeople: this.reservations.numberPeople,
@@ -270,11 +270,11 @@ export default {
         this.validatePeople();
         this.validateTime();
 
-        const api = `${import.meta.env.VITE_API}/api/Bistro/insert`
+        const api = `${import.meta.env.VITE_API}/api/frontend/insert`
         const response = await this.axios.post(api, this.reservations)
         if (response.data.success) {
           //發送簡訊要取得的資料
-          const confirmationApi = `${import.meta.env.VITE_API}/api/Bistro/send`
+          const confirmationApi = `${import.meta.env.VITE_API}/api/frontend/send`
           const reservationData = {
             contactPhone: this.reservations.contactPhone,
             reservationDate: this.reservations.reservationDate,

@@ -113,10 +113,20 @@ public class ReservationsFrontstageService {
 			occupiedTables[1] += 1;
 		} else if (numberPeople > 2) {
 			occupiedTables[2] += 1;
-		} else if (numberPeople == 2) {
-			occupiedTables[1] += 1;
-		} else {
-			occupiedTables[0] += 1;
+		}else if (numberPeople == 2) {
+		    if (occupiedTables[1] > 0) {
+		        occupiedTables[1] += 1;
+		    } else {
+		        // 如果沒有2人桌，使用兩個1人桌
+		        occupiedTables[0] += 2; // 兩人使用兩個1人桌。
+		    }
+		}else {
+		    if (occupiedTables[0] > 0) {
+		        occupiedTables[0] += 1;
+		    } else {
+		        // 如果沒有1人桌，使用2人桌。
+		        occupiedTables[1] += 1; // 一人使用2人桌。
+		    }
 		}
 	}
 
@@ -133,41 +143,42 @@ public class ReservationsFrontstageService {
 		int availableOneSeat = oneSeat;
 
 		// 針對不同人數進行檢查
-		if (numberPeople > 6) {
-			if (availableFourSeat >= 2) {
-				return true;
-			}
-		} else if (numberPeople > 4) {
-			// 5-6人 目前暫定一個4人桌加一個2人桌
-			if (availableFourSeat >= 1 && availableTwoSeat >= 1) {
-				return true;
-			}
-			// 也可以分配4人桌
-			if (availableFourSeat >= 2) {
-				return true;
-			}
-		} else if (numberPeople > 2) {
-			if (availableFourSeat >= 1) {
-				return true;
-			}
-			// 或者使用兩個2人桌
-			if (availableTwoSeat >= 2) {
-				return true;
-			}
-		} else if (numberPeople == 2) {
-			if (availableTwoSeat >= 1 || availableFourSeat >= 1) {
-				return true;
-			}
-			if (availableOneSeat >= 2) {
-				return true;
-			}
-		} else {
-			if (availableOneSeat >= 1 || availableTwoSeat >= 1 || availableFourSeat >= 1) {
-				return true;
-			}
-		}
+		  if (numberPeople > 6) {
+		        // 需要兩張4人桌
+		        if (availableFourSeat >= 2) {
+		            return true;
+		        }
+		    } else if (numberPeople > 4) {
+		        // 需要一張4人桌和一張2人桌
+		        if (availableFourSeat >= 1 && availableTwoSeat >= 1) {
+		            return true;
+		        }
+		    } else if (numberPeople > 2) {
+		        // 3-4人的情況，使用一張4人桌
+		        if (availableFourSeat >= 1) {
+		            return true;
+		        }
+		    } else if (numberPeople == 2) {
+		        // 優先檢查2人桌
+		        if (availableTwoSeat >= 1) {
+		            return true;
+		        }
+		        // 如果沒有2人桌，檢查兩張1人桌
+		        if (availableOneSeat >= 2) {
+		            return true;
+		        }
+		    } else {
+		        // 1人的情況，優先使用1人桌
+		        if (availableOneSeat >= 1) {
+		            return true;
+		        }
+		        // 如果沒有1人桌，檢查2人桌是否可用
+		        if (availableTwoSeat >= 1) {
+		            return true;
+		        }
+		    }
 
-		return false;
+		    return false; // 無法分配座位
 	}
 
 	// 取得日期人數 返回可以 選擇的時段
