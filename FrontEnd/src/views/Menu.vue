@@ -63,7 +63,7 @@
     </section>
   </div>
 
-  <div class="container">
+  <div class="container" >
     <div class="row mt-3">
       <div class="col-md-6 col-lg-4 col-sm-6" v-for="menu in paginatedMenus" :key="menu.id">
         <MenuCard
@@ -76,6 +76,7 @@
         >
         </MenuCard>
       </div>
+
       <MenuCommentModal
         ref="commentModal"
         :comments="comments"
