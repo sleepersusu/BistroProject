@@ -145,9 +145,7 @@ export default {
       genderError: '',
       dateError: '',
       timeError: '',
-      peopleError: '',
-      isMapVisible: false,
-      
+    
       reservations: {
         customerName: '',
         customerGender: '',
