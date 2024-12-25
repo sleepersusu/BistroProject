@@ -177,8 +177,8 @@ body .modal .modal-content form textarea {
 										th:title="${campaign.campaignDescription}"></td>
 									<td th:text="${campaign.campaignType}"></td>
 									<td th:text="${campaign.minOrderAmount}"></td>
-									<td th:text="${campaign.startDate}"></td>
-									<td th:text="${campaign.endDate}"></td>
+									<td th:text="${#dates.format(campaign.startDate, 'yyyy-MM-dd HH:mm')}"></td>
+									<td th:text="${#dates.format(campaign.endDate, 'yyyy-MM-dd HH:mm')}"></td>
 									<td><span th:text="${campaign.campaignStatus.description}"
 										th:style="${campaign.campaignStatus.name() == 'IN_PROGRESS' ? 'color: #28a745' : 
 					                 campaign.campaignStatus.name() == 'EXPIRED' ? 'color: #dc3545' : 

@@ -46,11 +46,11 @@
   <div class="col" v-if="!isLoading">
     <div class="product-item">
       <div>
-        <figure style="overflow: hidden; height: 250px; width: 100%;" >
+        <figure style="overflow: hidden; height: 250px; width: 100%">
           <img
             :src="menuSrc"
             @error="menuSrc = 'public/images/avatar.jpg'"
-            class="img-fixed "
+            class="img-fixed"
             v-on:click.prevent.stop="viewDescribeModal(menu)"
           />
         </figure>
@@ -62,7 +62,8 @@
         <div>
           <span class="rating">
             <svg width="24" height="24" class="text-primary">
-              <use xlink:href="#star-solid"></use></svg>{{ menu.avgScore }}
+              <use xlink:href="#star-solid"></use></svg
+            >{{ menu.avgScore }}
           </span>
           <span style="padding-left: 5px; font-size: smaller">({{ commentPeople }})</span>
         </div>
@@ -78,7 +79,6 @@
 
       <div class="d-flex justify-content-between">
         <span class="price">NT${{ menu.productPrice }}</span>
-
       </div>
 
       <div class="d-flex align-items-center justify-content-between">
@@ -108,7 +108,6 @@
               type="button"
               class="quantity-right-plus btn btn-success btn-number"
               data-type="plus"
-
             >
               <svg width="16" height="16" v-on:click.prevent="addOne">
                 <use xlink:href="#plus"></use>
@@ -120,7 +119,7 @@
         <button
           class="btn btn-primary mt-3"
           @click="handleAddToCart(menu.id)"
-          :disabled="count <= 0 "
+          :disabled="count <= 0"
         >
           Add to Cart
         </button>
@@ -164,14 +163,9 @@ export default {
       comments: [],
       commentPeople: 0,
       cartCount: 0,
-      isAddDisabled:false,
+      isAddDisabled: false,
 
-
-      totalCount:0
-
-
-
-
+      totalCount: 0,
     }
   },
   methods: {
@@ -205,10 +199,8 @@ export default {
 
     // 加一的方法需要考慮購物車數量
     async addOne() {
-
-        this.count += 1
-        this.$emit('update-count', this.count)
-
+      this.count += 1
+      this.$emit('update-count', this.count)
     },
     async getCommentPeople() {
       let API_URL = `${import.meta.env.VITE_API}/api/${this.menu.productName}/comment/people`
@@ -229,11 +221,8 @@ export default {
       this.$emit('view-menudescribe', menu)
     },
     handleAddToCart(id) {
-
-
       const productName = this.menu.productName
       this.addToCart({ id, count: this.count })
-
 
       this.count = 1
       // 黑灰底白字的提示框
@@ -252,8 +241,6 @@ export default {
           toast.style.marginTop = '80px' // 動態調整位置
         },
       })
-
-
     },
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
@@ -267,22 +254,16 @@ export default {
 
           confirmButtonColor: 'black',
           confirmButtonText: '確定',
-
         })
         this.count = this.menu.productCount
       }
     },
   },
 
-
-
   async created() {
-    this.loadPicture(this.menu.id)
+    await this.loadPicture(this.menu.id)
     await this.getCommentPeople()
-
-
   },
-
 
   computed: {
     // 計算剩餘可添加的庫存數量
@@ -293,14 +274,11 @@ export default {
     // 判斷是否應該禁用添加按鈕
     isAddDisabled() {
       // 當前選擇數量 + 購物車數量 >= 總庫存，或當前選擇數量 > 剩餘庫存
-      return (this.count + this.cartCount > this.menu.productCount) ||
-            (this.count >= this.remainingStock)
-    }
-  }, watch: {
-
-  }
-
-}
+      return (
+        this.count + this.cartCount > this.menu.productCount || this.count >= this.remainingStock
+      )
+    },
+  },
 </script>
 
 <style scoped>

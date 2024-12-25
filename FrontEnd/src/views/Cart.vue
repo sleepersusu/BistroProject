@@ -34,7 +34,7 @@
                   <hr v-if="index !== 0" />
                   <div class="col-md-3">
                     <img
-                      :src="item.menu.productImgUrl"
+                      :src="item.menu.imageUrl"
                       :alt="item.menu.productName"
                       class="img-fluid rounded"
                     />
@@ -148,7 +148,7 @@
                   </div>
 
                   <div class="d-flex justify-content-between mb-3">
-                    <span>稅金</span>
+                    <span>服務費(10%)</span>
                     <span class="fw-medium">${{ calculateTax }}</span>
                   </div>
 
@@ -216,17 +216,19 @@ export default {
 
     //all
     async fetchCartItems() {
-      this.isLoading = true
       try {
         const result = await this.getCart()
-        if (result && result.data) {
-          console.log('Fetched cart items:', result.data)
-          this.cartItems = result.data
+        if (result?.data) {
+          this.cartItems = result.data.map(item => ({
+            ...item,
+            menu: {
+              ...item.menu,
+              imageUrl: `${import.meta.env.VITE_API}/api/menu/photo/${item.menu.id}`
+            }
+          }))
         }
       } catch (error) {
         console.error('Failed to fetch cart items:', error)
-      } finally {
-        this.isLoading = false
       }
     },
 
@@ -241,11 +243,8 @@ export default {
     async increaseQuantity(item) {
       try {
         // 確保傳遞完整的 menu 對象
-        const result = await this.CountCart(item.menu)
-        if (result && result.data) {
-          this.cartItems = result.data
-          console.log('result:' + this.cartItems)
-        }
+        await this.CountCart(item.menu)
+        await this.fetchCartItems()
       } catch (error) {
         console.error('Failed to increase quantity:', error)
       }
@@ -254,20 +253,16 @@ export default {
     async decreaseQuantity(item) {
       if (item.cartCount > 1) {
         try {
-          const result = await this.MinusCart(item.menu)
-          if (result && result.data) {
-            this.cartItems = result.data
-          }
+          await this.MinusCart(item.menu)
+          await this.fetchCartItems()
         } catch (error) {
           console.error('Failed to decrease quantity:', error)
         }
       } else {
         // 數量=1，直接刪掉
         try {
-          const result = await this.MinusCart(item.menu)
-          if (result && result.data) {
-            this.cartItems = result.data
-          }
+          await this.MinusCart(item.menu)
+          await this.fetchCartItems()
         } catch (error) {
           console.error('Failed to remove item:', error)
         }
