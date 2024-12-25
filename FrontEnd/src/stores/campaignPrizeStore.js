@@ -11,10 +11,17 @@ export const campaignPrizeStore = defineStore('prize', {
         this.prizes = []
         const api = `${import.meta.env.VITE_API}/api/campaignPrize/prizeByCampaign/${campaignId}`
         const res = await axios.get(api)
-        const prizeData = res.data
+        let prizeData = res.data
+
+        const thanksMessage = prizeData.find((prize) => prize.prizeName === '銘謝惠顧')
+        const otherPrizes = prizeData
+          .filter((prize) => prize.prizeName !== '銘謝惠顧')
+          .sort((a, b) => a.probability - b.probability)
+
+        const arrangedPrizes = [...otherPrizes.slice(0, 4), thanksMessage, ...otherPrizes.slice(4)]
 
         const prizesWithImages = await Promise.all(
-          prizeData.map(async (prize, index) => {
+          arrangedPrizes.map(async (prize, index) => {
             const imageUrl = await this.getPrizeImage(prize.id)
             return {
               x: Math.floor(index / 3),

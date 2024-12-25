@@ -187,7 +187,7 @@
                     <td th:text="${result[1]}"></td>
                     <td th:text="${result[2]}"></td>
                     <td th:text="${result[3]}"></td>
-                    <td th:text="${result[4]}"></td>
+                    <td th:text="${#dates.format(result[4], 'yyyy-MM-dd HH:mm')}"></td>
                     <td>
                       <span th:if="${result[5] == '進行中'}" style="color: blue"
                         >[[${result[5]}]]</span
