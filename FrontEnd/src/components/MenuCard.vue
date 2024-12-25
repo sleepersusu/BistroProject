@@ -258,7 +258,7 @@ export default {
       }
     },
 
-  
+
   },
 
   async created() {
