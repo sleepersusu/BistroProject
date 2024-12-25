@@ -48,6 +48,7 @@ public class Menu {
 	private String productName;
 
 	@Lob
+	@JsonIgnore
 	private byte[] productImg;
 
     private Integer productPrice;
@@ -70,7 +71,7 @@ public class Menu {
 	@Column(name = "createdAt")
 	private Date createdAt;
 
-	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<OrdersDetails> orderDetails; 
 

@@ -46,7 +46,7 @@
   <div class="col" v-if="!isLoading">
     <div class="product-item">
       <div>
-        <figure>
+        <figure style="overflow: hidden; height: 250px; width: 100%">
           <img
             :src="menuSrc"
             @error="menuSrc = 'public/images/avatar.jpg'"
@@ -65,7 +65,7 @@
               <use xlink:href="#star-solid"></use></svg
             >{{ menu.avgScore }}
           </span>
-          <span style="padding-left: 5px">({{ commentPeople }})</span>
+          <span style="padding-left: 5px; font-size: smaller">({{ commentPeople }})</span>
         </div>
 
         <li
@@ -78,8 +78,7 @@
       </div>
 
       <div class="d-flex justify-content-between">
-        <span class="price">${{ menu.productPrice }}</span>
-        <span class="fs-6"> 剩餘:{{ menu.productCount }}份</span>
+        <span class="price">NT${{ menu.productPrice }}</span>
       </div>
 
       <div class="d-flex align-items-center justify-content-between">
@@ -90,6 +89,7 @@
               class="quantity-left-minus btn btn-danger btn-number"
               data-type="minus"
               v-on:click.prevent="minusOne"
+              :disabled="this.count == 0"
             >
               <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
             </button>
@@ -116,7 +116,13 @@
           </span>
         </div>
 
-        <button class="btn btn-primary mt-3" @click="handleAddToCart(menu.id)">Add to Cart</button>
+        <button
+          class="btn btn-primary mt-3"
+          @click="handleAddToCart(menu.id)"
+          :disabled="count <= 0"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   </div>
@@ -140,6 +146,10 @@ export default {
       type: Object, // menu 應該是一個物件
       required: true, // 如果 menu 是必需的
     },
+    cartItems: {
+      type: Array,
+      required: true,
+    },
   },
 
   emits: ['update-count', 'addToCart', 'image-loaded', 'view-comment', 'view-menudescribe'],
@@ -152,12 +162,15 @@ export default {
       count: 1,
       comments: [],
       commentPeople: 0,
+      cartCount: 0,
+      isAddDisabled: false,
+
+      totalCount: 0,
     }
   },
   methods: {
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
-
 
     async loadPicture(ID) {
       this.isLoading = true
@@ -184,22 +197,13 @@ export default {
       }
     },
 
+    // 加一的方法需要考慮購物車數量
     async addOne() {
-      if (this.count < this.menu.productCount) {
-        this.count += 1
-        this.$emit('update-count', this.count)
-      } else {
-        this.count = this.menu.productCount
-        this.$emit('update-count', this.count)
-        Swal.fire({
-          title: '已到達庫存上限',
-          text: '請重新選擇數量',
-          icon: 'error',
-        })
-      }
+      this.count += 1
+      this.$emit('update-count', this.count)
     },
-    async countCommentPeople(productName) {
-      let API_URL = `${import.meta.env.VITE_API}/api/${productName}/comment/people`
+    async getCommentPeople() {
+      let API_URL = `${import.meta.env.VITE_API}/api/${this.menu.productName}/comment/people`
       axios
         .get(API_URL)
         .then(async (response) => {
@@ -209,6 +213,7 @@ export default {
           console.error('Error fetching commentPeople:', error)
         })
     },
+
     async viewComment(menu) {
       this.$emit('view-comment', menu)
     },
@@ -216,28 +221,27 @@ export default {
       this.$emit('view-menudescribe', menu)
     },
     handleAddToCart(id) {
-      const productName = this.menu.productName;
+      const productName = this.menu.productName
       this.addToCart({ id, count: this.count })
+
       this.count = 1
       // 黑灰底白字的提示框
       Swal.fire({
-        toast:true,
+        toast: true,
         title: `「${productName}」成功加入購物車！`,
-        position:'top-end',
+        position: 'top-end',
         icon: 'success',
         background: '#fff', // 黑灰底
-        color: '#000000',     // 白字
+        color: '#000000', // 白字
         iconColor: '#000000', // 成功
         showConfirmButton: false, //不顯示確認按鈕
         timer: 2330, //時間
         timerProgressBar: true, //進度條
         didOpen: (toast) => {
-          toast.style.marginTop = '80px'; // 動態調整位置
+          toast.style.marginTop = '80px' // 動態調整位置
         },
-
-      });
+      })
     },
-
     updateQuantity(event) {
       const value = parseInt(event.target.value, 10)
       if (value >= 0 && value <= this.menu.productCount) {
@@ -247,29 +251,46 @@ export default {
           title: '已到達庫存上限',
           text: '請重新選擇數量',
           icon: 'error',
+
+          confirmButtonColor: 'black',
+          confirmButtonText: '確定',
         })
         this.count = this.menu.productCount
       }
     },
   },
-  created() {
-    this.loadPicture(this.menu.id)
-    this.countCommentPeople(this.menu.productName)
+
+  async created() {
+    await this.loadPicture(this.menu.id)
+    await this.getCommentPeople()
   },
-}
+
+  computed: {
+    // 計算剩餘可添加的庫存數量
+    remainingStock() {
+      return this.menu.productCount - this.cartCount
+    },
+
+    // 判斷是否應該禁用添加按鈕
+    isAddDisabled() {
+      // 當前選擇數量 + 購物車數量 >= 總庫存，或當前選擇數量 > 剩餘庫存
+      return (
+        this.count + this.cartCount > this.menu.productCount || this.count >= this.remainingStock
+      )
+    },
+  },
 </script>
 
 <style scoped>
-
-
 .img-fixed {
-  width: 100%; /* 讓圖片寬度符合卡片寬度 */
-  height: 200px; /* 固定高度 */
-  object-fit: cover; /* 圖片裁切，確保不變形 */
-  border-radius: 5px; /* 可選：讓圖片有圓角效果 */
+  min-height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px;
 }
 .card {
   margin-bottom: 5px;
+  overflow: hidden;
 }
 
 figure > img {
@@ -323,14 +344,14 @@ product-qty {
 
 .btn-primary {
   --bs-btn-color: #fff;
-  --bs-btn-bg: #ffc43f;
+  --bs-btn-bg: #111111;
   --bs-btn-border-color: transparent;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #f7a422;
+  --bs-btn-hover-bg: #3b3b3b;
   --bs-btn-hover-border-color: transparent;
   --bs-btn-focus-shadow-rgb: 49, 132, 253;
   --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #ffc43f;
+  --bs-btn-active-bg: #111111;
   --bs-btn-active-border-color: transparent;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #fff;
@@ -425,34 +446,97 @@ product-qty {
   margin-bottom: 30px;
   transition: box-shadow 0.3s ease-out;
 }
-
 .product-item:hover {
   box-shadow: 0px 21px 44px rgba(0, 0, 0, 0.08);
 }
-
+.product-item h3 {
+  display: block;
+  width: 100%;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  text-transform: capitalize;
+  color: #333333;
+  margin: 0;
+}
+.product-item figure {
+  background: #f9f9f9;
+  border-radius: 12px;
+  text-align: center;
+}
+.product-item figure img {
+  max-height: 210px;
+  height: auto;
+}
+.product-item .btn-wishlist {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  transition: all 0.3s ease-out;
+}
+.product-item .btn-wishlist:hover {
+  background: rgb(240, 56, 56);
+  color: #fff;
+}
+.product-item .qty {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #9d9d9d;
+}
+.product-item .rating {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: #222222;
+}
+.product-item .rating iconify-icon {
+  color: #ffc43f;
+}
 .product-item .price {
   display: block;
+  width: 50%;
   font-weight: 600;
   font-size: 22px;
   line-height: 30px;
   text-transform: capitalize;
   color: #222222;
 }
-
-.product-item figure {
-  background: #f9f9f9;
-  border-radius: 12px;
-  text-align: center;
+.product-item .product-qty {
+  width: 85px;
 }
-.product-item figure {
-  max-height: 210px;
+.product-item .btn-link {
+  text-decoration: none;
+}
+.product-item #quantity {
   height: auto;
-  width: 100%;
-  border-radius: 12px;
+  width: 28px;
+  text-align: center;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
-
-.product-item .rating iconify-icon {
-  color: #ffc43f;
+.product-item .btn-number {
+  width: 26px;
+  height: 26px;
+  line-height: 1;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 6px;
+  color: #222;
+  padding: 0;
 }
 
 .nav-link {

@@ -9,7 +9,7 @@
                             :style="{ backgroundImage: `url(${store.memberprofile.userAvatar})` }"
                             @click="handleAvatarClick">
                         </div>
-                        <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange" />
+                        <input type="file" ref="fileInput" accept="image/jpeg, image/png" style="display: none;" @change="handleFileChange" />
                     </div>
                 </form>
                 <form class="needs-validation" @submit.prevent="handleSubmit" novalidate>
@@ -198,7 +198,7 @@ export default {
                 isSubmitting.value = true
                 let checkValue = validateForm()
                 if (!checkValue) {
-                    window.Swal.fire({
+                    Swal.fire({
                         toast: false,
                         position: 'top',
                         icon: 'warning',
@@ -212,7 +212,7 @@ export default {
                 } else {
                     let response = await store.submitProfile()
                     if (response.data.status === 'success') {
-                        window.Swal.fire({
+                        Swal.fire({
                             toast: false,
                             position: 'top',
                             icon: 'success',
@@ -264,29 +264,54 @@ export default {
 
         // 處理頭像點擊
         const handleAvatarClick = () => {
-            console.log('觸發圖片上傳');
+            
             if (fileInput.value) {
                 fileInput.value.click();  // 通过 ref 触发文件选择
-                console.log('Avatar clicked');
+            }
+        }
+        const handleFileChange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const allowedTypes = ['image/jpeg', 'image/png'];
+                if (allowedTypes.includes(file.type)) {
+                    console.log('準備上傳');
+                    store.updateUserImage(file)
+                } else {
+                    console.log('圖片格式不符');
+                    event.target.value = '';
+                    Swal.fire({
+                        toast: false,
+                        position: 'top',
+                        icon: 'warning',
+                        iconColor: 'red',
+                        title: `請上傳JPEG或PNG檔案！`,
+                        timer: 1500,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    })
+                }
+            } else {
+                console.log('没有上傳圖片檔');
             }
         }
 
 
         return {
-            store,
-            cities,
-            selectedCity,
-            selectedDistrict,
-            currentDistricts,
-            validationErrors,
-            isSubmitting,
-            handleSubmit,
-            handleAvatarClick,
-            updateAddress,
-            updateDistricts,
-            fileInput
-        }
+        store,
+        cities,
+        selectedCity,
+        selectedDistrict,
+        currentDistricts,
+        validationErrors,
+        isSubmitting,
+        handleSubmit,
+        handleAvatarClick,
+        updateAddress,
+        updateDistricts,
+        fileInput,
+        handleFileChange
     }
+}
 }
 const cities = {
     台北市: ['中正區', '大安區', '士林區', '北投區', '內湖區', '南港區', '信義區', '文山區', '松山區', '大同區', '中山區'],

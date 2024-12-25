@@ -35,6 +35,9 @@ public class PointPrizesBean {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	private Date pointPrizesExpiration;
+
+
+	//不用進資料庫
 	@Transient
 	private String rewardsStatus;
 
@@ -42,7 +45,7 @@ public class PointPrizesBean {
     @Lob
 	private byte[] pointPrizesImg;
 
-      
+
 	public Integer getId() {
 		return id;
 	}

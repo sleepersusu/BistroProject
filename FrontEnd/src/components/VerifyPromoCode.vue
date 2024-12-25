@@ -2,17 +2,17 @@
   <div>
     <div class="card mt-4">
       <div class="card-body">
-        <h5 class="card-title mb-3">Apply Promo Code</h5>
+        <h5 class="card-title mb-3">輸入獎品兌換碼</h5>
         <div class="input-group mb-3">
           <input
             type="text"
             class="form-control"
-            placeholder="Enter promo code"
+            placeholder="獎品兌換碼"
             v-model="inputPromoCode"
             @keyup.enter="checkAndVerifyPromoCode"
           />
           <button class="btn btn-outline-secondary" type="button" @click="checkAndVerifyPromoCode">
-            Apply
+            傳送
           </button>
         </div>
       </div>

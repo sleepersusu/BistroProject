@@ -26,6 +26,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { Notifications } from '@kyvg/vue3-notification'
 import velocity from 'velocity-animate'
+import '@fortawesome/fontawesome-free/css/all.min.css'
+
 
 library.add(faUserSecret,fas,faEnvelope)
 
@@ -62,4 +64,5 @@ app.component('Form', Form)
 app.component('Field', Field)
 app.component('ErrorMessage', ErrorMessage)
 app.component('font-awesome-icon', FontAwesomeIcon)
+
 app.mount('#app')

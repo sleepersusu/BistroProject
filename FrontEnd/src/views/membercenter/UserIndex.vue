@@ -51,26 +51,11 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-center align-items-center" style="width: 150px;">
-                            <font-awesome-icon :icon="['fas', 'trophy']"size="5x" />
-                            
-                        </div>
-                        <div class="container">
-                            <h5 class="card-title">獎品兌換</h5>
-                            <p class="card-text">參加抽獎活動，贏得好禮相送。</p>
-                            <router-link class="btn btn-primary" to="/membercenter/lotteryresult">查看抽獎結果</router-link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-12 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center" style="width: 150px;">
                             <font-awesome-icon :icon="['fas', 'dice-five']"size="5x" />
                         </div>
                         <div class="container">
                             <h5 class="card-title">抽獎結果</h5>
-                            <p class="card-text">查看抽獎活動結果。</p>
+                            <p class="card-text">參加抽獎活動，查看抽獎活動結果，贏得好禮相送。</p>
                             <router-link class="btn btn-primary" to="/membercenter/lotteryresult">查看抽獎結果</router-link>
                         </div>
                     </div>

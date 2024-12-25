@@ -44,9 +44,6 @@ public class MenuController {
 			@RequestParam String productDescribe, @RequestParam Integer productCount,
 			@RequestParam Integer minproductCount, @RequestParam(defaultValue = "0.0") Double avgScore,
 			@RequestParam String menuStatus) throws IOException {
-		
-		
-		String type = "menu";
 
 		byte[] fileBytes = productImage.getBytes();
 		String originalFilename = productImage.getOriginalFilename();
@@ -54,10 +51,7 @@ public class MenuController {
 		Menu newMenu = new Menu();
 		newMenu.setProductCategory(productCategory);
 		newMenu.setProductName(productName);
-//		newMenu.setProductImg(fileBytes);
-		
-		
-		
+		newMenu.setProductImg(fileBytes);
 		newMenu.setProductPrice(productPrice);
 		newMenu.setProductDescribe(productDescribe);
 		newMenu.setProductImgUrl(originalFilename);
@@ -73,16 +67,12 @@ public class MenuController {
 		}
 
 		newMenu.setMenuStatus(menuStatus);
-		
 
 		menuService.createMenu(newMenu);
-		
-		imageService.imageUpload(type,newMenu.getID(),fileBytes);
-		
-		
 		return "redirect:/Bistro/findAllMenu";
 
 	}
+
 
 
 

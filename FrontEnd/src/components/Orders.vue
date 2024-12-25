@@ -136,39 +136,38 @@
                             >
                               <div class="d-flex align-items-center">
                                 <span>{{ item.odName }} x {{ item.odQuantity }}</span>
-                                <!-- 添加評論按鈕 -->
-                                    <button
-                                      @click.stop="openReviewModal(item)"
-                                      class="btn btn-link btn-sm text-primary p-0 ms-2"
-                                      v-if="order.latestPaymentStatus === '已付款'"
-                                    >
-                                      <i class="bi">
-                                        <font-awesome-icon v-bind:icon="['fas','fa-pen-fancy']" />
-                                      </i>
-                                    </button>
+                                  <!-- 添加評論按鈕 -->
+                                  <CommentPostButton
+                                    :item="item"
+                                    :order="order"
+                                    @open-add-commentmodal="handleOpenAddCommentModal"
+                                    :hidebutton="commentStatus[item.id]"
+                                  >
+                                  </CommentPostButton>
+                                </div>
+                                <span>NT$ {{ item.odSumPrice }}</span>
                               </div>
-                              <span>NT$ {{ item.odSumPrice }}</span>
-                            </div>
 
-                            <div class="d-flex justify-content-between mb-2">
-                              <strong>服務費 (10%)</strong>
-                              <strong>NT$ {{ calculateServiceFee(order.ordersNumber) }}</strong>
-                            </div>
+                              <div class="d-flex justify-content-between mb-2">
+                                <strong>服務費 (10%)</strong>
+                                <strong>NT$ {{ calculateServiceFee(order.ordersNumber) }}</strong>
+                              </div>
 
-                            <div class="border-top pt-2 mt-2">
-                              <strong>總計：</strong> NT$ {{ orderDetails[order.ordersNumber].ordersSumPrice }}
+                              <div class="border-top pt-2 mt-2">
+                                <strong>總計：</strong> NT$
+                                {{ orderDetails[order.ordersNumber].ordersSumPrice }}
+                              </div>
+                            </div>
+                          </div>
+                          <div v-else class="text-center py-3">
+                            <div class="spinner-border text-primary" role="status">
+                              <span class="visually-hidden">Loading...</span>
                             </div>
                           </div>
                         </div>
-                        <div v-else class="text-center py-3">
-                          <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </template>
+                      </td>
+                    </tr>
+                  </template>
                 </tbody>
               </table>
             </div>
@@ -179,11 +178,19 @@
                 Page {{ currentPage }} of {{ totalPages }}
               </p>
               <div class="ms-auto">
-                <button class="btn btn-sm btn-white mb-0 no-border" :disabled="currentPage === 1" @click="previousPage">
-                  <font-awesome-icon v-bind:icon="['fas','fa-angle-double-left']" />
+                <button
+                  class="btn btn-sm btn-white mb-0 no-border"
+                  :disabled="currentPage === 1"
+                  @click="previousPage"
+                >
+                  <font-awesome-icon v-bind:icon="['fas', 'fa-angle-double-left']" />
                 </button>
-                <button class=" btn btn-sm btn-white mb-0 no-border" :disabled="currentPage === totalPages" @click="nextPage">
-                  <font-awesome-icon v-bind:icon="['fas','fa-angle-double-right']" />
+                <button
+                  class="btn btn-sm btn-white mb-0 no-border"
+                  :disabled="currentPage === totalPages"
+                  @click="nextPage"
+                >
+                  <font-awesome-icon v-bind:icon="['fas', 'fa-angle-double-right']" />
                 </button>
               </div>
             </div>
@@ -192,6 +199,12 @@
       </div>
     </div>
   </div>
+
+  <CommentPostForm
+    ref="commentPostModal"
+    :item="currentItem"
+    @comment-submitted="handleCommentSubmitted"
+  ></CommentPostForm>
 </template>
 
 <script>
@@ -201,12 +214,15 @@ import { cartStore } from '@/stores/cartStore.js'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { orderStore } from '@/stores/orderStore.js'
-
+import CommentPostForm from './CommentPostForm.vue'
+import CommentPostButton from './CommentPostButton.vue'
 const user = useUserStore()
 export default {
   name: 'Orders',
-  components:{
-    FontAwesomeIcon
+  components: {
+    FontAwesomeIcon,
+    CommentPostForm,
+    CommentPostButton,
   },
   props: {
     orderItems: {
@@ -218,8 +234,10 @@ export default {
     return {
       currentPage: 1,
       pageSize: 10, // 每頁顯示數量
-      expandedOrders:[], // 存儲已展開的訂單編號
-      orderDetails: {},  // 存儲訂單詳情
+      expandedOrders: [], // 存儲已展開的訂單編號
+      orderDetails: {}, // 存儲訂單詳情
+      currentItem: {},
+      commentStatus: {},
     }
   },
   methods: {
@@ -227,15 +245,39 @@ export default {
 
     calculateServiceFee(ordersNumber) {
       const total = this.orderDetails[ordersNumber]?.ordersSumPrice || 0
-      const serviceFee = total / 1.1 * 0.1 // 假設總計金額已包含 10% 服務費
+      const serviceFee = (total / 1.1) * 0.1 // 假設總計金額已包含 10% 服務費
       return Math.round(serviceFee) // 四捨五入為整數
     },
 
-    openReviewModal(item) {
+    handleOpenAddCommentModal(event, item) {
       // 阻止事件冒泡，避免觸發展開/收起
       event.stopPropagation()
       // 這裡實現打開評論modal的邏輯
-      // this.$emit('open-review', item)
+      this.currentItem = {
+        id: item.id,
+        odName: item.odName,
+      }
+
+      this.$refs.commentPostModal.showModal()
+    },
+
+    //用來隱藏以評論按鈕
+    handleCommentSubmitted({ detailId, isCommented }) {
+      this.commentStatus[detailId] = isCommented
+      this.saveCommentStatus()
+      this.$refs.commentPostModal.hideModal()
+    },
+    // 添加保存方法
+    saveCommentStatus() {
+      localStorage.setItem('commentStatus', JSON.stringify(this.commentStatus))
+    },
+
+    // 添加讀取方法
+    loadCommentStatus() {
+      const savedStatus = localStorage.getItem('commentStatus')
+      if (savedStatus) {
+        this.commentStatus = JSON.parse(savedStatus)
+      }
     },
 
     async toggleOrderDetail(ordersNumber) {
@@ -253,7 +295,7 @@ export default {
               this.orderDetails[ordersNumber] = details
             }
           } catch (error) {
-            console.error('獲取訂單詳情失敗:', error);
+            console.error('獲取訂單詳情失敗:', error)
             // 如果獲取詳情失敗，從展開列表中移除
             const failedIndex = this.expandedOrders.indexOf(ordersNumber)
             if (failedIndex !== -1) {
@@ -289,8 +331,12 @@ export default {
     displayedOrders() {
       const start = (this.currentPage - 1) * this.pageSize
       const end = start + this.pageSize
-      return this.orderItems.slice(start,end)
-    }
+      return this.orderItems.slice(start, end)
+    },
+  },
+  created() {
+    // 載入保存的評論狀態
+    this.loadCommentStatus()
   },
 }
 </script>
