@@ -15,7 +15,12 @@
         </p>
         <ul class="list-unstyled">
           <li>💰 消費門檻：${{ props.campaign.minOrderAmount }}</li>
-          <li class="text-truncate">⏰ 截止日期：{{ formatDate(props.campaign.endDate) }}</li>
+          <li class="text-truncate" v-if="campaignStatus === 'NOT_STARTED'">
+            ⏰ 開始日期：{{ formatDate(props.campaign.startDate) }}
+          </li>
+          <li class="text-truncate" v-else>
+            ⏰ 截止日期：{{ formatDate(props.campaign.endDate) }}
+          </li>
           <li class="text-truncate">📢 {{ props.campaign.note }}</li>
         </ul>
       </div>

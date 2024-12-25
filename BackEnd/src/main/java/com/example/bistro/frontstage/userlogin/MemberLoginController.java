@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.members.MembersService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -35,7 +37,7 @@ public class MemberLoginController {
 			Members memberData = checkResult.get();
 			long currentTime = System.currentTimeMillis();
 			System.out.println("登入成功，建立Session");
-			httpSession.setMaxInactiveInterval(3600);//session存活時間sec
+			httpSession.setMaxInactiveInterval(10800);//session存活時間sec
 			httpSession.setAttribute("lastAccessTime", currentTime);
 			httpSession.setAttribute("membersId", memberData.getId());
 			//Session紀錄資訊
@@ -55,5 +57,17 @@ public class MemberLoginController {
 			response.put("status", "fail");
 			return ResponseEntity.status(404).body(response);
 		}
-    }		
+    }
+    
+    @GetMapping("/logout")
+    public ResponseEntity<Map<String, Object>> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Map<String, Object> response = new HashMap<>();
+        if (session != null) {
+            session.invalidate();  // 销毁 Session
+            System.out.println("登出銷毀Session");
+            response.put("status", "success");
+        }
+        return ResponseEntity.ok(response);
+    }
 }

@@ -26,44 +26,45 @@
     <!-- 商品卡片區塊 -->
     <div class="container my-5">
       <ul class="prize-list">
-        <li
-          v-for="prize in pointPrizes"
-          :key="prize.id"
-          class="prize-item"
-          :class="{ 'insufficient-points': memberPointTotal < prize.pointPrizesPoints }"
-        >
-          <div v-if="prize.rewardsStatus == '上架中'" class="card">
-            <img
-              :src="'data:image/jpeg;base64,' + prize.base64Image"
-              class="card-img-top"
-              alt="Prize Image"
-            />
-            <div class="card-body">
-              <div class="prize-header">
-                <h5 class="prize-title">{{ prize.pointPrizesName }}</h5>
-                <h5 class="prize-points">{{ prize.pointPrizesPoints }} 點</h5>
-              </div>
-              <p class="prize-description">{{ prize.pointPrizesDescription }}</p>
-              <div class="prize-footer">
-                <button
-                  class="btn"
-                  :class="
-                    memberPointTotal >= prize.pointPrizesPoints && prize.pointPrizesCount > 0
-                      ? 'btn-primary'
-                      : 'btn-secondary'
-                  "
-                  @click="redeemPrize(prize)"
-                  :disabled="
-                    memberPointTotal < prize.pointPrizesPoints || prize.pointPrizesCount === 0
-                  "
-                >
-                  {{ memberPointTotal >= prize.pointPrizesPoints ? '兌換商品' : '點數不足' }}
-                </button>
-                <span class="remaining-count">剩餘 {{ prize.pointPrizesCount }} 份</span>
+        <template v-for="prize in pointPrizes" :key="prize.id">
+          <li
+            v-if="prize.rewardsStatus == '上架中'"
+            class="prize-item"
+            :class="{ 'insufficient-points': memberPointTotal < prize.pointPrizesPoints }"
+          >
+            <div class="card">
+              <img
+                :src="'data:image/jpeg;base64,' + prize.base64Image"
+                class="card-img-top"
+                alt="Prize Image"
+              />
+              <div class="card-body">
+                <div class="prize-header">
+                  <h5 class="prize-title">{{ prize.pointPrizesName }}</h5>
+                  <h5 class="prize-points">{{ prize.pointPrizesPoints }} 點</h5>
+                </div>
+                <p class="prize-description">{{ prize.pointPrizesDescription }}</p>
+                <div class="prize-footer">
+                  <button
+                    class="btn"
+                    :class="
+                      memberPointTotal >= prize.pointPrizesPoints && prize.pointPrizesCount > 0
+                        ? 'btn-primary'
+                        : 'btn-secondary'
+                    "
+                    @click="redeemPrize(prize)"
+                    :disabled="
+                      memberPointTotal < prize.pointPrizesPoints || prize.pointPrizesCount === 0
+                    "
+                  >
+                    {{ memberPointTotal >= prize.pointPrizesPoints ? '兌換商品' : '點數不足' }}
+                  </button>
+                  <span class="remaining-count">剩餘 {{ prize.pointPrizesCount }} 份</span>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
+          </li>
+        </template>
       </ul>
     </div>
   </div>

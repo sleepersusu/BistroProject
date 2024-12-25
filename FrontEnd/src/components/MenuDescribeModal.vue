@@ -127,7 +127,11 @@
                 </span>
               </div>
 
-              <button class="btn btn-primary mt-3" @click="handleAddToCart(menu.id)">
+              <button
+                class="btn btn-primary mt-3"
+                style="text-wrap: nowrap"
+                @click="handleAddToCart(menu.id)"
+              >
                 Add to Cart
               </button>
             </div>
@@ -246,7 +250,6 @@ export default {
           Swal.fire({
             text: '成功加入購物車',
             icon: 'success',
-
           })
         } else {
           throw new Error('庫存更新失敗')

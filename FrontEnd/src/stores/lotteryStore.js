@@ -49,7 +49,7 @@ export const lotteryStore = defineStore('lottery', {
       }
     },
     async drawPrize(chanceId) {
-      const api = `${import.meta.env.VITE_API}/api/winner/${chanceId}`
+      const api = `${import.meta.env.VITE_API}/api/frontend/winner/${chanceId}`
       try {
         const res = await axios.post(api)
         this.winner = res.data

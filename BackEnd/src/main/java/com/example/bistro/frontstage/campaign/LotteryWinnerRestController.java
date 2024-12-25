@@ -31,7 +31,7 @@ public class LotteryWinnerRestController {
 		return ResponseEntity.ok(winner);
 	}
 	
-	@PostMapping("/api/winner/{chanceId}")
+	@PostMapping("/api/frontend/winner/{chanceId}")
 	public ResponseEntity<?> drawPrizeByChanceId(@PathVariable Integer chanceId) {
 		Map<String, Object> map = lotteryWinnerFrontService.drawPrize(chanceId);
 		return ResponseEntity.ok(map);

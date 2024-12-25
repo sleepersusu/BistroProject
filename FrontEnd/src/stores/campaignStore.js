@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { utils } from '@/mixins/utils'
 import axios from 'axios'
 
 export const campaignStore = defineStore('campaign', {
@@ -18,10 +19,19 @@ export const campaignStore = defineStore('campaign', {
           EXPIRED: 2,
         }
 
-        this.campaigns = res.data.sort((a, b) => b.id - a.id)
-        this.campaigns.sort((a, b) => {
-          return statusPriority[a.campaignStatus] - statusPriority[b.campaignStatus]
-        })
+        this.campaigns = res.data
+          .sort((a, b) => b.id - a.id)
+          .slice(0, 6)
+          .sort((a, b) => {
+            const statusDiff = statusPriority[a.campaignStatus] - statusPriority[b.campaignStatus]
+            if (statusDiff !== 0) return statusDiff
+
+            const { formatDate } = utils()
+            const dateA = new Date(formatDate(a.startDate))
+            const dateB = new Date(formatDate(b.startDate))
+
+            return dateB - dateA
+          })
 
         this.campaigns = await Promise.all(
           this.campaigns.map(async (campaign) => {

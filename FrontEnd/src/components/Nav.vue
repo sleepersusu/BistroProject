@@ -10,7 +10,9 @@
           class="circle-avatar d-block d-lg-none"
           v-on:click="triggerOffcanvas"
           :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"
-        ></div>
+          ></div>
+        <div>
+        </div>
         <button
           class="navbar-toggler"
           type="button"
@@ -71,6 +73,7 @@
                 v-on:click="triggerOffcanvas"
                 :style="{ backgroundImage: `url(${memberprofile?.userAvatar})` }"
               ></div>
+              
               <div class="d-flex align-items-center d-none d-lg-block">
                 <!-- 會員名稱 -->
                 <span class="text-light ms-2">{{ memberprofile.navName }}</span>
@@ -93,7 +96,7 @@ import { mapState, mapActions } from 'pinia'
 
 import { cartStore } from '@/stores/cartStore.js'
 
-import AvatarProfile from './AvatarProfile.vue';
+import AvatarProfile from './AvatarProfile.vue'
 import { pointStore } from '@/stores/pointStore'
 
 export default {
@@ -112,10 +115,10 @@ export default {
     ...mapState(cartStore, ['totalCartItems']),
   },
   methods: {
-    ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn']),
+    ...mapActions(useUserStore, ['setLoggedIn', 'checkLoggedIn','loadMemberData']),
     ...mapActions(lotteryStore, ['getAllChanceByMember']),
     ...mapActions(cartStore, ['getCart']),
-    ...mapActions(pointStore,['getMemberPoint']),
+    ...mapActions(pointStore, ['getMemberPoint']),
     navShadow() {
       requestAnimationFrame(() => {
         this.setShadow = window.scrollY > 100
@@ -132,8 +135,10 @@ export default {
       }
     },
 
-    triggerOffcanvas() {//觸發會員右側欄
+    triggerOffcanvas() {
+      //觸發會員右側欄
       const avatarProfileComponent = this.$refs.avatarProfile
+      this.loadMemberData(this.memberId)
       avatarProfileComponent.openOffcanvas()
     },
   },
@@ -141,7 +146,7 @@ export default {
     window.addEventListener('scroll', this.navShadow)
     this.navShadow()
     this.getAllChanceByMember()
-    this.memberprofile.navName=JSON.parse(localStorage.getItem('memberobj'))?.userName
+    this.memberprofile.navName = JSON.parse(localStorage.getItem('memberobj'))?.userName
   },
   unmounted() {
     window.removeEventListener('scroll', this.navShadow)
@@ -150,8 +155,8 @@ export default {
     // 監聽登入狀態變化
     async isLoggedIn(newValue) {
       if (newValue) {
-        await this.getCart();
-        await this.getMemberPoint();
+        await this.getCart()
+        await this.getMemberPoint()
       }
     },
   },

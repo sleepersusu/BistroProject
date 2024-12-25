@@ -23,12 +23,10 @@ public class BistroConfig {
     }
     
     @Bean
-    public FilterRegistrationBean<frontEndLoggingFilter> frontEndLoggingFilter() {
-    	FilterRegistrationBean<frontEndLoggingFilter> registrationBean = new FilterRegistrationBean<>();
-    	registrationBean.setFilter(new frontEndLoggingFilter());  // 註冊自定義的過濾器
-    	registrationBean.addUrlPatterns("/api/frontEnd");  // 配置過濾 URL 模式
-    	return registrationBean;
+    public FilterRegistrationBean<LoggingFrontEndFilter> loggingFrontEndFilter() {
+        FilterRegistrationBean<LoggingFrontEndFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new LoggingFrontEndFilter());  // 註冊自定義的過濾器
+        registrationBean.addUrlPatterns("/api/frontend/*");  // 配置過濾 URL 模式
+        return registrationBean;
     }
-    
-    
 }

@@ -21,7 +21,7 @@ public class ReservationRestController {
 	@Autowired
 	private TwilioService twilioService;
 
-	@PostMapping("/api/Bistro/insert")
+	@PostMapping("/api/insert")
 	public ResponseEntity<Map<String, Object>> insert(@RequestBody ReservationDTO dto) {
 
 		try {
@@ -43,7 +43,7 @@ public class ReservationRestController {
 		}
 	}
 
-	@PostMapping("/api/Bistro/remaining")
+	@PostMapping("/api/remaining")
 	public ResponseEntity<Map<String, Object>> remaining(@RequestBody ReservationDTO reservation) {
 		try {
 			List<String> availableTimeslots = testService.getAvailableTimeSlots(reservation.getReservationDate(),
@@ -65,7 +65,7 @@ public class ReservationRestController {
 		}
 	}
 
-	@PostMapping("/api/Bistro/send")
+	@PostMapping("/api/send")
 	public ResponseEntity<Map<String, Object>> submitReservation(@RequestBody ReservationDTO dto) {
 		try {
 			String contactPhone = dto.getContactPhone();
