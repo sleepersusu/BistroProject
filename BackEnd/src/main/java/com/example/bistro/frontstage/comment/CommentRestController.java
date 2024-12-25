@@ -50,6 +50,9 @@ public class CommentRestController {
 	
 	@Autowired
 	private CommentRepository commentRepo;
+	
+
+	
 
 	@PostMapping("/api/comment/postComment")
 	public ResponseEntity<?> createComment(@RequestBody CommentDTO dto, HttpSession httpSession) {
@@ -75,6 +78,13 @@ public class CommentRestController {
 
 	        // 創建評論物件並填充屬性
 	        Comment newComment = new Comment();
+	        
+	        Double newAvgScore = menuService.countOneMenuAvgScore(menu.getProductName());
+	        
+	        double roundedNewAvgScore=Math.round(newAvgScore * 10.0) / 10.0;
+	        
+	        menu.setAvgScore(roundedNewAvgScore);
+	        
 	        newComment.setMenu(menu);
 	        newComment.setMembers(member);
 	        newComment.setCommentMessage(dto.getCommentMessage());
@@ -210,12 +220,27 @@ public class CommentRestController {
 		if (ID == null) {
 			ResponseEntity.badRequest().body("評論ID無效");
 		}
-
+		
+		Comment comment = commentService.findCommentById(ID);
+		
+		String commentProduct = comment.getCommentProduct();
+		
+		Menu menu = menuService.findMenuByProductName(commentProduct);	
+		
 		boolean deleteComment = commentService.deleteComment(ID);
 
 		if (!deleteComment) {
 			ResponseEntity.status(HttpStatus.NOT_FOUND).body("未找到評論，刪除失敗");
 
+		}else {
+			Double newAvgScore = menuService.countOneMenuAvgScore(commentProduct);
+	        
+	        double roundedNewAvgScore=Math.round(newAvgScore * 10.0) / 10.0;
+	        
+	        menu.setAvgScore(roundedNewAvgScore);
+	        
+	        comment.setMenu(menu);
+			
 		}
 
 		return ResponseEntity.ok("評論已刪除");
@@ -256,6 +281,14 @@ public class CommentRestController {
 
 			Members members = op.get();
 
+			
+			Double newAvgScore = menuService.countOneMenuAvgScore(menu.getProductName());
+			
+			double roundedNewAvgScore=Math.round(newAvgScore * 10.0) / 10.0;
+	        
+	        menu.setAvgScore(roundedNewAvgScore);
+	        
+		
 			// 5. 更新評論資料
 			comment.setMenu(menu);
 			comment.setMembers(members);

@@ -65,6 +65,7 @@ import ModalMixin from '@/mixins/modalMixin-option'
 import StarRating from 'vue-star-rating'
 import LoadingVue from 'vue3-loading-overlay'
 import CommentModalBody from './CommentModalBody.vue'
+
 export default {
   components: {
     StarRating,
