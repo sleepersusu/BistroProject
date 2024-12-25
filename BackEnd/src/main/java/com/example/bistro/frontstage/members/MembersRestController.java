@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,14 +22,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api/frontend/members")
+@RequestMapping("/api")
 public class MembersRestController {
 	
 	@Autowired
 	private MemberFrontService memberFronetService;
 	
 	//新增會員帳號
-	@PostMapping("/create")
+	@PostMapping("/members/create")
 	public ResponseEntity<Map<String, String>> createMember(@RequestBody MembersDTO membersDTO) {
 		String userName = membersDTO.getUserName();
 		String userPhone = membersDTO.getUserPhone();
@@ -55,8 +56,8 @@ public class MembersRestController {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
 	}
-	
-	@GetMapping("/{id}")
+
+	@GetMapping("/frontend/members/{id}")
 	public ResponseEntity<Members> getMethodName(@PathVariable Integer id) {
 		Optional<Members> result = memberFronetService.findMemberById(id);
 		if(result.isPresent()) {
@@ -67,7 +68,7 @@ public class MembersRestController {
 		}
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/frontend/members/{id}")
 	public ResponseEntity<Map<String, String>> updateMemberProfile(@PathVariable Integer id, @RequestBody memberProfileDTO memberProfileDTO) {
 		Optional<Members> resultData = memberFronetService.findMemberById(id);
 		Map<String, String> response = new HashMap<>();
@@ -88,7 +89,7 @@ public class MembersRestController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/frontend/members/{id}")
 	public String name() {
 		return null;
 	}

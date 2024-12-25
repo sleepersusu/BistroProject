@@ -24,9 +24,8 @@ public class LoginFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 		HttpSession session = httpRequest.getSession(false);
-
+		System.out.println("Backend filter有取到"+session.getAttribute("loginId"));
 		if (session != null && session.getAttribute("loginId") != null) {
-			System.out.println("判斷session沒銷毀");
 			long maxInactiveInterval = session.getMaxInactiveInterval()* 1000; // 转换为毫秒
 			session.setAttribute("maxInactiveInterval", maxInactiveInterval);
 			long currentTime = System.currentTimeMillis();

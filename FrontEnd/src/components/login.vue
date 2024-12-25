@@ -12,12 +12,12 @@
                     <form v-on:submit.prevent="sendLogin" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">帳號</label>
-                            <input type="text" class="form-control" id="username" name="Account"
+                            <input type="text" class="form-control" id="username" name="account"
                                 value="user2@example.com" required />
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">密碼</label>
-                            <input type="password" class="form-control" id="password" name="Password" value="password2"
+                            <input type="password" class="form-control" id="password" name="password" value="password2"
                                 required />
                         </div>
                         <div class="d-flex justify-content-between">
@@ -65,7 +65,7 @@
                         </div>
                         <div class="mb-3">
                             <input type="text" class="form-control" id="userphone" name="userPhone" value=""
-                                placeholder="Phone" required>
+                                placeholder="Phone" maxlength="10" required>
                         </div>
                         <div class="mb-3">
                             <input type="text" class="form-control" id="useraccount" name="userAccount" value=""

@@ -28,8 +28,8 @@ public class MemberLoginController {
 	
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginPost(@RequestBody Map<String,String> userRequest,HttpSession httpSession) {
-    	String memberAccount = userRequest.get("Account");
-    	String memberPassword = userRequest.get("Password");
+    	String memberAccount = userRequest.get("account");
+    	String memberPassword = userRequest.get("password");
     	Optional<Members> checkResult = membersService.checkLogin(memberAccount, memberPassword);//撈這筆資料
 
     	Map<String, Object> response = new HashMap<>();
@@ -41,8 +41,7 @@ public class MemberLoginController {
 			httpSession.setAttribute("lastAccessTime", currentTime);
 			httpSession.setAttribute("membersId", memberData.getId());
 			//Session紀錄資訊
-			System.out.println(httpSession.hashCode());
-			System.out.println("session有取到"+httpSession.getAttribute("membersId"));
+			System.out.println("前台的session有取到"+httpSession.getAttribute("membersId"));
 			response.put("status", "success");
 			response.put("memberId", memberData.getId().toString());
 			response.put("memberName", memberData.getMemberName());

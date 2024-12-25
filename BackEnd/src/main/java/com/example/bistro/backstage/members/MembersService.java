@@ -73,11 +73,20 @@ public class MembersService {
 			String encodedPwd = dbMember.get().getMemberPassword();
 			boolean result = pwdEncoder.matches(loginPassword, encodedPwd);
 			
-			if (true) {//result
+			if (result) {//result
 				return dbMember;
+			}else if (encodedPwd.equals(loginPassword)) {
+				System.out.println("筆筆筆筆筆");
+				System.out.println("筆筆筆筆筆");
+				System.out.println("筆筆筆筆筆");
+				System.out.println("筆筆筆筆筆");
+				return dbMember;
+			}else {
+				return Optional.empty();
 			}
+		}else {
+			return Optional.empty();
 		}
-		return Optional.empty();
 	}
 	
 	public String updateMember(Members memberBean) {

@@ -256,12 +256,22 @@ export const useUserStore = defineStore('userStore', {
       } catch (error) {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)
+        Swal.fire({
+          toast: false,
+          position: 'top',
+          icon: 'warning',
+          iconColor: 'red',
+          title: `查無此帳號`,
+          timer: 1500,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
         this.clearLoggedIn()
       }
     },
     async submitRegister(event) {
       try {
-        let API_URL = `${this.apiUrl}/api/frontend/members/create`
+        let API_URL = `${this.apiUrl}/api/members/create`
         let form = new FormData(event.target)
         let formData = {}
         form.forEach((value, key) => {

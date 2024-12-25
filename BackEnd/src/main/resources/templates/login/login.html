@@ -59,7 +59,7 @@
 					<i class="bx bxs-user"></i>
 				</div>
 				<div class="input-box">
-					<input type="password" name="employeePassword" placeholder="密碼" required />
+					<input type="password" id="password" name="employeePassword" placeholder="密碼" required />
 					<i class="fa-solid fa-eye" id="lock" style="cursor: pointer"></i>
 				</div>
 				<div class="remember-forget">
@@ -74,14 +74,15 @@
 		document.getElementById("lock").addEventListener("click", () => {
 			let input = document.getElementById("password");
 			let iTag = document.getElementById("lock");
-
-			if (input.type === "password" && iTag.classList.contains("fa-eye")) {
-				input.type = "text";
 				iTag.classList.remove("fa-eye");
+				iTag.classList.remove("fa-eye-slash");
+			if (input.type == "password" ) {
+				input.type = "text";
+			    console.log('觸發眼睛換斜線')
 				iTag.classList.add("fa-eye-slash");
 			} else {
 				input.type = "password";
-				iTag.classList.remove("fa-eye-slash");
+				console.log('觸發眼睛無斜線')
 				iTag.classList.add("fa-eye");
 			}
 		});
