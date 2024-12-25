@@ -61,7 +61,6 @@ public class LotteryWinners {
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-
 	@JoinColumn(name = "prizeId")
 	private CampaignPrizes campaignPrizes;
 	

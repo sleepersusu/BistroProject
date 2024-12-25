@@ -23,6 +23,8 @@ import com.example.bistro.backstage.menu.MenuService;
 import com.example.bistro.backstage.reservations.Reservations;
 import com.example.bistro.backstage.reservations.ReservationsRepository;
 import com.example.bistro.backstage.shippingDetails.ShippingDetails;
+import com.example.bistro.frontstage.promoCode.PromoCodeDTO;
+import com.example.bistro.frontstage.promoCode.PromoCodeService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linecorp.bot.client.LineMessagingClient;
@@ -46,6 +48,7 @@ public class LineMessageService {
    private final ReservationsRepository reservationsRepo;
    private final PointsTotalRepository pointsTotalRepo;
    private final MenuService menuService;
+   private final PromoCodeService promoCodeService;
 
    public void processWebhookEvent(String body) throws Exception {
        JsonNode jsonNode = objectMapper.readTree(body);
@@ -161,6 +164,12 @@ public class LineMessageService {
        lineMember.setMember(member);
        lineMember.setLineUserId(userId);
        lineMemberRepo.save(lineMember);
+       
+       PromoCodeDTO promoCodeDTO = new PromoCodeDTO();
+       promoCodeDTO.setMemberId(member.getId());
+       promoCodeDTO.setPointPrizesId(1);
+       promoCodeDTO.setPromoCode("4KEFIJ");
+       promoCodeService.createPromoCode(promoCodeDTO);
 
        String memberName = member.getMemberName();
        String message = String.format(
