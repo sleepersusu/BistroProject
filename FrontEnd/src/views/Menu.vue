@@ -244,12 +244,6 @@ export default {
       },
       deep: true,
     },
-    'menus.length': {
-      handler(newLength) {
-        this.loadAllMenu() // 當 menus 長度變化時，重新加載菜單
-      },
-      immediate: true, // 初始化時會立刻執行一次
-    },
   },
   created() {
     this.loadAllMenu() // 組件創建時執行一次菜單加載

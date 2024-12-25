@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.bistro.backstage.employee.EmployeeRepository;
 import com.example.bistro.backstage.members.MembersRepository;
+import com.example.bistro.backstage.members.MembersService;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.menu.MenuRepository;
 import com.example.bistro.backstage.payment.Payment;
@@ -42,6 +43,9 @@ public class OrdersController {
     private EmployeeRepository employeeRepositoryDao;
     @Autowired
     private MenuRepository menuRepositoryDao;
+    
+    @Autowired
+    private MembersService membersService;
 
     //findAll orders
         @GetMapping("/Bistro/Orders/findAll")
@@ -100,6 +104,11 @@ public class OrdersController {
         orders.setSeatType(seatType);
         orders.setOrdersSumPrice(ordersSumPrice);
         orders.setPointGetted(ordersSumPrice / 100);
+        if(memberId !=null) {
+        	Members memberData = membersService.findMembersById(memberId);
+        	Integer PointDate = memberData.getMemberPoint();
+        	memberData.setMemberPoint(PointDate+(ordersSumPrice / 100));       	
+        }
         orders.setOrdersRequest(ordersRequest);
 
         // 處理會員資訊

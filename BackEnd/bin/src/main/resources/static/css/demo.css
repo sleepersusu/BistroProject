@@ -149,15 +149,29 @@ header{
     text-align: end;
     width: 85%;
     position: fixed;
+    display: flex;
+    justify-content: flex-end;
     align-content: center;
-    padding-bottom: 10px;
+    padding: 10px;
     z-index:1;
 }
 
+.Timebox{
+padding-left: 15px;
+padding-right: 15px;
+transform: scale(0.95);  /* 将元素缩小 */
+transform-origin: center;  /* 保证缩放从中心开始 */
+border-radius: 18px;
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: 0 0 0 0.7px black;
+margin-right: 5px;
+}
 
 header button{
     margin-right: 50px;
-    margin-top: 10px;
+
     width: 53px;
     height: 35px;
     border-radius: 5px;
@@ -166,19 +180,20 @@ header button{
 
 header button:hover,.dataButton:hover{
     background-color:gray;
-    color : white;
+    color : black;
 }
 /* main header 登出 CSS設定結束 ----------*/
 
-h2{
+main h2{
     margin-top: 10px;
 }
 
 
 main{
-    width: 90%;
-    padding-left: 100px;
+    width: 100%;
+    padding-left: 150px;
     padding-top:60px;
+    padding-bottom: 5%;
     z-index: 0.9;
 }
 
@@ -263,7 +278,8 @@ td img{
 
 
 footer{
-    margin-top: 100px;
+    position: sticky;
+    bottom: 0;
     background-color: lightgray;
     border-top: 1px gray solid;
     text-align: center;
@@ -357,7 +373,7 @@ div.dt-container .dt-paging .dt-paging-button {
 /* 頁數 */
 
 .dt-layout-cell.dt-layout-end{
-    margin-right: 100px;
+    margin-right: 115px;
 }/* 搜尋區容器 */
 
 div.dt-container .dt-search input{ 
@@ -392,10 +408,6 @@ text-align: left;
 /*------------------------------- datatable套件不要動 -------------------------------------*/
 
 /* form */
-
-fieldset{
-	padding: 0rem 1rem;
-}
 
 
 body .modal {
@@ -564,116 +576,15 @@ body .modal .modal-content {
 	background-color: #F0F0F0;
 }
 
-
-
-body {
-	font-family: "Noto Sans TC", sans-serif;
+.ellipsis {
+    white-space: nowrap;         /* 防止换行 */
+    overflow: hidden;            /* 隐藏溢出的内容 */
+    text-overflow: ellipsis;     /* 显示省略号 */
+}
+.center {
+text-align: center;
 }
 
-#edit, #delete,#recover {
-	padding: 0.3rem 0.75rem;
-	cursor: pointer;
-	color: white;
-	border: none;
-	border-radius: 10px
+fieldset{
+	padding: 0.5rem 1rem ;
 }
-
-#edit {
-	background-color: #0071e3;
-	margin-bottom: 0.3rem;
-}
-
-#edit:hover {
-	background-color: #2894FF;
-}
-
-#delete {
-	background-color: #CE0000;
-}
-
-#delete:hover {
-	background-color: #FF5151;
-}
-
-
-
-#recover {
-	background-color: green;
-	margin-bottom: 0.3rem;
-}
-
-#recover:hover {
-	background-color: lightgreen;
-}
-
-#dt-search-0 {
-	margin-right: 2rem
-}
-
-#dt-search-0:focus {
-	outline: none;
-}
-
-#addData {
-	padding: 0.5rem 1.25rem !important;
-	font-size: 1rem !important;
-	width: auto;
-	height: auto;
-	color: white;
-	background-color: #0071e3;
-	border: none;
-	border-radius: 0;
-	font-weight: normal;
-}
-
-#addData:hover {
-	background-color: #2894FF;
-}
-
-.modal-content {
-	min-width: 700px;
-	height: 700px;
-	overflow: auto;
-}
-
-body .modal .modal-content form textarea {
-	width: 350px
-}
-
-#save {
-	background-color: #0071e3;
-	border-radius: 10px;
-	color: white;
-	width: auto;
-	border: none;
-	font-size: 1rem;
-	padding: 0.4rem 2rem;
-}
-
-#save:hover {
-	background-color: #2894FF;
-}
-
-#reset {
-	border-radius: 10px;
-	background-color: white;
-	color: #0071e3;
-	border: 1px solid #0071e3;
-	height: auto;
-	width: auto;
-	font-size: 1rem;
-	padding: 0.3rem 2rem;
-}
-
-#reset:hover {
-	text-decoration: none;
-}
-
-#buttonbox {
-	margin-top: 0.5rem
-}
-
-.out-of-stock{
-	color:red;
-}
-

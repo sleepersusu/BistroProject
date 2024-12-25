@@ -173,14 +173,16 @@ body .modal .modal-content form textarea {
 										<td th:text="${reservations.id}"></td>
 										<td th:text="${reservations.formattedId}"></td>
 										<td th:text="${reservations.customerName}"></td>
-										<td th:text="${#strings.equals(reservations?.customerGender, '0') ? '男' : '女'}"></td>
-										
+										<td th:text="${#strings.equals(reservations?.customerGender, '0') ? '男' : '女'}"></td>										
 										<td th:text="${reservations.contactPhone}"></td>
 										<td th:text="${#dates.format(reservations.reservationDate, 'yyyy-MM-dd')}"></td>
 										<td th:text="${reservations.startTime}"></td>
 										<td th:text="${reservations.numberPeople}"></td>
 										<td th:text="${reservations.notes}"></td>
-										<td th:text="${reservations.reservationStatus}"></td>
+										<td th:text="${reservations.reservationStatus}"
+										th:style="'color:'+(${reservations.reservationStatus} == '已確認' ? '#0072E3' : 'red')"
+										></td>
+										
 										<td th:text="${reservations.createdAt}"></td>
 
 										<td>
