@@ -239,7 +239,7 @@ export default {
         const formattedDate = commentTime.replace('T', ' ') + ':00'
         updatedComment.commentTime = formattedDate
 
-        const API_URL = `${import.meta.env.VITE_API}/api/put/comment/${this.comment.id}`
+        const API_URL = `${import.meta.env.VITE_API}/api/frontend/put/comment/${this.comment.id}`
         console.log(this.comment.id)
         try {
           // 發送 PUT 請求並傳遞更新的評論資料

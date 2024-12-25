@@ -6,11 +6,13 @@
     <!-- 登入顯示區塊 -->
 
     <!-- 未登入提示 -->
-    <div v-if="!user.memberId" class="d-flex justify-content-center align-items-center flex-column my-5">
+    <div
+      v-if="!user.memberId"
+      class="d-flex justify-content-center align-items-center flex-column my-5"
+    >
       <i class="bi bi-person-exclamation display-1 mb-3"></i>
       <h3 class="mb-4">尚未登入會員</h3>
     </div>
-
 
     <!-- 點數顯示區塊 -->
     <div class="container text-center my-4">
@@ -73,7 +75,11 @@ import PointTotal from '@/components/PointTotal.vue'
 import { useUserStore } from '@/stores/userStore'
 import login from '@/components/login.vue'
 import { pointStore } from '@/stores/pointStore'
-import { mapActions,mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
+import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2'
+
+const router = useRouter()
 
 const user = useUserStore()
 
@@ -91,7 +97,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(pointStore,['getMemberPoint']),
+    ...mapActions(pointStore, ['getMemberPoint']),
     generateRandomCode() {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       let result = ''
@@ -175,6 +181,14 @@ export default {
             timer: 5000,
             showConfirmButton: false,
             timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('click', () => {
+                this.$router.push('/membercenter/MerberOwnPrize')
+                Swal.close()
+              })
+              toast.style.cursor = 'pointer'
+
+            },
           })
           this.getPointPrizes()
           this.getMemberPoint()
@@ -190,14 +204,12 @@ export default {
       }
     },
   },
-  watch: {
-
-  },
+  watch: {},
   computed: {
-    ...mapState(pointStore,['memberPointTotal']),
+    ...mapState(pointStore, ['memberPointTotal']),
     user() {
       return user
-    }
+    },
   },
   created() {
     this.getPointPrizes()

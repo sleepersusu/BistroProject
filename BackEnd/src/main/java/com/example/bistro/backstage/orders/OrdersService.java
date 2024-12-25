@@ -2,6 +2,8 @@ package com.example.bistro.backstage.orders;
 
 import com.example.bistro.backstage.members.MembersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,6 +57,13 @@ public class OrdersService {
                 }
                 return false;  // 如果訂單不存在，返回 false
             }
+
+        // Add this method for pagination
+            public Page<Orders> findOrdersWithPagination(Pageable pageable) {
+                return ordersRepository.findAll(pageable);
+            }
+
+
 
 
 
