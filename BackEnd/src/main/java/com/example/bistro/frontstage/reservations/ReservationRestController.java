@@ -21,7 +21,7 @@ public class ReservationRestController {
 	@Autowired
 	private TwilioService twilioService;
 
-	@PostMapping("/api/frontend/insert")
+	@PostMapping("/api/insert")
 	public ResponseEntity<Map<String, Object>> insert(@RequestBody ReservationDTO dto) {
 
 		try {
@@ -65,7 +65,7 @@ public class ReservationRestController {
 		}
 	}
 
-	@PostMapping("/api/frontend/send")
+	@PostMapping("/api/send")
 	public ResponseEntity<Map<String, Object>> submitReservation(@RequestBody ReservationDTO dto) {
 		try {
 			String contactPhone = dto.getContactPhone();
