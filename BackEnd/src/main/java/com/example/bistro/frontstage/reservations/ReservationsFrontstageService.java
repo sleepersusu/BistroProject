@@ -3,7 +3,10 @@ package com.example.bistro.frontstage.reservations;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.bistro.backstage.reservations.Reservations;
@@ -21,20 +24,33 @@ public class ReservationsFrontstageService {
 
 	public Reservations insert(ReservationDTO dto) {
 
+		Map<String, String> errors = new HashMap<>();
+		
 		if (dto.getCustomerName() == null || dto.getCustomerName().trim().isEmpty()) {
-		    throw new IllegalArgumentException("姓名不能為空白");
+			 errors.put("customerName", "姓名不能為空白");
 		} else if (dto.getCustomerName().length() > 15) {
-		    throw new IllegalArgumentException("姓名不能超過15個字元");
-		} else if (!dto.getCustomerName().matches("^[\\u4e00-\\u9fa5]{1,15}$")) {
-		    throw new IllegalArgumentException("姓名只能包含中文字符，且長度不能超過15個字元");
+			  errors.put("customerName", "姓名不能超過15個字元");
+		}
+		if (dto.getCustomerGender() == null) {
+			 errors.put("customerGender", "請你選擇性別");
+		}
+		if (dto.getNumberPeople() == 0) {
+			  errors.put("numberpeople", "請你選擇人數");		
 		}
 		if (dto.getContactPhone() == null || !dto.getContactPhone().matches("^09\\d{8}$")) {
-		    throw new IllegalArgumentException("電話號碼必須是09開頭，且包含10個數字");
+			errors.put("contactPhone", "電話號碼必須是09開頭，且包含10個數字");
+		}
+		if (dto.getReservationDate() == null) {
+			 errors.put("reservationDate", "請你選擇訂位日期");
 		}
 		if (dto.getStartTime() == null) {
-			throw new IllegalArgumentException("請你選擇訂位時段");
+			  errors.put("startTime", "選擇的時段無效，請選擇可用的時段");		
 		}
-
+		
+		 if (!errors.isEmpty()) {
+		        throw new IllegalArgumentException(errors.toString());
+		    }
+		 
 		Reservations reservations = new Reservations();
 		reservations.setCustomerName(dto.getCustomerName());
 		reservations.setCustomerGender(dto.getCustomerGender());
