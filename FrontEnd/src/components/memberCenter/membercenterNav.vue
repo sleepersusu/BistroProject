@@ -25,9 +25,7 @@
 
       <li class="nav-item">
         <router-link to="/membercenter/lotteryresult" class="nav-link">
-
           <span class="icon-circle"><i class="bi bi-dice-6-fill"></i></span> 抽獎結果
-
         </router-link>
       </li>
 
@@ -95,7 +93,7 @@ export default {
 }
 
 .nav-link:hover .icon-circle {
-  background-color: #007bff;
+  background-color: #ffc107;
 }
 
 .membernav {
