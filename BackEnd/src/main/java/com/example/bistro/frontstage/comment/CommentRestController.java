@@ -54,7 +54,7 @@ public class CommentRestController {
 
 	
 
-	@PostMapping("/api/comment/postComment")
+	@PostMapping("/api/frontend/comment/postComment")
 	public ResponseEntity<?> createComment(@RequestBody CommentDTO dto, HttpSession httpSession) {
 	    try {
 	        // 從 session 中取得會員 ID
@@ -119,7 +119,7 @@ public class CommentRestController {
 
 	
 
-	@GetMapping("/api/member/comment") // 根據會員取得評論
+	@GetMapping("/api/frontend/member/comment") // 根據會員取得評論
 	public ResponseEntity<?> findAllCommentByMember(HttpSession httpSession) {
 
 //		 從 HttpSession 獲取會員 ID
@@ -209,7 +209,7 @@ public class CommentRestController {
 	}
 
 	@Transactional
-	@DeleteMapping("/api/Bistro/deleteComment/{ID}")
+	@DeleteMapping("/api/frontend/Bistro/deleteComment/{ID}")
 	public ResponseEntity<String> deleteComment(@PathVariable Integer ID, HttpSession httpSession) {
 
 		Integer memberId = (Integer) httpSession.getAttribute("membersId");
@@ -249,7 +249,7 @@ public class CommentRestController {
 	}
 
 	@Transactional
-	@PutMapping("/api/put/comment/{ID}")
+	@PutMapping("/api/frontend/put/comment/{ID}")
 	public ResponseEntity<Map<String, Object>> updateComment(@PathVariable Integer ID, @RequestBody CommentDTO dto,
 			HttpSession httpSession) {
 		try {
