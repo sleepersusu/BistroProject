@@ -4,7 +4,7 @@
       <!-- 左側：用戶圖片和名稱 -->
       <div class="col-md-3 d-flex flex-column align-items-center">
         <section class="avatar-container">
-          <img :src="memberSrc" alt="" class="avatar" />
+          <img :src="memberSrc" alt="" class="avatar" @error="memberSrc = 'public/images/avatar.jpg'"/>
         </section>
 
         <section>
