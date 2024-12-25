@@ -26,6 +26,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { Notifications } from '@kyvg/vue3-notification'
 import velocity from 'velocity-animate'
+import '@fortawesome/fontawesome-free/css/all.min.css'
+
 
 library.add(faUserSecret,fas,faEnvelope)
 

@@ -81,6 +81,7 @@ public class CommentRestController {
 	        newComment.setCommentProduct(dto.getCommentProduct());
 	        newComment.setCommentRating(dto.getCommentRating());
 	        newComment.setCommentTime(new Date()); // 設定當前時間
+	        commentService.updateCommentAndMenuScore(newComment, menu);
 
 	        // 保存評論到資料庫
 	        Comment savedComment = commentRepo.save(newComment);

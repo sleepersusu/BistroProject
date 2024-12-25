@@ -18,6 +18,8 @@ import com.example.bistro.backstage.lotteryWinners.LotteryWinners;
 import com.example.bistro.backstage.lotteryWinners.LotteryWinnersRepository;
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.members.MembersRepository;
+import com.example.bistro.backstage.menu.Menu;
+import com.example.bistro.backstage.menu.MenuService;
 import com.example.bistro.backstage.reservations.Reservations;
 import com.example.bistro.backstage.reservations.ReservationsRepository;
 import com.example.bistro.backstage.shippingDetails.ShippingDetails;
@@ -43,6 +45,7 @@ public class LineMessageService {
    private final CampaignFrontService campaignFrontService;
    private final ReservationsRepository reservationsRepo;
    private final PointsTotalRepository pointsTotalRepo;
+   private final MenuService menuService;
 
    public void processWebhookEvent(String body) throws Exception {
        JsonNode jsonNode = objectMapper.readTree(body);
@@ -92,6 +95,8 @@ public class LineMessageService {
                    case "#紅利點數":
                        handleViewPoints(userId);
                        break;
+                   case "#熱門餐點":
+                	   handleViewDishes(userId);
                }
            }
        }
@@ -185,41 +190,106 @@ public class LineMessageService {
 
        String message = formatPrizeHistory(winners);
        sendLineMessage(userId, message);
-   }
+   }   
+   
 
    private String formatPrizeHistory(List<LotteryWinners> winners) {
-       StringBuilder sb = new StringBuilder();
-       sb.append("您的中獎紀錄如下：\n\n");
-       
-       int count = 0;
-       for (LotteryWinners winner : winners) {
-           if (count >= 3) break;
-           
-           sb.append("🎈活動名稱：").append(winner.fetchCampaignName()).append("\n");
-           sb.append("🎁 獎品：").append(winner.fetchPrizeName()).append("\n");
-           
-           ShippingDetails details = winner.getShippingDetails();
-           if (details != null ) {
-        	   if(details.getIsSend()) {
-        		   sb.append("📦 狀態：已出貨\n");
-        	   }else if(details.getLotteryWinner().isShippingCompleted()) {
-        		   sb.append("⏳ 狀態：處理中\n");
-        	   }               
-               sb.append("🏠 配送地址：").append(details.getAddress()).append("\n");
-           } else {
-               sb.append("⏳ 狀態：待處理\n");
-           }
-           sb.append("\n");
-           count++;
-       }
-       
-       if (winners.size() > 3) {
-           sb.append("還有 ").append(winners.size() - 3).append(" 筆更早的中獎紀錄\n");
-       }
-       
-       sb.append("感謝您的參與！");
-       return sb.toString();
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("🏆 您的中獎紀錄 🏆\n");
+	    sb.append("───────────────\n\n");
+
+	    int count = 0;
+	    for (LotteryWinners winner : winners) {
+	    	
+	    	if(winner.fetchPrizeName().equals("銘謝惠顧")) {
+	    		continue;
+	    	}
+	    	
+	        if (count >= 3) break;
+
+	        sb.append("🌟 活動名稱\n")
+	          .append("   ").append(winner.fetchCampaignName()).append("\n\n");
+	        
+	        sb.append("🎉 獎品內容\n")
+	          .append("   ").append(winner.fetchPrizeName()).append("\n\n");
+
+	        ShippingDetails details = winner.getShippingDetails();
+	        if (details != null) {
+	            if (details.getIsSend()) {
+	                sb.append("📦 配送狀態\n")
+	                  .append("   配送中\n\n");
+	            } else if (details.getLotteryWinner().isShippingCompleted()) {
+	                sb.append("📝 配送狀態\n")
+	                  .append("   已收到配送資訊\n\n");
+	            }
+	            sb.append("📍 配送地址\n")
+	              .append("   ").append(details.getAddress()).append("\n");
+	        } else {
+	            sb.append("⚠️ 配送狀態\n")
+	              .append("   待填寫配送資訊\n");
+	        }
+
+	        if (count < 2 && winners.size() > count + 1) {
+	            sb.append("\n━━━━━━━━━━━━━━━\n\n");
+	        }
+	        count++;
+	    }
+
+	    if (winners.size() > 3) {
+	        sb.append("\n💫 還有 ").append(winners.size() - 3).append(" 筆更早的中獎紀錄");
+	    }
+
+	    sb.append("\n\n🙏 感謝您的參與！");
+	    return sb.toString();
+	}
+   
+   private void handleViewDishes(String userId) throws Exception {
+	   List<Menu> topThreeMenu = menuService.findTopThreeMenu();
+	   
+	   if(topThreeMenu.isEmpty()) {
+		   String message = "目前還沒有餐點上排名，請持續關注我們的最新消息！";
+		   sendLineMessage(userId, message);
+		   return;
+	   }
+	   
+	   String message = formatTopDishes(topThreeMenu);
+       sendLineMessage(userId, message);	   
    }
+   
+   private String formatTopDishes(List<Menu> topThreeMenu) {
+	    StringBuilder message = new StringBuilder("🏆 本店人氣排行榜 TOP 3 🏆\n\n");
+	    
+	    for (int i = 0; i < topThreeMenu.size(); i++) {
+	        Menu menu = topThreeMenu.get(i);
+	        
+	        String rankEmoji = (i == 0) ? "🥇" : (i == 1) ? "🥈" : "🥉";
+	        
+	        message.append(rankEmoji)
+	              .append(" 第").append(i + 1).append("名：")
+	              .append(menu.getProductName()).append("\n")
+	              .append("類別：").append(menu.getProductCategory()).append("\n")
+	              .append("價格：$").append(menu.getProductPrice()).append("\n")
+	              .append("介紹：").append(menu.getProductDescribe()).append("\n")
+	              .append("評分：").append(formatScore(menu.getAvgScore())).append("\n\n");
+	    }
+	    
+	    message.append("快來品嚐我們的人氣美食吧！😋\n\n");
+	    message.append("📌 線上菜單：http://nightlysips.com/menu\n");
+	    message.append("☎️ 訂位專線：02-2345-6789");
+	    return message.toString();
+	}
+
+	
+	private String formatScore(double score) {
+	    StringBuilder stars = new StringBuilder();
+	    int fullStars = (int) score;
+	    
+	    for (int i = 0; i < fullStars; i++) {
+	        stars.append("⭐");
+	    }
+	    
+	    return stars.toString();
+	}
 
    private void handleViewActiveCampaign(String userId) throws Exception {
        List<Campaign> activeCampaigns = campaignFrontService.findActiveCampaign();
