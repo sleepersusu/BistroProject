@@ -270,11 +270,11 @@ export default {
         this.validatePeople();
         this.validateTime();
 
-        const api = `${import.meta.env.VITE_API}/api/frontend/insert`
+        const api = `${import.meta.env.VITE_API}/api/insert`
         const response = await this.axios.post(api, this.reservations)
         if (response.data.success) {
           //發送簡訊要取得的資料
-          const confirmationApi = `${import.meta.env.VITE_API}/api/frontend/send`
+          const confirmationApi = `${import.meta.env.VITE_API}/api/send`
           const reservationData = {
             contactPhone: this.reservations.contactPhone,
             reservationDate: this.reservations.reservationDate,
