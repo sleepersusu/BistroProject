@@ -22,7 +22,7 @@
           <div v-if="noComment">
             <div class="container">
               <div class="row">
-                <h4 style="text-align: center; padding-top:10px;">目前沒有評論</h4>
+                <h4 style="text-align: center; padding-top: 10px">目前沒有評論</h4>
               </div>
             </div>
           </div>
@@ -117,6 +117,7 @@ export default {
         })
         .catch((error) => {
           console.error('Error loading comments:', error)
+          this.noComment = true
         })
         .finally(() => {
           this.isLoading = false
