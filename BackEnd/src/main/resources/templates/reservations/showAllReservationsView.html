@@ -208,7 +208,7 @@ body .modal .modal-content form textarea {
 
 
 											<form
-												th:action="@{/Bistro/deleteReservations(id=${reservations.Id})}"
+												th:action="@{/Bistro/deleteReservations(id=${reservations.id})}"
 												method="post" style="display: inline;">
 												<input type="hidden" name="reservationsId"
 													th:value="${reservations.Id}">
@@ -321,13 +321,13 @@ body .modal .modal-content form textarea {
 						<!-- 區域1 -->
 						<legend>訂位資訊</legend>
 
-						<label for="id2"></label> <input type="hidden" name="id" id="id2"
+						<label for="id2"></label> <input type="hidden" name="id2" id="id2"
 							readonly>
 
 						<div class="question">
 							<label for="customerName2" class="title">姓名</label> <input
 								type="text" id="customerName2" name="customerName2" value=""
-								placeholder="請輸入姓名" required aria-required="true" />
+								placeholder="請輸入姓名"  />
 						</div>
 
 						<div class="question">
@@ -341,20 +341,19 @@ body .modal .modal-content form textarea {
 						<div class="question">
 							<label for="contactPhone2" class="title">電話</label> <input
 								type="tel" id="contactPhone2" name="contactPhone2" value=""
-								placeholder="請輸入電話號碼" maxlength="10" required
-								aria-required="true" />
+								placeholder="請輸入電話號碼" maxlength="10"  />
 						</div>
 
 
 						<div class="question">
 							<label for="reservationDate2" class="title">日期</label> <input
 								type="date" id="reservationDate2" name="reservationDate2"
-								value="" required aria-required="true" />
+								value=""  />
 						</div>
 
 						<div class="question">
 							<label for="startTime2" class="title">時間</label> <select
-								id="startTime2" name="startTime2" required aria-required="true">
+								id="startTime2" name="startTime2" >
 								<option value="0" selected>選擇時間</option>
 								<option value="18:00">18:00</option>
 								<option value="20:00">20:00</option>
@@ -365,13 +364,13 @@ body .modal .modal-content form textarea {
 						<div class="question">
 							<label for="numberPeople2" class="title">訂位人數</label> <input
 								type="number" id="numberPeople2" name="numberPeople2" value=""
-								placeholder="人數" min="1" max="8" required aria-required="true" />
+								placeholder="人數" min="1" max="8"  />
 						</div>
 
 						<div class="question">
 							<label for="reservationStatus2" class="title">狀態</label> <input
 								type="text" id="reservationStatus2" name="reservationStatus2"
-								value="" placeholder="已確認 未確認 已取消" required aria-required="true" />
+								value="" placeholder="已確認 未確認 已取消"  />
 						</div>
 
 						<div class="question">
@@ -436,14 +435,13 @@ body .modal .modal-content form textarea {
         }
       };
       
-      function openEditModal(reservations) {
-      
+      function openEditModal(reservations) {    	
       	const gender = reservations.customerGender;
     	document.getElementById("addEventModal2").style.display = "block";
     	document.getElementById("id2").value =reservations.id;
 	   	document.getElementById("customerName2").value = reservations.customerName;
 	    document.getElementById("contactPhone2").value = reservations.contactPhone;
-	    document.getElementById("reservationDate2").value = reservations.reservationDate;
+		document.getElementById("reservationDate2").value = reservations.reservationDate;
 	    document.getElementById("startTime2").value = reservations.startTime;    
 	    document.getElementById("numberPeople2").value = reservations.numberPeople;
 	    document.getElementById("notes2").value = reservations.notes;
@@ -453,12 +451,8 @@ body .modal .modal-content form textarea {
     } else if (gender === "女") {
         document.getElementById('female').checked = true;
     }
-	    
-	 
-	   
-	}
-	
-	    
+
+}  
 
 
 	</script>
