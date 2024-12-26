@@ -143,6 +143,7 @@ body .modal .modal-content form textarea {
 								<tr>
 									<th>訂單詳情編號</th>
 									<th>訂單編號</th>
+									<th>訂單號碼</th>
 									<th>產品編號</th>
 									<th>產品名稱</th>
 									<th>數量</th>
@@ -154,6 +155,7 @@ body .modal .modal-content form textarea {
 								<tr  th:each="allOrdersDetails:${allOrdersDetails}">
 									<td th:text="${allOrdersDetails.ID}"></td>
 									<td th:text="${allOrdersDetails.orders.ID}"></td>
+									<td th:text="${allOrdersDetails.orders.ordersNumber}"></td>
 									<td th:text="${allOrdersDetails.menu.ID}"></td>
 									<td th:text="${allOrdersDetails.odName}"></td>
 									<td th:text="${allOrdersDetails.odQuantity}"></td>
@@ -179,15 +181,62 @@ body .modal .modal-content form textarea {
 
 
 
-	<script>
-		$("#table").DataTable({
-			scrollX : "90%",
-			scrollY : "500px",
-			paging: true, // 如果希望有分頁功能
-			searching: true, // 如果需要啟用搜尋功能
-			responsive: true, // 如果希望在不同尺寸螢幕上調整表格
-			
-		})		
+	<script th:inline="javascript">
+
+		// DataTable 初始化
+		const table = $("#table").DataTable({
+
+			columnDefs: [
+				{
+					targets: '_all', // 套用到所有欄位
+					className: 'text-center'
+				},
+				{
+					targets: [7],
+					className: 'text-left'
+				}
+			],
+			scrollX: "90%",
+			scrollY: "500px",
+			searching: true,
+			responsive: true,
+			serverSide: true,
+			processing: true,
+			ordering: true, // 啟用排序功能
+			ajax: {
+				url: '/Bistro/OrdersDetails/data',
+				type: 'GET',
+				data: function(d) {
+					// 保持原有的請求參數
+					return d;
+				}
+			},
+			columns: [
+				{ data: 'ID', width: '180px' },
+				{ data: 'orderId', width: '120px',className: 'text-center !important' },
+				{ data: 'ordersNumber', width: '220px' ,className: 'text-center ' },
+				{ data: 'menuId', width: '120px' ,className: 'text-center !important '},
+				{ data: 'odName', width: '220px' ,className: 'text-center' },
+				{ data: 'odQuantity', width: '120px' ,className: 'text-center !important' },
+				{ data: 'odPrice', width: '120px' ,className: 'text-right' },
+				{ data: 'odSumPrice', width: '120px' },
+			],
+			language: {
+				processing: "處理中...",
+				lengthMenu: "顯示 _MENU_ 筆資料",
+				zeroRecords: "沒有符合的結果",
+				info: "顯示第 _START_ 至 _END_ 筆結果，共 _TOTAL_ 筆",
+				infoEmpty: "顯示第 0 至 0 筆結果，共 0 筆",
+				infoFiltered: "(從 _MAX_ 筆資料中過濾)",
+				search: "搜尋:",
+				paginate: {
+					first: "第一頁",
+					previous: "上一頁",
+					next: "下一頁",
+					last: "最後一頁"
+				}
+			}
+		});
 		
 		
 		// jquery寫法 end
