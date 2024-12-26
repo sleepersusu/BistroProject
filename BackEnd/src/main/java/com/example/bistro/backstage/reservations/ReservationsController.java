@@ -40,12 +40,12 @@ public class ReservationsController {
 	}
 
 	@PostMapping("/Bistro/updatePost")
-	public String updateReservations(Integer id, String customerName, String customerGender, String contactPhone,
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date reservationDate, String startTime,
-			Integer numberPeople, String notes, String reservationStatus) throws ParseException {
+	public String updateReservations(Integer id2, String customerName2, String customerGender2, String contactPhone2,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date reservationDate2, String startTime2,
+			Integer numberPeople2, String notes2, String reservationStatus2) throws ParseException {
 
-		reservationsService.updateReservations(id, customerName, customerGender, contactPhone, reservationDate,
-				startTime, numberPeople, notes, reservationStatus);
+		reservationsService.updateReservations(id2, customerName2, customerGender2, contactPhone2, reservationDate2,
+				startTime2, numberPeople2, notes2, reservationStatus2);
 
 		return "redirect:/Bistro/findAllReservations";
 	}
