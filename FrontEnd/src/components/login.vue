@@ -5,7 +5,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fs-4" style="font-family: 'Chakra Petch', cursive !important;" id="loginModalLabel">Nightly Sips</h5>
+                    <h5 class="modal-title fs-4" style="font-family: 'Chakra Petch', cursive !important;"
+                        id="loginModalLabel">Nightly Sips</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -54,30 +55,38 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fs-4" style="font-family: 'Chakra Petch', cursive !important;" id="loginModalLabel">Nightly Sips</h5>
+                    <h5 class="modal-title fs-4" style="font-family: 'Chakra Petch', cursive !important;"
+                        id="loginModalLabel">Nightly Sips</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form v-on:submit.prevent="sendRegister" method="post">
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="username" name="userName" value=""
-                                placeholder="Name" required>
+                            <input type="text" class="form-control" id="username" v-model="registForm.userName" value=""
+                                :class="{ 'is-invalid': validationErrors.userName }" placeholder="請輸入姓名"
+                                maxlength="15" :required>
+                            <small v-if="validationErrors.nameError" class="text-danger">{{ validationErrors.nameError }}</small>
                         </div>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="userphone" name="userPhone" value=""
-                                placeholder="Phone" maxlength="10" required>
+                            <input type="text" class="form-control" id="userphone" v-model="registForm.userPhone"
+                                value="" :class="{ 'is-invalid': validationErrors.phoneError }"
+                                placeholder="請輸入聯絡手機" maxlength="10" required>
+                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError }}</small>
                         </div>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="useraccount" name="userAccount" value=""
-                                placeholder="Email Account" required>
+                            <input type="text" class="form-control" id="useraccount" name="userAccount" value="" :class="{ 'is-invalid': validationErrors.phoneError }"
+                                placeholder="請輸入要申請的信箱帳號" required>
+                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError }}</small>
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" id="userpassword" name="userPassword" value=""
-                                placeholder="Password" required>
+                            <input type="password" class="form-control" id="userpassword" name="userPassword" value="" :class="{ 'is-invalid': validationErrors.phoneError }"
+                                placeholder="請輸入密碼" required>
+                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError }}</small>
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" id="userpassword" name="userPassword" value=""
-                                placeholder="Repeat Password" required>
+                            <input type="password" class="form-control" id="userpassword" name="userPassword" value="" :class="{ 'is-invalid': validationErrors.phoneError }"
+                                placeholder="請輸入二次密碼驗證" required>
+                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError }}</small>
                         </div>
                         <div class="mb-3 d-flex justify-content-between">
                             <button type="submit" class="btn btn-outline-primary w-100 btn-lg">註冊帳號</button>
@@ -111,10 +120,50 @@ export default {
         return {
             loginModalElement: null,
             registerModalElement: null,
+            registForm: {
+                userName: '',
+                userPhone: '',
+                userEmail:'',
+                userPassword:'',
+            },
+            validationErrors:{
+                nameError:'',
+                phoneError:'',
+            }
         }
     },
+    watch: {
+        'registForm.userName'(newVal) {
+            const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s]{2,15}$/
+            if (!newVal.trim()) {
+                this.validationErrors.nameError = '請輸入姓名';
+            } else if(!nameRegex.test(newVal)){
+                this.validationErrors.nameError = '姓名格式錯誤，請輸入2-15個字的中文或英文';
+            }
+        },
+        'registForm.userPhone'(newVal) {
+            const phoneRegex = /^09\d{8}$/
+            if(!newVal.trim()){
+                this.phoneError = '電話未填寫'
+            }else if (!phoneRegex.test(newVal)) {
+                // this.validationErrors.phoneError = '請輸入手機號碼';
+                this.validationErrors.phoneError = '電話格式錯誤，請輸入正確的手機號碼'
+                console.log(this.validationErrors.phoneError)
+            } else {
+                this.validationErrors.phoneError = '';
+            }
+        },
+        'registForm.userEmail'(newVal) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        },
+        'registForm.userEmail'(newVal) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        },
+    },
     methods: {
-        ...mapActions(useUserStore, ['submitLogin', 'submitRegister','handleGoogleLogin']),
+        ...mapActions(useUserStore, ['submitLogin', 'submitRegister', 'handleGoogleLogin']),
         openLoginModal() {
             // 手動開啟登入模態框
             this.loginModalElement = document.getElementById('loginModal')
@@ -130,12 +179,54 @@ export default {
             this.loginmodel.hide()
         },
         sendRegister(event) {
-            this.submitRegister(event)
-            this.registermodel.hide()
+            let checkValue = this.validateForm()
+            if (!checkValue) {
+                {
+                    Swal.fire({
+                        toast: false,
+                        position: 'top',
+                        icon: 'warning',
+                        iconColor: 'red',
+                        title: `資料格式驗證失敗！`,
+                        timer: 1500,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                    })
+                    return
+                }
+            } else {
+                this.submitRegister(event)
+                Swal.fire({
+                    toast: false,
+                    position: 'top',
+                    icon: 'success',
+                    iconColor: 'black',
+                    title: `資料已更新！`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                })
+                this.registermodel.hide()
+            }
         },
         closeLoginmodel() {//未知新增
-        //會員獎品會用到
-        this.loginmodel.hide()
+            //會員獎品會用到
+            this.loginmodel.hide()
+        },
+        validateForm() {
+            let isValid = true;
+            const phoneRegex = /^09\d{8}$/ // 09開頭,8位數字
+            if (!this.registForm.userPhone.trim()) {
+                isValid = false;
+                this.phoneError = '電話為必填'
+            } else if (!phoneRegex.test(this.registForm.userPhone)) {
+                isValid = false;
+                this.phoneError = '電話格式錯誤，請輸入正確的手機號碼'
+            } else {
+                isValid = false;
+                this.phoneError = ''
+            }
+            return isValid;
         },
 
         handleForgot() {
@@ -266,6 +357,4 @@ input.form-control {
 input::placeholder {
     color: #666666;
 }
-
-
 </style>

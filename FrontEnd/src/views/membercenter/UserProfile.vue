@@ -292,7 +292,7 @@ export default {
               timerProgressBar: true,
             })
           } else {
-            window.Swal.fire({
+            Swal.fire({
               toast: false,
               position: 'top',
               icon: 'error',
@@ -315,7 +315,7 @@ export default {
     // 表單驗證
     const validateForm = () => {
       validationErrors.value = {}
-      let isValid = true
+      let isValid = true;
       console.log('驗證開始')
 
       if (!store.getProfile.userName) {
