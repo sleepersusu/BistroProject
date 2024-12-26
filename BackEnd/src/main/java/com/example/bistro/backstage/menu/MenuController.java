@@ -44,6 +44,19 @@ public class MenuController {
 			@RequestParam String productDescribe, @RequestParam Integer productCount,
 			@RequestParam Integer minproductCount, @RequestParam(defaultValue = "0.0") Double avgScore,
 			@RequestParam String menuStatus) throws IOException {
+		
+		
+	    long maxSize = 8 * 1024 * 1024;  
+
+	    // 檢查檔案大小
+	    if (productImage.getSize() > maxSize) {
+	    	System.out.println("檔案大小超過限制！最大檔案大小為 8MB。");
+	        throw new IOException("檔案大小超過限制！最大檔案大小為 8MB。");
+	    }
+		
+		
+		
+		
 
 		byte[] fileBytes = productImage.getBytes();
 		String originalFilename = productImage.getOriginalFilename();
@@ -153,6 +166,16 @@ public class MenuController {
 			) {
 
 		try {
+			
+			long maxSize = 8 * 1024 * 1024;  
+
+		    // 檢查檔案大小
+			 if (file.getSize() > maxSize) {
+			    	System.out.println("檔案大小超過限制！最大檔案大小為 8MB。");
+			        throw new IOException("檔案大小超過限制！最大檔案大小為 8MB。");
+			    }
+			
+			
 			if (file.isEmpty()) {
 				Menu findmenu = menuService.findMenuById(menu.getID());
 				if (findmenu != null) {
