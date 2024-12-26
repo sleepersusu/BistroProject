@@ -199,7 +199,7 @@ export default {
           text: '請填寫評分',
           icon: 'warning',
           confirmButtonColor: 'black',
-          iconColor:'black',
+          iconColor: 'black',
           customClass: {
             confirmButton: 'custom-button',
           },
@@ -227,7 +227,7 @@ export default {
           icon: 'success',
           confirmButtonText: '確定',
           confirmButtonColor: 'black',
-          iconColor:'black',
+          iconColor: 'black',
           customClass: {
             confirmButton: 'custom-button',
           },
