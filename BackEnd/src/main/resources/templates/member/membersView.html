@@ -149,7 +149,7 @@
 									<!-- <th>點數</th> -->
 									<!-- <th>類型</th> -->
 									<th>狀態</th>
-									<!-- <th>操作</th> -->
+									<th>操作</th>
 								</tr>
 							</thead>
 							<tbody id="event-list">
@@ -405,6 +405,30 @@
 					}
 				},
 				{ data: 'memberStatus', "width": "90px", "targets": 11 },
+				{
+					data: null,  // 空資料，用來放按鈕
+					width: "90px",
+					targets: 12,
+					render: function (data, type, row) {
+						// 動態創建編輯按鈕，並綁定相應的資料
+						return `<button type="button" id="edit" 
+                                data-id="${row.id}"
+                                data-account="${row.memberAccount}"
+                                data-password="${row.memberPassword}"
+                                data-name="${row.memberName}"
+                                data-sex="${row.memberSex}"
+                                data-birthday="${row.memberBirthday}"
+                                data-favor="${row.memberFavor}"
+                                data-address="${row.memberAddress}"
+                                data-phone="${row.memberPhone}"
+                                data-email="${row.memberEmail}"
+                                data-Img="${row.memberImg}"
+                                data-point="${row.memberPoint}"
+                                data-status="${row.memberStatus}"
+                                data-memberShip="${row.memberShip}"
+                                onclick="openEditModal(this)">編輯</button>`;
+					}
+				},
 			],
 			language: {
 				processing: "處理中...",
