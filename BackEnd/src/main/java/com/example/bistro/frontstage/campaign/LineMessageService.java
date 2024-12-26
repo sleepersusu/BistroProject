@@ -14,6 +14,8 @@ import com.example.bistro.backstage.PointsTotal.PointsTotalRepository;
 import com.example.bistro.backstage.campaign.Campaign;
 import com.example.bistro.backstage.line.LineMember;
 import com.example.bistro.backstage.line.LineMemberRepository;
+import com.example.bistro.backstage.lotteryChance.LotteryChance;
+import com.example.bistro.backstage.lotteryChance.LotteryChanceService;
 import com.example.bistro.backstage.lotteryWinners.LotteryWinners;
 import com.example.bistro.backstage.lotteryWinners.LotteryWinnersRepository;
 import com.example.bistro.backstage.members.Members;
@@ -49,6 +51,7 @@ public class LineMessageService {
    private final PointsTotalRepository pointsTotalRepo;
    private final MenuService menuService;
    private final PromoCodeService promoCodeService;
+   private final LotteryChancesFrontService lotteryChanceService;
 
    public void processWebhookEvent(String body) throws Exception {
        JsonNode jsonNode = objectMapper.readTree(body);
@@ -95,7 +98,7 @@ public class LineMessageService {
                    case "#我的訂位":
                        handleViewReservations(userId);
                        break;
-                   case "#紅利點數":
+                   case "#福利查詢":
                        handleViewPoints(userId);
                        break;
                    case "#熱門餐點":
@@ -414,43 +417,63 @@ public class LineMessageService {
    }
 
    private void handleViewPoints(String userId) throws Exception {
-       Optional<LineMember> lineMember = lineMemberRepo.findByLineUserId(userId);
-       if (lineMember.isEmpty()) {
-           sendNotBindMessage(userId);
-           return;
-       }
+	    Optional<LineMember> lineMember = lineMemberRepo.findByLineUserId(userId);
+	    if (lineMember.isEmpty()) {
+	        sendNotBindMessage(userId);
+	        return;
+	    }
 
-       Members member = lineMember.get().getMember();
-       PointsTotalBean pointTotals = pointsTotalRepo.findByMembers(member);
-       
-       if (pointTotals == null) {
-           String message = "您目前還沒有紅利點數！\n" +
-                          "消費即可累積點數，快來享受會員專屬優惠 🛍\n" +
-                          "👉 立即訂位：http://nightlysips.com/reservations";
-           sendLineMessage(userId, message);
-           return;
-       }
-       
-       String message = formatPointsInfo(pointTotals.getPointsTotal());
-       sendLineMessage(userId, message);
-   }
+	    Members member = lineMember.get().getMember();
+	    PointsTotalBean pointTotals = pointsTotalRepo.findByMembers(member);
+	    List<LotteryChance> chances = lotteryChanceService.findByMemberId(member.getId());
 
-   private String formatPointsInfo(Integer points) {
-       StringBuilder sb = new StringBuilder();
-       sb.append("💰 您的紅利點數資訊\n\n");
-       sb.append("目前點數：").append(points).append(" 點\n\n");
-       
-       sb.append("📌 點數說明：\n");
-       sb.append("- 每消費 100 元可獲得 1 點\n");
-       
-       if (points >= 100) {
-           sb.append("\n🎉 您的點數已經可以兌換優惠了！\n");
-           sb.append("下次消費時可以折抵 ").append(points).append(" 元");
-       }
-       
-       sb.append("\n\n💡 更多優惠資訊請至官網查看");
-       return sb.toString();
-   }
+	    int chanceCount = 0;
+	    for(LotteryChance chance : chances) {
+	        chanceCount += chance.getRemainingChances();
+	    }
+
+	    if (pointTotals == null) {
+	        String message = "您目前還沒有紅利點數！\n" +
+	            "消費即可累積點數，快來享受會員專屬優惠 🛍\n" +
+	            "👉 立即訂位：http://nightlysips.com/reservations";
+	        sendLineMessage(userId, message);
+	        return;
+	    }
+
+	    String message = formatPointsInfo(pointTotals.getPointsTotal(), chanceCount);
+	    sendLineMessage(userId, message);
+	}
+
+   private String formatPointsInfo(Integer points, int chances) {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("💰 您的會員福利資訊\n\n");
+	    
+	    
+	    sb.append("目前點數：").append(points).append(" 點\n");
+	    sb.append("抽獎機會：").append(chances).append(" 次\n\n");
+
+	    sb.append("📌 點數說明：\n");
+	    sb.append("- 每消費 100 元可獲得 1 點\n");
+	    sb.append("- 點數可於下次消費時折抵\n");
+	    
+	    if (points >= 100) {
+	        sb.append("\n🎉 您的點數已經可以兌換優惠了！\n");
+	        sb.append("下次消費時可以折抵 ").append(points).append(" 元");
+	    }
+
+	    
+	    sb.append("\n\n🎲 抽獎資訊：");
+	    if (chances > 0) {
+	        sb.append("\n您還有 ").append(chances).append(" 次抽獎機會\n");
+	        sb.append("別忘了把握機會來試試手氣！");
+	    } else {
+	        sb.append("\n目前沒有抽獎機會\n");
+	        sb.append("下次消費即可獲得抽獎機會！");
+	    }
+
+	    sb.append("\n\n💡 更多優惠資訊請至官網查看");
+	    return sb.toString();
+	}
 
    private void sendLineMessage(String userId, String message) throws Exception {
        TextMessage textMessage = new TextMessage(message);

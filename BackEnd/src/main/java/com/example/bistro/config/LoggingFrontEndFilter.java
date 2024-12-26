@@ -21,7 +21,12 @@ public class LoggingFrontEndFilter implements Filter {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-
+		
+		if ("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
+            chain.doFilter(request, response);
+            return;
+        }
+		
 		HttpSession session = httpRequest.getSession(false);
 		System.out.println("前端FILTER擋住");
 		if (session != null && session.getAttribute("membersId") != null) {
