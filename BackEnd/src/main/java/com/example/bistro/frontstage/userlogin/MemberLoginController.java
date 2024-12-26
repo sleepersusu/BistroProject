@@ -46,7 +46,7 @@ public class MemberLoginController {
 			response.put("memberId", memberData.getId().toString());
 			response.put("memberName", memberData.getMemberName());
 			if(memberData.getMemberPoint()==null) {
-				response.put("memberPoint", "0");
+				response.put("memberPoint", 0);
 			}else {
 				response.put("memberPoint", memberData.getMemberPoint().toString());
 			}

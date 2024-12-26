@@ -8,6 +8,7 @@ import java.util.List;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.bistro.backstage.PointsTotal.PointsTotalBean;
 import com.example.bistro.backstage.comment.Comment;
 import com.example.bistro.backstage.orders.Orders;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -61,7 +62,10 @@ public class Members {
 			createdAt = new Date();
 		}
 	}
-
+	
+//	//一對一會員點數表
+//	@OneToOne(mappedBy = "members")
+//    private PointsTotalBean pointsTotalBean;
 
 	// 一對多：一個會員可以有很多訂單
     @JsonIgnore
@@ -72,7 +76,5 @@ public class Members {
 	@OneToMany(mappedBy = "members",fetch = FetchType.LAZY)
 	private List<Comment> comments =new ArrayList<Comment>();
      // 用於映射 Comment 實體中的 members 
-
-	
 
 }

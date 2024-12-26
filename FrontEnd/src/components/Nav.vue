@@ -63,7 +63,7 @@
           </li>
           <li class="nav-item ms-lg-5">
             <!-- 如果已登入，顯示頭像；否則顯示登入/註冊按鈕 -->
-            <div v-if="!isLoggedIn" class="btn btn-outline-light" v-on:click="openLoginModal">
+            <div v-if="!isLoggedIn" class="btn btn-soft-gold-glow" v-on:click="openLoginModal">
               登入 / 註冊
             </div>
             <div v-else class="d-flex align-items-center">
@@ -138,7 +138,7 @@ export default {
     triggerOffcanvas() {
       //觸發會員右側欄
       const avatarProfileComponent = this.$refs.avatarProfile
-      this.loadMemberData(this.memberId)
+      this.loadMemberData()
       avatarProfileComponent.openOffcanvas()
     },
   },
@@ -251,6 +251,29 @@ export default {
   opacity: 0.8;
 }
 
+.btn-soft-gold-glow {
+  background: linear-gradient(45deg, #ffd700, #ffcc00); /* 金色漸變背景 */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 30px; /* 圓角 */
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.4), 0 0 10px rgba(255, 215, 0, 0.3); /* 柔和的發光效果 */
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+.btn-soft-gold-glow:hover {
+  background: linear-gradient(45deg, #e6b800, #ffbb33); /* Hover時的金色漸變 */
+  transform: scale(1.05); /* 微微放大效果 */
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.4); /* 更柔和的發光效果 */
+}
+
+.btn-soft-gold-glow:focus {
+  outline: none; /* 去掉聚焦框 */
+}
+
+
 @media (max-width: 992px) {
   .nav-link {
     margin: 0.5rem 0;
@@ -270,4 +293,5 @@ export default {
     display: inline-block;
   }
 }
+
 </style>

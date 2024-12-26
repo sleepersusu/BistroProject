@@ -3,6 +3,8 @@ package com.example.bistro.frontstage.members;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.bistro.backstage.PointsTotal.PointsTotalBean;
+import com.example.bistro.backstage.PointsTotal.PointsTotalRepository;
 import com.example.bistro.backstage.members.Members;
 
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,18 +31,21 @@ public class MembersRestController {
 	@Autowired
 	private MemberFrontService memberFronetService;
 	
+	@Autowired
+	private PointsTotalRepository PTRepo;
+	
 	//新增會員帳號
 	@PostMapping("/members/create")
 	public ResponseEntity<Map<String, String>> createMember(@RequestBody MembersDTO membersDTO) {
 		String userName = membersDTO.getUserName();
 		String userPhone = membersDTO.getUserPhone();
-		String userAccount = membersDTO.getUserAccount();
+		String userAccount = membersDTO.getUserEmail();
 		String userPassword = membersDTO.getUserPassword();
 		Optional<Members> result = memberFronetService.findMemberByAccount(userAccount);
 		Map<String, String> response = new HashMap<>();
 		if(result.isPresent()) {
-			response.put("status", "資料已存在");
-			return ResponseEntity.status(404).body(response);
+			response.put("status", "Fail");
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 		}else {
 
 			Members memberBean = new Members();
@@ -48,11 +54,15 @@ public class MembersRestController {
 			memberBean.setMemberAccount(userAccount);
 			memberBean.setMemberPassword(userPassword);
 			memberBean.setMemberEmail(userAccount);
-
 			Members memberData = memberFronetService.insertMember(memberBean);
+//			try {
+//				response.put("status", "success");
+//				response.put("memberId", memberData.getId().toString());
+//			} catch (DataIntegrityViolationException e) {
+//				System.out.println("唯一性錯誤");
+//				e.printStackTrace();
+//			}
 			
-			response.put("status", "success");
-			response.put("memberId", memberData.getId().toString());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
 	}
@@ -62,6 +72,13 @@ public class MembersRestController {
 		Optional<Members> result = memberFronetService.findMemberById(id);
 		if(result.isPresent()) {
 			Members memberData = result.get();
+			Optional<PointsTotalBean> pointResult = PTRepo.findByMembersId(id);
+			if(pointResult.isPresent()) {
+				PointsTotalBean pointsData = pointResult.get();
+				memberData.setMemberPoint(pointsData.getPointsTotal());
+			}else {
+				memberData.setMemberPoint(0);
+			}
 			return ResponseEntity.ok(memberData);
 		}else {
 			return ResponseEntity.notFound().build();

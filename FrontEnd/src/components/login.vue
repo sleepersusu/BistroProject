@@ -63,30 +63,54 @@
                     <form v-on:submit.prevent="sendRegister" method="post">
                         <div class="mb-3">
                             <input type="text" class="form-control" id="username" v-model="registForm.userName" value=""
-                                :class="{ 'is-invalid': validationErrors.userName }" placeholder="請輸入姓名"
-                                maxlength="15" :required>
-                            <small v-if="validationErrors.nameError" class="text-danger">{{ validationErrors.nameError }}</small>
+                                :class="{ 'is-invalid': validationErrors.userName }" placeholder="請輸入姓名" maxlength="15"
+                                required>
+                            <small v-if="validationErrors.nameError" class="text-danger">{{ validationErrors.nameError
+                                }}</small>
                         </div>
                         <div class="mb-3">
                             <input type="text" class="form-control" id="userphone" v-model="registForm.userPhone"
-                                value="" :class="{ 'is-invalid': validationErrors.phoneError }"
-                                placeholder="請輸入聯絡手機" maxlength="10" required>
-                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError }}</small>
+                                value="" :class="{ 'is-invalid': validationErrors.phoneError }" placeholder="請輸入聯絡手機"
+                                maxlength="10" required>
+                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError
+                                }}</small>
                         </div>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="useraccount" name="userAccount" value="" :class="{ 'is-invalid': validationErrors.phoneError }"
+                            <input type="text" class="form-control" id="useraccount" v-model="registForm.userEmail"
+                                value="" :class="{ 'is-invalid': validationErrors.emailError }"
                                 placeholder="請輸入要申請的信箱帳號" required>
-                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError }}</small>
+                            <small v-if="validationErrors.emailError" class="text-danger">{{ validationErrors.emailError
+                                }}</small>
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" id="userpassword" name="userPassword" value="" :class="{ 'is-invalid': validationErrors.phoneError }"
-                                placeholder="請輸入密碼" required>
-                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError }}</small>
+                            <div class="input-group">
+                                <input :type="isPasswordVisible ? 'text' : 'password'" class="form-control"
+                                    id="userpassword" v-model="registForm.userPassword" value=""
+                                    :class="{ 'is-invalid': validationErrors.passwordError }" placeholder="請輸入密碼"
+                                    maxlength="50" minlength="6" required>
+                                <span class="input-group-text" @click="togglePasswordVisibility"
+                                    style="cursor: pointer;">
+                                    <i :class="isPasswordVisible ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                                </span>
+                            </div>
+                            <small v-if="validationErrors.passwordError" class="text-danger">{{
+                                validationErrors.passwordError }}</small>
                         </div>
+
+                        <!-- 二次密碼欄位 -->
                         <div class="mb-3">
-                            <input type="password" class="form-control" id="userpassword" name="userPassword" value="" :class="{ 'is-invalid': validationErrors.phoneError }"
-                                placeholder="請輸入二次密碼驗證" required>
-                            <small v-if="validationErrors.phoneError" class="text-danger">{{ validationErrors.phoneError }}</small>
+                            <div class="input-group">
+                                <input :type="isSecondPasswordVisible ? 'text' : 'password'" class="form-control"
+                                    id="secondpassword" v-model="registForm.secondPassword" value=""
+                                    :class="{ 'is-invalid': validationErrors.secondPasswordError }"
+                                    placeholder="請輸入二次密碼驗證" minlength="6" required>
+                                <span class="input-group-text" @click="toggleSecondPasswordVisibility"
+                                    style="cursor: pointer;">
+                                    <i :class="isSecondPasswordVisible ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                                </span>
+                            </div>
+                            <small v-if="validationErrors.secondPasswordError" class="text-danger">{{
+                                validationErrors.secondPasswordError }}</small>
                         </div>
                         <div class="mb-3 d-flex justify-content-between">
                             <button type="submit" class="btn btn-outline-primary w-100 btn-lg">註冊帳號</button>
@@ -118,52 +142,108 @@ import Modal from 'bootstrap/js/dist/modal'
 export default {
     data() {
         return {
+            isPasswordVisible: false,  // 控制顯示密碼
+            isSecondPasswordVisible: false,  // 控制二次密碼顯示
             loginModalElement: null,
             registerModalElement: null,
+            isValid: true,
             registForm: {
                 userName: '',
                 userPhone: '',
-                userEmail:'',
-                userPassword:'',
+                userEmail: '',
+                userPassword: '',
+                secondPassword: '',
             },
-            validationErrors:{
-                nameError:'',
-                phoneError:'',
+            validationErrors: {
+                nameError: '',
+                phoneError: '',
+                emailError: '',
+                passwordError: '',
+                secondPasswordError: '',
             }
         }
     },
     watch: {
+        // 當任何一個字段變化時，檢查表單的有效性
         'registForm.userName'(newVal) {
-            const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s]{2,15}$/
+            const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s]{2,15}$/;
             if (!newVal.trim()) {
-                this.validationErrors.nameError = '請輸入姓名';
-            } else if(!nameRegex.test(newVal)){
+                this.validationErrors.nameError = '未填寫姓名';
+                this.isValid = false;
+            } else if (!nameRegex.test(newVal)) {
                 this.validationErrors.nameError = '姓名格式錯誤，請輸入2-15個字的中文或英文';
+                this.isValid = false;
+            } else {
+                this.validationErrors.nameError = '';
+                this.checkFormValidity();
             }
         },
         'registForm.userPhone'(newVal) {
-            const phoneRegex = /^09\d{8}$/
-            if(!newVal.trim()){
-                this.phoneError = '電話未填寫'
-            }else if (!phoneRegex.test(newVal)) {
-                // this.validationErrors.phoneError = '請輸入手機號碼';
-                this.validationErrors.phoneError = '電話格式錯誤，請輸入正確的手機號碼'
-                console.log(this.validationErrors.phoneError)
+            const phoneRegex = /^09\d{8}$/;
+            if (!newVal.trim()) {
+                this.validationErrors.phoneError = '電話未填寫';
+                this.isValid = false;
+            } else if (!phoneRegex.test(newVal)) {
+                this.validationErrors.phoneError = '電話格式錯誤，需以09開頭，請輸入正確的手機號碼';
+                this.isValid = false;
             } else {
                 this.validationErrors.phoneError = '';
+                this.checkFormValidity();
             }
         },
         'registForm.userEmail'(newVal) {
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+            if (!newVal.trim()) {
+                this.validationErrors.emailError = '信箱未填寫';
+                this.isValid = false;
+            } else if (!emailRegex.test(newVal)) {
+                this.validationErrors.emailError = '信箱格式錯誤，需以user@example.com格式，請輸入正確的信箱';
+                this.isValid = false;
+            } else {
+                this.validationErrors.emailError = '';
+                this.checkFormValidity();
+            }
         },
-        'registForm.userEmail'(newVal) {
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+        'registForm.userPassword'(newVal) {
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+            if (!newVal.trim()) {
+                this.validationErrors.passwordError = '未填入密碼';
+                this.isValid = false;
+            } else if (!passwordRegex.test(newVal)) {
+                this.validationErrors.passwordError = '密碼格式錯誤，須含大小寫英文，1位特殊符號';
+                this.isValid = false;
+            } else {
+                this.validationErrors.passwordError = '';
+                this.checkFormValidity();
+            }
+        },
+        'registForm.secondPassword'(newVal) {
+            this.checkPasswords();
         },
     },
     methods: {
         ...mapActions(useUserStore, ['submitLogin', 'submitRegister', 'handleGoogleLogin']),
+        checkFormValidity() {
+            const { userName, userPhone, userEmail, userPassword } = this.registForm;
+            if (userName && userPhone && userEmail && userPassword &&
+                !this.validationErrors.nameError &&
+                !this.validationErrors.phoneError &&
+                !this.validationErrors.emailError &&
+                !this.validationErrors.passwordError) {
+                this.isValid = true;
+            } else {
+                this.isValid = false;
+            }
+        },
+        checkPasswords() {
+            if (this.registForm.userPassword !== this.registForm.secondPassword) {
+                this.validationErrors.secondPasswordError = '密碼與二次密碼不一致';
+                this.isValid = false;
+            } else {
+                this.validationErrors.secondPasswordError = '';
+                this.isValid = true;  // 確保當兩者一致時，表單有效
+            }
+        },
         openLoginModal() {
             // 手動開啟登入模態框
             this.loginModalElement = document.getElementById('loginModal')
@@ -178,9 +258,8 @@ export default {
             this.submitLogin(event)
             this.loginmodel.hide()
         },
-        sendRegister(event) {
-            let checkValue = this.validateForm()
-            if (!checkValue) {
+        sendRegister() {
+            if (!this.isValid) {
                 {
                     Swal.fire({
                         toast: false,
@@ -195,17 +274,7 @@ export default {
                     return
                 }
             } else {
-                this.submitRegister(event)
-                Swal.fire({
-                    toast: false,
-                    position: 'top',
-                    icon: 'success',
-                    iconColor: 'black',
-                    title: `資料已更新！`,
-                    timer: 1500,
-                    showConfirmButton: false,
-                    timerProgressBar: true,
-                })
+                this.submitRegister(this.registForm)
                 this.registermodel.hide()
             }
         },
@@ -213,21 +282,7 @@ export default {
             //會員獎品會用到
             this.loginmodel.hide()
         },
-        validateForm() {
-            let isValid = true;
-            const phoneRegex = /^09\d{8}$/ // 09開頭,8位數字
-            if (!this.registForm.userPhone.trim()) {
-                isValid = false;
-                this.phoneError = '電話為必填'
-            } else if (!phoneRegex.test(this.registForm.userPhone)) {
-                isValid = false;
-                this.phoneError = '電話格式錯誤，請輸入正確的手機號碼'
-            } else {
-                isValid = false;
-                this.phoneError = ''
-            }
-            return isValid;
-        },
+
 
         handleForgot() {
             Swal.fire({
@@ -301,6 +356,12 @@ export default {
             } else {
                 console.error("Google API client not loaded.")
             }
+        },
+        togglePasswordVisibility() {
+            this.isPasswordVisible = !this.isPasswordVisible;  // 切換密碼顯示狀態
+        },
+        toggleSecondPasswordVisibility() {
+            this.isSecondPasswordVisible = !this.isSecondPasswordVisible;  // 切換二次密碼狀態
         },
     },
     onMounted() {

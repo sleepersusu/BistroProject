@@ -149,7 +149,7 @@ body {
 									<th>聯絡電話</th>
 									<th>電子信箱</th>
 									<th>會員圖片</th>
-									<th>點數</th>
+									<!-- <th>點數</th> -->
 									<!-- <th>類型</th> -->
 									<th>狀態</th>
 									<th>操作</th>
@@ -169,7 +169,7 @@ body {
 										<td th:text="${members.memberPhone}"></td>
 										<td th:text="${members.memberEmail==null?'無':members.memberEmail}"></td>
 										<td><img alt="無圖片" th:src="@{/Bistro/download?type=member&(ID=${members.id})}"></td>
-										<td th:text="${members.memberPoint==null?'無':members.memberPoint}"></td>
+										<!-- <td th:text="${members.memberPoint==null?'無':members.memberPoint}"></td> -->
 										<!-- <td th:text="${members.memberShip}" th:style="'color:'+(${members.memberShip} == '會員' ? '#0072E3' : 'red')"></td> -->
 										<td th:text="${members.memberStatus}" th:style="'color:'+(${members.memberStatus} == '啟用' ? '#0072E3' : 'red')"></td>
 
@@ -433,8 +433,7 @@ body {
 		            {"width": "100px","targets": 9,className: 'ellipsis'},
 		            {"width": "90px","targets": 10},
 		            {"width": "85px","targets": 11},
-		            {"width": "70px","targets": 12},
-		            {"width": "70px","targets": 13,"orderable": false},
+		            {"width": "70px","targets": 12,"orderable": false},
 		        ]
 			});
 		});

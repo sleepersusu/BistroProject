@@ -95,6 +95,7 @@ public class GoogleLoginController {
 			} else {
 				response.put("memberPoint", memberData.getMemberPoint().toString());
 			}
+			return ResponseEntity.ok(response);
 		} else {
 			System.out.println("GOOGLE登入，沒有此帳號，註冊帳號");
 			Members memberBean = new Members();
@@ -113,9 +114,8 @@ public class GoogleLoginController {
 			response.put("memberId", resultData.getId().toString());
 			response.put("memberName", resultData.getMemberName());
 			response.put("memberPoint", "0");
-
+			return ResponseEntity.ok(response);
 		}
-		return ResponseEntity.ok(response);
 	}
 
 }

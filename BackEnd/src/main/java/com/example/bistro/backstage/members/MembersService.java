@@ -76,10 +76,6 @@ public class MembersService {
 			if (result) {//result
 				return dbMember;
 			}else if (encodedPwd.equals(loginPassword)) {
-				System.out.println("筆筆筆筆筆");
-				System.out.println("筆筆筆筆筆");
-				System.out.println("筆筆筆筆筆");
-				System.out.println("筆筆筆筆筆");
 				return dbMember;
 			}else {
 				return Optional.empty();

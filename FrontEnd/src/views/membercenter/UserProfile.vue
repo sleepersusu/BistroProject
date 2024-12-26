@@ -216,30 +216,48 @@ export default {
     const selectedCity = ref(store.memberprofile.city)
     const selectedDistrict = ref(store.memberprofile.district)
     const fileInput = ref(null)
+    const isValid=ref(true)
 
     watch(
       () => store.getProfile,
       (newProfile) => {
+        isValid.value=true
         if (!newProfile.userName) {
           validationErrors.userName = '請輸入姓名'
+          isValid.value=false
         } else {
           validationErrors.userName = ''
         }
-
-        if (!newProfile.userEmail || !newProfile.userEmail.includes('@')) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!newProfile.userEmail) {
           validationErrors.userEmail = '請輸入有效的 email 地址'
-        } else {
+          isValid.value=false
+        }else if(!emailRegex.test(newProfile.userEmail)){
+          validationErrors.userEmail = '請輸入有效的 email 地址，如user@example.com'
+          isValid.value=false
+        }else {
           validationErrors.userEmail = ''
         }
+
+        const phoneRegex = /^09\d{8}$/
+        if (!newProfile.userPhone) {
+          validationErrors.userPhone = '請輸入有效的手機號碼'
+          isValid.value=false
+        }else if(!phoneRegex.test(newProfile.userPhone)){
+          validationErrors.userPhone = '請輸入有效的手機號碼，如09開頭+8位數字'
+          isValid.value=false
+        }else {
+          validationErrors.userPhone = ''
+        }
       },
-      { immediate: true, deep: true }, // deep深度監聽內部數據變化
+      { immediate: true, deep: true }, // deep監聽內部數據變化
     )
 
     // 初始化表單資料
     onMounted(async () => {
+      console.log('初始化表單')
       let memberId = store.memberId
       await store.loadMemberData(memberId)
-      console.log('初始化完')
       selectedCity.value = store.getProfile.city || ''
       selectedDistrict.value = store.getProfile.district || ''
     })
@@ -265,8 +283,7 @@ export default {
     const handleSubmit = async () => {
       try {
         isSubmitting.value = true
-        let checkValue = validateForm()
-        if (!checkValue) {
+        if (!isValid.value) {
           Swal.fire({
             toast: false,
             position: 'top',
@@ -312,24 +329,6 @@ export default {
       }
     }
 
-    // 表單驗證
-    const validateForm = () => {
-      validationErrors.value = {}
-      let isValid = true;
-      console.log('驗證開始')
-
-      if (!store.getProfile.userName) {
-        validationErrors.value.userName = '請輸入姓名'
-        isValid = false
-      }
-
-      if (!store.getProfile.userEmail || !store.getProfile.userEmail.includes('@')) {
-        validationErrors.value.userEmail = '請輸入有效的 email 地址'
-        isValid = false
-      }
-      return isValid
-    }
-
     // 處理頭像點擊
     const handleAvatarClick = () => {
       if (fileInput.value) {
@@ -370,6 +369,7 @@ export default {
       currentDistricts,
       validationErrors,
       isSubmitting,
+      isValid,
       handleSubmit,
       handleAvatarClick,
       updateAddress,
