@@ -129,7 +129,7 @@ public class MembersController {
     @Transactional
     @PostMapping("/Bistro/Member/UpdateMember")
     public String updateMember(@ModelAttribute Members memberBean,@RequestParam("memberPhoto") MultipartFile file) {
-    	String type = "member";
+    	String type = "members";
     	Members dbMember = membersService.findMembersById(memberBean.getId());
         memberBean.setMemberShip(dbMember.getMemberShip());
         memberBean.setMemberStatus(dbMember.getMemberStatus());

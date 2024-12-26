@@ -28,7 +28,7 @@ public class LoggingFrontEndFilter implements Filter {
 		}
 
 		HttpSession session = httpRequest.getSession(false);
-		System.out.println("Frontend filter有取到"+session.getAttribute("membersId"));
+//		System.out.println("Frontend filter有取到"+session.getAttribute("membersId"));
 		if (session != null && session.getAttribute("membersId") != null) {
 			long maxInactiveInterval = session.getMaxInactiveInterval()* 1000;
 			session.setAttribute("maxInactiveInterval", maxInactiveInterval);

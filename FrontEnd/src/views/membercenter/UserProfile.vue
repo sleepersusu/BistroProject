@@ -241,8 +241,8 @@ export default {
 
         const phoneRegex = /^09\d{8}$/
         if (!newProfile.userPhone) {
-          validationErrors.userPhone = '請輸入有效的手機號碼'
-          isValid.value=false
+          // validationErrors.userPhone = '請輸入有效的手機號碼'
+          isValid.value=true
         }else if(!phoneRegex.test(newProfile.userPhone)){
           validationErrors.userPhone = '請輸入有效的手機號碼，如09開頭+8位數字'
           isValid.value=false

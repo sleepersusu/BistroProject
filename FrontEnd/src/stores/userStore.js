@@ -203,17 +203,17 @@ export const useUserStore = defineStore('userStore', {
         console.error('Google發送後端失敗', error)
       }
     },
-    async submitLogin(event) {
+    async submitLogin(loginForm) {
       try {
         // 後端服務
         let API_URL = `${this.apiUrl}/user/login`
-        let form = new FormData(event.target)
-        let formData = {}
-        form.forEach((value, key) => {
-          formData[key] = value
-        })
-        let formJsonData = JSON.stringify(formData)
-        const response = await axios.post(API_URL, formJsonData, {
+        // let form = new FormData(event.target)
+        // let formData = {}
+        // form.forEach((value, key) => {
+        //   formData[key] = value
+        // })
+        // let formJsonData = JSON.stringify(formData)
+        const response = await axios.post(API_URL, loginForm, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -324,5 +324,25 @@ export const useUserStore = defineStore('userStore', {
         console.error('登入失敗', error)
       }
     },
+    async submitRestPasswordEmail(email){
+      try {
+        const response = axios.post(`${this.apiUrl}/api/forgot-password/${email}`)
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            iconColor: 'black',
+            title: `重設密碼連結已發送到您的電子信箱`,
+            timer: 2500,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        });
+        console.log('信箱response'+response.data);
+    } catch (e) {
+        console.log(e)
+        Swal.showValidationMessage(e.response?.data.message || '發送失敗')
+    }
+      
+    }
   },
 })

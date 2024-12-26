@@ -56,6 +56,15 @@ public class EmployeeController {
     	employeeService.updateEmployee(employee,jobId);
     	return "redirect:/Bistro/Employee/findAllEmployees";
     }
+    @PostMapping("/Employee/resetPassword")
+    public String resetEmployeePassword(@ModelAttribute EmployeeDTO employee) {
+        Employee employeeDate = employeeService.findEmployeeByAccount(employee.getEmployeeAccount());
+        if(employeeDate!=null) {
+        	employeeDate.setEmployeePassword(employee.getConfirmPassword());
+        	employeeService.changePassword(employeeDate);
+        }
+        return "redirect:/";
+    }
     
 	
 	@PostMapping("/employee/createEmployee")

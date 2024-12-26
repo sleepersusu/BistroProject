@@ -88,4 +88,13 @@ public class EmployeeService {
 		}
 	}
 	
+	@Transactional
+	public Employee changePassword(Employee employeeBean) {
+		String password = employeeBean.getEmployeePassword();
+		String encodedPwd = pwdEncoder.encode(password);//加密
+		employeeBean.setEmployeePassword(encodedPwd);
+		return employeeRepo.save(employeeBean);
+
+	}
+	
 }
