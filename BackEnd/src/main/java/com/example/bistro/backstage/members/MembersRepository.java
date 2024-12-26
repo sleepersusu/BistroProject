@@ -2,8 +2,11 @@ package com.example.bistro.backstage.members;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
+
+import com.example.bistro.backstage.ordersDetails.OrdersDetails;
 
 
 public interface MembersRepository extends JpaRepository<Members, Integer> {
@@ -22,5 +25,7 @@ public interface MembersRepository extends JpaRepository<Members, Integer> {
     //根據會員帳號查詢會員資料
     Optional<Members> findByMemberAccount(String account);
 
-	
+    // Add this method for pagination
+    Page<Members> findByMemberNameOrMemberEmailContaining(
+            String memberName, String memberEmail, Pageable pageable);
 }

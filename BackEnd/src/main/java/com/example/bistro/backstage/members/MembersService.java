@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.bistro.backstage.ordersDetails.OrdersDetails;
 
 
 
@@ -16,6 +20,14 @@ public class MembersService {
 	
 	@Autowired
 	private MembersRepository memberRepo;
+	
+	public Page<Members> findWithPagination(String search, Pageable pageable) {
+        if (search != null && !search.trim().isEmpty()) {
+            return memberRepo.findByMemberNameOrMemberEmailContaining(
+                    search, search, pageable);
+        }
+        return memberRepo.findAll(pageable);
+    }
 	
 	public Members insertMember(Members memberBean) {
 		String memberShip="會員";

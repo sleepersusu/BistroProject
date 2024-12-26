@@ -54,15 +54,9 @@ public class MembersRestController {
 			memberBean.setMemberAccount(userAccount);
 			memberBean.setMemberPassword(userPassword);
 			memberBean.setMemberEmail(userAccount);
-			Members memberData = memberFronetService.insertMember(memberBean);
-//			try {
-//				response.put("status", "success");
-//				response.put("memberId", memberData.getId().toString());
-//			} catch (DataIntegrityViolationException e) {
-//				System.out.println("唯一性錯誤");
-//				e.printStackTrace();
-//			}
-			
+			Members memberData = memberFronetService.insertMember(memberBean);		
+				response.put("status", "success");
+				response.put("memberId", memberData.getId().toString());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
 	}
