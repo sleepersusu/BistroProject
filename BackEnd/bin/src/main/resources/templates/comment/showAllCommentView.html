@@ -19,6 +19,65 @@
 
 <link rel="stylesheet" th:href="@{/css/demo.css}" />
 
+<style>
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
+
+#edit, #delete, #active {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#active {
+	background-color: #009c0d;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+#dt-search-0 {
+	margin-right: 2rem
+}
+
+#dt-search-0:focus {
+	outline: none;
+}
+
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
+
+#addData:hover {
+	background-color: #2894FF;
+}
+</style>
+
 </head>
 <style>
 body {
@@ -92,7 +151,10 @@ body {
 			<div th:replace="~{layout/headerlogout.html}"></div>
 
 			<main>
+				
 				<h2>評論管理</h2>
+				
+				
 				
 
 				<section>
@@ -133,6 +195,7 @@ body {
 						</table>
 					</div>
 				</section>
+				<div style="min-height: 65px"></div>
 			</main>
 
 			<footer> &copy; Made by TeamWork </footer>
@@ -145,10 +208,26 @@ body {
 	<script>
 		
 
-	$("#table").DataTable({
-		scrollX : "90%",
-		scrollY : "500px",
-	})
+			// jquery寫法 start
+		$(document).ready(function() {
+			$("#table").DataTable({
+				scrollX : "90%",
+				scrollY : "500px",
+				paging: true, // 如果希望有分頁功能
+				searching: true, // 如果需要啟用搜尋功能
+				responsive: true, // 如果希望在不同尺寸螢幕上調整表格
+				autoWidth: false,
+		        "columnDefs": [
+		            {"width": "30px","targets": 0},
+		            {"width": "60px","targets": 1},
+		            {"width": "100px","targets": 2},
+		            {"width": "60px","targets": 3},
+		            {"width": "200px","targets": 4},
+		            {"width": "100px","targets": 5}
+
+		        ]
+			});
+		});
 
 
 	</script>
