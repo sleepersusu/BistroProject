@@ -67,6 +67,7 @@ export default {
           iconColor: 'black',
           title: '優惠碼無效',
           text: '請確認優惠碼是否正確',
+          confirmButtonColor: '#000000'
         })
       }
     },
