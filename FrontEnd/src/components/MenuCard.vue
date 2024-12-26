@@ -202,7 +202,7 @@ export default {
       this.$emit('update-count', this.count)
     },
     async getCommentPeople() {
-      let API_URL = `${import.meta.env.VITE_API}/api/frontend/${this.menu.productName}/comment/people`
+      let API_URL = `${import.meta.env.VITE_API}/api/${this.menu.productName}/comment/people`
       axios
         .get(API_URL)
         .then(async (response) => {
