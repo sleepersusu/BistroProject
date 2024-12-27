@@ -13,7 +13,7 @@
             <h5 class="username">{{ memberprofile.userName }}</h5>
             <div class="points">
               <font-awesome-icon :icon="['fas', 'copyright']" bounce style="color: #FFD43B;" />
-              <span>{{ memberprofile.userPoint }} 點</span>
+              <span>{{ memberPointTotal }} 點</span>
             </div>
           </div>
         </div>
@@ -62,6 +62,7 @@
 import Offcanvas from 'bootstrap/js/dist/offcanvas';
 import { useUserStore } from '@/stores/userStore'
 import { mapState, mapActions } from 'pinia'
+import { pointStore } from '@/stores/pointStore'
 
 export default {
   name: 'MemberMenu',
@@ -72,6 +73,7 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ['memberprofile']),
+    ...mapState(pointStore, ['memberPointTotal']),
   },
   methods: {
     ...mapActions(useUserStore, ['clearLoggedIn']),

@@ -8,9 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.bistro.backstage.members.Members;
-
-
 @Service
 public class EmployeeService {
 	@Autowired
@@ -54,9 +51,6 @@ public class EmployeeService {
 			Employee employeeBean = employeeData.get();
 			String passwordData = employeeBean.getEmployeePassword();
 			boolean matchResult = pwdEncoder.matches(loginPassword, passwordData);
-			System.out.println(passwordData);
-			System.out.println(loginPassword);
-			System.out.println("比較");
 			if (matchResult) {//result
 				return employeeData;
 			}else if(passwordData.equals(loginPassword)){
@@ -86,6 +80,15 @@ public class EmployeeService {
 		}else {
 			return employeeRepo.save(employeeBean);
 		}
+	}
+	
+	@Transactional
+	public Employee changePassword(Employee employeeBean) {
+		String password = employeeBean.getEmployeePassword();
+		String encodedPwd = pwdEncoder.encode(password);//加密
+		employeeBean.setEmployeePassword(encodedPwd);
+		return employeeRepo.save(employeeBean);
+
 	}
 	
 }

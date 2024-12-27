@@ -3,6 +3,8 @@ package com.example.bistro.frontstage.members;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.bistro.backstage.PointsTotal.PointsTotalBean;
+import com.example.bistro.backstage.PointsTotal.PointsTotalRepository;
 import com.example.bistro.backstage.members.Members;
 
 import java.util.HashMap;
@@ -17,28 +19,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api/frontend/members")
+@RequestMapping("/api")
 public class MembersRestController {
 	
 	@Autowired
 	private MemberFrontService memberFronetService;
 	
+	@Autowired
+	private PointsTotalRepository PTRepo;
+	
 	//新增會員帳號
-	@PostMapping("/create")
+	@PostMapping("/members/create")
 	public ResponseEntity<Map<String, String>> createMember(@RequestBody MembersDTO membersDTO) {
 		String userName = membersDTO.getUserName();
 		String userPhone = membersDTO.getUserPhone();
-		String userAccount = membersDTO.getUserAccount();
+		String userAccount = membersDTO.getUserEmail();
 		String userPassword = membersDTO.getUserPassword();
 		Optional<Members> result = memberFronetService.findMemberByAccount(userAccount);
 		Map<String, String> response = new HashMap<>();
 		if(result.isPresent()) {
-			response.put("status", "資料已存在");
-			return ResponseEntity.status(404).body(response);
+			response.put("status", "Fail");
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 		}else {
 
 			Members memberBean = new Members();
@@ -47,27 +51,32 @@ public class MembersRestController {
 			memberBean.setMemberAccount(userAccount);
 			memberBean.setMemberPassword(userPassword);
 			memberBean.setMemberEmail(userAccount);
-
-			Members memberData = memberFronetService.insertMember(memberBean);
-			
-			response.put("status", "success");
-			response.put("memberId", memberData.getId().toString());
+			Members memberData = memberFronetService.insertMember(memberBean);		
+				response.put("status", "success");
+				response.put("memberId", memberData.getId().toString());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
 	}
-	
-	@GetMapping("/{id}")
+
+	@GetMapping("/frontend/members/{id}")
 	public ResponseEntity<Members> getMethodName(@PathVariable Integer id) {
 		Optional<Members> result = memberFronetService.findMemberById(id);
 		if(result.isPresent()) {
 			Members memberData = result.get();
+			Optional<PointsTotalBean> pointResult = PTRepo.findByMembersId(id);
+			if(pointResult.isPresent()) {
+				PointsTotalBean pointsData = pointResult.get();
+				memberData.setMemberPoint(pointsData.getPointsTotal());
+			}else {
+				memberData.setMemberPoint(0);
+			}
 			return ResponseEntity.ok(memberData);
 		}else {
 			return ResponseEntity.notFound().build();
 		}
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/frontend/members/{id}")
 	public ResponseEntity<Map<String, String>> updateMemberProfile(@PathVariable Integer id, @RequestBody memberProfileDTO memberProfileDTO) {
 		Optional<Members> resultData = memberFronetService.findMemberById(id);
 		Map<String, String> response = new HashMap<>();
@@ -88,7 +97,7 @@ public class MembersRestController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/frontend/members/{id}")
 	public String name() {
 		return null;
 	}

@@ -35,6 +35,13 @@
                 showCursor: false
             };
             const typed = new Typed("#typing-effect", options);
+            
+            // 頁面加載時檢查是否有保存的帳號和密碼
+            if (localStorage.getItem("rememberMe") === "true") {
+                document.getElementById("employeeAccount").value = localStorage.getItem("employeeAccount");
+                document.getElementById("password").value = localStorage.getItem("employeePassword");
+                document.getElementById("rememberMe").checked = true;  // 設置勾選框為已勾選狀態
+            }
         };
     </script>
 
@@ -52,18 +59,19 @@
 
 	<div class="box">
 		<div class="wrapper">
-			<form th:action="@{/employee/login}" method="post">
+			<form th:action="@{/employee/login}" method="post" id="loginForm">
 				<h1>登入</h1>
 				<div class="input-box">
-					<input type="text" name="employeeAccount" placeholder="使用者帳號" required />
+					<input type="text" id="employeeAccount" name="employeeAccount" placeholder="使用者帳號" required />
 					<i class="bx bxs-user"></i>
 				</div>
 				<div class="input-box">
-					<input type="password" name="employeePassword" placeholder="密碼" required />
+					<input type="password" id="password" name="employeePassword" placeholder="密碼" required />
 					<i class="fa-solid fa-eye" id="lock" style="cursor: pointer"></i>
 				</div>
 				<div class="remember-forget">
-					<label for=""><input type="checkbox" />記住密碼</label> <a href="#">忘記密碼</a>
+					<label for=""><input type="checkbox" id="rememberMe" />記住密碼</label> 
+					<a href="/resetPassword">忘記密碼</a>
 				</div>
 				<button type="submit" class="btn">登入</button>
 			</form>
@@ -74,15 +82,29 @@
 		document.getElementById("lock").addEventListener("click", () => {
 			let input = document.getElementById("password");
 			let iTag = document.getElementById("lock");
-
-			if (input.type === "password" && iTag.classList.contains("fa-eye")) {
+			iTag.classList.remove("fa-eye");
+			iTag.classList.remove("fa-eye-slash");
+			if (input.type == "password") {
 				input.type = "text";
-				iTag.classList.remove("fa-eye");
+				console.log('觸發眼睛換斜線');
 				iTag.classList.add("fa-eye-slash");
 			} else {
 				input.type = "password";
-				iTag.classList.remove("fa-eye-slash");
+				console.log('觸發眼睛無斜線');
 				iTag.classList.add("fa-eye");
+			}
+		});
+
+		// 提交表單時，處理記住密碼的邏輯
+		document.getElementById("loginForm").addEventListener("submit", function(event) {
+			if (document.getElementById("rememberMe").checked) {
+				localStorage.setItem("rememberMe", "true");
+				localStorage.setItem("employeeAccount", document.getElementById("employeeAccount").value);
+				localStorage.setItem("employeePassword", document.getElementById("password").value);
+			} else {
+				localStorage.removeItem("rememberMe");
+				localStorage.removeItem("employeeAccount");
+				localStorage.removeItem("employeePassword");
 			}
 		});
 	</script>

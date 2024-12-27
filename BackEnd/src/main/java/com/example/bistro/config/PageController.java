@@ -8,7 +8,12 @@ public class PageController {
 	
 	@GetMapping("/")
 	public String home() {
-		return "/login/login";
+		return "login/login";
+	}
+	
+	@GetMapping("/resetPassword")
+	public String restPassword() {
+		return "login/resetPassword";
 	}
 	
 }

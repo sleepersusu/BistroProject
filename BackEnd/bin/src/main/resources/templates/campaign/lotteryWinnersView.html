@@ -187,7 +187,9 @@
                     <td th:text="${result[1]}"></td>
                     <td th:text="${result[2]}"></td>
                     <td th:text="${result[3]}"></td>
-                    <td th:text="${#dates.format(result[4], 'yyyy-MM-dd HH:mm')}"></td>
+                    <td
+                      th:text="${#dates.format(result[4], 'yyyy-MM-dd HH:mm')}"
+                    ></td>
                     <td>
                       <span th:if="${result[5] == '進行中'}" style="color: blue"
                         >[[${result[5]}]]</span
@@ -201,6 +203,7 @@
                         type="submit"
                         id="edit"
                         th:onclick="openEditModal([[${result[0]}]])"
+                        th:if="${result[3] != '銘謝惠顧'}"
                       >
                         查看
                       </button>
