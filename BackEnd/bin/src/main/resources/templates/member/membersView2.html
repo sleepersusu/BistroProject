@@ -1,122 +1,119 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>會員管理 - DINEEASE餐廳管理系統</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>會員管理 - DINEEASE餐廳管理系統</title>
 
-<link rel="icon" th:href="@{/images/favicon.ico}" />
+	<link rel="icon" th:href="@{/images/favicon.ico}" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
-	rel="stylesheet" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
-<link rel="stylesheet" th:href="@{/css/demo.css}" />
-<style>
-body {
-	font-family: "Noto Sans TC", sans-serif;
-}
+	<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+	<link rel="stylesheet" th:href="@{/css/demo.css}" />
+	<style>
+		body {
+			font-family: "Noto Sans TC", sans-serif;
+		}
 
-#edit, #delete, #active {
-	padding: 0.3rem 0.75rem;
-	cursor: pointer;
-	color: white;
-	border: none;
-	border-radius: 10px
-}
+		#edit,
+		#delete,
+		#active {
+			padding: 0.3rem 0.75rem;
+			cursor: pointer;
+			color: white;
+			border: none;
+			border-radius: 10px
+		}
 
-#edit {
-	background-color: #0071e3;
-	margin-bottom: 0.3rem;
-}
+		#edit {
+			background-color: #0071e3;
+			margin-bottom: 0.3rem;
+		}
 
-#edit:hover {
-	background-color: #2894FF;
-}
+		#edit:hover {
+			background-color: #2894FF;
+		}
 
-#delete {
-	background-color: #CE0000;
-}
+		#delete {
+			background-color: #CE0000;
+		}
 
-#active {
-	background-color: #009c0d;
-}
+		#active {
+			background-color: #009c0d;
+		}
 
-#delete:hover {
-	background-color: #FF5151;
-}
+		#delete:hover {
+			background-color: #FF5151;
+		}
 
-#dt-search-0 {
-	margin-right: 2rem
-}
+		#dt-search-0 {
+			margin-right: 2rem
+		}
 
-#dt-search-0:focus {
-	outline: none;
-}
+		#dt-search-0:focus {
+			outline: none;
+		}
 
-#addData {
-	padding: 0.5rem 1.25rem !important;
-	font-size: 1rem !important;
-	width: auto;
-	height: auto;
-	color: white;
-	background-color: #0071e3;
-	border: none;
-	border-radius: 0;
-	font-weight: normal;
-}
+		#addData {
+			padding: 0.5rem 1.25rem !important;
+			font-size: 1rem !important;
+			width: auto;
+			height: auto;
+			color: white;
+			background-color: #0071e3;
+			border: none;
+			border-radius: 0;
+			font-weight: normal;
+		}
 
-#addData:hover {
-	background-color: #2894FF;
-}
+		#addData:hover {
+			background-color: #2894FF;
+		}
 
-.modal-content {
-	min-width: 700px;
-	height: 700px;
-	overflow: auto;
-}
+		.modal-content {
+			min-width: 700px;
+			height: 700px;
+			overflow: auto;
+		}
 
-.radiomenu {
-	display: flex;
-	height: 30px;
-	margin-bottom: 16px;
-	padding: 5px 10px;
-	align-items: center;
-}
+		.radiomenu {
+			display: flex;
+			height: 30px;
+			margin-bottom: 16px;
+			padding: 5px 10px;
+			align-items: center;
+		}
 
-.radiomenu .radiomenuitem {
-	padding: 5px;
-	margin-right: 10px;
-}
+		.radiomenu .radiomenuitem {
+			padding: 5px;
+			margin-right: 10px;
+		}
 
-.radiomenu .radiomenuitem>label {
-	display: inline-block;
-	vertical-align: middle;
-}
+		.radiomenu .radiomenuitem>label {
+			display: inline-block;
+			vertical-align: middle;
+		}
 
-.radiomenu .radiomenuitem>input {
-	vertical-align: middle;
-	position: relative;
-	top: 8px
-}
-
-
-</style>
+		.radiomenu .radiomenuitem>input {
+			vertical-align: middle;
+			position: relative;
+			top: 8px
+		}
+	</style>
 
 
 </head>
 
 <body>
 	<!-- datatable  -->
-	<script th:src="@{/jquery/jquery-3.7.1.js}" ></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js" ></script>
+	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
 
 	<div id="page">
@@ -156,67 +153,13 @@ body {
 								</tr>
 							</thead>
 							<tbody id="event-list">
-								<tr th:each="members : ${allMembers}">
-										<td th:text="${members.id}"></td>
-										<td th:text="${members.memberAccount == null ? '無' : #strings.substringBefore(members.memberAccount, '@')+'@信箱'}"></td>
-										<td class="password-cell" th:text="${members.memberPassword==null?'無':members.memberPassword }"></td>
-										<td th:text="${members.memberName}"></td>
-										<td th:text="${members.memberSex == null ? '無' : (members.memberSex == 1 ? '男' : (members.memberSex == 0 ? '女' : '未知')) }"
-										th:style="${members.memberSex == null ? 'color: black;' : (members.memberSex == 1 ? 'color: #0072E3;' : 'color: red;')}"></td>
-										<td th:text="${members.memberBirthday==null?'無':members.memberBirthday}"></td>
-										<td th:text="${members.memberFavor==1 ? '外向' : '內向'}"></td>
-										<td th:text="${members.memberAddress==null?'無':members.memberAddress}"></td>
-										<td th:text="${members.memberPhone}"></td>
-										<td th:text="${members.memberEmail==null?'無':members.memberEmail}"></td>
-										<td><img alt="無圖片" th:src="@{/Bistro/download?type=member&(ID=${members.id})}"></td>
-										<!-- <td th:text="${members.memberPoint==null?'無':members.memberPoint}"></td> -->
-										<!-- <td th:text="${members.memberShip}" th:style="'color:'+(${members.memberShip} == '會員' ? '#0072E3' : 'red')"></td> -->
-										<td th:text="${members.memberStatus}" th:style="'color:'+(${members.memberStatus} == '啟用' ? '#0072E3' : 'red')"></td>
 
-										<td>
-										<!-- th:data-start-date="${#dates.format(members.memberBirthday, 'yyyy-MM-dd')}" -->
-											<button type="button" id="edit"
-												th:data-id="${members.id}"
-												th:data-account="${members.memberAccount}"
-												th:data-password="${members.memberPassword}"
-												th:data-name="${members.memberName}"
-												th:data-sex="${members.memberSex}"
-												th:data-birthday="${members.memberBirthday}"
-												th:data-favor="${members.memberFavor}"
-												th:data-address="${members.memberAddress}"
-												th:data-phone="${members.memberPhone}"
-												th:data-email="${members.memberEmail}"
-												th:data-Img="${members.memberImg}"
-												th:data-point="${members.memberPoint}"
-												th:data-status="${members.memberStatus}"
-												th:data-memberShip="${members.memberShip}"
-												onclick="openEditModal(this)">編輯</button>
-											<th:block th:if="${members.memberStatus!='註銷'}">
-												<form th:action="@{/Bistro/Member/cancel}" method="post"
-													style="display: inline;">
-													<input type="hidden" name="id" th:value="${members.id}">
-													<button type="submit" id="delete"
-														onclick="return confirm('確定要註銷帳號嗎？');">註銷</button>
-												</form>
-											</th:block>
-											<th:block th:if="${members.memberStatus!='啟用'}">
-												<form th:action="@{/Bistro/Member/active}" method="post"
-													style="display: inline;">
-													<input type="hidden" name="id" th:value="${members.id}">
-													<button type="submit" id="active">啟用</button>
-												</form>
-											</th:block>
-										</td>
-									</tr>
-									<tr th:if="${#lists.isEmpty(allMembers)}">
-										<td colspan="14">沒有會員資料</td>
-									</tr>
 
 							</tbody>
 						</table>
 					</div>
 				</section>
-				
+
 			</main>
 
 			<!--  新增會員視窗 -->
@@ -231,9 +174,8 @@ body {
 								會員基本資料 </legend>
 
 							<div class="question">
-								<span class="title">會員帳號</span> <input type="text" id="useraccount"
-									name="memberAccount" value="" placeholder="請輸入會員帳號" required
-									aria-required="true" />
+								<span class="title">會員帳號</span> <input type="text" id="useraccount" name="memberAccount"
+									value="" placeholder="請輸入會員帳號" required aria-required="true" />
 							</div>
 							<div class="question">
 								<span class="title">會員密碼</span> <input type="password" id="userpwd"
@@ -241,9 +183,8 @@ body {
 									aria-required="true" />
 							</div>
 							<div class="question">
-								<span class="title">會員姓名</span> <input type="text" id="username"
-									name="memberName" value="" placeholder="請輸入會員姓名" required
-									aria-required="true" />
+								<span class="title">會員姓名</span> <input type="text" id="username" name="memberName"
+									value="" placeholder="請輸入會員姓名" required aria-required="true" />
 							</div>
 
 							<div class="question">
@@ -251,56 +192,53 @@ body {
 								<div class="question">
 									<div class="radiomenu">
 										<div class="radiomenuitem">
-											<label for="male">男</label> <input type="radio"
-												name="memberSex" id="male" value="1" required />
+											<label for="male">男</label> <input type="radio" name="memberSex" id="male"
+												value="1" required />
 										</div>
 										<div class="radiomenuitem">
-											<label for="female">女</label> <input type="radio"
-												name="memberSex" id="female" value="0" required />
+											<label for="female">女</label> <input type="radio" name="memberSex"
+												id="female" value="0" required />
 										</div>
 									</div>
 								</div>
 							</div>
 
 							<div class="question">
-								<span class="title">出生日期</span> <input type="DATE"
-									id="userbirthday" name="memberBirthday" value="" required />
+								<span class="title">出生日期</span> <input type="DATE" id="userbirthday"
+									name="memberBirthday" value="" required />
 							</div>
 
 							<div class="question">
 								<span class="title">興趣</span>
 								<div class="radiomenu">
 									<div class="radiomenuitem">
-										<label for="introver">內向</label> <input type="radio"
-											name="memberFavor" id="introver" value="0" required />
+										<label for="introver">內向</label> <input type="radio" name="memberFavor"
+											id="introver" value="0" required />
 									</div>
 									<div class="radiomenuitem">
-										<label for="extrovert">外向</label> <input type="radio"
-											name="memberFavor" id="extrovert" value="1" required />
+										<label for="extrovert">外向</label> <input type="radio" name="memberFavor"
+											id="extrovert" value="1" required />
 									</div>
 								</div>
 							</div>
 
 							<div class="question">
-								<span class="title">會員地址</span> <input type="text"
-									id="useraddress" name="memberAddress" value=""
-									placeholder="請輸入會員地址" />
+								<span class="title">會員地址</span> <input type="text" id="useraddress" name="memberAddress"
+									value="" placeholder="請輸入會員地址" />
 							</div>
 
 							<div class="question">
-								<span class="title">聯絡電話</span> <input type="text"
-									id="userphone" name="memberPhone" value="" placeholder="請輸入會員電話"
-									maxlength="10" required />
+								<span class="title">聯絡電話</span> <input type="text" id="userphone" name="memberPhone"
+									value="" placeholder="請輸入會員電話" maxlength="10" required />
 							</div>
 
 							<div class="question">
-								<span class="title">電子信箱</span> <input type="text"
-									id="useremail" name="memberEmail" value="" placeholder="請輸入會員信箱"
-									required />
+								<span class="title">電子信箱</span> <input type="text" id="useremail" name="memberEmail"
+									value="" placeholder="請輸入會員信箱" required />
 							</div>
 							<div class="question">
-								<span class="title">會員頭像</span> <input type="file" id="userimg"
-									name="memberPhoto" value="" accept="image/*" />
+								<span class="title">會員頭像</span> <input type="file" id="userimg" name="memberPhoto"
+									value="" accept="image/*" />
 							</div>
 						</fieldset>
 						<!---------------------------底下為按鈕區---------------------------------------------- -->
@@ -323,79 +261,72 @@ body {
 							<legend style="margin-bottom: 1rem; font-weight: bold">
 								會員基本資料 </legend>
 							<input type="hidden" id="edituserid" name="id" value="">
-								<div class="question">
-									<span class="title">會員帳號</span> <input type="text"
-										id="edituseraccount" name="memberAccount" value=""
-										placeholder="請輸入會員帳號" />
-								</div>
-								<div class="question">
-									<span class="title">會員密碼</span> <input type="password"
-										id="edituserpwd" name="memberPassword" value=""
-										placeholder="請輸入會員密碼" />
-								</div>
-								<div class="question">
-									<span class="title">會員姓名</span> <input type="text"
-										id="editusername" name="memberName" value=""
-										placeholder="請輸入會員姓名" />
-								</div>
+							<div class="question">
+								<span class="title">會員帳號</span> <input type="text" id="edituseraccount"
+									name="memberAccount" value="" placeholder="請輸入會員帳號" />
+							</div>
+							<div class="question">
+								<span class="title">會員密碼</span> <input type="password" id="edituserpwd"
+									name="memberPassword" value="" placeholder="請輸入會員密碼" />
+							</div>
+							<div class="question">
+								<span class="title">會員姓名</span> <input type="text" id="editusername" name="memberName"
+									value="" placeholder="請輸入會員姓名" />
+							</div>
 
+							<div class="question">
+								<span class="title">會員性別:</span>
 								<div class="question">
-									<span class="title">會員性別:</span>
-									<div class="question">
-										<div class="radiomenu">
-											<div class="radiomenuitem">
-												<label for="male">男</label> <input type="radio"
-													id="editmale" name="memberSex" value="1"  />
-											</div>
-											<div class="radiomenuitem">
-												<label for="female">女</label> <input type="radio"
-													id="editfemale" name="memberSex" value="0"  />
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="question">
-									<span class="title">出生日期</span> <input type="DATE"
-										id="edituserbirthday" name="memberBirthday" value=""
-										/>
-								</div>
-
-								<div class="question">
-									<span class="title">興趣:</span>
 									<div class="radiomenu">
 										<div class="radiomenuitem">
-											<label for="introver">內向</label> <input type="radio"
-												id="editintrover" name="memberFavor" value="0"  />
+											<label for="male">男</label> <input type="radio" id="editmale"
+												name="memberSex" value="1" />
 										</div>
 										<div class="radiomenuitem">
-											<label for="extrovert">外向</label> <input type="radio"
-												id="editextrovert" name="memberFavor" value="1"  />
+											<label for="female">女</label> <input type="radio" id="editfemale"
+												name="memberSex" value="0" />
 										</div>
 									</div>
 								</div>
+							</div>
 
-								<div class="question">
-									<span class="title">會員地址</span> <input type="text"
-										id="edituseraddress" name="memberAddress" value=""
-										placeholder="請輸入會員地址" />
-								</div>
+							<div class="question">
+								<span class="title">出生日期</span> <input type="DATE" id="edituserbirthday"
+									name="memberBirthday" value="" />
+							</div>
 
-								<div class="question">
-									<span class="title">聯絡電話</span> <input type="text"
-										id="edituserphone" name="memberPhone" value=""
-										maxlength="10" placeholder="請輸入會員電話" />
+							<div class="question">
+								<span class="title">興趣:</span>
+								<div class="radiomenu">
+									<div class="radiomenuitem">
+										<label for="introver">內向</label> <input type="radio" id="editintrover"
+											name="memberFavor" value="0" />
+									</div>
+									<div class="radiomenuitem">
+										<label for="extrovert">外向</label> <input type="radio" id="editextrovert"
+											name="memberFavor" value="1" />
+									</div>
 								</div>
+							</div>
 
-								<div class="question">
-									<span class="title">電子信箱</span> <input type="text"
-										id="edituseremail" name="memberEmail" value=""
-										placeholder="請輸入會員信箱"/>
-								</div>
-								<div class="question">
-									<span class="title">會員頭像</span> <input type="file"
-										id="edituserimg" name="memberPhoto" value="" accept="image/*" />
-								</div>
+							<div class="question">
+								<span class="title">會員地址</span> <input type="text" id="edituseraddress"
+									name="memberAddress" value="" placeholder="請輸入會員地址" />
+							</div>
+
+							<div class="question">
+								<span class="title">聯絡電話</span> <input type="text" id="edituserphone" name="memberPhone"
+									value="" maxlength="10" placeholder="請輸入會員電話" />
+							</div>
+
+							<div class="question">
+								<span class="title">電子信箱</span> <input type="text" id="edituseremail" name="memberEmail"
+									value="" placeholder="請輸入會員信箱" />
+							</div>
+							<div class="question">
+								<span class="title">會員頭像</span> <input type="file" id="edituserimg" name="memberPhoto"
+									value="" accept="image/*" />
+							</div>
 						</fieldset>
 						<!---------------------------底下為按鈕區---------------------------------------------- -->
 						<div id="buttonbox">
@@ -410,100 +341,168 @@ body {
 		</div>
 	</div>
 
-	<script>
-		// jquery寫法 start
-		$(document).ready(function() {
-			$("#table").DataTable({
-				scrollX : "90%",
-				scrollY : "500px",
-				paging: true, // 如果希望有分頁功能
-				searching: true, // 如果需要啟用搜尋功能
-				responsive: true, // 如果希望在不同尺寸螢幕上調整表格
-				autoWidth: false,
-		        "columnDefs": [
-		            {"width": "45px","targets": 0},
-		            {"width": "70px","targets": 1,},
-		            {"width": "70px","targets": 2,className: 'ellipsis'},
-		            {"width": "70px","targets": 3},
-		            {"width": "70px","targets": 4},
-		            {"width": "90px","targets": 5},
-		            {"width": "70px","targets": 6},
-		            {"width": "70px","targets": 7,className: 'ellipsis'},
-		            {"width": "95px","targets": 8},
-		            {"width": "100px","targets": 9,className: 'ellipsis'},
-		            {"width": "90px","targets": 10},
-		            {"width": "85px","targets": 11},
-		            {"width": "70px","targets": 12,"orderable": false},
-		        ]
-			});
+	<script th:inline="javascript">
+
+		// DataTable 初始化
+		const table = $("#table").DataTable({
+
+			columnDefs: [
+				{
+					targets: '_all', // 套用到所有欄位
+					className: 'text-center'
+				},
+				{
+					targets: [11],
+					className: 'text-left'
+				}
+			],
+			scrollX: "90%",
+			scrollY: "500px",
+			searching: true,
+			responsive: true,
+			serverSide: true,
+			processing: true,
+			ordering: true, // 啟用排序功能
+			ajax: {
+				url: '/Bistro/Member/data',
+				type: 'GET',
+				data: function (d) {
+					// 保持原有的請求參數
+					return d;
+				}
+			},
+			columns: [
+				{ data: 'id', "width": "45px", "targets": 0 },
+				{ data: 'memberAccount', "width": "70px", "targets": 1, },
+				{ data: 'memberPassword', "width": "70px", "targets": 2, className: 'ellipsis' },
+				{ data: 'memberName', "width": "70px", "targets": 3 },
+				{
+					data: 'memberSex', "width": "70px", "targets": 4,
+					"render": function (data, type, row) {
+						if (data === 0) {
+							return '女';  // 當 memberSex 為 0 時顯示 "女"
+						} else if (data === 1) {
+							return '男';  // 當 memberSex 為 1 時顯示 "男"
+						}
+						return '';  // 如果不是 0 或 1，顯示空字符串
+					}
+				},
+				{ data: 'memberBirthday', "width": "90px", "targets": 5 },
+				{ data: 'memberFavor', "width": "70px", "targets": 6 },
+				{ data: 'memberAddress', "width": "70px", "targets": 7, className: 'ellipsis' },
+				{ data: 'memberPhone', "width": "95px", "targets": 8 },
+				{ data: 'memberEmail', "width": "100px", "targets": 9, className: 'ellipsis' },
+				{
+					data: 'memberImg',   // 從後端取得的圖片欄位
+					width: "95px",
+					targets: 10,
+					render: function (data, type, row) {
+						if (data) {
+							// 假設 `data` 是 Base64 編碼的圖片字符串
+							return '<img src="data:image/png;base64,' + data + '" alt="Member Image" style="max-width: 100%; max-height: 100%;">';
+						}
+						return ''; // 如果沒有圖片，返回空字符串
+					}
+				},
+				{ data: 'memberStatus', "width": "90px", "targets": 11 },
+				{
+					data: null,  // 空資料，用來放按鈕
+					width: "90px",
+					targets: 12,
+					render: function (data, type, row) {
+						// 動態創建編輯按鈕，並綁定相應的資料
+						return `<button type="button" id="edit" 
+                                data-id="${row.id}"
+                                data-account="${row.memberAccount}"
+                                data-password="${row.memberPassword}"
+                                data-name="${row.memberName}"
+                                data-sex="${row.memberSex}"
+                                data-birthday="${row.memberBirthday}"
+                                data-favor="${row.memberFavor}"
+                                data-address="${row.memberAddress}"
+                                data-phone="${row.memberPhone}"
+                                data-email="${row.memberEmail}"
+                                data-Img="${row.memberImg}"
+                                data-point="${row.memberPoint}"
+                                data-status="${row.memberStatus}"
+                                data-memberShip="${row.memberShip}"
+                                onclick="openEditModal(this)">編輯</button>`;
+					}
+				},
+			],
+			language: {
+				processing: "處理中...",
+				zeroRecords: "沒有符合的結果",
+				infoFiltered: "(從 _MAX_ 筆資料中過濾)",
+			}
 		});
-	    
+
 		// jquery寫法 end
-		
+
 		document.getElementById("addData").addEventListener("click", () => {
-        	document.getElementById("addEventModal").style.display = "block";
-     	 });
+			document.getElementById("addEventModal").style.display = "block";
+		});
 
 		document.querySelectorAll(".close").forEach(closeButton => {
-		    closeButton.addEventListener("click", () => {
-		        document.getElementById("addEventModal").style.display = "none";
-		        document.getElementById("addEventModal2").style.display = "none";
-		    });
+			closeButton.addEventListener("click", () => {
+				document.getElementById("addEventModal").style.display = "none";
+				document.getElementById("addEventModal2").style.display = "none";
+			});
 		});
 
-	      window.onclick = function (event) {
-	        const modal = document.getElementById("addEventModal");
-	        const modal2 = document.getElementById("addEventModal2");
-	        if (event.target == modal || event.target == modal2) {
-	          document.getElementById("addEventModal").style.display = "none";
-	          document.getElementById("addEventModal2").style.display = "none";
-	        }
-	      };
-	      
-	      function openEditModal(btnData) {
-	    	  	console.log(btnData);
-		    	document.getElementById("addEventModal2").style.display = "block";
-		    	document.getElementById("edituserid").value = btnData.dataset.id;
-	    	    document.getElementById("edituseraccount").value = btnData.dataset.account;
-	    	    document.getElementById("edituserpwd").value = btnData.dataset.password;
-	    	    document.getElementById("editusername").value = btnData.dataset.name;
-	    	    
-	    	    if(btnData.dataset.sex==0){
-	    	    	document.getElementById("editfemale").checked=true;
-	    	    }else if(btnData.dataset.sex==1){
-	    	    	document.getElementById("editmale").checked=true;
-	    	    }else{
-	    	    	document.getElementById("editfemale").checked=false;
-	    	    	document.getElementById("editmale").checked=false;
-	    	    }
-	    	    
-	    	    document.getElementById("edituserbirthday").value = btnData.dataset.birthday;
-	    	    
-	    	    if(btnData.dataset.favor==0){
-	    	    	document.getElementById("editintrover").checked=true;
-	    	    }else if(btnData.dataset.favor==1){
-	    	    	document.getElementById("editextrovert").checked=true;
-	    	    }else{
-	    	    	document.getElementById("editintrover").checked=false;
-	    	    	document.getElementById("editextrovert").checked=false;
-	    	    }
-	    	    
-	    	    document.getElementById("edituseraddress").value = btnData.dataset.address; 
-	    	    document.getElementById("edituserphone").value = btnData.dataset.phone;
-	    	    document.getElementById("edituseremail").value = btnData.dataset.email;
-	    	    }
-	    	    
-			document.addEventListener("DOMContentLoaded", function() {
-			    // 取所有"password-cell"
-			    document.querySelectorAll('.password-cell').forEach(function(passwordElement) {
-			      var password = passwordElement.textContent.trim();
-			
-			      if (password && password.length > 2) {
-			        var firstChar = password.substring(0, 1);  // 取第一字
-			        var lastChar = password.substring(password.length - 1);  // 取最後字
-			        passwordElement.textContent = firstChar + "***" + lastChar;
-			      }
-			    });
-			  });
+		window.onclick = function (event) {
+			const modal = document.getElementById("addEventModal");
+			const modal2 = document.getElementById("addEventModal2");
+			if (event.target == modal || event.target == modal2) {
+				document.getElementById("addEventModal").style.display = "none";
+				document.getElementById("addEventModal2").style.display = "none";
+			}
+		};
 
-	    </script>
+		function openEditModal(btnData) {
+			console.log(btnData);
+			document.getElementById("addEventModal2").style.display = "block";
+			document.getElementById("edituserid").value = btnData.dataset.id;
+			document.getElementById("edituseraccount").value = btnData.dataset.account;
+			document.getElementById("edituserpwd").value = btnData.dataset.password;
+			document.getElementById("editusername").value = btnData.dataset.name;
+
+			if (btnData.dataset.sex == 0) {
+				document.getElementById("editfemale").checked = true;
+			} else if (btnData.dataset.sex == 1) {
+				document.getElementById("editmale").checked = true;
+			} else {
+				document.getElementById("editfemale").checked = false;
+				document.getElementById("editmale").checked = false;
+			}
+
+			document.getElementById("edituserbirthday").value = btnData.dataset.birthday;
+
+			if (btnData.dataset.favor == 0) {
+				document.getElementById("editintrover").checked = true;
+			} else if (btnData.dataset.favor == 1) {
+				document.getElementById("editextrovert").checked = true;
+			} else {
+				document.getElementById("editintrover").checked = false;
+				document.getElementById("editextrovert").checked = false;
+			}
+
+			document.getElementById("edituseraddress").value = btnData.dataset.address;
+			document.getElementById("edituserphone").value = btnData.dataset.phone;
+			document.getElementById("edituseremail").value = btnData.dataset.email;
+		}
+
+		document.addEventListener("DOMContentLoaded", function () {
+			// 取所有"password-cell"
+			document.querySelectorAll('.password-cell').forEach(function (passwordElement) {
+				var password = passwordElement.textContent.trim();
+
+				if (password && password.length > 2) {
+					var firstChar = password.substring(0, 1);  // 取第一字
+					var lastChar = password.substring(password.length - 1);  // 取最後字
+					passwordElement.textContent = firstChar + "***" + lastChar;
+				}
+			});
+		});
+
+	</script>

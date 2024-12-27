@@ -106,21 +106,20 @@ body {
 	position: relative;
 	top: 8px
 }
-select {
-    width: 180px; /* 设置宽度 */
-    padding-top: 5px; 
-    padding-bottom: 5px; 
-    padding-right: 5px; 
-    font-size: 15px; /* 设置字体大小 */
-    border: 2px solid #ccc; /* 设置边框 */
 
+select {
+	width: 180px; /* 设置宽度 */
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	font-size: 15px; /* 设置字体大小 */
+	border: 2px solid #ccc; /* 设置边框 */
 }
 
 /* 鼠标悬停时的效果 */
 select:hover {
-    border-color: #007bff; /* 设置边框颜色 */
+	border-color: #007bff; /* 设置边框颜色 */
 }
-
 </style>
 
 
@@ -128,8 +127,8 @@ select:hover {
 
 <body>
 	<!-- datatable  -->
-	<script th:src="@{/jquery/jquery-3.7.1.js}" ></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js" ></script>
+	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
 
 	<div id="page">
@@ -167,60 +166,61 @@ select:hover {
 							</thead>
 							<tbody id="event-list">
 								<tr th:each="employees : ${allEmployees}">
-										<td th:text="${employees.id}"></td>
-										<td th:text="${employees.employeeAccount}"></td>
-										<td class="password-cell" th:text="${employees.employeePassword==null?'無':employees.employeePassword }"></td>
-										<td th:text="${employees.employeeName}"></td>
-										<td th:text="${employees.employeeGender}"
+									<td th:text="${employees.id}"></td>
+									<td th:text="${employees.employeeAccount}"></td>
+									<td class="password-cell"
+										th:text="${employees.employeePassword==null?'無':employees.employeePassword }"></td>
+									<td th:text="${employees.employeeName}"></td>
+									<td th:text="${employees.employeeGender}"
 										th:style="'color: ' + (${employees.employeeGender} == '男' ? '#0072E3' : 'red')"></td>
-										<td th:text="${employees.jobTitle.jobtitleName}"></td>
-										<td th:text="${employees.employeeBorn==null?'無':employees.employeeBorn}"></td>
-										<td th:text="${employees.employeeTel}"></td>
-										<td th:text="${employees.employeeSeniority+'年'}"></td>
-										<td th:text="${employees.employeeSalary}"></td>
-										<td th:text="${employees.employeeStatus}" th:style="'color:'+(${employees.employeeStatus} == '在職' ? '#0072E3' : 'red')"></td>
+									<td th:text="${employees.jobTitle.jobtitleName}"></td>
+									<td
+										th:text="${employees.employeeBorn==null?'無':employees.employeeBorn}"></td>
+									<td th:text="${employees.employeeTel}"></td>
+									<td th:text="${employees.employeeSeniority+'年'}"></td>
+									<td th:text="${employees.employeeSalary}"></td>
+									<td th:text="${employees.employeeStatus}"
+										th:style="'color:'+(${employees.employeeStatus} == '在職' ? '#0072E3' : 'red')"></td>
 
-										<td>
+									<td>
 										<!-- th:data-start-date="${#dates.format(employees.employeeBirthday, 'yyyy-MM-dd')}" -->
-											<button type="button" id="edit"
-												th:data-id="${employees.id}"
-												th:data-account="${employees.employeeAccount}"
-												th:data-password="${employees.employeePassword}"
-												th:data-name="${employees.employeeName}"
-												th:data-sex="${employees.employeeGender}"
-												th:data-jobid="${employees.jobTitle.id}"
-												th:data-birthday="${employees.employeeBorn}"
-												th:data-phone="${employees.employeeTel}"
-												th:data-seniority="${employees.employeeSeniority}"
-												th:data-salary="${employees.employeeSalary}"
-												th:data-status="${employees.employeeStatus}"
-												onclick="openEditModal(this)">編輯</button>
-											<th:block th:if="${employees.employeeStatus!='離職'}">
-												<form th:action="@{/Bistro/Employee/cancel}" method="post"
-													style="display: inline;">
-													<input type="hidden" name="id" th:value="${employees.id}">
-													<button type="submit" id="delete"
-														onclick="return confirm('確定註銷為離職員工嗎？');">註銷</button>
-												</form>
-											</th:block>
-											<th:block th:if="${employees.employeeStatus!='在職'}">
-												<form th:action="@{/Bistro/Employee/active}" method="post"
-													style="display: inline;">
-													<input type="hidden" name="id" th:value="${employees.id}">
-													<button type="submit" id="active">啟用</button>
-												</form>
-											</th:block>
-										</td>
-									</tr>
-									<tr th:if="${#lists.isEmpty(allEmployees)}">
-										<td colspan="11">沒有員工資料</td>
-									</tr>
+										<button type="button" id="edit" th:data-id="${employees.id}"
+											th:data-account="${employees.employeeAccount}"
+											th:data-password="${employees.employeePassword}"
+											th:data-name="${employees.employeeName}"
+											th:data-sex="${employees.employeeGender}"
+											th:data-jobid="${employees.jobTitle.id}"
+											th:data-birthday="${employees.employeeBorn}"
+											th:data-phone="${employees.employeeTel}"
+											th:data-seniority="${employees.employeeSeniority}"
+											th:data-salary="${employees.employeeSalary}"
+											th:data-status="${employees.employeeStatus}"
+											onclick="openEditModal(this)">編輯</button> <th:block
+											th:if="${employees.employeeStatus!='離職'}">
+											<form th:action="@{/Bistro/Employee/cancel}" method="post"
+												style="display: inline;">
+												<input type="hidden" name="id" th:value="${employees.id}">
+												<button type="submit" id="delete"
+													onclick="return confirm('確定註銷為離職員工嗎？');">註銷</button>
+											</form>
+										</th:block> <th:block th:if="${employees.employeeStatus!='在職'}">
+											<form th:action="@{/Bistro/Employee/active}" method="post"
+												style="display: inline;">
+												<input type="hidden" name="id" th:value="${employees.id}">
+												<button type="submit" id="active">啟用</button>
+											</form>
+										</th:block>
+									</td>
+								</tr>
+								<tr th:if="${#lists.isEmpty(allEmployees)}">
+									<td colspan="11">沒有員工資料</td>
+								</tr>
 
 							</tbody>
 						</table>
 					</div>
 				</section>
-				
+
 			</main>
 
 			<!--  新增員工視窗 -->
@@ -228,32 +228,35 @@ select:hover {
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h1>新增員工</h1>
-					<form th:action="@{/Bistro/Employee/postemployee}" method="post" id="dataForm"
-						enctype="multipart/form-data">
+					<form th:action="@{/Bistro/Employee/postemployee}" method="post"
+						id="dataForm" enctype="multipart/form-data">
 						<fieldset>
 							<legend style="margin-bottom: 1rem; font-weight: bold">
 								員工基本資料 </legend>
 
 							<div class="question">
-								<span class="title">員工帳號</span> <input type="text" id="employeeaccount"
-									name="employeeAccount" value="" placeholder="請輸入員工帳號" required
-									aria-required="true" />
+								<span class="title">員工帳號</span> <input type="text"
+									id="employeeaccount" name="employeeAccount" value="server10"
+									placeholder="請輸入員工帳號" required aria-required="true" />
 							</div>
 							<div class="question">
-								<span class="title">員工密碼</span> <input type="password" id="employeepwd"
-									name="employeePassword" value="" placeholder="請輸入員工密碼" required
-									aria-required="true" />
+								<span class="title">員工密碼</span> <input type="password"
+									id="employeepwd" name="employeePassword" value="!QAZ2wsx"
+									placeholder="請輸入員工密碼" required aria-required="true"
+									pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$"
+									title="密碼需包含至少 6 位字符，包括大寫字母、小寫字母、數字和特殊字符（如 @$!%*?&）" />
 							</div>
 							<div class="question">
-								<span class="title">員工姓名</span> <input type="text" id="employeename"
-									name="employeeName" value="" placeholder="請輸入員工姓名" required
-									aria-required="true" />
+								<span class="title">員工姓名</span> <input type="text"
+									id="employeename" name="employeeName" value="陳忙"
+									placeholder="請輸入員工姓名" required aria-required="true" />
 							</div>
-							
+
 							<div class="question">
-								<span class="title">員工職位</span> 
-								<select id="employeejob" name="jobId" value="">
-									<option th:each="allJob : ${allJobTitle}" th:value="${allJob.id}" th:text="${allJob.jobtitleName}"></option>
+								<span class="title">員工職位</span> <select id="employeejob"
+									name="jobId" value="" required>
+									<option th:each="allJob : ${allJobTitle}"
+										th:value="${allJob.id}" th:text="${allJob.jobtitleName}"></option>
 								</select>
 							</div>
 
@@ -275,19 +278,22 @@ select:hover {
 
 							<div class="question">
 								<span class="title">出生日期</span> <input type="DATE"
-									id="employeeborn" name="employeeBorn" value="" required />
+									id="employeeborn" name="employeeBorn" value="2000-1-5" required />
 							</div>
-							
+
 							<div class="question">
 								<span class="title">員工薪水</span> <input type="text"
-									id="employeesalary" name="employeeSalary" value="" placeholder="請輸入員工電話"
-									required />
+									id="employeesalary" name="employeeSalary" value="20000"
+									placeholder="請輸入員工薪水" required
+									pattern="^(?!0{1,5}$)(?:[2-9][0-9]{4,}|28000|[3-9][0-9]{4,})$"
+									title="薪水必須為20000以上的數字" />
 							</div>
-							
+
 							<div class="question">
 								<span class="title">聯絡電話</span> <input type="text"
-									id="employeetel" name="employeeTel" value="" placeholder="請輸入員工電話"
-									required />
+									id="employeetel" name="employeeTel" value="0955661122"
+									placeholder="請輸入員工電話" required pattern="^09\d{8}$"
+									title="請輸入有效的台灣手機號碼，格式為 09XXXXXXXX" />
 							</div>
 
 						</fieldset>
@@ -305,69 +311,72 @@ select:hover {
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h1>編輯員工</h1>
-					<form th:action="@{/Bistro/Employee/UpdateEmployee}" method="post" id="dataForm"
-						enctype="multipart/form-data">
+					<form th:action="@{/Bistro/Employee/UpdateEmployee}" method="post"
+						id="dataForm" enctype="multipart/form-data">
 						<fieldset>
 							<legend style="margin-bottom: 1rem; font-weight: bold">
 								員工基本資料 </legend>
 							<input type="hidden" id="editemployeeid" name="id" value="">
-								<div class="question">
-									<span class="title">員工帳號</span> <input type="text"
-										id="editemployeeaccount" name="employeeAccount" value=""
-										placeholder="請輸入員工帳號" />
-								</div>
-								<div class="question">
-									<span class="title">員工密碼</span> <input type="password"
-										id="editemployeepwd" name="employeePassword" value=""
-										placeholder="請輸入員工密碼" />
-								</div>
-								<div class="question">
-									<span class="title">員工姓名</span> <input type="text"
-										id="editemployeename" name="employeeName" value=""
-										placeholder="請輸入員工姓名" />
-								</div>
-								
-								<div class="question">
-									<span class="title">員工職位</span> 
-									<select id="editemployeejob" name="jobId" value="">
-										<option th:each="allJob : ${allJobTitle}" th:value="${allJob.id}" th:text="${allJob.jobtitleName}"></option>
-									</select>
-								</div>
+							<div class="question">
+								<span class="title">員工帳號</span> <input type="text"
+									id="editemployeeaccount" name="employeeAccount" value=""
+									placeholder="請輸入員工帳號" />
+							</div>
+							<div class="question">
+								<span class="title">員工密碼</span> <input type="password"
+									id="editemployeepwd" name="employeePassword" value=""
+									placeholder="請輸入員工密碼" />
+							</div>
+							<div class="question">
+								<span class="title">員工姓名</span> <input type="text"
+									id="editemployeename" name="employeeName" value=""
+									placeholder="請輸入員工姓名" />
+							</div>
 
+							<div class="question">
+								<span class="title">員工職位</span> <select id="editemployeejob"
+									name="jobId" value="">
+									<option th:each="allJob : ${allJobTitle}"
+										th:value="${allJob.id}" th:text="${allJob.jobtitleName}"></option>
+								</select>
+							</div>
+
+							<div class="question">
+								<span class="title">員工性別:</span>
 								<div class="question">
-									<span class="title">員工性別:</span>
-									<div class="question">
-										<div class="radiomenu">
-											<div class="radiomenuitem">
-												<label for="male">男</label> <input type="radio"
-													id="editmale" name="employeeGender" value="男"  />
-											</div>
-											<div class="radiomenuitem">
-												<label for="female">女</label> <input type="radio"
-													id="editfemale" name="employeeGender" value="女"  />
-											</div>
+									<div class="radiomenu">
+										<div class="radiomenuitem">
+											<label for="male">男</label> <input type="radio" id="editmale"
+												name="employeeGender" value="男" />
+										</div>
+										<div class="radiomenuitem">
+											<label for="female">女</label> <input type="radio"
+												id="editfemale" name="employeeGender" value="女" />
 										</div>
 									</div>
 								</div>
+							</div>
 
-								<div class="question">
-									<span class="title">出生日期</span> <input type="DATE"
-										id="editemployeeborn" name="employeeBorn" value=""
-										/>
-								</div>
-								
-								<div class="question">
-									<span class="title">員工薪水</span> <input type="text"
-										id="editemployeesalary" name="employeeSalary" value="" placeholder="請輸入員工薪水"
-										required />
-								</div>
+							<div class="question">
+								<span class="title">出生日期</span> <input type="DATE"
+									id="editemployeeborn" name="employeeBorn" value="" />
+							</div>
+
+							<div class="question">
+								<span class="title">員工薪水</span> <input type="text"
+									id="editemployeesalary" name="employeeSalary" value=""
+									placeholder="請輸入員工薪水" required
+									pattern="^(?!0{1,5}$)(?:[2-9][0-9]{4,}|28000|[3-9][0-9]{4,})$"
+									title="薪水必須為20000以上的數字" />
+							</div>
 
 
-								<div class="question">
-									<span class="title">聯絡電話</span> <input type="text"
-										id="editemployeetele" name="employeeTel" value=""
-										placeholder="請輸入員工電話" />
-								</div>
+							<div class="question">
+								<span class="title">聯絡電話</span> <input type="text"
+									id="editemployeetele" name="employeeTel" value=""
+									placeholder="請輸入員工電話" pattern="^09\d{8}$"
+									title="請輸入有效的台灣手機號碼，格式為 09XXXXXXXX" />
+							</div>
 
 						</fieldset>
 						<!---------------------------底下為按鈕區---------------------------------------------- -->
