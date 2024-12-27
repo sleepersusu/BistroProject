@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestClient;
 
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.config.GoogleConfig;
@@ -95,6 +94,7 @@ public class GoogleLoginController {
 			} else {
 				response.put("memberPoint", memberData.getMemberPoint().toString());
 			}
+			return ResponseEntity.ok(response);
 		} else {
 			System.out.println("GOOGLE登入，沒有此帳號，註冊帳號");
 			Members memberBean = new Members();
@@ -113,9 +113,8 @@ public class GoogleLoginController {
 			response.put("memberId", resultData.getId().toString());
 			response.put("memberName", resultData.getMemberName());
 			response.put("memberPoint", "0");
-
+			return ResponseEntity.ok(response);
 		}
-		return ResponseEntity.ok(response);
 	}
 
 }

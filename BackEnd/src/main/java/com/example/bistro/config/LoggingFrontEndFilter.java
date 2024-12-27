@@ -21,17 +21,16 @@ public class LoggingFrontEndFilter implements Filter {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		
-		if ("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
-            chain.doFilter(request, response);
-            return;
-        }
-		
+    
+		if("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {//處理跨域請求，接收到OPTIONS
+			chain.doFilter(request, response);
+			return;
+		}
+
 		HttpSession session = httpRequest.getSession(false);
-		System.out.println("前端FILTER擋住");
+//		System.out.println("Frontend filter有取到"+session.getAttribute("membersId"));
 		if (session != null && session.getAttribute("membersId") != null) {
-			System.out.println("判斷session沒銷毀");
-			long maxInactiveInterval = session.getMaxInactiveInterval()* 1000; // 转换为毫秒
+			long maxInactiveInterval = session.getMaxInactiveInterval()* 1000;
 			session.setAttribute("maxInactiveInterval", maxInactiveInterval);
 			long currentTime = System.currentTimeMillis();
 			Long lastAccessTime = (Long) session.getAttribute("lastAccessTime");
@@ -45,7 +44,7 @@ public class LoggingFrontEndFilter implements Filter {
 			    if (remainingTime <= 0) {
 			        session.invalidate();
 			        System.out.println("超時session銷毀");
-			        httpResponse.sendRedirect("http://localhost:5173/index"); // 重定向到登入頁面
+			        httpResponse.sendRedirect("http://localhost:5173/index");
 			        return;
 			    }
 			}

@@ -23,7 +23,6 @@
 <script>
 import { pointStore } from '@/stores/pointStore'
 import { mapState, mapActions } from 'pinia'
-import { useUserStore } from '@/stores/userStore'
 
 export default {
   data() {
@@ -55,6 +54,7 @@ export default {
 
           window.Swal.fire({
             icon: 'success',
+            iconColor: 'black',
             title: '優惠碼套用成功',
             showConfirmButton: false,
             timer: 1500,
@@ -64,8 +64,10 @@ export default {
         console.error('驗證優惠碼失敗:', error)
         window.Swal.fire({
           icon: 'error',
+          iconColor: 'black',
           title: '優惠碼無效',
           text: '請確認優惠碼是否正確',
+          confirmButtonColor: '#000000'
         })
       }
     },

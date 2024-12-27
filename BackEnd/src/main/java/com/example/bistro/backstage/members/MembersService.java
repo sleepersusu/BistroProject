@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
 
 @Service
 public class MembersService {
@@ -16,6 +16,14 @@ public class MembersService {
 	
 	@Autowired
 	private MembersRepository memberRepo;
+	
+	public Page<Members> findWithPagination(String search, Pageable pageable) {
+        if (search != null && !search.trim().isEmpty()) {
+            return memberRepo.findByMemberNameOrMemberEmailContaining(
+                    search, search, pageable);
+        }
+        return memberRepo.findAll(pageable);
+    }
 	
 	public Members insertMember(Members memberBean) {
 		String memberShip="會員";
@@ -73,11 +81,16 @@ public class MembersService {
 			String encodedPwd = dbMember.get().getMemberPassword();
 			boolean result = pwdEncoder.matches(loginPassword, encodedPwd);
 			
-			if (true) {//result
+			if (result) {//result
 				return dbMember;
+			}else if (encodedPwd.equals(loginPassword)) {
+				return dbMember;
+			}else {
+				return Optional.empty();
 			}
+		}else {
+			return Optional.empty();
 		}
-		return Optional.empty();
 	}
 	
 	public String updateMember(Members memberBean) {

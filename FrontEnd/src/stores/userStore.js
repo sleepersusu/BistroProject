@@ -13,7 +13,7 @@ export const useUserStore = defineStore('userStore', {
       userName: '',
       userEmail: '',
       userPhone: '',
-      userPoint: '',
+      // userPoint: '',
       userShip: '',
       userAvatar: '/images/avatar.jpg', 
       userGender: null,
@@ -30,6 +30,8 @@ export const useUserStore = defineStore('userStore', {
     // 檢查是否登入
     checkLogin: (state) => state.isLoggedIn,
 
+
+    
     memberId: () => Number(JSON.parse(localStorage.getItem('memberobj'))?.memberId) || null,
 
     memberId: (state) => {
@@ -53,6 +55,7 @@ export const useUserStore = defineStore('userStore', {
         this.isLoggedIn = true
         let memberId=JSON.parse(memberobj)?.memberId
         this.memberprofile.userName = JSON.parse(memberobj)?.userName
+        // this.memberprofile.userPoint = JSON.parse(memberobj)?.userPoint
         let imgUrl = `${this.apiUrl}/api/members/photo/${memberId}`
         let userAvatar=''
         let imgData = await axios.get(imgUrl, {
@@ -82,24 +85,21 @@ export const useUserStore = defineStore('userStore', {
       let userAvatar = URL.createObjectURL(response.data)
       this.memberprofile.userAvatar=userAvatar
     },
-    async loadMemberData(memberId) {
+    async loadMemberData() {
       //會員資料頁面撈資訊
       try {
-        await axios.get(`${this.apiUrl}/api/frontend/members/${memberId}`).then((response) => {
+        const pointStoreInstance = pointStore()
+        await axios.get(`${this.apiUrl}/api/frontend/members/${this.memberId}`).then((response) => {
           this.memberprofile.userName = response.data.memberName
           this.memberprofile.userEmail = response.data.memberEmail
           this.memberprofile.userPhone = response.data.memberPhone
           this.memberprofile.userGender = response.data.memberSex
           this.memberprofile.userFavor = response.data.memberFavor
           this.memberprofile.userAddress = response.data.memberAddress
-          this.memberprofile.userPoint = response.data.memberPoint
+          // console.log(this.memberprofile.userPoint);
           this.memberprofile.userBirthdate = response.data.memberBirthday
           // console.log(response.data.memberAccount)
-          // console.log(response.data.memberEmail)
-          // console.log(response.data.memberImg)
           // console.log(response.data.memberPassword)
-          // console.log(response.data.memberShip)
-          // console.log(response.data.memberStatus)
           this.parseAddress(this.memberprofile.userAddress)
         })
       } catch (error) {
@@ -184,7 +184,7 @@ export const useUserStore = defineStore('userStore', {
           userAvatar = URL.createObjectURL(imgData.data)
         }
         let userName = response.data.memberName
-        let userPoint = response.data.memberPoint
+        // let userPoint = response.data.memberPoint
         let memberObj = {
           memberId,
           token: token,
@@ -196,29 +196,29 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.userName = userName
         this.memberprofile.navName = userName
         this.memberprofile.userAvatar = userAvatar
-        this.memberprofile.userPoint = userPoint
+        // this.memberprofile.userPoint = userPoint
         const cart = cartStore()
         cart.getCart()
       } catch (error) {
         console.error('Google發送後端失敗', error)
       }
     },
-    async submitLogin(event) {
+    async submitLogin(loginForm) {
       try {
         // 後端服務
         let API_URL = `${this.apiUrl}/user/login`
-        let form = new FormData(event.target)
-        let formData = {}
-        form.forEach((value, key) => {
-          formData[key] = value
-        })
-        let formJsonData = JSON.stringify(formData)
-        const response = await axios.post(API_URL, formJsonData, {
+        // let form = new FormData(event.target)
+        // let formData = {}
+        // form.forEach((value, key) => {
+        //   formData[key] = value
+        // })
+        // let formJsonData = JSON.stringify(formData)
+        const response = await axios.post(API_URL, loginForm, {
           headers: {
             'Content-Type': 'application/json',
           },
         })
-
+        console.log(response)
         // 假設登入成功，後端返回 token
         let userAvatar = ''
         let memberId = response.data.memberId
@@ -234,7 +234,7 @@ export const useUserStore = defineStore('userStore', {
         }
         const token = response.data.token
         let userName = response.data.memberName
-        let userPoint = response.data.memberPoint
+        // let userPoint = response.data.memberPoint
         let memberObj = {
           memberId,
           token: token,
@@ -246,7 +246,7 @@ export const useUserStore = defineStore('userStore', {
         this.memberprofile.userName = userName
         this.memberprofile.navName = userName
         this.memberprofile.userAvatar = userAvatar
-        this.memberprofile.userPoint = userPoint
+        // this.memberprofile.userPoint = userPoint
         const cart = cartStore()
         cart.getCart()
         const point = pointStore()
@@ -256,28 +256,93 @@ export const useUserStore = defineStore('userStore', {
       } catch (error) {
         // 處理錯誤，設登入失敗
         console.error('登入失敗', error)
+        Swal.fire({
+          toast: false,
+          position: 'top',
+          icon: 'warning',
+          iconColor: 'red',
+          title: `查無此帳號`,
+          timer: 1500,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
         this.clearLoggedIn()
       }
     },
-    async submitRegister(event) {
+    async submitRegister(registForm) {
       try {
-        let API_URL = `${this.apiUrl}/api/frontend/members/create`
-        let form = new FormData(event.target)
-        let formData = {}
-        form.forEach((value, key) => {
-          formData[key] = value
-        })
-        let formJsonData = JSON.stringify(formData)
-        let response = await axios.post(API_URL, formJsonData, {
+        console.log(registForm);
+        let API_URL = `${this.apiUrl}/api/members/create`
+        // let form = new FormData(event.target)
+        // let formData = {}
+        // form.forEach((value, key) => {
+        //   formData[key] = value
+        // })
+        // let formJsonData = JSON.stringify(formData)
+        let response = await axios.post(API_URL, registForm, {
           headers: {
             'Content-Type': 'application/json',
           },
         })
         console.log(response.data)
+        if(response.data.status==='success')
+          Swal.fire({
+            toast: false,
+            position: 'top',
+            icon: 'success',
+            iconColor: 'black',
+            title: `資料已更新！`,
+            timer: 1500,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        })
         this.submitLogin
       } catch (error) {
+        if(error.response.status===409){
+          Swal.fire({
+            toast: false,
+            position: 'top',
+            icon: 'error',
+            iconColor: 'red',
+            title: `帳號或電話資料重複申請！`,
+            timer: 1500,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        })
+        }else{
+          Swal.fire({
+            toast: false,
+            position: 'top',
+            icon: 'error',
+            iconColor: 'red',
+            title: `註冊失敗！`,
+            timer: 1500,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        })
+        }
         console.error('登入失敗', error)
       }
     },
+    async submitRestPasswordEmail(email){
+      try {
+        const response = axios.post(`${this.apiUrl}/api/forgot-password/${email}`)
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            iconColor: 'black',
+            title: `重設密碼連結已發送到您的電子信箱`,
+            timer: 2500,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        });
+        console.log('信箱response'+response.data);
+    } catch (e) {
+        console.log(e)
+        Swal.showValidationMessage(e.response?.data.message || '發送失敗')
+    }
+      
+    }
   },
 })

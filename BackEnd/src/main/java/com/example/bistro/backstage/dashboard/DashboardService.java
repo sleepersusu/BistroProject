@@ -167,30 +167,35 @@ public class DashboardService {
     // 取得商品營收流向數據
     public Map<String, Object> getProductRevenueFlow() {
         String sql = """
-            SELECT 
-                m.productCategory as source,
-                m.productName as target,
-                SUM(od.odSumPrice) as value
-            FROM OrderDetails od
-            JOIN Menu m ON od.menuId = m.ID
-            JOIN Orders o ON od.ordersId = o.ID
-            WHERE MONTH(o.createdAt) = MONTH(GETDATE())
-            AND YEAR(o.createdAt) = YEAR(GETDATE())
-            GROUP BY m.productCategory, m.productName
-            ORDER BY m.productCategory, value DESC
-        """;
+        SELECT 
+            m.productCategory as category,
+            CASE WHEN o.seatType = '內用' THEN '內用' ELSE '外帶' END as consumerType,
+            m.productName as product,
+            SUM(od.odSumPrice) as value
+        FROM OrderDetails od
+        JOIN Menu m ON od.menuId = m.ID
+        JOIN Orders o ON od.ordersId = o.ID
+        WHERE MONTH(o.createdAt) = MONTH(GETDATE())
+        AND YEAR(o.createdAt) = YEAR(GETDATE())
+        GROUP BY m.productCategory, o.seatType, m.productName
+        ORDER BY m.productCategory, o.seatType, value DESC
+    """;
 
         List<Map<String, Object>> results = jdbcTemplate.queryForList(sql);
+
         List<Map<String, Object>> nodes = new ArrayList<>();
         List<Map<String, Object>> links = new ArrayList<>();
         Set<String> uniqueCategories = new HashSet<>();
+        Set<String> uniqueConsumerTypes = new HashSet<>();
         Set<String> uniqueProducts = new HashSet<>();
 
-        // 先收集所有唯一的類別和產品
+        // 收集所有唯一的類別、消費者類型和產品
         for (Map<String, Object> row : results) {
-            String category = (String) row.get("source");
-            String product = (String) row.get("target");
+            String category = (String) row.get("category");
+            String consumerType = (String) row.get("consumerType");
+            String product = (String) row.get("product");
             uniqueCategories.add(category);
+            uniqueConsumerTypes.add(consumerType);
             uniqueProducts.add(product);
         }
 
@@ -202,25 +207,51 @@ public class DashboardService {
         for (String category : uniqueCategories) {
             Map<String, Object> node = new HashMap<>();
             node.put("name", category);
+            node.put("depth", 0);
+            node.put("category", category);
             nodes.add(node);
             nodeIndices.put(category, index++);
+        }
+
+        // 添加消費者類型節點
+        for (String consumerType : uniqueConsumerTypes) {
+            Map<String, Object> node = new HashMap<>();
+            node.put("name", consumerType);
+            node.put("depth", 1);
+            node.put("consumerType", consumerType);
+            nodes.add(node);
+            nodeIndices.put(consumerType, index++);
         }
 
         // 添加產品節點
         for (String product : uniqueProducts) {
             Map<String, Object> node = new HashMap<>();
             node.put("name", product);
+            node.put("depth", 2);
             nodes.add(node);
             nodeIndices.put(product, index++);
         }
 
         // 建立連結
         for (Map<String, Object> row : results) {
-            Map<String, Object> link = new HashMap<>();
-            link.put("source", nodeIndices.get(row.get("source")));
-            link.put("target", nodeIndices.get(row.get("target")));
-            link.put("value", ((Number) row.get("value")).intValue());
-            links.add(link);
+            String category = (String) row.get("category");
+            String consumerType = (String) row.get("consumerType");
+            String product = (String) row.get("product");
+            int value = ((Number) row.get("value")).intValue();
+
+            // 類別到消費者類型的連結
+            Map<String, Object> link1 = new HashMap<>();
+            link1.put("source", nodeIndices.get(category));
+            link1.put("target", nodeIndices.get(consumerType));
+            link1.put("value", value);
+            links.add(link1);
+
+            // 消費者類型到產品的連結
+            Map<String, Object> link2 = new HashMap<>();
+            link2.put("source", nodeIndices.get(consumerType));
+            link2.put("target", nodeIndices.get(product));
+            link2.put("value", value);
+            links.add(link2);
         }
 
         Map<String, Object> result = new HashMap<>();
@@ -229,7 +260,6 @@ public class DashboardService {
 
         return result;
     }
-
     // 取得所有儀表板數據
     public Map<String, Object> getDashboardData() {
         logger.info("開始獲取儀表板數據");

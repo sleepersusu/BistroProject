@@ -98,6 +98,9 @@
             border: 1px solid #e0e0e0;
             height: 400px;
             width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .chart-wrapper.full-width {
@@ -232,8 +235,9 @@
         const revenueChart = echarts.init(document.getElementById('revenueChart'));
         const topDishesChart = echarts.init(document.getElementById('topDishesChart'));
         const categoryRevenueChart = echarts.init(document.getElementById('categoryRevenueChart'));
-        const sankeyChart = echarts.init(document.getElementById('sankeyChart'));
-
+        const sankeyChart = echarts.init(document.getElementById('sankeyChart'), null, {
+            resizable: true
+        });
         // 內用外帶分布圖表配置
         const orderTypeOption = {
             title: {
@@ -355,7 +359,8 @@
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
-                    type: 'shadow'
+                    type: 'shadow',
+                    fontSize: 14,
                 },
                 formatter: '{b}<br/>營收：${c}'
             },
@@ -364,8 +369,9 @@
                 data: [],
                 axisLabel: {
                     interval: 0,
-                    rotate: 30,
-                    fontSize: 16,
+                    rotate: 0,
+                    fontSize: 18,
+                    fontWeight: 'bold',
                     color: '#666666'
                 }
             },
@@ -373,7 +379,7 @@
                 type: 'value',
                 name: '營收（元）',
                 nameTextStyle: {
-                    fontSize: 16,
+                    fontSize: 18,
                     color: '#666666'
                 },
                 axisLabel: {
@@ -388,7 +394,7 @@
                 data: [],
                 itemStyle: {
                     color: function (params) {
-                        const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de'];
+                        const colors = ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc', '#ef5350'];
                         return colors[params.dataIndex % colors.length];
                     }
                 },
@@ -503,6 +509,10 @@
                 }
             }, series: [{
                 type: 'sankey',
+                left: '10%',
+                right: '10%',
+                top: '15%',
+                bottom: '10%',
                 emphasis: {
                     focus: 'adjacency'
                 },
@@ -523,12 +533,17 @@
                 levels: [{
                     depth: 0,
                     itemStyle: {
-                        color: '#f6b704'
+                        color: '#f4be06'
                     }
                 }, {
                     depth: 1,
                     itemStyle: {
-                        color: '#4ca8f8'
+                        color: '#66bb6a'
+                    }
+                },{
+                    depth: 2,
+                    itemStyle: {
+                        color: '#54affa'
                     }
                 }]
             }]
