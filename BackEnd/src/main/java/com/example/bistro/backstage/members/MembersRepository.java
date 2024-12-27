@@ -6,9 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.bistro.backstage.ordersDetails.OrdersDetails;
-
-
 public interface MembersRepository extends JpaRepository<Members, Integer> {
 
 	// 根據會員姓名查詢

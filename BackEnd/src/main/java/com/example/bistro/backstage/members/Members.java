@@ -8,7 +8,6 @@ import java.util.List;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.example.bistro.backstage.PointsTotal.PointsTotalBean;
 import com.example.bistro.backstage.comment.Comment;
 import com.example.bistro.backstage.orders.Orders;
 import com.fasterxml.jackson.annotation.JsonFormat;
