@@ -110,7 +110,6 @@ export default {
           icon: 'success',
           iconColor: 'black',
           title: '已加入購物車',
-          text: '完成結帳後即可使用此優惠券',
           showConfirmButton: false,
           timer: 1500,
         })

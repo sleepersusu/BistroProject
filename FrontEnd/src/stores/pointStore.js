@@ -24,7 +24,7 @@ export const pointStore = defineStore('point', {
         const pointPrizesName = filterCode[0].pointPrizes.pointPrizesName
         const pointPrizesImg = filterCode[0].pointPrizes.pointPrizesImg
         const promoCode = filterCode[0].promoCode
-        
+
 
         this.pointPrizes.push({
           name: pointPrizesName,
@@ -32,7 +32,7 @@ export const pointStore = defineStore('point', {
           promoCode: promoCode,
         })
       } else {
-        console.log('找不到符合的促銷碼')
+        throw new Error('找不到符合的促銷碼')
       }
     },
 
@@ -48,7 +48,25 @@ export const pointStore = defineStore('point', {
 
     // 刪除購物車獎品
     removePointPrize(item) {
-      this.pointPrizes = this.pointPrizes.filter((prize) => prize.name !== item.name)
+      this.pointPrizes = this.pointPrizes.filter((prize) => prize.promoCode !== item.promoCode)
+
+      // 加入 SweetAlert 提示
+    window.Swal.fire({
+      toast: true,
+      position: 'top-end',
+      title: '刪除成功',
+      text: `獎品 "${item.name}" 已成功從購物車移除！`,
+      icon: 'success',
+      background: '#fff',
+      color: '#000000',
+      iconColor: '#d60101',
+      showConfirmButton: false,
+      timer: 2330,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.style.marginTop = '80px'
+      }
+    })
     },
 
     async getMemberPoint() {
