@@ -2,9 +2,9 @@
 <html xmlns:th="https://www.thymeleaf.org/">
 
 <head>
-	<meta charset="UTF-8">
-	<title>商品管理 - DINEEASE餐廳管理系統</title>
-	<link rel="icon" th:href="@{/images/favicon.ico}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>商品管理 - DINEEASE餐廳管理系統</title>
+<link rel="icon" th:href="@{/images/favicon.ico}" />
 
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,10 +16,10 @@
 
 	<link rel="stylesheet" th:href="@{/css/demo.css}" />
 
-	<style>
-		body {
-			font-family: "Noto Sans TC", sans-serif;
-		}
+<style th:inline="css">
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
 
 		#edit,
 		#delete,
@@ -72,10 +72,23 @@
 			font-weight: normal;
 		}
 
-		#addData:hover {
-			background-color: #2894FF;
-		}
-	</style>
+#addData:hover {
+	background-color: #2894FF;
+}
+
+td:nth-child(6) {
+ white-space: normal;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ max-width: 300px;
+}
+
+#table_wrapper {
+ width: 100%;
+ overflow-x: auto;
+}
+
+</style>
 
 </head>
 
@@ -87,8 +100,6 @@
 	<div id="page">
 
 		<div th:replace="~{layout/navbar.html}"></div>
-
-
 
 		<div id="right">
 			<div th:replace="~{layout/headerlogout.html}"></div>
@@ -107,7 +118,7 @@
 						<table id="table" class="display ">
 							<thead>
 								<tr>
-									<th>ID</th>
+									
 									<th width="100px">名稱</th>
 									<th>照片</th>
 									<th>價格</th>
@@ -136,7 +147,7 @@
 									<tr class="fade-out"
 										th:classappend="${menu.menuStatus == '已下架'} ? 'out-of-stock' : ''">
 
-										<td th:text="${menu.ID}"></td>
+										
 										<td th:text="${menu.productName}" width="100px"></td>
 										<td><img th:src="@{/Bistro/download?type=menu&(ID=${menu.ID})}" alt="商品照片"
 												width="100"></td>

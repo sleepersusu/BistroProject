@@ -22,13 +22,8 @@ public class LoggingFrontEndFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
-		   // 處理 OPTIONS 預檢請求
-        if ("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
-            httpResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-            httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-            httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
-            httpResponse.setStatus(HttpServletResponse.SC_OK);
+		if ("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
+            chain.doFilter(request, response);
             return;
         }
 
