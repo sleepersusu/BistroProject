@@ -119,6 +119,7 @@ export default {
       if (prize.pointPrizesCount === 0) {
         Swal.fire({
           icon: 'error',
+          iconColor: 'black',
           title: '商品已售完',
           text: '很抱歉，此商品已經售完',
           confirmButtonText: '確定',
@@ -174,6 +175,7 @@ export default {
           window.Swal.fire({
             toast: true,
             icon: 'success',
+            iconColor: 'black',
             title: `兌換成功！您已成功兌換 ${prize.pointPrizesName}`,
             html: `兌換碼是 : ${promoCode}<br>可前往會員中心查看`,
             timer: 5000,
@@ -194,6 +196,7 @@ export default {
         console.error('兌換處理失敗:', error)
         Swal.fire({
           icon: 'error',
+          iconColor: 'black',
           title: '兌換失敗',
           text: '請稍後再試',
           confirmButtonText: '確定',
