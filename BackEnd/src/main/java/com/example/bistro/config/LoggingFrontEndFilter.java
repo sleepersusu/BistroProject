@@ -21,7 +21,7 @@ public class LoggingFrontEndFilter implements Filter {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		
+    
 		if("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {//處理跨域請求，接收到OPTIONS
 			chain.doFilter(request, response);
 			return;
