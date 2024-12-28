@@ -26,7 +26,7 @@
     <!-- 商品卡片區塊 -->
     <div class="container my-5">
       <ul class="prize-list">
-        <template v-for="prize in pointPrizes" :key="prize.id">
+        <template v-for="prize in paginatedPrizes" :key="prize.id">
           <li
             v-if="prize.rewardsStatus == '上架中'"
             class="prize-item"
@@ -66,6 +66,31 @@
           </li>
         </template>
       </ul>
+
+      <!-- 分頁按鈕 -->
+      <div class="pagination-container">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link"
+              :disabled="currentPage === 1"
+              @click="changePage(currentPage - 1)">Previous</a>
+          </li>
+          <li v-for="page in totalPages"
+              :key="page"
+              class="page-item"
+              :class="{ active: page === currentPage }">
+            <a class="page-link" @click.prevent="changePage(page)">
+              {{ page }}
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link"
+              :disabled="currentPage === totalPages"
+              @click="changePage(currentPage + 1)">Next</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
   </div>
 </template>
@@ -95,6 +120,8 @@ export default {
       pointPrizes: [],
       redeemedPrize: {},
       memberId: user.memberId,
+      currentPage: 1,
+      itemsPerPage: 8, // 每頁顯示 8 筆
     }
   },
   methods: {
@@ -107,6 +134,12 @@ export default {
         result += characters[randomIndex]
       }
       return result
+    },
+
+    changePage(page) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      }
     },
 
     async getPointPrizes() {
@@ -210,6 +243,14 @@ export default {
     user() {
       return user
     },
+    paginatedPrizes() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.pointPrizes.slice(startIndex, endIndex);
+    },
+    totalPages() {
+      return Math.ceil(this.pointPrizes.length / this.itemsPerPage);
+    }
   },
   created() {
     this.getPointPrizes()
@@ -348,4 +389,62 @@ h3 {
 .prize-description::-webkit-scrollbar {
   width: 0px;
 }
+
+/* 分頁 */
+.pagination .page-link {
+  background: linear-gradient(#fffefe);
+  color: rgb(0, 0, 0);
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin: 0 5px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background: linear-gradient(45deg, #444, #111);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.pagination .page-item.active .page-link {
+  background: linear-gradient(45deg, #ffffff, #ffffff);
+  color: black;
+  border: 1px solid #000000;
+  transform: scale(1.15);
+}
+
+.pagination .page-item.disabled .page-link {
+  background: #555;
+  color: #999;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.pagination .page-item {
+  display: inline-block;
+}
+
+.pagination .page-link {
+  cursor: pointer;
+  background: linear-gradient(#fffefe);
+  color: rgb(0, 0, 0);
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin: 0 5px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
 </style>
+
