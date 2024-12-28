@@ -95,9 +95,14 @@ td:nth-child(6) {
 
 table.dataTable {
     width: 100% !important;
+    table-layout: fixed;
      border-collapse: collapse;
 }
 
+div.dt-container {
+        width: 1400px;
+        margin: 0 auto;
+    }
 
 
 </style>
@@ -460,19 +465,21 @@ table.dataTable {
 				searching: true, // 如果需要啟用搜尋功能
 				responsive: true, // 如果希望在不同尺寸螢幕上調整表格
 				autoWidth: false,
+				scrollCollapse: true,
+				scrollResize: true,
 		        "columnDefs": [
-		            {"width": "60px","targets": 0},
-		            {"width": "100px","targets": 1},
-		            {"width": "100px","targets": 2},
-		            {"width": "80px","targets": 3},
-		            {"width": "80px","targets": 4},
-		            {"width": "300px","targets": 5},
-		            {"width": "70px","targets": 6,"orderable": false},
-		            {"width": "100px","targets": 7,"orderable": false},
-		            {"width": "60px","targets": 8},
-		            {"width": "80px","targets": 9},
-		            {"width": "100px","targets": 10},
-		            {"width": "80px","targets": 11,"orderable": false},
+		            {"width": "80px","targets": 0},
+		            {"width": "120px","targets": 1},
+		            {"width": "120px","targets": 2},
+		            {"width": "100px","targets": 3},
+		            {"width": "100px","targets": 4},
+		            {"width": "320px","targets": 5},
+		            {"width": "110px","targets": 6,"orderable": false},
+		            {"width": "120px","targets": 7,"orderable": false},
+		            {"width": "90px","targets": 8},
+		            {"width": "100px","targets": 9},
+		            {"width": "120px","targets": 10},
+		            {"width": "100px","targets": 11,"orderable": false},
 		          
 		        ]
 			});

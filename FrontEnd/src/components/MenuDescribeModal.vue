@@ -179,6 +179,7 @@ export default {
         .then(async (response) => {
           let url = URL.createObjectURL(response.data)
           this.menuSrc = url
+          
         })
         .catch((error) => {
           console.error('Error fetching menus:', error)
