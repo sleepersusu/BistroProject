@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 googleoauth.properties
+custom-config.properties
 
 ### STS ###
 .apt_generated
