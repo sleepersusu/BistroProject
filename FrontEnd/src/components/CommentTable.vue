@@ -159,7 +159,7 @@ export default {
   padding: 0;
 }
 td{
-  padding: 50px 0px 50px 0px;
+  padding: 50px 0px 50px 5px;
 }
 
 

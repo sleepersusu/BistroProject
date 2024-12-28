@@ -41,7 +41,11 @@ public class CommentFrontService {
 
 	public Comment createComment(CommentDTO dto) {
 	    Comment comment = new Comment();
-	    comment.setCommentMessage(dto.getCommentMessage());
+	    
+	    if(dto.getCommentMessage().length()<200) {
+	    	comment.setCommentMessage(dto.getCommentMessage());	    	
+	    }
+	    
 	    comment.setCommentRating(dto.getCommentRating());
 	    comment.setMenu(menuRepo.findById(dto.getMenuId()).orElse(null));
 	    comment.setMembers(membersRepo.findById(dto.getMemberId()).orElse(null));
