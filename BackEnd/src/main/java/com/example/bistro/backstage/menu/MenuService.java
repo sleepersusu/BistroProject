@@ -19,8 +19,12 @@ public class MenuService {
 	private MenuRepository menuRepo;
 
 	public Menu createMenu(Menu menu) {
+		
+		if(menu.getProductDescribe().length()<=200) {
+			return menuRepo.save(menu);
+		}
 
-		return menuRepo.save(menu);
+		return null;
 
 	}
 
@@ -58,7 +62,11 @@ public class MenuService {
 	}
 
 	public Menu updateMenu(Menu menu) {
-		return menuRepo.save(menu);
+		
+		if(menu.getProductDescribe().length()<=200) {
+			return menuRepo.save(menu);
+		}
+		return null;
 	}
 
 	public List<Menu> findAllMenu() {

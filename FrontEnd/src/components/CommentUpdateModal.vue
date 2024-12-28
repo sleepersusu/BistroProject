@@ -56,21 +56,10 @@
               />
             </div>
 
-            <!-- 會員編號 -->
-            <div class="mb-3">
-              <input
-                class="form-control"
-                type="hidden"
-                :value="comment.memberid"
-                aria-label="會員編號"
-                disabled
-                readonly
-              />
-            </div>
 
             <!-- 評分 -->
             <div class="mb-3">
-              <label class="form-label">評分</label>
+              <label class="form-label">評分<span style="color: red">*(必填)</span></label>
               <star-rating
                 :show-rating="false"
                 :rating="rating"
@@ -81,7 +70,11 @@
                 ]"
               >
               </star-rating>
-              <div style="margin-top: 10px; font-weight: bold">{{ currentRatingText }}</div>
+              <div
+                :class="['rating-text mt-2', { 'text-danger': showValidationErrors && !rating }]"
+              >
+                {{ currentRatingText }}
+              </div>
             </div>
             <!-- 顯示評分 -->
             <div class="mb-3">
@@ -94,14 +87,20 @@
               />
             </div>
 
-            <!-- 評論訊息 -->
+            <!-- 評論內容 -->
             <div class="mb-3">
-              <label for="commentMessage" class="form-label">你的評論</label>
+              <label for="commentMessage" class="form-label">評論內容</label>
+              <span
+                style="font-size: smaller; margin-left: 5px"
+                :class="['char-count', { 'text-danger': commentLength <= 0 }]"
+                >剩餘字數 : {{ commentLength }}字</span
+              >
               <textarea
                 class="form-control"
                 id="commentMessage"
                 rows="3"
                 v-model="commentMessage"
+                maxlength="200"
               ></textarea>
             </div>
 
@@ -128,7 +127,9 @@
           >
             重設
           </button>
-          <button type="button" class="btn btn-primary" @click="handleSubmit()">確定</button>
+          <button type="button" class="btn btn-primary"
+          @click="handleSubmit()":disabled="isSubmitting">
+          {{isSubmitting?'提交中...':'確定'}}</button>
         </div>
       </div>
     </div>
@@ -137,7 +138,7 @@
 
 <script>
 import { useUserStore } from '@/stores/userStore'
-import ModalMixin from '@/mixins/modalMixin-option'
+import modalMixinOption from '@/mixins/modalMixin-option'
 import StarRating from 'vue-star-rating'
 import { mapState } from 'pinia'
 import axios from 'axios'
@@ -174,7 +175,7 @@ export default {
     },
   },
 
-  mixins: [ModalMixin],
+  mixins: [modalMixinOption],
   emits: ['update-table'],
   data() {
     return {
@@ -182,6 +183,7 @@ export default {
       rating: this.comment.rating,
       isSubmitting: false,
       currentDate: this.getCurrentDate(),
+      commentLength: '',
     }
   },
 
@@ -245,7 +247,7 @@ export default {
           // 發送 PUT 請求並傳遞更新的評論資料
           await axios.put(API_URL, updatedComment).then(async (response) => {
             this.$emit('update-table')
-
+            this.isSubmitting=true,
             await new Promise((resolve) => setTimeout(resolve, 100))
 
             this.$refs.modal.querySelector('[data-bs-dismiss="modal"]').click()
@@ -256,8 +258,7 @@ export default {
               icon: 'success',
               confirmButtonText: '確定',
               confirmButtonColor: 'black',
-              iconColor:'black',
-
+              iconColor: 'black',
             })
           })
         } catch (error) {
@@ -266,12 +267,14 @@ export default {
             title: '錯誤!',
             text: '提交評論時發生錯誤。',
             icon: 'error',
-            iconColor:'black',
+            iconColor: 'black',
             customClass: {
-                confirmButton: 'custom-button',
-                icon:'custom-button',
-              },
+              confirmButton: 'custom-button',
+              icon: 'custom-button',
+            },
           })
+        }finally{
+          this.isSubmitting=false;
         }
       }
     },
@@ -286,6 +289,17 @@ export default {
         this.commentMessage = this.comment.commentMessage
         this.updateCurrentDate() // 當 comment 更新時也更新時間
       }
+    },
+
+    commentMessage: {
+      handler(newVal) {
+        this.commentLength = 200 - newVal.length
+
+        if (this.commentLength < 0) {
+          document.getElementById('submitButton').disabled = true
+        }
+      },
+      immediate: true,
     },
   },
   mounted() {
@@ -302,6 +316,18 @@ export default {
 textarea {
   resize: vertical;
   min-height: 100px;
+}
+
+.rating-text {
+  font-weight: bold;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.invalid-feedback {
+  display: block;
 }
 
 button {
