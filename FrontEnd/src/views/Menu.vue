@@ -64,11 +64,11 @@
   </div>
 
   <div class="container">
-
-    <div class="row mt-3">
-      <div class="col-4"></div>
-      <div class="col-4 row">
+    <div class="row mt-3 align-items-center">
+      <div class="col-4">
         <!-- 篩選價錢-->
+
+
         <div class="price-range-slider px-4">
           <div class="slider-labels mb-2">
             <span>價格範圍: {{ priceRange.min }} - {{ priceRange.max }}</span>
@@ -81,8 +81,8 @@
                 background: `linear-gradient(
             to right,
             #e5e7eb ${(priceRange.min / 1000) * 100}%,
-            #3b82f6 ${(priceRange.min / 1000) * 100}%,
-            #3b82f6 ${(priceRange.max / 1000) * 100}%,
+            #000 ${(priceRange.min / 1000) * 100}%,
+            #000 ${(priceRange.max / 1000) * 100}%,
             #e5e7eb ${(priceRange.max / 1000) * 100}%
           )`,
               }"
@@ -114,8 +114,9 @@
           </div>
         </div>
       </div>
+      <div class="col-4"></div>
 
-      <div class="col-4">
+      <div class="col-4" >
         <!-- 排序選單 -->
         <select v-model="selectedSort" class="form-select form-select-lg mb-3" @change="handleSort">
           <!-- 排序選單選項 -->
@@ -637,7 +638,6 @@ export default {
 /* 篩選價格 */
 .price-range-slider {
   width: 100%;
-  padding: 1rem;
 }
 
 .slider-container {
@@ -659,7 +659,6 @@ export default {
 .range-input {
   position: absolute;
   width: 100%;
-  height: 4px;
   appearance: none;
   background: transparent;
   pointer-events: auto;
@@ -670,7 +669,7 @@ export default {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #000000;
   cursor: pointer;
   border: 2px solid white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -695,7 +694,7 @@ export default {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #000000;
   cursor: pointer;
   border: 2px solid white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
