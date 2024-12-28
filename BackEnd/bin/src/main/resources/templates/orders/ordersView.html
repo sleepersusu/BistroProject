@@ -14,6 +14,7 @@
 	<link rel="stylesheet" th:href="@{/css/demo.css}" />
 
 	<style th:inline="css">
+
 		body {
 			font-family: "Noto Sans TC", sans-serif;
 		}
@@ -161,6 +162,7 @@
 		#addMenuItem:hover {
 			background-color: #2894FF;
 		}
+
 	</style>
 </head>
 
@@ -390,14 +392,61 @@
 		}, 500));
 
 	// DataTable 初始化
-	$("#table").DataTable({
+	const table = $("#table").DataTable({
+
+		columnDefs: [
+			{
+				targets: '_all', // 套用到所有欄位
+				className: 'text-center'
+			},
+			{
+				targets: [8],
+				className: 'text-left'
+			}
+		],
 		scrollX: "90%",
 		scrollY: "500px",
-		paging: true,
 		searching: true,
-		responsive: true
-	});
+		responsive: true,
+		serverSide: true,
+		processing: true,
+		ordering: true, // 啟用排序功能
+		ajax: {
+			url: '/Bistro/Orders/data',
+			type: 'GET'
+		},
+		columns: [
+			{ data: 'ID', width: '70px' },
+			{ data: 'ordersNumber', width: '120px',className: 'text-center !important' },
+			{ data: 'memberId', width: '100px' ,className: 'text-center ' },
+			{ data: 'ordersName', width: '80px' ,className: 'text-center !important '},
+			{ data: 'ordersTel', width: '80px' ,className: 'text-center' },
+			{ data: 'seatType', width: '80px' ,className: 'text-center !important' },
+			{ data: 'ordersSumPrice', width: '80px' ,className: 'text-right' },
+			{ data: 'pointGetted', width: '60px' },
+			{ data: 'ordersRequest', width: '160px' },
+			{ data: 'latestPaymentStatus', width: '80px',className: 'text-center'  },
+			{ data: 'createdAt', width: '150px' },
+			{
+				data: 'ID',
+				width: '60px',
+				render: function(data) {
+					return `<form action="/Bistro/Orders/deleteOrders" method="post" style="display: inline;">
+                    <input type="hidden" name="id" value="${data}">
+                    <button type="submit" id="delete" onclick="return confirm('確定要刪除嗎？');">刪除</button>
+                </form>`;
+				}
+			}
+		],
+		language: {
+			processing: "處理中...",
+			lengthMenu: "顯示 _MENU_ 筆資料",
+			zeroRecords: "沒有符合的結果",
+			infoFiltered: "(從 _MAX_ 筆資料中過濾)",
+			search: "搜尋:",
 
+		}
+	});
 	// Modal 控制
 		document.getElementById("addData").addEventListener("click", () => {
 			document.getElementById("addEventModal").style.display = "block";

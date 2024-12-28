@@ -15,9 +15,9 @@ public class BistroConfig {
 	}
 	
     @Bean
-    public FilterRegistrationBean<LoginFilter> loggingFilter() {
-        FilterRegistrationBean<LoginFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new LoginFilter());  // 註冊自定義的過濾器
+    public FilterRegistrationBean<LoginBackEndFilter> loggingFilter() {
+        FilterRegistrationBean<LoginBackEndFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new LoginBackEndFilter());  // 註冊自定義的過濾器
         registrationBean.addUrlPatterns("/Bistro/*");  // 配置過濾 URL 模式
         return registrationBean;
     }

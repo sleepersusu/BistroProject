@@ -2,7 +2,6 @@ package com.example.bistro.frontstage.orders;
 
 import com.example.bistro.backstage.members.Members;
 import com.example.bistro.backstage.members.MembersRepository;
-import com.example.bistro.backstage.members.MembersService;
 import com.example.bistro.backstage.menu.Menu;
 import com.example.bistro.backstage.menu.MenuRepository;
 import com.example.bistro.backstage.orders.Orders;
@@ -49,9 +48,6 @@ public class OrdersFrontService {
     private CartRepository cartRepository;
     
     @Autowired
-    private MembersService membersService;
-
-    @Autowired
     private CartService cartService;
 
 
@@ -77,11 +73,7 @@ public class OrdersFrontService {
         // 計算 pointGetted（根據總金額 / 100）
             if (ordersDTO.getOrdersSumPrice() != null) {
                 Integer pointGetted = ordersDTO.getOrdersSumPrice() / 100; // 金額除以 100
-                if(ordersDTO.getMemberId() !=null) {
-                	Members memberData = membersService.findMembersById(ordersDTO.getMemberId());
-                	Integer PointDate = memberData.getMemberPoint();
-                	memberData.setMemberPoint(PointDate+pointGetted);       	
-                }
+
                 newOrder.setPointGetted(pointGetted);
             } else {
                 newOrder.setPointGetted(0); // 若金額為空，點數設為 0

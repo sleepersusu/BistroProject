@@ -8,6 +8,11 @@ export const pointStore = defineStore('point', {
     promoCode: null,
     memberPointTotal: 0
   }),
+  getters:{
+    getPoint: (state) => {
+      return state.memberPointTotal;
+    },
+  },
   actions: {
     //判斷是否有此兌換碼
     async verifyPromoCode(inputPromoCode) {
