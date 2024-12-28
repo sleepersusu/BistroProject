@@ -114,6 +114,17 @@ body .modal .modal-content form textarea {
 #buttonbox {
 	margin-top: 0.5rem
 }
+#table {
+    table-layout: auto; /* 預設自動調整 */
+    width: 100%; /* 滿版寬度 */
+    border-collapse: collapse;
+}
+
+#table th, #table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+}
 </style>
 </head>
 <body>
@@ -142,6 +153,7 @@ body .modal .modal-content form textarea {
 				<section>
 					<div>
 						<table id="table" class="display ">
+
 							<thead>
 								<tr>
 									<th>id</th>
@@ -161,11 +173,11 @@ body .modal .modal-content form textarea {
 							</thead>
 
 							<tbody id="event-list">
-
+								 
 								<th:block th:each="reservations:${allReservations}">
 
 									<tr th:if="${#lists.isEmpty(allReservations)}">
-										<td colspan="8">沒有資料</td>
+										<td colspan="12">沒有資料</td>
 									</tr>
 
 
@@ -174,8 +186,8 @@ body .modal .modal-content form textarea {
 										<td th:text="${reservations.formattedId}"></td>
 										<td th:text="${reservations.customerName}"></td>
 										<td th:text="${reservations.customerGender}"></td>										
-										<td th:text="${reservations.contactPhone}"></td>
-										<td th:text="${#dates.format(reservations.reservationDate, 'yyyy-MM-dd')}"></td>
+										<td th:text="${reservations.contactPhone}" width="110px"></td>
+										<td th:text="${#dates.format(reservations.reservationDate, 'yyyy-MM-dd')}" width="100px"></td>
 										<td th:text="${reservations.startTime}"></td>
 										<td th:text="${reservations.numberPeople}"></td>
 										<td th:text="${reservations.notes}"></td>
@@ -183,7 +195,7 @@ body .modal .modal-content form textarea {
 										th:style="'color:'+(${reservations.reservationStatus} == '已確認' ? '#0072E3' : 'red')"
 										></td>
 										
-										<td th:text="${reservations.createdAt}"></td>
+										<td th:text="${reservations.createdAt}" width="100px"></td>
 
 										<td>
 										
@@ -453,8 +465,21 @@ body .modal .modal-content form textarea {
     }
 
 }  
+	  const today = new Date().toISOString().split('T')[0];
 
+    // 設置7天後的日期為最大日期
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 7);
+    const maxDateStr = maxDate.toISOString().split('T')[0];
 
+    // 設置 input 的 min 和 max 屬性
+    const dateInput = document.getElementById('reservationDate');    
+    dateInput.min = today;  // 設置最小日期為今天
+    dateInput.max = maxDateStr;  // 設置最大日期為 7 天後
+    
+    const dateInput2 = document.getElementById('reservationDate2');
+	dateInput2.min = today;  // 設置最小日期為今天
+    dateInput2.max = maxDateStr;  // 設置最大日期為 7 天後
 	</script>
 
 
