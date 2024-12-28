@@ -33,7 +33,26 @@
             </div>
           </div>
 
+
           <div class="card-body px-0 py-0">
+
+            <!-- Loading State -->
+            <div v-if="isLoading" class="text-center py-5">
+              <div class="loading-spinner mb-2">
+                <div class="spinner-grow text-primary" role="status" style="width: 1rem; height: 1rem;">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-primary ms-2" role="status" style="width: 1rem; height: 1rem; animation-delay: 0.2s">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-primary ms-2" role="status" style="width: 1rem; height: 1rem; animation-delay: 0.4s">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              <p class="text-primary">載入中...</p>
+            </div>
+
+            <div v-else>
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
                 <thead class="bg-gray-100">
@@ -199,12 +218,14 @@
       </div>
     </div>
   </div>
+  </div>
 
   <CommentPostForm
     ref="commentPostModal"
     :item="currentItem"
     @comment-submitted="handleCommentSubmitted"
   ></CommentPostForm>
+
 </template>
 
 <script>
@@ -238,6 +259,8 @@ export default {
       orderDetails: {}, // 存儲訂單詳情
       currentItem: {},
       commentStatus: {},
+      isLoading: true,
+
     }
   },
   methods: {
@@ -333,6 +356,17 @@ export default {
       const end = start + this.pageSize
       return this.orderItems.slice(start, end)
     },
+  },
+  watch: {
+    orderItems: {
+      immediate: true,
+      handler(newItems) {
+        // 當獲取到數據時，延遲一下再關閉 loading
+        setTimeout(() => {
+          this.isLoading = false
+        }, 3500)
+      }
+    }
   },
   created() {
     // 載入保存的評論狀態
