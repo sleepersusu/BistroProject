@@ -51,7 +51,7 @@ import { useUserStore } from '@/stores/userStore'
 const user = useUserStore()
 
 const props = defineProps({
-  endDate: {
+  startDate: {
     type: String,
     required: true,
   },
@@ -74,7 +74,7 @@ let timer = null
 
 const calculateTimeLeft = () => {
   const now = new Date().getTime()
-  const end = new Date(props.endDate).getTime()
+  const end = new Date(props.startDate).getTime()
   const diff = end - now
 
   if (diff > 0) {

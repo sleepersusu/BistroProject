@@ -26,7 +26,7 @@
       </div>
     </div>
     <CountdownButton
-      :end-date="props.campaign.endDate"
+      :start-Date="props.campaign.startDate"
       :status="campaignStatus"
       :is-active="props.campaign.active"
       :count="count"

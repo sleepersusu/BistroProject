@@ -88,6 +88,7 @@ const startCallBack = async () => {
     window.Swal.fire({
       title: '你已經沒有抽獎機會',
       icon: 'warning',
+      iconColor: 'black',
       confirmButtonColor: 'black',
       confirmButtonText: '確定',
     })
