@@ -49,12 +49,18 @@ public class EmployeeLoginController {
 		Optional<Employee> checkResult = employeeService.checkLogin(employeeAccount, employeePassword);//撈這筆資料
 		
 		if (checkResult.isPresent()) {
+			Employee employeeBean = checkResult.get();
+			System.out.println("核對Status");
+			if(employeeBean.getEmployeeStatus().equals("離職")) {
+				System.out.println("Status:離職");
+				return "/login/login";
+			}
 			long currentTime = System.currentTimeMillis();
 			System.out.println("登入成功，建立Session");
 			httpSession.setMaxInactiveInterval(3600);//session存活時間sec
 			httpSession.setAttribute("lastAccessTime", currentTime);
-			httpSession.setAttribute("loginAccount", checkResult.get().getEmployeeAccount());
-			httpSession.setAttribute("loginId", checkResult.get().getId());
+			httpSession.setAttribute("loginAccount", employeeBean.getEmployeeAccount());
+			httpSession.setAttribute("loginId", employeeBean.getId());
 			//Session紀錄資訊
 			return "/HomePage/BackEndIndex";
 		}else {

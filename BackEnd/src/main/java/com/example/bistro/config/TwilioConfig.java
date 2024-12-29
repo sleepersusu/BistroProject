@@ -3,6 +3,8 @@ package com.example.bistro.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import lombok.Getter;
+
 @Configuration
 public class TwilioConfig {
 
@@ -17,7 +19,7 @@ public class TwilioConfig {
     
     @Value("${twilio.phone.numberTest}")
     private String phoneNumberTest;
-
+    
     public String getAccountSid() {
         return accountSid;
     }

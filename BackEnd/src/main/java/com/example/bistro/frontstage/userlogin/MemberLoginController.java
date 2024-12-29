@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,10 +32,16 @@ public class MemberLoginController {
     	String memberAccount = userRequest.get("account");
     	String memberPassword = userRequest.get("password");
     	Optional<Members> checkResult = membersService.checkLogin(memberAccount, memberPassword);//撈這筆資料
-
+    	Optional<Members> result = membersService.findMemberByAccount(memberAccount);
     	Map<String, Object> response = new HashMap<>();
 		if (checkResult.isPresent()) {
 			Members memberData = checkResult.get();
+			if(memberData.getMemberStatus().equals("註銷")) {
+				System.out.println("核對Status");
+				response.put("status", "fail");
+		        response.put("message", "帳號已註銷");
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+			}
 			long currentTime = System.currentTimeMillis();
 			System.out.println("登入成功，建立Session");
 			httpSession.setMaxInactiveInterval(10800);//session存活時間sec
@@ -50,6 +58,10 @@ public class MemberLoginController {
 				response.put("memberPoint", memberData.getMemberPoint().toString());
 			}
 			return ResponseEntity.ok(response);
+		}else if(result.isPresent()){
+			response.put("status", "fail");
+	        response.put("message", "輸入密碼錯誤");
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
 		}else {
 			System.out.println("會員登入失敗");
 			response.put("status", "fail");

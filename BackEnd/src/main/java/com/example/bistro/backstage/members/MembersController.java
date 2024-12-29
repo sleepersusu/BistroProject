@@ -67,6 +67,13 @@ public class MembersController {
         return "member/membersView";
     }
     
+    @GetMapping("/Member/changePassword")
+    @ResponseBody
+    public String changeEmployeePasswords() {
+    	membersService.updateAllMemberPasswords();
+        return "Passwords updated successfully";
+    }
+    
     
     //分頁
     @GetMapping("/Bistro/Member/data")

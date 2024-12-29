@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "twilio.account.sid.verify",
+  "type": "java.lang.String",
+  "description": "A description for 'twilio.account.sid.verify'"
+}]}

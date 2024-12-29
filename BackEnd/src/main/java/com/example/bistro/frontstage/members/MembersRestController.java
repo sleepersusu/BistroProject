@@ -31,6 +31,10 @@ public class MembersRestController {
 	@Autowired
 	private PointsTotalRepository PTRepo;
 	
+	@Autowired
+	private ResetPasswordValidTwilioService ResetTwilioService;
+	
+	private String verifyCode=null;
 	//新增會員帳號
 	@PostMapping("/members/create")
 	public ResponseEntity<Map<String, String>> createMember(@RequestBody MembersDTO membersDTO) {
@@ -58,6 +62,7 @@ public class MembersRestController {
 		}
 	}
 
+	//查詢會員
 	@GetMapping("/frontend/members/{id}")
 	public ResponseEntity<Members> getMethodName(@PathVariable Integer id) {
 		Optional<Members> result = memberFronetService.findMemberById(id);
@@ -75,9 +80,33 @@ public class MembersRestController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	//修改會員密碼
+	@PutMapping("/frontend/members/{id}/password")
+	public ResponseEntity<Map<String, String>> updateMemberPassword(@PathVariable Integer id,@RequestBody MemberPasswordDTO memberPWD) {
+		verifyCode=null;
+		System.out.println("接收密碼開始");
+		Map<String, String> response = new HashMap<>();
+		Optional<Members> resultData = memberFronetService.findMemberById(id);
+		if(resultData.isPresent()) {
+			System.out.println();
+			String newPassword = memberPWD.getNewPassword();
+			Members memberBean = resultData.get();
+			memberBean.setMemberPassword(newPassword);
+			memberFronetService.changeMemberPassword(memberBean);
+		}else {
+			response.put("status", "fail");
+			response.put("message", "無此帳號");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+		}
+		System.out.println(memberPWD.getNewPassword());
+
+		response.put("status", "success");
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
 	
+	//修改會員
 	@PutMapping("/frontend/members/{id}")
-	public ResponseEntity<Map<String, String>> updateMemberProfile(@PathVariable Integer id, @RequestBody memberProfileDTO memberProfileDTO) {
+	public ResponseEntity<Map<String, String>> updateMemberProfile(@PathVariable Integer id, @RequestBody MemberProfileDTO memberProfileDTO) {
 		Optional<Members> resultData = memberFronetService.findMemberById(id);
 		Map<String, String> response = new HashMap<>();
 		if(resultData.isPresent()) {
@@ -96,10 +125,59 @@ public class MembersRestController {
 		response.put("status", "fail");
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
-	
+	//註銷會員
 	@DeleteMapping("/frontend/members/{id}")
-	public String name() {
+	public ResponseEntity<?> cancelMemberAccount(@PathVariable Integer id) {
+		Optional<Members> resultData = memberFronetService.findMemberById(id);
+		System.out.println("準備註銷");
+		if(resultData.isPresent()) {
+			System.out.println("找到對象");
+			Members memberBean = resultData.get();
+			String status="註銷";
+			memberBean.setMemberStatus(status);
+			memberFronetService.updateMember(memberBean);
+		}
+		Map<String, String> response = new HashMap<>();
+		response.put("status", "success");
 		return null;
+	}
+	
+	//發送簡訊
+	@PutMapping("/frontend/members/{id}/sms")
+	public ResponseEntity<Map<String, String>> sendSMS(@PathVariable Integer id,@RequestBody MemberPasswordDTO memberPWD) {
+		
+		String uuid = ResetTwilioService.sendPhoneConfirm(memberPWD.getPhone());
+		verifyCode=uuid;
+		Map<String, String> response = new HashMap<>();
+		if(uuid!=null) {
+			response.put("status", "success");
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		}else {
+			response.put("status", "fail");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
+	}
+	
+	//核對驗證碼
+	@PutMapping("/frontend/members/{id}/verify")
+	public ResponseEntity<Map<String, String>> checkVerifyCode(@PathVariable Integer id,@RequestBody MemberPasswordDTO memberPWD) {
+		String verificationCode = memberPWD.getVerificationCode();
+		Map<String, String> response = new HashMap<>();
+		try {
+			if(verifyCode.equals(verificationCode)) {
+				response.put("status", "success");
+				return ResponseEntity.status(HttpStatus.OK).body(response);
+			}
+			else {
+				response.put("status", "fail");
+				response.put("message", "驗證碼不符合");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+			}
+		} catch (NullPointerException e) {
+			response.put("status", "fail");
+			response.put("message", "驗證碼已棄置，請重新發送");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
 	}
 	
 	

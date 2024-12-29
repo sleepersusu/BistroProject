@@ -44,6 +44,16 @@ public class MemberFrontService {
 		Members resultData = memberRepo.save(memberBean);
 		return resultData;
 	}
+	public Members changeMemberPassword(Members memberBean) {
+		System.out.println("密碼加密開始");
+		if(memberBean.getMemberPassword()!=null) {
+			String password = memberBean.getMemberPassword();
+			String encodedPwd = pwdEncoder.encode(password);
+			memberBean.setMemberPassword(encodedPwd);
+		}
+		Members resultData = memberRepo.save(memberBean);
+		return resultData;
+	}
 
 	
 }

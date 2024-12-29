@@ -97,6 +97,7 @@ export default {
 }
 
 .membernav {
-  height: 100vh;
+  min-height: 85vh;
+
 }
 </style>
