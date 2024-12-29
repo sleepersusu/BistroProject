@@ -213,7 +213,7 @@ export default {
 }
 
 td {
-  padding: 1rem 0.5rem;
+  padding: 50px 0 50px 5px;
   vertical-align: middle;
 }
 
