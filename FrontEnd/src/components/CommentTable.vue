@@ -1,7 +1,7 @@
 <template>
   <tr>
     <!-- 商品名稱 -->
-    <td data-label="餐點名稱" >
+    <td data-label="餐點名稱">
       <div class="d-flex">
         <div class="mb-0 text-sm font-weight-semibold text-primary">
           {{ comment.commentProduct }}
@@ -28,7 +28,7 @@
     </td>
 
     <!-- 評論內容 -->
-    <td data-label="評論內容" style="max-width: 300px; ">
+    <td data-label="評論內容" style="max-width: 300px">
       {{ comment.commentMessage }}
     </td>
 
@@ -37,27 +37,28 @@
       <span class="time-text">{{ comment.commentTime }}</span>
     </td>
 
-    <div class="action-wrapper">
-      <div class="btn-group" style="margin:10px 0px 10px 0px; ">
-        <button
-          class="btn btn-sm action-btn"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="bi bi-three-dots"></i>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-start" style="z-index: 10;"
-        data-bs-offset="0,10">
-          <li>
-            <button class="dropdown-item" @click.prevent="updateComment(comment)">編輯</button>
-          </li>
-          <li>
-            <button class="dropdown-item" @click.prevent="deleteComment(comment)">刪除</button>
-          </li>
-        </ul>
+    <td>
+      <div class="action-wrapper">
+        <div class="btn-group" style="margin: 10px 0px 10px 0px">
+          <button
+            class="btn btn-sm action-btn"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-start" style="z-index: 10" data-bs-offset="0,10">
+            <li>
+              <button class="dropdown-item" @click.prevent="updateComment(comment)">編輯</button>
+            </li>
+            <li>
+              <button class="dropdown-item" @click.prevent="deleteComment(comment)">刪除</button>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </td>
   </tr>
 </template>
 
@@ -154,13 +155,10 @@ export default {
   z-index: 1055;
 }
 
-
 .action-wrapper {
   padding: 0;
 }
-td{
+td {
   padding: 50px 0px 50px 5px;
 }
-
-
 </style>
