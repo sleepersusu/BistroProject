@@ -18,6 +18,7 @@ import com.example.bistro.backstage.employee.Employee;
 import com.example.bistro.backstage.employee.EmployeeService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -71,13 +72,21 @@ public class EmployeeLoginController {
 	}
 	
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // 获取 Session 并销毁
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();  // 销毁 Session
             System.out.println("登出銷毀Session");
         }
-        return "redirect:/";  // 重定向到登录页面
+
+        // 禁止浏览器缓存
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
+        // 重定向到登录页面
+        return "redirect:/";  
     }
 	
 }
