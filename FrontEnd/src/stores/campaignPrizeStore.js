@@ -29,7 +29,7 @@ export const campaignPrizeStore = defineStore('prize', {
               background: index === 0 ? 'red' : '#1C1C1C',
               fonts: [
                 {
-                  text: prize.prizeName,
+                  text: prize.prizeName.trim(),
                   fontSize: '12px',
                   fontColor: '#fff',
                   top: '65%',

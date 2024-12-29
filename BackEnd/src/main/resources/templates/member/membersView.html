@@ -108,6 +108,19 @@ body {
 }
 
 
+#table_wrapper {
+ width: 100%;
+ overflow-x: auto;
+ box-sizing: border-box;
+}
+
+
+table.dataTable {
+    width: 100% !important;
+    table-layout: fixed;
+     border-collapse: collapse;
+}
+
 </style>
 
 
@@ -115,8 +128,8 @@ body {
 
 <body>
 	<!-- datatable  -->
-	<script th:src="@{/jquery/jquery-3.7.1.js}" ></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js" ></script>
+	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
 
 	<div id="page">
@@ -134,8 +147,8 @@ body {
 				</section>
 
 				<section>
-					<div>
-						<table id="table" class="display">
+					<div id="table_wrapper">
+						<table id="table" class="display" style="width:90%;">
 							<thead>
 								<tr>
 									<th>ID</th>
@@ -149,7 +162,7 @@ body {
 									<th>聯絡電話</th>
 									<th>電子信箱</th>
 									<th>會員圖片</th>
-									<th>點數</th>
+									<!-- <th>點數</th> -->
 									<!-- <th>類型</th> -->
 									<th>狀態</th>
 									<th>操作</th>
@@ -157,66 +170,72 @@ body {
 							</thead>
 							<tbody id="event-list">
 								<tr th:each="members : ${allMembers}">
-										<td th:text="${members.id}"></td>
-										<td th:text="${members.memberAccount == null ? '無' : #strings.substringBefore(members.memberAccount, '@')+'@信箱'}"></td>
-										<td class="password-cell" th:text="${members.memberPassword==null?'無':members.memberPassword }"></td>
-										<td th:text="${members.memberName}"></td>
-										<td th:text="${members.memberSex == null ? '無' : (members.memberSex == 1 ? '男' : (members.memberSex == 0 ? '女' : '未知')) }"
+									<td th:text="${members.id}"></td>
+									<td
+										th:text="${members.memberAccount == null ? '無' : #strings.substringBefore(members.memberAccount, '@')+'@信箱'}"></td>
+									<td class="password-cell"
+										th:text="${members.memberPassword==null?'無':members.memberPassword }"></td>
+									<td th:text="${members.memberName}"></td>
+									<td
+										th:text="${members.memberSex == null ? '無' : (members.memberSex == 1 ? '男' : (members.memberSex == 0 ? '女' : '未知')) }"
 										th:style="${members.memberSex == null ? 'color: black;' : (members.memberSex == 1 ? 'color: #0072E3;' : 'color: red;')}"></td>
-										<td th:text="${members.memberBirthday==null?'無':members.memberBirthday}"></td>
-										<td th:text="${members.memberFavor==1 ? '外向' : '內向'}"></td>
-										<td th:text="${members.memberAddress==null?'無':members.memberAddress}"></td>
-										<td th:text="${members.memberPhone}"></td>
-										<td th:text="${members.memberEmail==null?'無':members.memberEmail}"></td>
-										<td><img alt="無圖片" th:src="@{/Bistro/download?type=member&(ID=${members.id})}"></td>
-										<td th:text="${members.memberPoint==null?'無':members.memberPoint}"></td>
-										<!-- <td th:text="${members.memberShip}" th:style="'color:'+(${members.memberShip} == '會員' ? '#0072E3' : 'red')"></td> -->
-										<td th:text="${members.memberStatus}" th:style="'color:'+(${members.memberStatus} == '啟用' ? '#0072E3' : 'red')"></td>
+									<td
+										th:text="${members.memberBirthday==null?'無':members.memberBirthday}"></td>
+									<td th:text="${members.memberFavor==1 ? '外向' : '內向'}"></td>
+									<td
+										th:text="${members.memberAddress==null?'無':members.memberAddress}"></td>
+									<td th:text="${members.memberPhone}"></td>
+									<td
+										th:text="${members.memberEmail==null?'無':members.memberEmail}"></td>
+									<td><img alt="無圖片"
+										th:src="@{/Bistro/download?type=members&(ID=${members.id})}"></td>
+									<!-- <td th:text="${members.memberPoint==null?'無':members.memberPoint}"></td> -->
+									<!-- <td th:text="${members.memberShip}" th:style="'color:'+(${members.memberShip} == '會員' ? '#0072E3' : 'red')"></td> -->
+									<td th:text="${members.memberStatus}"
+										th:style="'color:'+(${members.memberStatus} == '啟用' ? '#0072E3' : 'red')"></td>
 
-										<td>
+									<td>
 										<!-- th:data-start-date="${#dates.format(members.memberBirthday, 'yyyy-MM-dd')}" -->
-											<button type="button" id="edit"
-												th:data-id="${members.id}"
-												th:data-account="${members.memberAccount}"
-												th:data-password="${members.memberPassword}"
-												th:data-name="${members.memberName}"
-												th:data-sex="${members.memberSex}"
-												th:data-birthday="${members.memberBirthday}"
-												th:data-favor="${members.memberFavor}"
-												th:data-address="${members.memberAddress}"
-												th:data-phone="${members.memberPhone}"
-												th:data-email="${members.memberEmail}"
-												th:data-Img="${members.memberImg}"
-												th:data-point="${members.memberPoint}"
-												th:data-status="${members.memberStatus}"
-												th:data-memberShip="${members.memberShip}"
-												onclick="openEditModal(this)">編輯</button>
-											<th:block th:if="${members.memberStatus!='註銷'}">
-												<form th:action="@{/Bistro/Member/cancel}" method="post"
-													style="display: inline;">
-													<input type="hidden" name="id" th:value="${members.id}">
-													<button type="submit" id="delete"
-														onclick="return confirm('確定要註銷帳號嗎？');">註銷</button>
-												</form>
-											</th:block>
-											<th:block th:if="${members.memberStatus!='啟用'}">
-												<form th:action="@{/Bistro/Member/active}" method="post"
-													style="display: inline;">
-													<input type="hidden" name="id" th:value="${members.id}">
-													<button type="submit" id="active">啟用</button>
-												</form>
-											</th:block>
-										</td>
-									</tr>
-									<tr th:if="${#lists.isEmpty(allMembers)}">
-										<td colspan="14">沒有會員資料</td>
-									</tr>
+										<button type="button" id="edit" th:data-id="${members.id}"
+											th:data-account="${members.memberAccount}"
+											th:data-password="${members.memberPassword}"
+											th:data-name="${members.memberName}"
+											th:data-sex="${members.memberSex}"
+											th:data-birthday="${members.memberBirthday}"
+											th:data-favor="${members.memberFavor}"
+											th:data-address="${members.memberAddress}"
+											th:data-phone="${members.memberPhone}"
+											th:data-email="${members.memberEmail}"
+											th:data-Img="${members.memberImg}"
+											th:data-point="${members.memberPoint}"
+											th:data-status="${members.memberStatus}"
+											th:data-memberShip="${members.memberShip}"
+											onclick="openEditModal(this)">編輯</button> <th:block
+											th:if="${members.memberStatus!='註銷'}">
+											<form th:action="@{/Bistro/Member/cancel}" method="post"
+												style="display: inline;">
+												<input type="hidden" name="id" th:value="${members.id}">
+												<button type="submit" id="delete"
+													onclick="return confirm('確定要註銷帳號嗎？');">註銷</button>
+											</form>
+										</th:block> <th:block th:if="${members.memberStatus!='啟用'}">
+											<form th:action="@{/Bistro/Member/active}" method="post"
+												style="display: inline;">
+												<input type="hidden" name="id" th:value="${members.id}">
+												<button type="submit" id="active">啟用</button>
+											</form>
+										</th:block>
+									</td>
+								</tr>
+								<tr th:if="${#lists.isEmpty(allMembers)}">
+									<td colspan="14">沒有會員資料</td>
+								</tr>
 
 							</tbody>
 						</table>
 					</div>
 				</section>
-				
+
 			</main>
 
 			<!--  新增會員視窗 -->
@@ -224,25 +243,29 @@ body {
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h1>新增會員</h1>
-					<form th:action="@{/Bistro/Member/postMember}" method="post" id="dataForm"
-						enctype="multipart/form-data">
+					<form th:action="@{/Bistro/Member/postMember}" method="post"
+						id="dataForm" enctype="multipart/form-data">
 						<fieldset>
 							<legend style="margin-bottom: 1rem; font-weight: bold">
 								會員基本資料 </legend>
 
 							<div class="question">
-								<span class="title">會員帳號</span> <input type="text" id="useraccount"
-									name="memberAccount" value="" placeholder="請輸入會員帳號" required
-									aria-required="true" />
+								<span class="title">會員帳號</span> <input type="email"
+									id="useraccount" name="memberAccount" value="duck@example.com"
+									placeholder="請輸入會員帳號" required aria-required="true"
+									pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+									title="請輸入有效的電子郵件地址，格式應為 user@example.com" />
 							</div>
 							<div class="question">
-								<span class="title">會員密碼</span> <input type="text" id="userpwd"
-									name="memberPassword" value="" placeholder="請輸入會員密碼" required
-									aria-required="true" />
+								<span class="title">會員密碼</span> <input type="password"
+									id="userpwd" name="memberPassword" value="!QAZ2wsx"
+									placeholder="請輸入會員密碼" required aria-required="true"
+									pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$"
+									title="密碼需包含至少 6 位字符，包括大寫字母、小寫字母、數字和特殊字符（如 @$!%*?&）" />
 							</div>
 							<div class="question">
 								<span class="title">會員姓名</span> <input type="text" id="username"
-									name="memberName" value="" placeholder="請輸入會員姓名" required
+									name="memberName" value="吳興明" placeholder="請輸入會員姓名" required
 									aria-required="true" />
 							</div>
 
@@ -264,7 +287,7 @@ body {
 
 							<div class="question">
 								<span class="title">出生日期</span> <input type="DATE"
-									id="userbirthday" name="memberBirthday" value="" required />
+									id="userbirthday" name="memberBirthday" value="2000-11-21" required />
 							</div>
 
 							<div class="question">
@@ -283,20 +306,23 @@ body {
 
 							<div class="question">
 								<span class="title">會員地址</span> <input type="text"
-									id="useraddress" name="memberAddress" value=""
+									id="useraddress" name="memberAddress" value="台北市北區"
 									placeholder="請輸入會員地址" />
 							</div>
 
 							<div class="question">
 								<span class="title">聯絡電話</span> <input type="text"
-									id="userphone" name="memberPhone" value="" placeholder="請輸入會員電話"
-									required />
+									id="userphone" name="memberPhone" value="0967844321"
+									placeholder="請輸入會員電話" maxlength="10" required
+									pattern="^09\d{8}$" title="請輸入有效的台灣手機號碼，格式為 09XXXXXXXX" />
 							</div>
 
 							<div class="question">
-								<span class="title">電子信箱</span> <input type="text"
-									id="useremail" name="memberEmail" value="" placeholder="請輸入會員信箱"
-									required />
+								<span class="title">電子信箱</span> <input type="email"
+									id="useremail" name="memberEmail" value="duck@example.com"
+									placeholder="請輸入會員信箱" required
+									pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+									title="請輸入有效的電子郵件地址，格式應為 user@example.com" />
 							</div>
 							<div class="question">
 								<span class="title">會員頭像</span> <input type="file" id="userimg"
@@ -317,85 +343,89 @@ body {
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h1>編輯會員</h1>
-					<form th:action="@{/Bistro/Member/UpdateMember}" method="post" id="dataForm"
-						enctype="multipart/form-data">
+					<form th:action="@{/Bistro/Member/UpdateMember}" method="post"
+						id="dataForm" enctype="multipart/form-data">
 						<fieldset>
 							<legend style="margin-bottom: 1rem; font-weight: bold">
 								會員基本資料 </legend>
 							<input type="hidden" id="edituserid" name="id" value="">
-								<div class="question">
-									<span class="title">會員帳號</span> <input type="text"
-										id="edituseraccount" name="memberAccount" value=""
-										placeholder="請輸入會員帳號" />
-								</div>
-								<div class="question">
-									<span class="title">會員密碼</span> <input type="text"
-										id="edituserpwd" name="memberPassword" value=""
-										placeholder="請輸入會員密碼" />
-								</div>
-								<div class="question">
-									<span class="title">會員姓名</span> <input type="text"
-										id="editusername" name="memberName" value=""
-										placeholder="請輸入會員姓名" />
-								</div>
+							<div class="question">
+								<span class="title">會員帳號</span> <input type="email"
+									id="edituseraccount" name="memberAccount" value=""
+									placeholder="請輸入會員帳號"
+									pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+									title="請輸入有效的電子郵件地址，格式應為 user@example.com" />
+							</div>
+							<div class="question">
+								<span class="title">會員密碼</span> <input type="password"
+									id="edituserpwd" name="memberPassword" value=""
+									placeholder="請輸入會員密碼" />
+							</div>
+							<div class="question">
+								<span class="title">會員姓名</span> <input type="text"
+									id="editusername" name="memberName" value=""
+									placeholder="請輸入會員姓名" />
+							</div>
 
+							<div class="question">
+								<span class="title">會員性別:</span>
 								<div class="question">
-									<span class="title">會員性別:</span>
-									<div class="question">
-										<div class="radiomenu">
-											<div class="radiomenuitem">
-												<label for="male">男</label> <input type="radio"
-													id="editmale" name="memberSex" value="1"  />
-											</div>
-											<div class="radiomenuitem">
-												<label for="female">女</label> <input type="radio"
-													id="editfemale" name="memberSex" value="0"  />
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="question">
-									<span class="title">出生日期</span> <input type="DATE"
-										id="edituserbirthday" name="memberBirthday" value=""
-										/>
-								</div>
-
-								<div class="question">
-									<span class="title">興趣:</span>
 									<div class="radiomenu">
 										<div class="radiomenuitem">
-											<label for="introver">內向</label> <input type="radio"
-												id="editintrover" name="memberFavor" value="0"  />
+											<label for="male">男</label> <input type="radio" id="editmale"
+												name="memberSex" value="1" />
 										</div>
 										<div class="radiomenuitem">
-											<label for="extrovert">外向</label> <input type="radio"
-												id="editextrovert" name="memberFavor" value="1"  />
+											<label for="female">女</label> <input type="radio"
+												id="editfemale" name="memberSex" value="0" />
 										</div>
 									</div>
 								</div>
+							</div>
 
-								<div class="question">
-									<span class="title">會員地址</span> <input type="text"
-										id="edituseraddress" name="memberAddress" value=""
-										placeholder="請輸入會員地址" />
-								</div>
+							<div class="question">
+								<span class="title">出生日期</span> <input type="DATE"
+									id="edituserbirthday" name="memberBirthday" value="" />
+							</div>
 
-								<div class="question">
-									<span class="title">聯絡電話</span> <input type="text"
-										id="edituserphone" name="memberPhone" value=""
-										placeholder="請輸入會員電話" />
+							<div class="question">
+								<span class="title">興趣:</span>
+								<div class="radiomenu">
+									<div class="radiomenuitem">
+										<label for="introver">內向</label> <input type="radio"
+											id="editintrover" name="memberFavor" value="0" />
+									</div>
+									<div class="radiomenuitem">
+										<label for="extrovert">外向</label> <input type="radio"
+											id="editextrovert" name="memberFavor" value="1" />
+									</div>
 								</div>
+							</div>
 
-								<div class="question">
-									<span class="title">電子信箱</span> <input type="text"
-										id="edituseremail" name="memberEmail" value=""
-										placeholder="請輸入會員信箱"/>
-								</div>
-								<div class="question">
-									<span class="title">會員頭像</span> <input type="file"
-										id="edituserimg" name="memberPhoto" value="" accept="image/*" />
-								</div>
+							<div class="question">
+								<span class="title">會員地址</span> <input type="text"
+									id="edituseraddress" name="memberAddress" value=""
+									placeholder="請輸入會員地址" />
+							</div>
+
+							<div class="question">
+								<span class="title">聯絡電話</span> <input type="text"
+									id="edituserphone" name="memberPhone" value="" maxlength="10"
+									placeholder="請輸入會員電話" pattern="^09\d{8}$"
+									title="請輸入有效的台灣手機號碼，格式為 09XXXXXXXX" />
+							</div>
+
+							<div class="question">
+								<span class="title">電子信箱</span> <input type="email"
+									id="edituseremail" name="memberEmail" value=""
+									placeholder="請輸入會員信箱"
+									pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+									title="請輸入有效的電子郵件地址，格式應為 user@example.com" />
+							</div>
+							<div class="question">
+								<span class="title">會員頭像</span> <input type="file"
+									id="edituserimg" name="memberPhoto" value="" accept="image/*" />
+							</div>
 						</fieldset>
 						<!---------------------------底下為按鈕區---------------------------------------------- -->
 						<div id="buttonbox">
@@ -433,8 +463,7 @@ body {
 		            {"width": "100px","targets": 9,className: 'ellipsis'},
 		            {"width": "90px","targets": 10},
 		            {"width": "85px","targets": 11},
-		            {"width": "70px","targets": 12},
-		            {"width": "70px","targets": 13,"orderable": false},
+		            {"width": "70px","targets": 12,"orderable": false},
 		        ]
 			});
 		});

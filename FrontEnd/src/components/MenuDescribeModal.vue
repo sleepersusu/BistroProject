@@ -150,16 +150,17 @@ import { mapActions } from 'pinia'
 import { cartStore } from '@/stores/cartStore'
 import { useNotificationStore } from '@/stores/notificationStore.js'
 export default {
+  name: 'MenuDescribeModal',
+  components: { StarRating },
+  mixins: [ModalMixin],
+
   props: {
     menu: {
       type: Object,
       required: true,
+      default: () => ({})
     },
   },
-  components: {
-    StarRating,
-  },
-  mixins: [ModalMixin],
   data() {
     return {
       menuSrc: '',
@@ -178,6 +179,7 @@ export default {
         .then(async (response) => {
           let url = URL.createObjectURL(response.data)
           this.menuSrc = url
+          
         })
         .catch((error) => {
           console.error('Error fetching menus:', error)
@@ -266,14 +268,24 @@ export default {
       }
     },
   },
+
+
   watch: {
-    // 當菜單數據改變時重新加載圖片
-    menu(newMenu) {
-      if (newMenu.id) {
-        this.loadPicture(newMenu.id)
-      }
-    },
+    'menu.id': {
+      handler(newId) {
+        if (newId) {
+          this.loadPicture(newId)
+        }
+      },
+      immediate: true
+    }
   },
+
+  beforeUnmount() {
+    if (this.menuSrc) {
+      URL.revokeObjectURL(this.menuSrc)
+    }
+  }
 }
 </script>
 

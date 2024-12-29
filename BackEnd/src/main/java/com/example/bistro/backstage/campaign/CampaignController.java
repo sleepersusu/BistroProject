@@ -120,13 +120,8 @@ public class CampaignController {
 	        }
 
 	        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-	        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-	        Date startDateTime = inputFormat.parse(startDate);
-	        campaign.setStartDate(outputFormat.parse(outputFormat.format(startDateTime)));
-
-	        Date endDateTime = inputFormat.parse(endDate);
-	        campaign.setEndDate(outputFormat.parse(outputFormat.format(endDateTime)));
+	        campaign.setStartDate(inputFormat.parse(startDate));
+	        campaign.setEndDate(inputFormat.parse(endDate));
 
 	        Campaign existingCampaign = campaignService.findCampaignById(id);
 	        if (existingCampaign != null) {

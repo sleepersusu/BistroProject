@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MembersService {
@@ -16,6 +17,14 @@ public class MembersService {
 	
 	@Autowired
 	private MembersRepository memberRepo;
+	
+	public Page<Members> findWithPagination(String search, Pageable pageable) {
+        if (search != null && !search.trim().isEmpty()) {
+            return memberRepo.findByMemberNameOrMemberEmailContaining(
+                    search, search, pageable);
+        }
+        return memberRepo.findAll(pageable);
+    }
 	
 	public Members insertMember(Members memberBean) {
 		String memberShip="會員";
@@ -73,11 +82,16 @@ public class MembersService {
 			String encodedPwd = dbMember.get().getMemberPassword();
 			boolean result = pwdEncoder.matches(loginPassword, encodedPwd);
 			
-			if (true) {//result
+			if (result) {//result
 				return dbMember;
+			}else if (encodedPwd.equals(loginPassword)) {
+				return dbMember;
+			}else {
+				return Optional.empty();
 			}
+		}else {
+			return Optional.empty();
 		}
-		return Optional.empty();
 	}
 	
 	public String updateMember(Members memberBean) {
@@ -88,6 +102,28 @@ public class MembersService {
 		Optional<Members> memberData = memberRepo.findByMemberAccount(loginAccount);
 	return memberData;
 	}
+	
+    @Transactional
+    public void updateAllMemberPasswords() {
+        List<Members> allMembers = memberRepo.findAll();
+
+        for (Members member : allMembers) {
+            String account = member.getMemberAccount();
+            String newPassword;
+
+            // 如果帳號有@和沒有@
+            if (account.contains("@")) {
+                newPassword = account.split("@")[0];  // 去掉 '@' 後
+            } else {
+                newPassword = account;  // 如果没有'@'
+            }
+
+            String encodedPwd = pwdEncoder.encode(newPassword);
+            member.setMemberPassword(encodedPwd);
+        }
+
+        memberRepo.saveAll(allMembers);
+    }
 	
 	
 }

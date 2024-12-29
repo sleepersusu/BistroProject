@@ -32,7 +32,13 @@ public class LotteryWinnerFrontService {
 	LotteryWinnersService lotteryWinnersService;
 	
 	@Autowired
-    private LotteryChancesFrontService lotteryChanceService;
+    LotteryChancesFrontService lotteryChanceService;
+	
+	@Autowired
+	RedisService redisService;
+	
+	@Autowired
+	TimeBonus timeBonus;
 	
 	
 	public LotteryWinners findWinnerById(Integer id) {
@@ -60,14 +66,25 @@ public class LotteryWinnerFrontService {
 	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到活動獎品..");
 	    }
 
-	    CampaignPrizes winnerPrize = drawPrizeByProbability(prizes);
-
-	   
+	    CampaignPrizes winnerPrize = drawPrizeByProbability(prizes, chance.getMember().getId());	   
 	    lotteryChanceService.useChance(chance.getId());
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("isWin", !winnerPrize.getPrizeName().equals("銘謝惠顧"));
 	    result.put("remainingChances", chance.getRemainingChances());
+	    
+	    int unluckyCount = redisService.getUnluckyCount(chance.getMember().getId());
+	    result.put("unluckyCount", unluckyCount);
+        result.put("unluckyBonus", unluckyCount * 5.0);
+        
+        Map<String, Object> timeBonusInfo = timeBonus.getCurrentBonusInfo();
+        if ((Boolean) timeBonusInfo.get("isBonusTime")) {
+            result.putAll(timeBonusInfo);
+        }
+        
+        if (unluckyCount >= 3) {
+            result.put("bonusMessage", "手氣不好沒關係，中獎機率大幅提升中！");
+        }
 	    
 	    if (winnerPrize != null) {
 	        LotteryWinners winner = new LotteryWinners();
@@ -82,7 +99,7 @@ public class LotteryWinnerFrontService {
 	    return result;
 	}
 
-	private CampaignPrizes drawPrizeByProbability(List<CampaignPrizes> prizes) {
+	private CampaignPrizes drawPrizeByProbability(List<CampaignPrizes> prizes, Integer memberId) {
 	    if (prizes == null || prizes.isEmpty()) {
 	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品列表為空");
 	    }
@@ -97,16 +114,34 @@ public class LotteryWinnerFrontService {
 	            .findFirst()
 	            .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "抽獎過程發生錯誤"));
 	    }
+	    
+	    CampaignPrizes jackpot = timeBonus.calculateActualProbability(prizes);
+	    
+	    int unluckyCount = redisService.getUnluckyCount(memberId);
+	    double unluckyBonus = 1.0 + Math.min(unluckyCount * 0.05, 0.5);
 
-	    double random = Math.random() * 100;
+	    double random = Math.random() * 100 / unluckyBonus;
 	    double cumulative = 0.00;
 
 	    for (CampaignPrizes prize : availablePrizes) {
 	        if(prize.getProbability() == null) {
 	            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "獎品機率設定錯誤");
 	        }
-	        cumulative += prize.getProbability().doubleValue();
+	        
+	        double probability = prize.getProbability().doubleValue();
+	        
+	        if (prize.equals(jackpot) && timeBonus.isBonusTime()) {
+                probability *= 1.67;  
+            }
+	        
+	        cumulative += probability;
+	        
 	        if (random <= cumulative) {
+	        	if (!prize.getPrizeName().equals("銘謝惠顧")) {
+                    redisService.resetUnluckyCount(memberId);
+                } else {
+                    redisService.incrementUnluckyCount(memberId);
+                }
 	            return prize;
 	        }
 	    }

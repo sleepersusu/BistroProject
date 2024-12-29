@@ -13,12 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.example.bistro.backstage.members.Members;
-
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 
 @Controller
@@ -55,6 +50,15 @@ public class EmployeeController {
     	employee.setEmployeeSeniority(employeeData.getEmployeeSeniority());
     	employeeService.updateEmployee(employee,jobId);
     	return "redirect:/Bistro/Employee/findAllEmployees";
+    }
+    @PostMapping("/Employee/resetPassword")
+    public String resetEmployeePassword(@ModelAttribute EmployeeDTO employee) {
+        Employee employeeDate = employeeService.findEmployeeByAccount(employee.getEmployeeAccount());
+        if(employeeDate!=null) {
+        	employeeDate.setEmployeePassword(employee.getConfirmPassword());
+        	employeeService.changePassword(employeeDate);
+        }
+        return "redirect:/";
     }
     
 	
@@ -121,5 +125,12 @@ public class EmployeeController {
     	String result = employeeService.updateEmployee(employeeBean,employeeBean.getJobTitle().getId());
     	System.out.println(result);
     	return "redirect:/Bistro/Employee/findAllEmployees";
+    }
+    
+    @GetMapping("/Employee/changePassword")
+    @ResponseBody
+    public String changeEmployeePasswords() {
+        employeeService.updateAllEmployeePasswords();
+        return "Passwords updated successfully";
     }
 }

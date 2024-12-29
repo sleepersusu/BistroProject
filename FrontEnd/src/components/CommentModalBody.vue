@@ -4,7 +4,7 @@
       <!-- 左側：用戶圖片和名稱 -->
       <div class="col-md-3 d-flex flex-column align-items-center">
         <section class="avatar-container">
-          <img :src="memberSrc" alt="" class="avatar" @error="memberSrc = 'public/images/avatar.jpg'"/>
+          <img :src="memberSrc" alt="" class="avatar" />
         </section>
 
         <section>
@@ -24,7 +24,9 @@
             style="font-size: 15px"
             :rounded-corners="true"
             :show-rating="false"
-            :star-points="[23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17]"
+            :star-points="[
+              23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17,
+            ]"
           ></star-rating>
 
           <!-- 評論內容 -->
@@ -58,12 +60,14 @@ export default {
   methods: {
     async loadMemberAvatar(memberid) {
       this.showComment = true
-
-      const api = `${import.meta.env.VITE_API}/api/member/photo/${memberid}`
-      this.axios.get(api, { responseType: 'blob' }).then((response) => {
-        let url = URL.createObjectURL(response.data)
+      //這邊要用try catch 寫法 避免錯誤時 被知道我們的api 路徑
+      try {
+        const response = await this.axios.get(api, { responseType: 'blob' })
+        const url = URL.createObjectURL(response.data)
         this.memberSrc = url
-      })
+      } catch (error) {
+        this.memberSrc = 'public/images/avatar.jpg'
+      }
     },
   },
   async created() {

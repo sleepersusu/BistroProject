@@ -2,10 +2,15 @@ package com.example.bistro.backstage.members;
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.bistro.backstage.config.ImageService;
@@ -61,10 +67,75 @@ public class MembersController {
         return "member/membersView";
     }
     
+    @GetMapping("/Member/changePassword")
+    @ResponseBody
+    public String changeEmployeePasswords() {
+    	membersService.updateAllMemberPasswords();
+        return "Passwords updated successfully";
+    }
+    
+    
+    //分頁
+    @GetMapping("/Bistro/Member/data")
+    @ResponseBody
+    public Map<String, Object> getOrdersDetailsData(
+            @RequestParam(value = "draw", defaultValue = "1") int draw,
+            @RequestParam(value = "start", defaultValue = "0") int start,
+            @RequestParam(value = "length", defaultValue = "10") int length,
+            @RequestParam(value = "search[value]", required = false) String search,
+            @RequestParam(value = "order[0][column]", required = false, defaultValue = "0") int sortColumn,
+            @RequestParam(value = "order[0][dir]", required = false, defaultValue = "asc") String sortDir) {
+
+        // 設定排序
+        String[] columnNames = {"id", "Members.memberAccount", "Members.memberPassword",
+                "Members.memberName", "Members.memberSex", "Members.memberBirthday", "Members.memberFavor",
+                "Members.memberAddress","Members.memberPhone","Members.memberEmail","Members.memberImg","Members.memberStatus"};
+        String sortField = columnNames[sortColumn];
+        Sort.Direction direction = sortDir.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        // 建立分頁請求
+        PageRequest pageRequest = PageRequest.of(start / length, length, Sort.by(direction, sortField));
+
+        // 獲取分頁數據
+        Page<Members> memberDetailsPage = membersService.findWithPagination(search, pageRequest);
+
+        // 準備響應數據
+        Map<String, Object> response = new HashMap<>();
+        response.put("draw", draw);
+        response.put("recordsTotal", memberDetailsPage.getTotalElements());
+        response.put("recordsFiltered", memberDetailsPage.getTotalElements());
+
+        // 轉換數據格式
+        List<Map<String, Object>> data = memberDetailsPage.getContent().stream()
+                .map(Members -> {
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("id", Members.getId());
+                    item.put("memberAccount", Members.getMemberAccount());
+                    item.put("memberPassword", Members.getMemberPassword());
+                    item.put("memberName", Members.getMemberName());
+                    item.put("memberSex", Members.getMemberSex());
+                    item.put("memberBirthday", Members.getMemberBirthday());
+                    item.put("memberFavor", Members.getMemberFavor());
+                    item.put("memberAddress", Members.getMemberAddress());
+                    item.put("memberPhone", Members.getMemberPhone());
+                    item.put("memberEmail", Members.getMemberEmail());
+                    item.put("memberImg", Members.getMemberImg());
+                    item.put("memberStatus", Members.getMemberStatus());
+                    return item;
+                })
+                .collect(Collectors.toList());
+
+        response.put("data", data);
+        return response;
+    }
+
+    //Create ordersDetails when orders insert
+    
+    
     @Transactional
     @PostMapping("/Bistro/Member/UpdateMember")
     public String updateMember(@ModelAttribute Members memberBean,@RequestParam("memberPhoto") MultipartFile file) {
-    	String type = "member";
+    	String type = "members";
     	Members dbMember = membersService.findMembersById(memberBean.getId());
         memberBean.setMemberShip(dbMember.getMemberShip());
         memberBean.setMemberStatus(dbMember.getMemberStatus());

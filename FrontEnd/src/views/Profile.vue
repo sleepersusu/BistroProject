@@ -151,9 +151,9 @@
 
         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
           <div class="team-item rounded p-4">
-            <img class="img-fluid rounded mb-4" src="..." alt="" />
-            <h5>Jack Dawson</h5>
-            <p class="text-primary">Member</p>
+            <img class="img-fluid rounded mb-4" src="/images/Loxy大頭照.jpg" alt="" />
+            <h5>Yao YuPung</h5>
+            <p class="text-primary">Team Member</p>
             <div class="d-flex justify-content-center pt-1">
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"
@@ -173,9 +173,9 @@
 
         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
           <div class="team-item rounded p-4">
-            <img class="img-fluid rounded mb-4" src="" alt="" />
-            <h5>Jack Dawson</h5>
-            <p class="text-primary">Member</p>
+            <img class="img-fluid rounded mb-4" src="/images/馬修大頭照.jpg" alt="" />
+            <h5>LIOU JYUN-SIOU</h5>
+            <p class="text-primary">Team Member</p>
             <div class="d-flex justify-content-center pt-1">
               <a
                 class="btn btn-square btn-outline-primary rounded-circle mx-1"

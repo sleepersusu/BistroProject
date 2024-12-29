@@ -1,6 +1,8 @@
 package com.example.bistro.backstage.ordersDetails;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +33,14 @@ public class OrdersDetailsService {
         //管理員刪除(取消)這筆訂單，不用回傳，沒有時間限制
             //已經在orders中加入cascade
 
+    // Add this method for pagination
+    public Page<OrdersDetails> findOrdersWithPagination(String search, Pageable pageable) {
+        if (search != null && !search.trim().isEmpty()) {
+            return ordersDetailsRepository.findByOdNameContainingOrOrders_OrdersNumberContaining(
+                    search, search, pageable);
+        }
+        return ordersDetailsRepository.findAll(pageable);
+    }
             
             
             

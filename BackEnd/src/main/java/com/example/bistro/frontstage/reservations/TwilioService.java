@@ -3,7 +3,9 @@ package com.example.bistro.frontstage.reservations;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.bistro.config.TwilioConfig;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
@@ -11,10 +13,14 @@ import com.twilio.type.PhoneNumber;
 
 @Service
 public class TwilioService {
-	 	private final String accountSid;
-	    private final String authToken;
-	    private final String fromPhoneNumber;
-	    private final String phoneNumberTest;
+	
+	@Autowired
+    private TwilioConfig twilioConfig; // 注入 TwilioConfig
+	
+	 	private String accountSid;
+	    private String authToken;
+	    private String fromPhoneNumber;
+	    private String phoneNumberTest;
 
 	    public TwilioService(TwilioConfig twilioConfig) {
 	        this.accountSid = twilioConfig.getAccountSid();
@@ -25,7 +31,9 @@ public class TwilioService {
 	    }
 
 	    public void sendSms(String toPhoneNumber, String messageContent) {
-	        Message message = Message.creator(
+	    	System.out.println("我要開始初始化");
+	    	Twilio.init(accountSid, authToken);
+	    	Message message = Message.creator(
 	                new PhoneNumber(phoneNumberTest),
 	                new PhoneNumber(fromPhoneNumber),
 	                messageContent

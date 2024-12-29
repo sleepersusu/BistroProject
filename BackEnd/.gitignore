@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 googleoauth.properties
+custom-config.properties
+twilio.properties
 
 ### STS ###
 .apt_generated

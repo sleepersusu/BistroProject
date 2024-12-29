@@ -21,12 +21,41 @@ public class LoggingFrontEndFilter implements Filter {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
+    
+		if("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {//處理跨域請求，接收到OPTIONS
+			chain.doFilter(request, response);
+			return;
+		}
+		
 
 		HttpSession session = httpRequest.getSession(false);
-		System.out.println("前端FILTER擋住");
 		if (session != null && session.getAttribute("membersId") != null) {
-			System.out.println("判斷session沒銷毀");
-			long maxInactiveInterval = session.getMaxInactiveInterval()* 1000; // 转换为毫秒
+			
+			String requestUri = httpRequest.getRequestURI();
+	        String[] uriParts = requestUri.split("/");
+	        if (uriParts.length > 2 && "members".equals(uriParts[uriParts.length - 2])) {
+	        	System.out.println("只針對members");
+				try {
+					// 假設 uriParts[uriParts.length - 1] 是 memberId
+					String requestedMemberId = uriParts[uriParts.length - 1];
+					Object currentMemberId = session.getAttribute("membersId");
+					System.out.println("SESSION保存的ID"+currentMemberId.toString());
+					System.out.println("網址的ID"+requestedMemberId);
+					// 如果當前會員ID與請求中的會員ID不一致，則返回403
+					if (requestedMemberId != null && !requestedMemberId.equals(currentMemberId.toString())) {
+						System.out.println("會員ID不匹配，無權訪問");
+						httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have permission to access this resource.");
+						return;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					// 若解析出錯，可以返回 400 或 403
+					httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
+					return;
+				}
+			}
+			
+			long maxInactiveInterval = session.getMaxInactiveInterval()* 1000;
 			session.setAttribute("maxInactiveInterval", maxInactiveInterval);
 			long currentTime = System.currentTimeMillis();
 			Long lastAccessTime = (Long) session.getAttribute("lastAccessTime");
@@ -40,7 +69,7 @@ public class LoggingFrontEndFilter implements Filter {
 			    if (remainingTime <= 0) {
 			        session.invalidate();
 			        System.out.println("超時session銷毀");
-			        httpResponse.sendRedirect("http://localhost:5173/index"); // 重定向到登入頁面
+			        httpResponse.sendRedirect("http://localhost:5173/index");
 			        return;
 			    }
 			}

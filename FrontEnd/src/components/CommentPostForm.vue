@@ -27,7 +27,7 @@
 
             <!-- 評分星星 -->
             <div class="mb-3">
-              <label class="form-label">評分</label>
+              <label class="form-label">評分<span style="color: red">*(必填)</span></label>
               <star-rating
                 :show-rating="false"
                 :rating="rating"
@@ -45,12 +45,17 @@
             <!-- 評論內容 -->
             <div class="mb-3">
               <label for="commentMessage" class="form-label">評論內容</label>
+              <span style="font-size: smaller; margin-left: 5px"
+              :class="['char-count', { 'text-danger': commentLength <= 0 }]"
+                >剩餘字數 : {{ commentLength }}字</span
+              >
               <textarea
                 class="form-control"
                 id="commentMessage"
                 rows="3"
                 v-model.trim="commentMessage"
-                placeholder="請分享您的使用心得..."
+                placeholder="請分享您的心得..."
+                maxlength="200"
               ></textarea>
             </div>
 
@@ -72,6 +77,7 @@
             重設
           </button>
           <button
+            id="submitButton"
             type="button"
             class="btn btn-primary"
             @click="handleSubmit"
@@ -90,6 +96,7 @@ import StarRating from 'vue-star-rating'
 import modalMixinOption from '@/mixins/modalMixin-option'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { comment } from 'postcss'
 
 export default {
   name: 'CommentForm',
@@ -120,6 +127,7 @@ export default {
       currentDate: '',
       showValidationErrors: false,
       starPoints: [23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17],
+      commentLength: 200
     }
   },
 
@@ -155,7 +163,19 @@ export default {
         }
       },
     },
-  },
+    commentMessage: {
+    handler(newVal) {
+      this.commentLength = 200 - newVal.length;
+
+      if (this.commentLength< 0) {
+
+        document.getElementById("submitButton").disabled=true
+
+      }
+    },
+    immediate: true
+  }
+},
 
   methods: {
     getCurrentDate() {
@@ -186,6 +206,9 @@ export default {
       this.rating = 0
       this.showValidationErrors = false
       this.updateCurrentDate()
+      this.commentLength = 200 // 重置字數計數
+
+
     },
 
     async handleSubmit() {
@@ -196,7 +219,7 @@ export default {
         // 檢查是否有評分
         await Swal.fire({
           title: '請完整填寫',
-          text: '請填寫評分',
+          text: '請至少填寫評分',
           icon: 'warning',
           confirmButtonColor: 'black',
           iconColor: 'black',
@@ -240,12 +263,10 @@ export default {
           isCommented: true,
         })
 
-        // 重置表單
         this.handleReset()
       } catch (error) {
         console.error('Comment submission error:', error)
       } finally {
-        this.isSubmitting = false
         this.showValidationErrors = false
       }
     },
@@ -258,6 +279,15 @@ export default {
 </script>
 
 <style scoped>
+.modal-dialog {
+  max-width: 500px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
 .rating-text {
   font-weight: bold;
 }
