@@ -1,4 +1,5 @@
 <template>
+    <loading :active="isLoading"></loading>
   <div class="container">
     <BannerTop :title="' Menu'"></BannerTop>
     <section class="py-5 overflow-hidden">
@@ -214,7 +215,7 @@ import MenuDescribeModal from '@/components/MenuDescribeModal.vue'
 import PageComponent from '@/components/PageComponent.vue'
 import BannerTop from '@/components/BannerTop.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
+import LoadingVue from 'vue3-loading-overlay'
 export default {
   components: {
     MenuCard,
@@ -223,6 +224,7 @@ export default {
     PageComponent,
     BannerTop,
     FontAwesomeIcon,
+    LoadingVue
   },
 
   data() {
