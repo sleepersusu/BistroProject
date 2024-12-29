@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,6 +79,12 @@ public class GoogleLoginController {
 		Optional<Members> Result = membersFrontService.findMemberByAccount(useremail);
 		if (Result.isPresent()) {
 			Members memberData = Result.get();
+			if(memberData.getMemberStatus().equals("註銷")) {
+				System.out.println("核對Status");
+				response.put("status", "fail");
+		        response.put("message", "帳號已註銷");
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+			}
 			long currentTime = System.currentTimeMillis();
 			
 			System.out.println("登入成功，建立Session");
