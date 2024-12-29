@@ -95,9 +95,14 @@ td:nth-child(6) {
 
 table.dataTable {
     width: 100% !important;
+    table-layout: fixed;
      border-collapse: collapse;
 }
 
+div.dt-container {
+        width: 1400px;
+        margin: 0 auto;
+    }
 
 
 </style>
@@ -275,9 +280,14 @@ table.dataTable {
 							</div>
 
 							<div class="question">
-								<label for="productDescribe" class="title">商品製作</label>
-								<textarea name="productDescribe" placeholder="請輸入商品如何製作" required aria-required="true"
-									id="productDescribe"></textarea>
+								<label for="productDescribe" class="title">商品描述</label>
+									<span style="font-size: smaller; margin-left: 5px">剩餘字數:
+										<span th:text="${200 - #strings.length(productDescribe ?: '')}" id="charCount">200</span>
+									</span>字
+								<textarea name="productDescribe" placeholder="請輸入商品如何描述" required aria-required="true"
+									id="productDescribe" maxlength=200  
+									th:value="${productDescribe}"
+    								th:oninput="updateCharCount(this)"></textarea>
 							</div>
 
 
@@ -293,19 +303,13 @@ table.dataTable {
 									aria-required="true" min="0" />
 							</div>
 
-							<div class="question">
-								<label for="avgScore" class="title"></label> <input type="hidden" id="avgScore"
-									name="avgScore" value="" placeholder="請輸入星數" required aria-required="true" min="0"
-									step="0.1" />
-							</div>
 
-
-							<div class="question">
+							<div class="question" style="display:none">
 								<label for="menuStatus" class="title">狀態</label> <select id="menuStatus"
 									name="menuStatus" required aria-required="true">
 									<option value="0">選擇商品狀態</option>
 									<option value="上架" selected>上架</option>
-									<option value="已下架">已下架</option>
+									
 
 								</select>
 							</div>
@@ -383,9 +387,14 @@ table.dataTable {
 							</div>
 
 							<div class="question">
-								<label for="productDescribe2" class="title">商品製作</label>
-								<textarea name="productDescribe" placeholder="請輸入商品如何製作" required aria-required="true"
-									id="productDescribe2"></textarea>
+								<label for="productDescribe2" class="title">商品描述</label>
+									<span style="font-size: smaller; margin-left: 5px">剩餘字數 :</span>
+									<span id="charCount2">200字</span>
+								<textarea name="productDescribe" placeholder="請輸入商品描述" required aria-required="true"
+									id="productDescribe2" maxlength=200
+									 th:text="${productDescribe2}"
+    									oninput="updateEditCharCount(this)">
+    							</textarea>
 							</div>
 
 							<div class="question">
@@ -403,8 +412,9 @@ table.dataTable {
 
 
 
-							<div class="question">
-								<label for="menuStatus2" class="title">狀態</label> <select id="menuStatus2"
+							<div class="question" style="display:none">
+								<label for="menuStatus2" class="title">狀態</label> 
+								<select id="menuStatus2"
 									name="menuStatus" required aria-required="true">
 									<option value="0" selected>選擇商品狀態</option>
 									<option value="上架">上架</option>
@@ -455,19 +465,21 @@ table.dataTable {
 				searching: true, // 如果需要啟用搜尋功能
 				responsive: true, // 如果希望在不同尺寸螢幕上調整表格
 				autoWidth: false,
+				scrollCollapse: true,
+				scrollResize: true,
 		        "columnDefs": [
-		            {"width": "60px","targets": 0},
-		            {"width": "100px","targets": 1},
-		            {"width": "100px","targets": 2},
-		            {"width": "80px","targets": 3},
-		            {"width": "80px","targets": 4},
-		            {"width": "300px","targets": 5},
-		            {"width": "70px","targets": 6,"orderable": false},
-		            {"width": "100px","targets": 7,"orderable": false},
-		            {"width": "60px","targets": 8},
-		            {"width": "80px","targets": 9},
-		            {"width": "100px","targets": 10},
-		            {"width": "80px","targets": 11,"orderable": false},
+		            {"width": "80px","targets": 0},
+		            {"width": "120px","targets": 1},
+		            {"width": "120px","targets": 2},
+		            {"width": "100px","targets": 3},
+		            {"width": "100px","targets": 4},
+		            {"width": "320px","targets": 5},
+		            {"width": "110px","targets": 6,"orderable": false},
+		            {"width": "120px","targets": 7,"orderable": false},
+		            {"width": "90px","targets": 8},
+		            {"width": "100px","targets": 9},
+		            {"width": "120px","targets": 10},
+		            {"width": "100px","targets": 11,"orderable": false},
 		          
 		        ]
 			});
@@ -511,6 +523,8 @@ table.dataTable {
 			document.getElementById("createdAt2").value = menu.createdAt;
 
 			loadImage(menu.ID, 'preview2');
+			let textarea = document.getElementById('productDescribe2');
+    		updateEditCharCount(textarea);
 		}
 
 
@@ -539,6 +553,13 @@ table.dataTable {
 			let preview2 = document.getElementById('preview2');
 			preview.src = ''; // 清除圖片預覽
 			preview2.src = ''; // 清除圖片預覽
+			
+			let charCount  = document.getElementById('charCount');
+			let charCount2  = document.getElementById('charCount2');
+			
+			charCount.textContent = '200'; 
+    		charCount2.textContent = '200字'; 
+			
 		}
 
 
@@ -557,7 +578,22 @@ table.dataTable {
 
 
 
-
+		function updateCharCount(textarea) {
+  			const maxLength = 200;
+  			let currentLength = textarea.value.length;
+  			let remainingChars = maxLength - currentLength;
+  			document.getElementById('charCount').textContent = remainingChars;
+		}
+		
+		
+		
+		
+		function updateEditCharCount(textarea) {
+  			const maxLength = 200;
+  			let currentLength = textarea.value.length;
+  			let remainingChars = maxLength - currentLength;
+  			document.getElementById('charCount2').textContent = remainingChars+"字";
+		}
 		
 
 

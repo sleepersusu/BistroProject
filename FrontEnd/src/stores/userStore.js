@@ -389,8 +389,8 @@ export const useUserStore = defineStore('userStore', {
           Swal.fire({
             toast: false,
             position: 'top',
-            icon: 'warning',
-            iconColor: 'red',
+            icon: 'success',
+            iconColor: 'black',
             title: '簡訊已發送成功',
             timer: 1500,
             showConfirmButton: false,
@@ -431,10 +431,10 @@ export const useUserStore = defineStore('userStore', {
           Swal.fire({
             toast: false,
             position: 'top',
-            icon: 'warning',
-            iconColor: 'red',
+            icon: 'success',
+            iconColor: 'black',
             title: '驗證成功',
-            timer: 1500,
+            timer: 1000,
             showConfirmButton: false,
             timerProgressBar: true,
           })
@@ -475,8 +475,8 @@ export const useUserStore = defineStore('userStore', {
           Swal.fire({
             toast: false,
             position: 'top',
-            icon: 'warning',
-            iconColor: 'red',
+            icon: 'success',
+            iconColor: 'black',
             title: '更改密碼成功',
             timer: 1500,
             showConfirmButton: false,

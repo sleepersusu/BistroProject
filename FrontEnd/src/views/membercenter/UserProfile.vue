@@ -158,8 +158,8 @@
 
         <!-- Account Deletion Section -->
         <div class="card mb-3">
-          <div class="card-header" @click="openDeleteModal" style="cursor: pointer;">
-            <h5 class="mb-0 text-danger">註銷帳號</h5>
+          <div class="card-header bg-warning text-danger " @click="openDeleteModal" style="cursor: pointer;">
+            <h5 class="mb-0">註銷帳號</h5>
           </div>
         </div>
       </div>

@@ -156,7 +156,6 @@ export default {
   data() {
     return {
       menuSrc: '',
-      memberSrc: '',
       isLoading: false,
       count: 1,
       comments: [],
@@ -172,11 +171,15 @@ export default {
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
 
     async loadPicture(ID) {
+
+      if (this.menuSrc) {
+      URL.revokeObjectURL(this.menuSrc)
+    }
       this.isLoading = true
 
       let API_URL = `${import.meta.env.VITE_API}/api/menu/photo/${ID}`
 
-      axios
+      await axios
         .get(API_URL, { responseType: 'blob' })
         .then(async (response) => {
           let url = URL.createObjectURL(response.data)
@@ -549,4 +552,21 @@ product-qty {
 .lookComment:hover {
   cursor: pointer;
 }
+
+
+figure>img {
+  height: 250px;
+  width: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+figure>img:hover {
+  transform: scale(1.1);
+}
+
+
+
+
+
 </style>

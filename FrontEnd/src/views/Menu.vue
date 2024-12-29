@@ -63,60 +63,147 @@
     </section>
   </div>
 
-  <div class="container" >
-    <div class="row mt-3">
-      <div class="col-md-6 col-lg-4 col-sm-6" v-for="menu in paginatedMenus" :key="menu.id">
-        <MenuCard
-          :menu="menu"
-          @view-menudescribe="openDescribeModal"
-          @getcount="getCommentPeople"
-          @view-comment="openModal"
-          @update-count="updateCount"
-          @add-to-cart="handleAddToCart"
-        >
-        </MenuCard>
+  <div class="container">
+    <div class="row mt-3 align-items-center">
+      <div class="col-4">
+        <!-- 篩選價錢-->
+
+
+        <div class="price-range-slider px-4">
+          <div class="slider-labels mb-2">
+            <span>價格範圍: {{ priceRange.min }} - {{ priceRange.max }}</span>
+          </div>
+
+          <div class="slider-container">
+            <div
+              class="slider-track"
+              :style="{
+                background: `linear-gradient(
+            to right,
+            #e5e7eb ${(priceRange.min / 1000) * 100}%,
+            #000 ${(priceRange.min / 1000) * 100}%,
+            #000 ${(priceRange.max / 1000) * 100}%,
+            #e5e7eb ${(priceRange.max / 1000) * 100}%
+          )`,
+              }"
+            ></div>
+
+            <input
+              type="range"
+              class="range-input min-range"
+              min="0"
+              max="1000"
+              step="100"
+              :value="priceRange.min"
+              @input="updateMinPrice"
+              @mouseup="handleMouseUp"
+              @touchend="handleMouseUp"
+            />
+
+            <input
+              type="range"
+              class="range-input max-range"
+              min="0"
+              max="1000"
+              step="100"
+              :value="priceRange.max"
+              @input="updateMaxPrice"
+              @mouseup="handleMouseUp"
+              @touchend="handleMouseUp"
+            />
+          </div>
+        </div>
       </div>
+      <div class="col-4"></div>
 
-      <MenuCommentModal
-        ref="commentModal"
-        :comments="comments"
-        :productName="currentProduct"
-        :cart-items="cartItems"
-      ></MenuCommentModal>
-      <MenuDescribeModal ref="menuDescribeModal" :menu="menu"></MenuDescribeModal>
-    </div>
-
-    <!-- 分頁按鈕 -->
-    <div class="pagination-container">
-      <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" :disabled="currentPage === 1" @click="changePage(currentPage - 1)"
-            >Previous</a
-          >
-        </li>
-        <!-- Page Numbers -->
-        <li
-          v-for="page in totalPages"
-          :key="page"
-          class="page-item"
-          :class="{ active: page === currentPage }"
-        >
-          <a class="page-link" @click.prevent="changePage(page)">
-            {{ page }}
-          </a>
-        </li>
-
-        <li class="page-item">
-          <a
-            class="page-link"
-            :disabled="currentPage === totalPages"
-            @click="changePage(currentPage + 1)"
-            >Next</a
-          >
-        </li>
-      </ul>
+      <div class="col-4" >
+        <!-- 排序選單 -->
+        <select v-model="selectedSort" class="form-select form-select-lg mb-3" @change="handleSort">
+          <!-- 排序選單選項 -->
+          <option value="" disabled>選擇想要的排序方式</option>
+          <option value="avgScoreHighToLow">由評分高排到低</option>
+          <option value="avgScoreLowToHigh">由評分低排到高</option>
+          <option value="priceHighToLow">由價格高排到低</option>
+          <option value="priceLowToHigh">由價格低排到高</option>
+        </select>
+      </div>
     </div>
   </div>
+
+  <section>
+    <div class="container">
+
+      <div v-if="menus.length === 0" class="no-products">
+        <div class="text-center py-5">
+          <font-awesome-icon
+            :icon="['fas', 'box-open']"
+            size="4x"
+            class="text-gray-400 mb-3"
+          />
+          <h3 class="text-xl font-semibold text-gray-600">
+            沒有符合條件的商品
+          </h3>
+          <p class="text-gray-500 mt-2">
+            請調整篩選條件後重試
+          </p>
+        </div>
+      </div>
+
+
+
+      <div v-else  class="row mt-3" >
+        <div class="col-md-6 col-lg-4 col-sm-6" v-for="menu in paginatedMenus" :key="menu.id">
+          <MenuCard
+            :menu="menu"
+            @view-menudescribe="openDescribeModal"
+            @view-comment="openModal"
+            @update-count="updateCount"
+            @add-to-cart="handleAddToCart"
+          >
+          </MenuCard>
+        </div>
+
+        <MenuCommentModal
+          ref="commentModal"
+          :comments="comments"
+          :productName="currentProduct"
+          :cart-items="cartItems"
+        ></MenuCommentModal>
+        <MenuDescribeModal ref="menuDescribeModal" :menu="menu"></MenuDescribeModal>
+      </div>
+
+      <!-- 分頁按鈕 -->
+      <div class="pagination-container">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" :disabled="currentPage === 1" @click="changePage(currentPage - 1)"
+              >Previous</a
+            >
+          </li>
+          <!-- Page Numbers -->
+          <li
+            v-for="page in totalPages"
+            :key="page"
+            class="page-item"
+            :class="{ active: page === currentPage }"
+          >
+            <a class="page-link" @click.prevent="changePage(page)">
+              {{ page }}
+            </a>
+          </li>
+
+          <li class="page-item">
+            <a
+              class="page-link"
+              :disabled="currentPage === totalPages"
+              @click="changePage(currentPage + 1)"
+              >Next</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -152,31 +239,48 @@ export default {
       totalPages: 1,
 
       cartItems: [], // 購物車項目列表
+
+      //排序
+      selectedSort: '',
+
+      //價格篩選
+      priceRange: {
+        min: 0,
+        max: 1000,
+      },
     }
   },
   methods: {
-    loadAllMenu() {
-      let API_URL = `${import.meta.env.VITE_API}/api/menu`
-
-      axios.get(API_URL).then((response) => {
-        this.menus = response.data
+    async loadAllMenu() {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API}/api/menu`)
+        this.originalMenus = response.data // 保存原始數據
+        this.menus = [...response.data] // 用於顯示的拷貝
         this.totalPages = Math.ceil(this.menus.length / this.menusPerPage)
-      })
+        if (this.selectedSort) this.handleSort()
+      } catch (error) {
+        console.error('載入菜單失敗:', error)
+      }
     },
 
-    updateCount(newCount) {
+    async updateCount(newCount) {
       this.menuCount = newCount
     },
 
     // 按分類加載菜單數據
-    clickCategory(category) {
+    async clickCategory(category) {
       this.isLoading = true
       let API_URL = `${import.meta.env.VITE_API}/api/menu/${category}`
 
-      this.axios
+      axios
         .get(API_URL)
         .then((response) => {
-          this.menus = response.data // 假設 API 返回的數據是菜單數組
+          this.originalMenus = response.data // 保存原始數據
+          this.menus = [...response.data] // 用於顯示的拷貝
+
+          this.handlePriceFilter()
+          this.currentPage = 1
+          if (this.selectedSort) this.handleSort()
         })
         .catch((error) => {
           console.error('Error loading menus:', error)
@@ -185,10 +289,52 @@ export default {
           this.isLoading = false
         })
     },
-    openModal(menu) {
+    //價格篩選
+    updateMinPrice(event) {
+      const newMin = parseFloat(event.target.value)
+      if (newMin < this.priceRange.max) {
+        this.priceRange.min = newMin
+      } else {
+        // 如果超過最大值，將最小值設為最大值
+        this.priceRange.min = this.priceRange.max - 100
+        event.target.value = this.priceRange.max
+      }
+    },
+
+    updateMaxPrice(event) {
+      const newMax = parseFloat(event.target.value)
+      if (newMax > this.priceRange.min) {
+        this.priceRange.max = newMax
+      } else {
+        // 如果小於最小值，將最大值設為最小值
+        this.priceRange.max = this.priceRange.min + 100
+        event.target.value = this.priceRange.min
+      }
+    },
+
+    handleMouseUp() {
+      this.handlePriceFilter()
+    },
+
+    handlePriceFilter() {
+      this.menus = this.originalMenus.filter((menu) => {
+        const price = menu.productPrice
+        return price >= this.priceRange.min && price <= this.priceRange.max
+      })
+
+      // 重置到第一頁
+      this.currentPage = 1
+
+      // 如果有選擇排序方式，重新應用排序
+      if (this.selectedSort) {
+        this.handleSort()
+      }
+    },
+    //打開評論
+    async openModal(menu) {
       this.currentProduct = menu.productName
       let api = `${import.meta.env.VITE_API}/api/${menu.productName}/comment`
-      this.axios
+      axios
         .get(api)
         .then((response) => {
           this.comments = response.data
@@ -199,6 +345,7 @@ export default {
 
       this.$refs.commentModal.showModal()
     },
+    //打開描述
     async openDescribeModal(menu) {
       try {
         let api = `${import.meta.env.VITE_API}/api/${menu.id}/menu`
@@ -220,6 +367,23 @@ export default {
     },
     async viewDescribeModal(menu) {
       this.$emit('view-menudescribe', menu)
+    },
+    //排序
+    async handleSort() {
+      switch (this.selectedSort) {
+        case 'avgScoreHighToLow': // 當選擇"由高到低"時
+          this.menus.sort((a, b) => b.avgScore - a.avgScore)
+          break
+        case 'avgScoreLowToHigh': // 當選擇"由低到高"時
+          this.menus.sort((a, b) => a.avgScore - b.avgScore)
+          break
+        case 'priceHighToLow': // 當選擇"由高到低"時
+          this.menus.sort((a, b) => b.productPrice - a.productPrice)
+          break
+        case 'priceLowToHigh': // 當選擇"由低到高"時
+          this.menus.sort((a, b) => a.productPrice - b.productPrice)
+          break
+      }
     },
   },
 
@@ -244,6 +408,14 @@ export default {
         }
       },
       deep: true,
+    },
+
+    selectedSort: {
+      handler(newVal) {
+        if (newVal) {
+          this.handleSort()
+        }
+      },
     },
   },
   created() {
@@ -462,4 +634,147 @@ export default {
 .pagination .page-item {
   display: inline-block;
 }
+
+/* 篩選價格 */
+.price-range-slider {
+  width: 100%;
+}
+
+.slider-container {
+  position: relative;
+  width: 100%;
+  height: 24px;
+}
+
+.slider-track {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.range-input {
+  position: absolute;
+  width: 100%;
+  appearance: none;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.range-input::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #000000;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s ease;
+}
+
+.range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* 去除範圍輸入的默認樣式 */
+.range-input::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 2px;
+  border: none;
+}
+
+.range-input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #000000;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s ease;
+}
+
+.range-input::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider-labels {
+  text-align: center;
+  color: #4b5563;
+}
+
+.min-range,
+.max-range {
+  position: absolute;
+  top: 30%;
+  transform: translateY(-50%);
+}
+
+.min-range {
+  z-index: 1;
+}
+
+.max-range {
+  z-index: 2;
+}
+
+
+
+
+/* 手機板 */
+@media (max-width: 768px) {
+  /* 重設容器樣式 */
+  .container {
+    padding: 0 15px;
+  }
+
+  /* 重設 row 樣式 */
+  .row {
+    margin: 0;
+    width: 100%;
+  }
+
+  /* 重設所有 col-4 的基本樣式 */
+  .container .row .col-4 {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 15px;
+  }
+
+  /* 確保滑塊容器和選單容器有相同的寬度和對齊 */
+  .price-range-slider,
+  .form-select-lg {
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem;
+  }
+
+  /* 特別處理排序選單容器 */
+  .col-4:last-child {
+    padding: 0;
+    margin-bottom: 15px;
+  }
+
+  /* 排序選單本身的樣式 */
+  .form-select-lg {
+    width: 100%;
+    margin: 0;
+    height: 45px;  /* 固定高度 */
+  }
+}
+
+/* 在更小的螢幕上的額外調整 */
+@media (max-width: 576px) {
+  .container {
+    padding: 0 10px;
+  }
+}
+
 </style>
