@@ -126,4 +126,11 @@ public class EmployeeController {
     	System.out.println(result);
     	return "redirect:/Bistro/Employee/findAllEmployees";
     }
+    
+    @GetMapping("/Employee/changePassword")
+    @ResponseBody
+    public String changeEmployeePasswords() {
+        employeeService.updateAllEmployeePasswords();
+        return "Passwords updated successfully";
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MembersService {
@@ -101,6 +102,28 @@ public class MembersService {
 		Optional<Members> memberData = memberRepo.findByMemberAccount(loginAccount);
 	return memberData;
 	}
+	
+    @Transactional
+    public void updateAllMemberPasswords() {
+        List<Members> allMembers = memberRepo.findAll();
+
+        for (Members member : allMembers) {
+            String account = member.getMemberAccount();
+            String newPassword;
+
+            // 如果帳號有@和沒有@
+            if (account.contains("@")) {
+                newPassword = account.split("@")[0];  // 去掉 '@' 後
+            } else {
+                newPassword = account;  // 如果没有'@'
+            }
+
+            String encodedPwd = pwdEncoder.encode(newPassword);
+            member.setMemberPassword(encodedPwd);
+        }
+
+        memberRepo.saveAll(allMembers);
+    }
 	
 	
 }
