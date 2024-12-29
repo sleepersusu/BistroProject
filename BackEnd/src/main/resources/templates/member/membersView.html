@@ -106,6 +106,21 @@ body {
 	position: relative;
 	top: 8px
 }
+
+
+#table_wrapper {
+ width: 100%;
+ overflow-x: auto;
+ box-sizing: border-box;
+}
+
+
+table.dataTable {
+    width: 100% !important;
+    table-layout: fixed;
+     border-collapse: collapse;
+}
+
 </style>
 
 
@@ -132,8 +147,8 @@ body {
 				</section>
 
 				<section>
-					<div>
-						<table id="table" class="display">
+					<div id="table_wrapper">
+						<table id="table" class="display" style="width:90%;">
 							<thead>
 								<tr>
 									<th>ID</th>
