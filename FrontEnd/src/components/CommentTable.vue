@@ -38,25 +38,27 @@
     </td>
 
     <td>
-      <div class="action-wrapper">
-        <div class="btn-group" style="margin: 10px 0px 10px 0px">
-          <button
-            class="btn btn-sm action-btn"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i class="bi bi-three-dots"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-start" style="z-index: 10" data-bs-offset="0,10">
-            <li>
-              <button class="dropdown-item" @click.prevent="updateComment(comment)">編輯</button>
-            </li>
-            <li>
-              <button class="dropdown-item" @click.prevent="deleteComment(comment)">刪除</button>
-            </li>
-          </ul>
-        </div>
+      <div class="dropdown">
+        <button
+          class="btn btn-sm action-btn"
+          type="button"
+          @click="toggleDropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-three-dots"></i>
+        </button>
+        <ul
+          class="dropdown-menu"
+          :class="{ show: isOpen }"
+          @click.stop
+        >
+          <li>
+            <button class="dropdown-item" @click="updateComment(comment)">編輯</button>
+          </li>
+          <li>
+            <button class="dropdown-item" @click="deleteComment(comment)">刪除</button>
+          </li>
+        </ul>
       </div>
     </td>
   </tr>
@@ -76,17 +78,41 @@ export default {
       required: true,
     },
   },
+
   emits: ['update-comment-modal', 'delete-comment-modal'],
 
   data() {
-    return {}
+    return {
+      isOpen: false
+    }
   },
+
+  mounted() {
+    document.addEventListener('click', this.closeDropdown)
+  },
+
+  beforeUnmount() {
+    document.removeEventListener('click', this.closeDropdown)
+  },
+
   methods: {
+    toggleDropdown() {
+      this.isOpen = !this.isOpen
+    },
+
+    closeDropdown(e) {
+      if (!this.$el.contains(e.target)) {
+        this.isOpen = false
+      }
+    },
+
     async updateComment(comment) {
+      this.isOpen = false
       this.$emit('update-comment-modal', comment)
     },
 
     async deleteComment(comment) {
+      this.isOpen = false
       const result = await Swal.fire({
         icon: 'warning',
         iconColor: 'black',
@@ -103,62 +129,99 @@ export default {
       })
 
       if (result.isConfirmed) {
-        comment = this.comment
         let API_URL = `${import.meta.env.VITE_API}/api/frontend/Bistro/deleteComment/${this.comment.id}`
 
-        this.axios
-          .delete(API_URL)
-          .then(async () => {
-            this.$emit('delete-comment-modal')
-            await Swal.fire({
-              icon: 'success',
-              iconColor: 'black',
-              title: `刪除成功`,
-              showCancelButton: false,
-              confirmButtonColor: 'black',
-              customClass: {
-                confirmButton: 'custom-button',
-              },
-            })
+        try {
+          await this.axios.delete(API_URL)
+          this.$emit('delete-comment-modal')
+          await Swal.fire({
+            icon: 'success',
+            iconColor: 'black',
+            title: `刪除成功`,
+            showCancelButton: false,
+            confirmButtonColor: 'black',
+            customClass: {
+              confirmButton: 'custom-button',
+            },
           })
-          .catch(async (error) => {
-            console.error('Error deletei comments:', error)
-            await Swal.fire({ icon: 'error', title: `刪除失敗`, showCancelButton: false })
+        } catch (error) {
+          console.error('Error deleting comments:', error)
+          await Swal.fire({
+            icon: 'error',
+            title: `刪除失敗`,
+            showCancelButton: false
           })
+        }
       }
     },
   },
-  watch() {},
 }
 </script>
 
 <style scoped>
-.myComment {
-  word-wrap: break-word;
-}
-/* 基本樣式 */
-.rating-text {
-  font-weight: bold;
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-.text-danger {
-  color: #dc3545;
+.action-btn {
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-.invalid-feedback {
-  display: block;
+.action-btn:hover {
+  background-color: #f8f9fa;
+  border-radius: 4px;
 }
 
 .dropdown-menu {
-  position: absolute !important;
-  transform: translate(0, 10px) !important;
-  z-index: 1055;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  min-width: 8rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  z-index: 1060;
+  display: none;
 }
 
-.action-wrapper {
-  padding: 0;
+.dropdown-menu.show {
+  display: block;
 }
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1rem;
+  clear: both;
+  font-weight: 400;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
 td {
-  padding: 50px 0px 50px 5px;
+  padding: 1rem 0.5rem;
+  vertical-align: middle;
+}
+
+.myComment {
+  word-wrap: break-word;
+}
+
+.rating-text {
+  font-weight: bold;
 }
 </style>
