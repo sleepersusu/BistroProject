@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -35,9 +36,14 @@ public class Reservations {
 	private String notes;
 	private String reservationStatus="已確認";	
 
-	@Column(name = "createdAt", columnDefinition = "DATETIME2" ,insertable = false, updatable = false)
+	@Column(name = "createdAt", columnDefinition = "DATETIME2" ,updatable = false)
 	private Timestamp createdAt;	
-
+	
+	 @PrePersist
+	    protected void onCreate() {
+	        this.createdAt = new Timestamp(new Date().getTime());
+	    }
+	
 	public Integer getId() {
 		return id;
 	}
