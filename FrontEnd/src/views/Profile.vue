@@ -173,7 +173,7 @@
 
         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
           <div class="team-item rounded p-4">
-            <img class="img-fluid rounded mb-4" src="..." alt="" />
+            <img class="img-fluid rounded mb-4" src="" alt="" />
             <h5>Jack Dawson</h5>
             <p class="text-primary">Member</p>
             <div class="d-flex justify-content-center pt-1">
