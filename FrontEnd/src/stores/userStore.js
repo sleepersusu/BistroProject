@@ -310,7 +310,6 @@ export const useUserStore = defineStore('userStore', {
             account:registForm.userEmail,
             password:registForm.userPassword
           }
-          console.log(logindata)
         await this.submitLogin(logindata)
       } catch (error) {
         if (error.response.status === 409) {
