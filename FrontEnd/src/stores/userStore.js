@@ -283,7 +283,6 @@ export const useUserStore = defineStore('userStore', {
     },
     async submitRegister(registForm) {
       try {
-        console.log(registForm)
         let API_URL = `${this.apiUrl}/api/members/create`
         // let form = new FormData(event.target)
         // let formData = {}
@@ -296,7 +295,6 @@ export const useUserStore = defineStore('userStore', {
             'Content-Type': 'application/json',
           },
         })
-        console.log(response.data)
         if (response.data.status === 'success')
           Swal.fire({
             toast: false,
@@ -308,7 +306,12 @@ export const useUserStore = defineStore('userStore', {
             showConfirmButton: false,
             timerProgressBar: true,
           })
-        this.submitLogin()
+          let logindata= {
+            account:registForm.userEmail,
+            password:registForm.userPassword
+          }
+          console.log(logindata)
+        await this.submitLogin(logindata)
       } catch (error) {
         if (error.response.status === 409) {
           Swal.fire({
