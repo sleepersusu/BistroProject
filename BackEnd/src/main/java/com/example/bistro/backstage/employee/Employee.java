@@ -1,6 +1,7 @@
 package com.example.bistro.backstage.employee;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -50,11 +52,18 @@ public class Employee {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(updatable = false,insertable = false)
+    @Column(updatable = false)
     private Date createdAt  ;
 	
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jobtitleId")
     private JobTitle jobTitle;
+    
+    @PrePersist
+    public void onCreate() {
+        if(createdAt == null) {
+            createdAt = new Date();
+        }
+    }
 
 }
