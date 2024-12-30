@@ -54,9 +54,21 @@
         </div>
         <div class="modal-body d-flex flex-column flex-md-row">
           <div class="col-md-6 col-lg-5 mb-3 mb-md-0">
+            <div
+              v-if="!menuSrc || isImageLoading"
+              class="d-flex justify-content-center align-items-center"
+              style="height: 200px"
+            >
+              <div class="spinner-border text-dark" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+
             <img
+            v-else="!isImageLoading"
               :src="menuSrc"
               @error="menuSrc = 'public/images/avatar.jpg'"
+              @load="isImageLoading = false"
               alt=""
               class="img-fluid"
               style="border-radius: 5px"
@@ -158,13 +170,14 @@ export default {
     menu: {
       type: Object,
       required: true,
-      default: () => ({})
+      default: () => ({}),
     },
   },
   data() {
     return {
       menuSrc: '',
       count: 1,
+      isImageLoading: true,
     }
   },
 
@@ -173,19 +186,26 @@ export default {
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
 
     async loadPicture(ID) {
-      let API_URL = `${import.meta.env.VITE_API}/api/menu/photo/${ID}`
-      this.axios
-        .get(API_URL, { responseType: 'blob' })
-        .then(async (response) => {
-          let url = URL.createObjectURL(response.data)
-          this.menuSrc = url
-          
-        })
-        .catch((error) => {
-          console.error('Error fetching menus:', error)
-          this.isLoading = false
-        })
-    },
+
+  if (this.menuSrc) {
+    URL.revokeObjectURL(this.menuSrc)
+    this.menuSrc = ''
+  }
+
+  let API_URL = `${import.meta.env.VITE_API}/api/menu/photo/${ID}`
+  try {
+
+    this.isImageLoading = true
+    const response = await axios.get(API_URL, { responseType: 'blob' })
+    const url= URL.createObjectURL(response.data)
+    this.menuSrc=url
+  }  catch (error) {
+    console.error('Error fetching menus:', error)
+    this.menuSrc = 'public/images/avatar.jpg'
+  } finally {
+    this.isImageLoading = false
+  }
+},
     async minusOne() {
       if (this.count > 0) {
         this.count -= 1
@@ -269,7 +289,6 @@ export default {
     },
   },
 
-
   watch: {
     'menu.id': {
       handler(newId) {
@@ -277,15 +296,15 @@ export default {
           this.loadPicture(newId)
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   beforeUnmount() {
     if (this.menuSrc) {
       URL.revokeObjectURL(this.menuSrc)
     }
-  }
+  },
 }
 </script>
 

@@ -1,6 +1,5 @@
 <template>
-  <div class="container h-100" >
-
+  <div class="container h-100">
     <div class="col-12">
       <BannerTop :title="'My Comment'"></BannerTop>
       <div class="container-fluid comment-container">
@@ -8,33 +7,83 @@
           <div class="card border shadow-xs mb-4">
             <!-- 卡片標題 -->
 
-
             <!-- 卡片內容 -->
             <div class="card-body px-0 py-0">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
                   <thead class="bg-gray-100">
                     <tr>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 100px;">餐點名稱</th>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 150px;">評價分數</th>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 300px;">評論內容</th>
-                      <th class="text-dark text-xs font-weight-semibold opacity-7" style="min-width: 200px;">評論時間</th>
+                      <th
+                        class="text-dark text-xs font-weight-semibold opacity-7"
+                        style="min-width: 100px"
+                      >
+                        餐點名稱
+                      </th>
+                      <th
+                        class="text-dark text-xs font-weight-semibold opacity-7"
+                        style="min-width: 150px"
+                      >
+                        評價分數
+                      </th>
+                      <th
+                        class="text-dark text-xs font-weight-semibold opacity-7"
+                        style="min-width: 300px"
+                      >
+                        評論內容
+                      </th>
+                      <th
+                        class="text-dark text-xs font-weight-semibold opacity-7"
+                        style="min-width: 200px"
+                      >
+                        評論時間
+                      </th>
                       <th class="text-dark text-xs font-weight-semibold opacity-7"></th>
                     </tr>
                   </thead>
 
-                  <tbody v-if="!NoComment" class="comment-list" style="overflow: none;" >
-                    <CommentTable
-                      v-for="comment in displayedComment"
-                      :key="comment.id"
-                      :comment="comment"
-                      @update-comment-modal="openUpdateCommentModal"
-                      @delete-comment-modal="deleteReload"
-                    />
-                  </tbody>
+                  <tbody>
+                    <tr v-if="isLoading">
+                      <td colspan="5" class="text-center py-5">
+                        <div class="loading-spinner mb-2">
+                          <div
+                            class="spinner-grow text-primary"
+                            role="status"
+                            style="width: 1rem; height: 1rem"
+                          >
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          <div
+                            class="spinner-grow text-primary ms-2"
+                            role="status"
+                            style="width: 1rem; height: 1rem; animation-delay: 0.2s"
+                          >
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          <div
+                            class="spinner-grow text-primary ms-2"
+                            role="status"
+                            style="width: 1rem; height: 1rem; animation-delay: 0.4s"
+                          >
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                        </div>
+                        <p class="text-primary">載入中...</p>
+                      </td>
+                    </tr>
 
-                  <tbody v-if="NoComment">
-                    <tr>
+                    <!-- 有評論內容時 -->
+                    <template v-else-if="comments.length">
+                      <CommentTable
+                        v-for="comment in displayedComment"
+                        :key="comment.id"
+                        :comment="comment"
+                        @update-comment-modal="openUpdateCommentModal"
+                        @delete-comment-modal="deleteReload"
+                      />
+                    </template>
+
+                    <!-- 無評論時 -->
+                    <tr v-else>
                       <td colspan="5" class="text-center py-3 no-comment">目前尚未有評論</td>
                     </tr>
                   </tbody>
@@ -92,17 +141,17 @@ export default {
     CommentUpdateModal,
     CommentDeleteModal,
     BannerTop,
-    FontAwesomeIcon
+    FontAwesomeIcon,
   },
 
   data() {
     return {
       comments: [],
-      NoComment: true,
       currentComment: {},
       deleteComment: {},
       currentPage: 1,
-      pageSize: 3
+      pageSize: 3,
+      isLoading: true,
     }
   },
 
@@ -114,21 +163,22 @@ export default {
       const start = (this.currentPage - 1) * this.pageSize
       const end = start + this.pageSize
       return this.comments.slice(start, end)
-    }
+    },
   },
 
   methods: {
     async loadAllCommentByMember() {
       try {
+        this.isLoading = true
         const response = await this.axios.get(
-          `${import.meta.env.VITE_API}/api/frontend/member/comment`
+          `${import.meta.env.VITE_API}/api/frontend/member/comment`,
         )
         this.comments = response.data
-        this.NoComment = this.comments.length === 0
       } catch (error) {
         console.error('Error fetching comments:', error)
-        this.NoComment = true
         this.comments = []
+      } finally {
+        this.isLoading = false
       }
     },
 
@@ -151,7 +201,7 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--
       }
-    }
+    },
   },
 
   watch: {
@@ -162,13 +212,13 @@ export default {
           this.currentPage = Math.max(1, this.totalPages)
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   created() {
     this.loadAllCommentByMember()
-  }
+  },
 }
 </script>
 
@@ -177,8 +227,6 @@ export default {
 .comment-container {
   padding: 1.5rem;
 }
-
-
 
 .header-title {
   margin: 0;
@@ -214,7 +262,4 @@ export default {
   color: #666;
   font-size: 1rem;
 }
-
-
-
 </style>

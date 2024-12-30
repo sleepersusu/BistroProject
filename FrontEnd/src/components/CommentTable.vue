@@ -3,7 +3,7 @@
     <!-- 商品名稱 -->
     <td data-label="餐點名稱">
       <div class="d-flex">
-        <div class="mb-0 text-sm font-weight-semibold text-primary">
+        <div class="mb-0 text-sm font-weight-semibold text-primary" >
           {{ comment.commentProduct }}
         </div>
       </div>
@@ -37,7 +37,7 @@
       <span class="time-text">{{ comment.commentTime }}</span>
     </td>
 
-    <td>
+    <td style="text-align: start;padding: 0 0 50px 0;">
       <div class="dropdown">
         <button
           class="btn btn-sm action-btn"
@@ -48,7 +48,7 @@
           <i class="bi bi-three-dots"></i>
         </button>
         <ul
-          class="dropdown-menu"
+          class="dropdown-menu dropdown-menu-start"
           :class="{ show: isOpen }"
           @click.stop
         >
@@ -198,7 +198,7 @@ export default {
 .dropdown-item {
   display: block;
   width: 100%;
-  padding: 0.25rem 1rem;
+  padding: 0rem 1rem;
   clear: both;
   font-weight: 400;
   text-align: inherit;
@@ -213,7 +213,7 @@ export default {
 }
 
 td {
-  padding: 50px 0 50px 5px;
+  padding: 50px 0 50px 10px;
   vertical-align: middle;
 }
 
