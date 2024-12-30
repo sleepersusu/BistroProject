@@ -19,7 +19,7 @@ public class TimeBonus {
 		LocalDateTime now = LocalDateTime.now();
 		int hour = now.getHour();
 		
-		return hour >= 22 && hour < 24;
+		return hour >= 20 && hour < 24;
 	}
 	
 	public CampaignPrizes calculateActualProbability(List<CampaignPrizes> prizes) {
