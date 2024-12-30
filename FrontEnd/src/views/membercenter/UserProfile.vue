@@ -364,11 +364,15 @@ export default {
       modal.hide()
     }
 
-    const confirmDeleteAccount = () => {
-      store.cancelAccount()
-      store.clearLoggedIn()
+    const confirmDeleteAccount = async() => {
+      await store.cancelAccount()
       closeDeleteModal()
-      window.location.replace('/index')
+      // 設置延遲後跳轉
+      setTimeout(() => {
+        store.clearLoggedIn()
+        window.location.replace('/index');  // 延遲後跳轉到 /index
+      }, 2000);  // 延遲 2 秒 (2000 毫秒)
+
     }
 
     watch(

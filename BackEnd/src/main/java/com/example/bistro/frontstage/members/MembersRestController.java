@@ -127,19 +127,24 @@ public class MembersRestController {
 	}
 	//註銷會員
 	@DeleteMapping("/frontend/members/{id}")
-	public ResponseEntity<?> cancelMemberAccount(@PathVariable Integer id) {
+	public ResponseEntity<Map<String, String>> cancelMemberAccount(@PathVariable Integer id) {
 		Optional<Members> resultData = memberFronetService.findMemberById(id);
 		System.out.println("準備註銷");
+		Map<String, String> response = new HashMap<>();
 		if(resultData.isPresent()) {
 			System.out.println("找到對象");
 			Members memberBean = resultData.get();
 			String status="註銷";
 			memberBean.setMemberStatus(status);
 			memberFronetService.updateMember(memberBean);
+			System.out.println("註銷對象");
+			response.put("status", "success");
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		}else {		
+			response.put("status", "fail");
+			response.put("message", "查無帳號，註銷失敗");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 		}
-		Map<String, String> response = new HashMap<>();
-		response.put("status", "success");
-		return null;
 	}
 	
 	//發送簡訊

@@ -361,6 +361,16 @@ export const useUserStore = defineStore('userStore', {
       console.log('準備註銷帳號');     
       try {
         let response=await axios.delete(`${this.apiUrl}/api/frontend/members/${this.memberId}`)
+        await Swal.fire({
+          toast: false,
+          position: 'top',
+          icon: 'success',
+          iconColor: 'black',
+          title: '註銷成功',
+          timer: 2000,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
         console.log(response.data)
       } catch (error) {
         console.log(error.response)
