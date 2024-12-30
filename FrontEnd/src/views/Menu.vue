@@ -240,6 +240,7 @@ export default {
 
       //排序
       selectedSort: '',
+      originalMenus:[],
 
       //價格篩選
       priceRange: {
@@ -259,6 +260,7 @@ export default {
         this.menus = [...response.data] // 用於顯示的拷貝
         this.totalPages = Math.ceil(this.menus.length / this.menusPerPage)
         if (this.selectedSort) this.handleSort()
+        this.currentPage=1
       } catch (error) {
         console.error('載入菜單失敗:', error)
       } finally {
@@ -279,12 +281,15 @@ export default {
 
         // 整合處理數據，只處理一次
         let processedData = [...response.data]
-        if (this.priceRange.min > 0 || this.priceRange.max < 1000) {
-          processedData = this.filterByPrice(processedData)
+        if (this.priceRange.min >= 0 || this.priceRange.max <= 1000) {
+          processedData = this.handlePriceFilter(processedData)
+        }else{
+
+
         }
-        if (this.selectedSort) {
+
           this.sortData(processedData)
-        }
+
 
         this.menus = processedData
         this.currentPage = 1
