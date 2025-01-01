@@ -19,23 +19,6 @@ public class PromoCodeRecordService {
 	@Autowired
 	private MembersRepository membersRepository;
 	
-//    @Transactional // 加上事務管理
-//    public void createPromoCodeRecord(PromoCodeRecordDTO promoData) {
-//        Members member = membersRepository.findById(promoData.getMemberId())
-//            .orElseThrow(() -> new RuntimeException("找不到會員"));
-//            
-//        // 處理多筆優惠碼
-//        for (String promoCode : promoData.getPromoCodes()) {
-//            PromoCodeRecordBean promoCodeRecordBean = new PromoCodeRecordBean();
-//            promoCodeRecordBean.setMembers(member);
-//            promoCodeRecordBean.setPromoCode(promoCode);
-//            promoCodeRecordBean.setPointPrizesName(pointPrizesName);
-//            promoCodeRecordRepository.save(promoCodeRecordBean);
-//            
-//            // 同時刪除已使用的優惠碼
-//            promoCodeRecordRepository.deleteMemberPromoCode(promoCode);
-//        }
-//    }
 	@Transactional
 	public void createPromoCodeRecord(PromoCodeRecordDTO promoData) {
 	    Members member = membersRepository.findById(promoData.getMemberId())

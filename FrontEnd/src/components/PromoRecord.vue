@@ -79,7 +79,7 @@ export default {
   computed: {
     filteredPromoRecords() {
       const userStore = useUserStore()
-      return this.promoRecord.filter((record) => record.members.id === userStore.memberId)
+      return this.promoRecord.filter((record) => record.members.id === userStore.memberId).reverse()
     },
     // 計算總頁數
     totalPages() {

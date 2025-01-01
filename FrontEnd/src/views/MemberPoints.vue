@@ -28,7 +28,7 @@
       <ul class="prize-list">
         <template v-for="prize in paginatedPrizes" :key="prize.id">
           <li
-            v-if="prize.rewardsStatus == '上架中'"
+            v-if="prize.rewardsStatus === '上架中'"
             class="prize-item"
             :class="{ 'insufficient-points': memberPointTotal < prize.pointPrizesPoints }"
           >
@@ -71,26 +71,30 @@
       <div class="pagination-container">
         <ul class="pagination">
           <li class="page-item">
-            <a class="page-link"
-              :disabled="currentPage === 1"
-              @click="changePage(currentPage - 1)">Previous</a>
+            <a class="page-link" :disabled="currentPage === 1" @click="changePage(currentPage - 1)"
+              >Previous</a
+            >
           </li>
-          <li v-for="page in totalPages"
-              :key="page"
-              class="page-item"
-              :class="{ active: page === currentPage }">
+          <li
+            v-for="page in totalPages"
+            :key="page"
+            class="page-item"
+            :class="{ active: page === currentPage }"
+          >
             <a class="page-link" @click.prevent="changePage(page)">
               {{ page }}
             </a>
           </li>
           <li class="page-item">
-            <a class="page-link"
+            <a
+              class="page-link"
               :disabled="currentPage === totalPages"
-              @click="changePage(currentPage + 1)">Next</a>
+              @click="changePage(currentPage + 1)"
+              >Next</a
+            >
           </li>
         </ul>
       </div>
-
     </div>
   </div>
 </template>
@@ -137,15 +141,16 @@ export default {
     },
 
     changePage(page) {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page
       }
     },
 
     async getPointPrizes() {
       const api = `${import.meta.env.VITE_API}/api/pointPrizes`
       const response = await this.axios.get(api)
-      this.pointPrizes = response.data
+      // 過濾掉已過期的獎品並將結果賦值給 this.pointPrizes
+      this.pointPrizes = response.data.filter((prize) => prize.rewardsStatus !== '已過期')
     },
 
     async redeemPrize(prize) {
@@ -244,13 +249,13 @@ export default {
       return user
     },
     paginatedPrizes() {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.pointPrizes.slice(startIndex, endIndex);
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage
+      const endIndex = startIndex + this.itemsPerPage
+      return this.pointPrizes.slice(startIndex, endIndex)
     },
     totalPages() {
-      return Math.ceil(this.pointPrizes.length / this.itemsPerPage);
-    }
+      return Math.ceil(this.pointPrizes.length / this.itemsPerPage)
+    },
   },
   created() {
     this.getPointPrizes()
@@ -447,4 +452,3 @@ h3 {
   transition: all 0.3s ease;
 }
 </style>
-

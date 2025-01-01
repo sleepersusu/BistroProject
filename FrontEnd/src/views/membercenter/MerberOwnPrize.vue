@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PointTotal/>
+    <PointTotal />
   </div>
 </template>
 
@@ -8,9 +8,6 @@
 import BannerTop from '@/components/BannerTop.vue'
 import PointTotal from '@/components/PointTotal.vue'
 import PromoRecord from '@/components/PromoRecord.vue'
-import { useUserStore } from '@/stores/userStore'
-
-const user = useUserStore()
 
 export default {
   components: {
@@ -19,10 +16,8 @@ export default {
     PromoRecord,
   },
   data() {
-    return {
-    }
+    return {}
   },
-  methods: {
-  },
+  methods: {},
 }
 </script>

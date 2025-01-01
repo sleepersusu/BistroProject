@@ -24,15 +24,7 @@ public class PromoCodeRecordController {
 	
 	@Autowired
 	PromoCodeService promoCodeService;
-	
-//	@PostMapping("/api/createPromoRecord")
-//	public ResponseEntity<?> CreatePromoCodeRecord(@RequestBody PromoCodeRecordDTO requestDto) {
-//		promoCodeRecordService.createPromoCodeRecord(requestDto);
-//		
-//		return ResponseEntity.ok("PromoCodeRecord created successfully");
-//	}
-
-	
+		
 	@PostMapping("/api/deletePromoRecord")
 	public String deleteMemberPromoCode(@RequestBody Map<String, String> body) {
 	    String promoCode = body.get("promoCode");
