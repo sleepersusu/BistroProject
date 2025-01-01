@@ -16,7 +16,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "PointsRecords")
 public class PointsRecordsBean {
@@ -36,39 +40,5 @@ public class PointsRecordsBean {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
     private Date recordsDate;
-		
-	public Integer getID() {
-		return ID;
-	}
-
-	public void setID(Integer iD) {
-		ID = iD;
-	}
-
-	public Members getMembers() {
-		return members;
-	}
-
-	public void setMembers(Members members) {
-		this.members = members;
-	}
-
-	public PointPrizesBean getPointPrizes() {
-		return PointPrizes;
-	}
-
-	public void setPointPrizes(PointPrizesBean pointPrizes) {
-		PointPrizes = pointPrizes;
-	}
-
-	public Date getRecordsDate() {
-		return recordsDate;
-	}
-
-	public void setRecordsDate(Date recordsDate) {
-		this.recordsDate = recordsDate;
-	}
-
-
-    
+	
 }

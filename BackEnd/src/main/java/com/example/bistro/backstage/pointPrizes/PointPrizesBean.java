@@ -3,16 +3,21 @@ package com.example.bistro.backstage.pointPrizes;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.bistro.backstage.PointsRecords.PointsRecordsBean;
+import com.example.bistro.frontstage.promoCode.PromoCodeBean;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -44,7 +49,12 @@ public class PointPrizesBean {
 	private int pointPrizesCount;	
     @Lob
 	private byte[] pointPrizesImg;
-
+    
+    @OneToMany(mappedBy = "pointPrizes", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PromoCodeBean> promoCodes;
+    
+    @OneToMany(mappedBy = "PointPrizes", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PointsRecordsBean> pointsRecords;
 
 	public Integer getId() {
 		return id;
@@ -127,5 +137,5 @@ public class PointPrizesBean {
         }
         return null;
     }
-
+  
 }
