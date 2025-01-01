@@ -16,6 +16,12 @@
                         <span class="coupon-name">{{ item.pointPrizes.pointPrizesName }}</span>
                         <span class="coupon-code">{{ item.promoCode }}</span>
                       </div>
+                      <div v-if="isExpiringSoon(item)" class="expiration-info">
+                        <span class="expiring-tag">即將過期</span>
+                        <span class="expiration-date">{{
+                          formatDate(item.pointPrizes.pointPrizesExpiration)
+                        }}</span>
+                      </div>
                     </div>
                     <button
                       class="use-btn"
@@ -58,7 +64,9 @@ export default {
       try {
         const api = `${import.meta.env.VITE_API}/api/showPromoCode/${this.memberId}`
         const response = await this.axios.get(api)
-        this.memberPromoCode = response.data
+        this.memberPromoCode = response.data.filter(
+          (item) => item.pointPrizes.rewardsStatus === '上架中',
+        )
       } catch (error) {
         console.error('獲取優惠券失敗:', error)
         window.Swal.fire({
@@ -122,6 +130,18 @@ export default {
           text: '請稍後再試',
         })
       }
+    },
+
+    isExpiringSoon(item) {
+      const days = Math.ceil(
+        (new Date(item.pointPrizes.pointPrizesExpiration) - new Date()) / 86400000,
+      )
+      return days >= 0 && days <= 7
+    },
+
+    formatDate(date) {
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit' }
+      return date ? new Date(date).toLocaleDateString('zh-TW', options) : ''
     },
   },
 
@@ -351,6 +371,35 @@ export default {
     font-size: 0.8rem;
     white-space: nowrap;
     margin-bottom: 5px;
+  }
+
+  .coupon-name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+
+  .expiring-tag {
+    /* 移除漸變背景，使用與 coupon-name 一致的顏色 */
+    background: #2c3e50;
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 1.1rem; /* 與 coupon-name 一致 */
+    font-weight: 500; /* 與 coupon-name 一致 */
+  }
+
+  .expiration-date {
+    color: #2c3e50; /* 也改為相同顏色 */
+    font-size: 1.1rem; /* 與其他一致 */
+    font-weight: 500;
+  }
+
+  .expiration-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 0.2rem;
   }
 }
 </style>
