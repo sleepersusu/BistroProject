@@ -80,6 +80,8 @@ public class MenuService {
 
 	}
 
+
+
 	public Menu findMenuByProductName(String productName) {
 		Menu findMenuByProductName = menuRepo.findByProductName(productName);
 		return findMenuByProductName;
@@ -114,6 +116,10 @@ public class MenuService {
 		
 		return OneMenuAvgScore;
 
+	}
+
+	public Menu findMenuByNameLikeForPython(String productName) {
+		return menuRepo.findByProductNameLike2("%" + productName + "%");
 	}
 	
 

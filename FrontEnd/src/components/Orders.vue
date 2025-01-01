@@ -364,7 +364,7 @@ export default {
         // 當獲取到數據時，延遲一下再關閉 loading
         setTimeout(() => {
           this.isLoading = false
-        }, 3500)
+        }, 4500)
       }
     }
   },

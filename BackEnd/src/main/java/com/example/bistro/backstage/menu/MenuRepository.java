@@ -17,7 +17,11 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 	@Query("FROM Menu  WHERE productName like %:productname%")
 	List<Menu> findMenuByNameLike(@Param("productname") String productname);
 
+	//for python
 	Menu findByProductName(String productName);
+	@Query(value = "SELECT * FROM Menu WHERE productName LIKE %:productName%", nativeQuery = true)
+	Menu findByProductNameLike2(@Param("productName") String productName);
+
 
 	// 11/19修改
 	@Query("SELECT c.menu.productName AS productName, COALESCE(AVG(c.commentRating), 0.0) AS avgScore "

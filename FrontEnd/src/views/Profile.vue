@@ -86,7 +86,7 @@
         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
           <div class="team-item rounded p-4">
             <img class="img-fluid rounded mb-4" src="/public/images/SU大頭照.jpg" alt="" />
-            <h5>SU YUHSIANG</h5>
+            <h5>Su YuHsiang</h5>
             <p class="text-primary">Team Leader</p>
             <div class="d-flex justify-content-center pt-1">
               <a
@@ -174,7 +174,7 @@
         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
           <div class="team-item rounded p-4">
             <img class="img-fluid rounded mb-4" src="/images/馬修大頭照.jpg" alt="" />
-            <h5>LIOU JYUN-SIOU</h5>
+            <h5>Liou JyunSiou</h5>
             <p class="text-primary">Team Member</p>
             <div class="d-flex justify-content-center pt-1">
               <a
@@ -196,7 +196,7 @@
         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
           <div class="team-item rounded p-4">
             <img class="img-fluid rounded mb-4" src="../../public/images/hong.jpg" alt="" />
-            <h5>Jack Dawson</h5>
+            <h5>Hong BinFeng</h5>
             <p class="text-primary">Team Member</p>
             <div class="d-flex justify-content-center pt-1">
               <a
