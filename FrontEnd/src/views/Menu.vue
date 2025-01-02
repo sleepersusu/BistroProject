@@ -70,7 +70,7 @@
 
         <div class="price-range-slider px-4">
           <div class="slider-labels mb-2">
-            <span>價格範圍: {{ priceRange.min }} - {{ priceRange.max }}</span>
+            <span>價格範圍: NT${{ priceRange.min }}元 - {{ priceRange.max }}元</span>
           </div>
 
           <div class="slider-container">

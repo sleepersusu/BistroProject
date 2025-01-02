@@ -32,31 +32,25 @@ public class MenuController {
 
 	@Autowired
 	private MenuRepository menuRepo;
-	
-	
+
 	@Autowired
 	private ImageService imageService;
-	
 
+	@Transactional
 	@PostMapping("/Bistro/postMenu")
 	public String postMenu(@RequestParam String productCategory, @RequestParam String productName,
 			@RequestParam MultipartFile productImage, @RequestParam Integer productPrice,
 			@RequestParam String productDescribe, @RequestParam Integer productCount,
 			@RequestParam Integer minproductCount, @RequestParam(defaultValue = "0.0") Double avgScore,
 			@RequestParam String menuStatus) throws IOException {
-		
-		
-	    long maxSize = 8 * 1024 * 1024;  
 
-	    // 檢查檔案大小
-	    if (productImage.getSize() > maxSize) {
-	    	System.out.println("檔案大小超過限制！最大檔案大小為 8MB。");
-	        throw new IOException("檔案大小超過限制！最大檔案大小為 8MB。");
-	    }
-		
-		
-		
-		
+		long maxSize = 8 * 1024 * 1024;
+
+		// 檢查檔案大小
+		if (productImage.getSize() > maxSize) {
+			System.out.println("檔案大小超過限制！最大檔案大小為 8MB。");
+			throw new IOException("檔案大小超過限制！最大檔案大小為 8MB。");
+		}
 
 		byte[] fileBytes = productImage.getBytes();
 		String originalFilename = productImage.getOriginalFilename();
@@ -85,9 +79,6 @@ public class MenuController {
 		return "redirect:/Bistro/findAllMenu";
 
 	}
-
-
-
 
 	@GetMapping("/Bistro/findAllMenu")
 	public String findAllMenu(Model model) {
@@ -133,7 +124,6 @@ public class MenuController {
 
 		menuRepo.saveAll(menuList);
 
-
 		model.addAttribute("allMenu", menuList);
 		model.addAttribute("lowStockItems", lowStockItems);
 		model.addAttribute("menuList", menuList);
@@ -156,26 +146,18 @@ public class MenuController {
 		return "redirect:/Bistro/findAllMenu";
 
 	}
-	
-	
-	
 
 	@PostMapping("/Bistro/updateMenuPost")
 	@Transactional
-	public String updateMenuPost(@ModelAttribute Menu menu, @RequestParam("productImage") MultipartFile file
-			) {
-
+	public String updateMenuPost(@ModelAttribute Menu menu, @RequestParam("productImage") MultipartFile file) {
 		try {
-			
-			long maxSize = 8 * 1024 * 1024;  
+			long maxSize = 8 * 1024 * 1024;
+			// 檢查檔案大小
+			if (file.getSize() > maxSize) {
+				System.out.println("檔案大小超過限制！最大檔案大小為 8MB。");
+				throw new IOException("檔案大小超過限制！最大檔案大小為 8MB。");
+			}
 
-		    // 檢查檔案大小
-			 if (file.getSize() > maxSize) {
-			    	System.out.println("檔案大小超過限制！最大檔案大小為 8MB。");
-			        throw new IOException("檔案大小超過限制！最大檔案大小為 8MB。");
-			    }
-			
-			
 			if (file.isEmpty()) {
 				Menu findmenu = menuService.findMenuById(menu.getID());
 				if (findmenu != null) {
@@ -222,8 +204,5 @@ public class MenuController {
 		return "redirect:/Bistro/findAllMenu";
 
 	}
-
-
-
 
 }
