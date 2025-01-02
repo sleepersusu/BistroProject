@@ -1,18 +1,13 @@
 package com.example.bistro.backstage.menu;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -24,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.bistro.backstage.config.ImageService;
+
 
 @Controller
 public class MenuController {
@@ -32,11 +27,6 @@ public class MenuController {
 	@Autowired
 	private MenuService menuService;
 
-	@Autowired
-	private MenuRepository menuRepo;
-
-	@Autowired
-	private ImageService imageService;
 
 
 	private static final long MAX_FILE_SIZE = 8 * 1024 * 1024;
@@ -100,80 +90,11 @@ public class MenuController {
 		return "menu/showAllMenuView";
 	}
 
-//	@GetMapping("/Bistro/findAllMenu")
-//	public String findAllMenu(Model model) {
-//
-//		// 查詢所有菜單
-//		List<Menu> menuList = menuService.findAllMenu();
-//
-//		List<String> lowStockItems = new ArrayList<>();
-//
-//		// 只檢查上架庫存是否不足 已下架庫存不理他
-//		for (Menu menu : menuList) {
-//			if ((menu.getProductCount() < menu.getMinproductCount()) && menu.getMenuStatus().equals("上架")) {
-//				lowStockItems.add(menu.getProductName());
-//			}
-//		}
-//
-//		// 將庫存不足的商品名稱傳遞給前端
-//		model.addAttribute("lowStockItems", lowStockItems);
-//
-//		// 查詢所有菜品的平均分數
-//		List<Object[]> avgScores = menuService.countAvgScores();
-//
-//		// 創建一個 Map 用來存儲菜品名稱和平均分數
-//		Map<String, Double> avgScoreMap = new HashMap<>();
-//		for (Object[] avgScore : avgScores) {
-//			String productName = (String) avgScore[0]; // 取得菜品名稱
-//			Double score = (Double) avgScore[1]; // 取得平均分數
-//			avgScoreMap.put(productName, score);
-//		}
-//
-//		// 為每個菜品設置平均分數
-//		for (Menu menu : menuList) {
-//			Double avgScore = avgScoreMap.get(menu.getProductName());
-//			if (avgScore != null) {
-//				double roundedAvgScore = Math.round(avgScore * 10.0) / 10.0;
-//				menu.setAvgScore(roundedAvgScore);// 設置平均分數
-//
-//			} else {
-//				menu.setAvgScore(0.0); // 如果沒有評論則設置為 0
-//			}
-//
-//		}
-//
-//		menuRepo.saveAll(menuList);
-//
-//
-//		model.addAttribute("allMenu", menuList);
-//		model.addAttribute("lowStockItems", lowStockItems);
-//		model.addAttribute("menuList", menuList);
-//
-//		return "menu/showAllMenuView";
-//	}
-
-//	@GetMapping("/Menu/updateMenu")
-//	public String updateMenu(@RequestParam Integer ID, Model model) {
-//
-//		Menu updateMenu = menuService.findMenuById(ID);
-//		model.addAttribute("updateMenu", updateMenu);
-//
-//		if ("已下架".equals(updateMenu.getMenuStatus())) {
-//			model.addAttribute("outOfStock", true);
-//		} else {
-//			model.addAttribute("outOfStock", false);
-//		}
-//
-//		return "redirect:/Bistro/findAllMenu";
-//
-//	}
-
 	@PostMapping("/Bistro/updateMenuPost")
 	@Transactional
 	public String updateMenuPost(@ModelAttribute Menu menu, 
 			@RequestParam("productImage") MultipartFile file) {
 	    try {
-       
 	        if (file.getSize() > MAX_FILE_SIZE) {
 	            throw new IOException("檔案大小超過限制！最大檔案大小為 8MB。");
 	        }
