@@ -4,7 +4,7 @@
       <!-- 左側：用戶圖片和名稱 -->
       <div class="col-md-3 d-flex flex-column align-items-center">
         <section class="avatar-container">
-          <img :src="memberSrc" alt="" class="avatar" />
+          <img :src="memberSrc" alt="" v-on:error="memberSrc ='/images/avatar.jpg'" class="avatar" />
         </section>
 
         <section>
@@ -58,15 +58,16 @@ export default {
     }
   },
   methods: {
-    async loadMemberAvatar(memberid) {
+    async loadMemberAvatar() {
       this.showComment = true
       //這邊要用try catch 寫法 避免錯誤時 被知道我們的api 路徑
       try {
-        const response = await this.axios.get(api, { responseType: 'blob' })
+        let API_URL = `${import.meta.env.VITE_API}/api/members/photo/${this.comment.memberid}`
+        const response = await this.axios.get(API_URL, { responseType: 'blob' })
         const url = URL.createObjectURL(response.data)
         this.memberSrc = url
       } catch (error) {
-        this.memberSrc = 'public/images/avatar.jpg'
+        this.memberSrc = '/public/images/avatar.jpg'
       }
     },
   },

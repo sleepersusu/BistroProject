@@ -6,101 +6,96 @@
 <title>商品管理 - DINEEASE餐廳管理系統</title>
 <link rel="icon" th:href="@{/images/favicon.ico}" />
 
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+	rel="stylesheet" />
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-	<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
 
-	<link rel="stylesheet" th:href="@{/css/demo.css}" />
+<link rel="stylesheet" th:href="@{/css/demo.css}" />
 
 <style th:inline="css">
 body {
 	font-family: "Noto Sans TC", sans-serif;
 }
 
-		#edit,
-		#delete,
-		#active {
-			padding: 0.3rem 0.75rem;
-			cursor: pointer;
-			color: white;
-			border: none;
-			border-radius: 10px
-		}
+#edit, #delete, #active {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
 
-		#edit {
-			background-color: #0071e3;
-			margin-bottom: 0.3rem;
-		}
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
 
-		#edit:hover {
-			background-color: #2894FF;
-		}
+#edit:hover {
+	background-color: #2894FF;
+}
 
-		#delete {
-			background-color: #CE0000;
-		}
+#delete {
+	background-color: #CE0000;
+}
 
-		#active {
-			background-color: #009c0d;
-		}
+#active {
+	background-color: #009c0d;
+}
 
-		#delete:hover {
-			background-color: #FF5151;
-		}
+#delete:hover {
+	background-color: #FF5151;
+}
 
-		#dt-search-0 {
-			margin-right: 2rem
-		}
+#dt-search-0 {
+	margin-right: 2rem
+}
 
-		#dt-search-0:focus {
-			outline: none;
-		}
+#dt-search-0:focus {
+	outline: none;
+}
 
-		#addData {
-			padding: 0.5rem 1.25rem !important;
-			font-size: 1rem !important;
-			width: auto;
-			height: auto;
-			color: white;
-			background-color: #0071e3;
-			border: none;
-			border-radius: 0;
-			font-weight: normal;
-		}
-		
-		
-
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
 
 #addData:hover {
 	background-color: #2894FF;
 }
 
 td:nth-child(6) {
- white-space: normal;
- overflow: hidden;
- text-overflow: ellipsis;
- max-width: 300px;
+	white-space: normal;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 300px;
 }
 
 #table_wrapper {
- width: 100%;
- overflow-x: auto;
- box-sizing: border-box;
+	width: 100%;
+	overflow-x: auto;
+	box-sizing: border-box;
 }
-
 
 table.dataTable {
-    width: 100% !important;
-    table-layout: fixed;
-     border-collapse: collapse;
+	width: 100% !important;
+	table-layout: fixed;
+	border-collapse: collapse;
 }
-
-
-
 </style>
 
 </head>
@@ -127,8 +122,8 @@ table.dataTable {
 				</section>
 
 				<section>
-					<div  id="table_wrapper">
-						<table id="table" class="display"  style="width:90%;">
+					<div id="table_wrapper">
+						<table id="table" class="display" style="width: 90%;">
 							<thead>
 								<tr>
 									<th>ID</th>
@@ -159,8 +154,9 @@ table.dataTable {
 
 										<td th:text="${menu.ID}"></td>
 										<td th:text="${menu.productName}"></td>
-										<td><img th:src="@{/Bistro/download?type=menu&(ID=${menu.ID})}" alt="商品照片"
-												></td>
+										<td><img
+											th:src="@{/Bistro/download?type=menu&(ID=${menu.ID})}"
+											alt="商品照片"></td>
 										<td th:text="${menu.productPrice}"></td>
 										<td th:text="${menu.productCategory}"></td>
 										<td th:text="${menu.productDescribe}"></td>
@@ -173,7 +169,8 @@ table.dataTable {
 
 
 										<td>
-											<button type="button" id="edit" th:onclick="openEditModal({
+											<button type="button" id="edit"
+												th:onclick="openEditModal({
         										ID: [[${menu.ID}]], 
         										productCategory: [[${menu.productCategory}]], 
         										productImage:[[${menu.productImg}]],
@@ -190,16 +187,16 @@ table.dataTable {
 
 
 											<form th:if="${menu.menuStatus!='已下架'}"
-												th:action="@{/Bistro/deleteMenu(ID=${menu.ID})}" method="post"
-												style="display: inline;">
+												th:action="@{/Bistro/deleteMenu(ID=${menu.ID})}"
+												method="post" style="display: inline;">
 												<input type="hidden" name="ID" th:value="${menu.ID}">
 												<button type="submit" id="delete"
 													onclick="return confirm('確定要下架嗎？');">下架</button>
 											</form>
 
 											<form th:if="${menu.menuStatus!='上架'}"
-												th:action="@{/Bistro/recoverMenu(ID=${menu.ID})}" method="post"
-												style="display: inline;">
+												th:action="@{/Bistro/recoverMenu(ID=${menu.ID})}"
+												method="post" style="display: inline;">
 												<input type="hidden" name="ID" th:value="${menu.ID}">
 												<button type="submit" id="active"
 													onclick="return confirm('確定要上架嗎？');">上架</button>
@@ -218,7 +215,8 @@ table.dataTable {
 			</main>
 
 
-			<div id="lowStockModal" class="modal" th:if="${lowStockItems != null and lowStockItems.size() > 0}">
+			<div id="lowStockModal" class="modal"
+				th:if="${lowStockItems != null and lowStockItems.size() > 0}">
 				<div class="modal-content">
 
 					<span class="close">&times;</span>
@@ -236,15 +234,17 @@ table.dataTable {
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h1>新增商品資料</h1>
-					<form th:action="@{/Bistro/postMenu}" method="post" enctype="multipart/form-data" id="dataForm">
+					<form th:action="@{/Bistro/postMenu}" method="post"
+						enctype="multipart/form-data" id="dataForm">
 						<fieldset>
 							<!-- 區域1 -->
 
 							<legend>商品資訊</legend>
 
 							<div class="question">
-								<label for="productCategory" class="title">商品分類</label> <select id="productCategory"
-									name="productCategory" required aria-required="true">
+								<label for="productCategory" class="title">商品分類</label> <select
+									id="productCategory" name="productCategory" required
+									aria-required="true">
 									<option value="0" selected>選擇商品分類</option>
 									<option value="主菜">主菜</option>
 									<option value="開胃菜">開胃菜</option>
@@ -254,14 +254,16 @@ table.dataTable {
 							</div>
 
 							<div class="question">
-								<label for="productName" class="title">商品名稱</label> <input type="text" id="productName"
-									name="productName" value="" placeholder="請輸入商品名稱" required aria-required="true" />
+								<label for="productName" class="title">商品名稱</label> <input
+									type="text" id="productName" name="productName" value=""
+									placeholder="請輸入商品名稱" required aria-required="true" />
 							</div>
 
 							<div class="question">
-								<label for="productImage" class="title">商品照片</label> <input type="file"
-									id="productImage" name="productImage" required aria-required="true" accept="image/*"
-									onchange="previewImage(event)" />
+								<label for="productImage" class="title">商品照片</label> <input
+									type="file" id="productImage" name="productImage" required
+									aria-required="true" accept="image/*"
+									onchange="validateAndPreviewImage(event)"/>
 							</div>
 
 							<!-- <div id="previewContainer" style="display: none"> -->
@@ -270,42 +272,44 @@ table.dataTable {
 							</div>
 
 							<div class="question">
-								<label for="productPrice" class="title">商品單價</label> <input type="number"
-									id="productPrice" name="productPrice" value="" placeholder="請輸入商品單價" required
-									aria-required="true" min="0" />
+								<label for="productPrice" class="title">商品單價</label> <input
+									type="number" id="productPrice" name="productPrice" value=""
+									placeholder="請輸入商品單價" required aria-required="true" min="0" />
 							</div>
 
 							<div class="question">
-								<label for="productDescribe" class="title">商品描述</label>
-									<span style="font-size: smaller; margin-left: 5px">剩餘字數:
-										<span th:text="${200 - #strings.length(productDescribe ?: '')}" id="charCount">200</span>
-									</span>字
-								<textarea name="productDescribe" placeholder="請輸入商品如何描述" required aria-required="true"
-									id="productDescribe" maxlength=200  
-									th:value="${productDescribe}"
-    								th:oninput="updateCharCount(this)"></textarea>
+								<label for="productDescribe" class="title">商品描述</label> <span
+									style="font-size: smaller; margin-left: 5px">剩餘字數: <span
+									th:text="${200 - #strings.length(productDescribe ?: '')}"
+									id="charCount">200</span>
+								</span>字
+								<textarea name="productDescribe" placeholder="請輸入商品如何描述"
+									required aria-required="true" id="productDescribe"
+									maxlength=200 th:value="${productDescribe}"
+									th:oninput="updateCharCount(this)"></textarea>
 							</div>
 
 
 							<div class="question">
-								<label for="productCount" class="title">商品庫存</label> <input type="number"
-									id="productCount" name="productCount" value="" placeholder="請輸入庫存數量" required
-									aria-required="true" min="0" />
+								<label for="productCount" class="title">商品庫存</label> <input
+									type="number" id="productCount" name="productCount" value=""
+									placeholder="請輸入庫存數量" required aria-required="true" min="0" />
 							</div>
 
 							<div class="question">
-								<label for="minproductCount" class="title">最低庫存量</label> <input type="number"
-									id="minproductCount" name="minproductCount" value="" placeholder="請輸入最低庫存量" required
-									aria-required="true" min="0" />
+								<label for="minproductCount" class="title">最低庫存量</label> <input
+									type="number" id="minproductCount" name="minproductCount"
+									value="" placeholder="請輸入最低庫存量" required aria-required="true"
+									min="0" />
 							</div>
 
 
-							<div class="question" style="display:none">
-								<label for="menuStatus" class="title">狀態</label> <select id="menuStatus"
-									name="menuStatus" required aria-required="true">
+							<div class="question" style="display: none">
+								<label for="menuStatus" class="title">狀態</label> <select
+									id="menuStatus" name="menuStatus" required aria-required="true">
 									<option value="0">選擇商品狀態</option>
 									<option value="上架" selected>上架</option>
-									
+
 
 								</select>
 							</div>
@@ -318,7 +322,8 @@ table.dataTable {
 						<!---------------------------底下為按鈕區---------------------------------------------- -->
 						<div id="buttonbox">
 							<button type="submit" id="save" class="formbutton">儲存</button>
-							<button type="reset" id="reset" class="formbutton" onclick="resetPreview()">重設</button>
+							<button type="reset" id="reset" class="formbutton"
+								onclick="resetPreview()">重設</button>
 						</div>
 
 					</form>
@@ -337,16 +342,18 @@ table.dataTable {
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h1>編輯商品資料</h1>
-					<form th:action="@{/Bistro/updateMenuPost}" method="post" enctype="multipart/form-data"
-						id="dataForm">
+					<form th:action="@{/Bistro/updateMenuPost}" method="post"
+						enctype="multipart/form-data" id="dataForm">
 						<fieldset>
 							<!-- 區域1 -->
 							<legend>商品資訊</legend>
 
-							<label for="menuId2"></label> <input type="hidden" name="ID" id="menuId2" readonly>
+							<label for="menuId2"></label> <input type="hidden" name="ID"
+								id="menuId2" readonly>
 							<div class="question">
-								<label for="productCategory2" class="title">商品分類</label> <select id="productCategory2"
-									name="productCategory" required aria-required="true">
+								<label for="productCategory2" class="title">商品分類</label> <select
+									id="productCategory2" name="productCategory" required
+									aria-required="true">
 									<option value="0" selected>選擇商品分類</option>
 									<option value="主菜">主菜</option>
 									<option value="開胃菜">開胃菜</option>
@@ -358,60 +365,62 @@ table.dataTable {
 
 
 							<div class="question">
-								<label for="productName2" class="title">商品名稱</label> <input type="text"
-									id="productName2" name="productName" value="" placeholder="請輸入商品名稱" required
-									aria-required="true" />
+								<label for="productName2" class="title">商品名稱</label> <input
+									type="text" id="productName2" name="productName" value=""
+									placeholder="請輸入商品名稱" required aria-required="true" />
 							</div>
 
 							<div class="question">
-								<label for="productImage2" class="title">商品照片</label> <input type="file"
-									id="productImage2" name="productImage" accept="image/*"
-									onchange="previewImage(event)">
+								<label for="productImage2" class="title">商品照片</label> <input
+									type="file" id="productImage2" name="productImage"
+									accept="image/*" onchange="validateAndPreviewImage(event)">
 							</div>
 
 
 
-							<div id="previewContainer2" class="question" style="display: none">
+							<div id="previewContainer2" class="question"
+								style="display: none">
 								<img id="preview2" alt="商品照片" width="200" src="" />
 							</div>
 
 
 							<div class="question">
-								<label for="productPrice2" class="title">商品單價</label> <input type="number"
-									id="productPrice2" name="productPrice" value="" placeholder="請輸入商品單價" required
-									aria-required="true" />
+								<label for="productPrice2" class="title">商品單價</label> <input
+									type="number" id="productPrice2" name="productPrice" value=""
+									placeholder="請輸入商品單價" required aria-required="true" />
 							</div>
 
 							<div class="question">
-								<label for="productDescribe2" class="title">商品描述</label>
-									<span style="font-size: smaller; margin-left: 5px">剩餘字數 :</span>
-									<span id="charCount2">200字</span>
-								<textarea name="productDescribe" placeholder="請輸入商品描述" required aria-required="true"
-									id="productDescribe2" maxlength=200
-									 th:text="${productDescribe2}"
-    									oninput="updateEditCharCount(this)">
+								<label for="productDescribe2" class="title">商品描述</label> <span
+									style="font-size: smaller; margin-left: 5px">剩餘字數 :</span> <span
+									id="charCount2">200字</span>
+								<textarea name="productDescribe" placeholder="請輸入商品描述" required
+									aria-required="true" id="productDescribe2" maxlength=200
+									th:text="${productDescribe2}"
+									oninput="updateEditCharCount(this)">
     							</textarea>
 							</div>
 
 							<div class="question">
-								<label for="productCount2" class="title">商品庫存</label> <input type="number"
-									id="productCount2" name="productCount" value="" placeholder="請輸入庫存數量" required
-									aria-required="true" min="0" />
+								<label for="productCount2" class="title">商品庫存</label> <input
+									type="number" id="productCount2" name="productCount" value=""
+									placeholder="請輸入庫存數量" required aria-required="true" min="0" />
 							</div>
 
 
 							<div class="question">
-								<label for="minproductCount2" class="title">最低庫存量</label> <input type="number"
-									id="minproductCount2" name="minproductCount" value="" placeholder="請輸入最低庫存量"
-									required aria-required="true" min="0" />
+								<label for="minproductCount2" class="title">最低庫存量</label> <input
+									type="number" id="minproductCount2" name="minproductCount"
+									value="" placeholder="請輸入最低庫存量" required aria-required="true"
+									min="0" />
 							</div>
 
 
 
-							<div class="question" style="display:none">
-								<label for="menuStatus2" class="title">狀態</label> 
-								<select id="menuStatus2"
-									name="menuStatus" required aria-required="true">
+							<div class="question" style="display: none">
+								<label for="menuStatus2" class="title">狀態</label> <select
+									id="menuStatus2" name="menuStatus" required
+									aria-required="true">
 									<option value="0" selected>選擇商品狀態</option>
 									<option value="上架">上架</option>
 									<option value="已下架">已下架</option>
@@ -421,8 +430,8 @@ table.dataTable {
 
 
 							<div class="question">
-								<label for="createdAt2" class="title">建立時間</label> <input type="date" name="createdAt"
-									id="createdAt2" value="" required>
+								<label for="createdAt2" class="title">建立時間</label> <input
+									type="date" name="createdAt" id="createdAt2" value="" required>
 							</div>
 
 						</fieldset>
@@ -431,7 +440,8 @@ table.dataTable {
 						<!---------------------------底下為按鈕區---------------------------------------------- -->
 						<div id="buttonbox">
 							<button type="submit" id="save" class="formbutton">儲存</button>
-							<button type="reset" id="reset" class="formbutton" onclick="resetPreview()">重設</button>
+							<button type="reset" id="reset" class="formbutton"
+								onclick="resetPreview()">重設</button>
 						</div>
 					</form>
 				</div>
@@ -523,27 +533,52 @@ table.dataTable {
 			let textarea = document.getElementById('productDescribe2');
     		updateEditCharCount(textarea);
 		}
+			
+function validateAndPreviewImage(event) {
+    const file = event.target.files[0];
+
+    // 檔案大小限制（8MB）
+    const maxSize = 8 * 1024 * 1024; // 8MB in bytes
+    if (file.size > maxSize) {
+        alert('檔案過大！請選擇 8MB 以下的圖片檔案。');
+        event.target.value = ''; // 清除選擇的檔案
+        
+        // 清除預覽
+        const preview = event.target.id === 'productImage' ? 
+            document.getElementById('preview') : 
+            document.getElementById('preview2');
+        const previewContainer = event.target.id === 'productImage' ? 
+            document.getElementById('previewContainer') : 
+            document.getElementById('previewContainer2');
+            
+        preview.src = '';
+        previewContainer.style.display = 'none';
+        return;
+    }
+    
+    // 預覽圖片
+    const preview = event.target.id === 'productImage' ? 
+        document.getElementById('preview') : 
+        document.getElementById('preview2');
+    const previewContainer = event.target.id === 'productImage' ? 
+        document.getElementById('previewContainer') : 
+        document.getElementById('previewContainer2');
+
+    previewContainer.style.display = "block";
+    preview.src = URL.createObjectURL(file);
+
+    // 當圖片載入完成後釋放 URL
+    preview.onload = () => {
+        URL.revokeObjectURL(preview.src);
+    };
+}
+			
+			
+			
+			
+			
 
 
-		//換照片時即時顯示
-		function previewImage(event) {
-			let preview = document.getElementById('preview');
-			let previewContainer = document.getElementById('previewContainer');
-
-			let preview2 = document.getElementById('preview2');
-
-			previewContainer.style.display = "block";
-
-			preview.src = URL.createObjectURL(event.target.files[0]);
-			preview2.src = URL.createObjectURL(event.target.files[0]);
-
-			preview.onload = function () {
-				URL.revokeObjectURL(preview.src);
-			}
-			preview2.onload = function () {
-				URL.revokeObjectURL(preview2.src);
-			}
-		}
 
 		function resetPreview() {
 			let preview = document.getElementById('preview');
@@ -591,14 +626,8 @@ table.dataTable {
   			let remainingChars = maxLength - currentLength;
   			document.getElementById('charCount2').textContent = remainingChars+"字";
 		}
-		
-
 
 	</script>
-
-
-
-
 
 </body>
 
