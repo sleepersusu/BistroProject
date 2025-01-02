@@ -171,25 +171,29 @@ export default {
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
 
     async loadPicture(ID) {
+      try {
+        // 先清除之前的圖片 URL
+        if (this.menuSrc) {
+          URL.revokeObjectURL(this.menuSrc)
+          this.menuSrc = '' // 立即清空圖片源
+        }
 
-      if (this.menuSrc) {
-      URL.revokeObjectURL(this.menuSrc)
-    }
-      this.isLoading = true
+        this.isLoading = true
 
-      let API_URL = `${import.meta.env.VITE_API}/api/menu/photo/${ID}`
-
-      await axios
-        .get(API_URL, { responseType: 'blob' })
-        .then(async (response) => {
-          let url = URL.createObjectURL(response.data)
-          this.menuSrc = url
-          this.isLoading = false
+        const API_URL = `${import.meta.env.VITE_API}/api/menu/photo/${ID}`
+        const response = await axios.get(API_URL, {
+          responseType: 'blob',
         })
-        .catch((error) => {
-          console.error('Error fetching menus:', error)
-          this.isLoading = false
-        })
+
+        // 創建新的 URL
+        const url = URL.createObjectURL(response.data)
+        this.menuSrc = url
+      } catch (error) {
+        console.error('Error fetching image:', error)
+        this.menuSrc = 'public/images/avatar.jpg' // 設置預設圖片
+      } finally {
+        this.isLoading = false
+      }
     },
 
     async minusOne() {
@@ -260,8 +264,6 @@ export default {
         this.count = this.menu.productCount
       }
     },
-
-
   },
 
   async created() {
@@ -283,6 +285,12 @@ export default {
       )
     },
   },
+  beforeUnmount() {
+  // 清理圖片 URL
+  if (this.menuSrc) {
+    URL.revokeObjectURL(this.menuSrc)
+  }
+}
 }
 </script>
 
@@ -553,20 +561,14 @@ product-qty {
   cursor: pointer;
 }
 
-
-figure>img {
+figure > img {
   height: 250px;
   width: 100%;
   object-fit: cover;
   transition: all 0.3s ease;
 }
 
-figure>img:hover {
+figure > img:hover {
   transform: scale(1.1);
 }
-
-
-
-
-
 </style>

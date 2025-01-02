@@ -1,5 +1,4 @@
 <template>
-    <loading :active="isLoading"></loading>
   <div class="container">
     <BannerTop :title="' Menu'"></BannerTop>
     <section class="py-5 overflow-hidden">
@@ -69,10 +68,9 @@
       <div class="col-4">
         <!-- 篩選價錢-->
 
-
         <div class="price-range-slider px-4">
           <div class="slider-labels mb-2">
-            <span>價格範圍: {{ priceRange.min }} - {{ priceRange.max }}</span>
+            <span>價格範圍: NT${{ priceRange.min }} - {{ priceRange.max }}元</span>
           </div>
 
           <div class="slider-container">
@@ -117,15 +115,15 @@
       </div>
       <div class="col-4"></div>
 
-      <div class="col-4" >
+      <div class="col-4">
         <!-- 排序選單 -->
-        <select v-model="selectedSort" class="form-select form-select-lg mb-3" @change="handleSort">
+        <select v-model="selectedSort" class="form-select form-select-lg mb-3 styled-select" @change="handleSort">
           <!-- 排序選單選項 -->
           <option value="" disabled>選擇想要的排序方式</option>
-          <option value="avgScoreHighToLow">由評分高排到低</option>
-          <option value="avgScoreLowToHigh">由評分低排到高</option>
-          <option value="priceHighToLow">由價格高排到低</option>
-          <option value="priceLowToHigh">由價格低排到高</option>
+          <option value="avgScoreHighToLow" class="selectOption">由評分高排到低</option>
+          <option value="avgScoreLowToHigh" class="selectOption">由評分低排到高</option>
+          <option value="priceHighToLow" class="selectOption">由價格高排到低</option>
+          <option value="priceLowToHigh" class="selectOption">由價格低排到高</option>
         </select>
       </div>
     </div>
@@ -133,26 +131,24 @@
 
   <section>
     <div class="container">
-
-      <div v-if="menus.length === 0" class="no-products">
-        <div class="text-center py-5">
-          <font-awesome-icon
-            :icon="['fas', 'box-open']"
-            size="4x"
-            class="text-gray-400 mb-3"
-          />
-          <h3 class="text-xl font-semibold text-gray-600">
-            沒有符合條件的商品
-          </h3>
-          <p class="text-gray-500 mt-2">
-            請調整篩選條件後重試
-          </p>
+      <div v-if="isLoading" class="text-center py-5">
+        <div class="loading-spinner">
+          <div class="spinner-border text-dark" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">載入中...</p>
         </div>
       </div>
 
+      <div v-else-if="!isLoading && menus.length === 0" class="no-products">
+        <div class="text-center py-5">
+          <font-awesome-icon :icon="['fas', 'box-open']" size="4x" class="text-gray-400 mb-3" />
+          <h3 class="text-xl font-semibold text-gray-600">沒有符合條件的商品</h3>
+          <p class="text-gray-500 mt-2">請調整篩選條件後重試</p>
+        </div>
+      </div>
 
-
-      <div v-else  class="row mt-3" >
+      <div v-else-if="menus.length > 0" class="row mt-3">
         <div class="col-md-6 col-lg-4 col-sm-6" v-for="menu in paginatedMenus" :key="menu.id">
           <MenuCard
             :menu="menu"
@@ -224,7 +220,7 @@ export default {
     PageComponent,
     BannerTop,
     FontAwesomeIcon,
-    LoadingVue
+    LoadingVue,
   },
 
   data() {
@@ -244,24 +240,31 @@ export default {
 
       //排序
       selectedSort: '',
+      originalMenus:[],
 
       //價格篩選
       priceRange: {
         min: 0,
         max: 1000,
       },
+
+      isLoading: true,
     }
   },
   methods: {
     async loadAllMenu() {
       try {
+        this.isLoading = true
         const response = await axios.get(`${import.meta.env.VITE_API}/api/menu`)
         this.originalMenus = response.data // 保存原始數據
         this.menus = [...response.data] // 用於顯示的拷貝
         this.totalPages = Math.ceil(this.menus.length / this.menusPerPage)
         if (this.selectedSort) this.handleSort()
+        this.currentPage=1
       } catch (error) {
         console.error('載入菜單失敗:', error)
+      } finally {
+        this.isLoading = false
       }
     },
 
@@ -272,24 +275,29 @@ export default {
     // 按分類加載菜單數據
     async clickCategory(category) {
       this.isLoading = true
-      let API_URL = `${import.meta.env.VITE_API}/api/menu/${category}`
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API}/api/menu/${category}`)
+        this.originalMenus = response.data
 
-      axios
-        .get(API_URL)
-        .then((response) => {
-          this.originalMenus = response.data // 保存原始數據
-          this.menus = [...response.data] // 用於顯示的拷貝
+        // 整合處理數據，只處理一次
+        let processedData = [...response.data]
+        if (this.priceRange.min >= 0 || this.priceRange.max <= 1000) {
+          processedData = this.handlePriceFilter(processedData)
+        }else{
 
-          this.handlePriceFilter()
-          this.currentPage = 1
-          if (this.selectedSort) this.handleSort()
-        })
-        .catch((error) => {
-          console.error('Error loading menus:', error)
-        })
-        .finally(() => {
-          this.isLoading = false
-        })
+
+        }
+
+          this.sortData(processedData)
+
+
+        this.menus = processedData
+        this.currentPage = 1
+      } catch (error) {
+        console.error('Error loading menus:', error)
+      } finally {
+        this.isLoading = false
+      }
     },
     //價格篩選
     updateMinPrice(event) {
@@ -402,14 +410,10 @@ export default {
     },
   },
   watch: {
-    menus: {
-      handler(newVal) {
-        // 如果當前頁面大於總頁數，重置為最後一頁
-        if (this.currentPage > this.totalPages) {
-          this.currentPage = Math.max(1, this.totalPages)
-        }
-      },
-      deep: true,
+    'menus.length'(newLength) {
+      if (this.currentPage > Math.ceil(newLength / this.menusPerPage)) {
+        this.currentPage = Math.max(1, Math.ceil(newLength / this.menusPerPage))
+      }
     },
 
     selectedSort: {
@@ -727,9 +731,6 @@ export default {
   z-index: 2;
 }
 
-
-
-
 /* 手機板 */
 @media (max-width: 768px) {
   /* 重設容器樣式 */
@@ -768,7 +769,7 @@ export default {
   .form-select-lg {
     width: 100%;
     margin: 0;
-    height: 45px;  /* 固定高度 */
+    height: 45px; /* 固定高度 */
   }
 }
 
@@ -779,4 +780,30 @@ export default {
   }
 }
 
+.styled-select {
+  appearance: none; /* 隱藏原生的箭頭 */
+  -webkit-appearance: none; /* 修正 Safari */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 模擬懸停效果（透過背景） */
+.styled-select:hover {
+  border-color: black;
+}
+
+/* 無法直接控制 option:hover，但可以模擬效果 */
+.styled-select option {
+  background-color: white; /* 預設背景 */
+  color: black;            /* 預設文字顏色 */
+}
+
+.styled-select option:hover {
+  background-color: black !important; /* 模擬背景為黑色 */
+  color: white !important;           /* 模擬文字為白色 */
+}
 </style>

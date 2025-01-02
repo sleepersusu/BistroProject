@@ -42,11 +42,20 @@ public class ImageService {
 		}
 
 		case "menu": {
+			
+			MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
 			Optional<Menu> op = menuRepo.findById(id);
 			if(op.isPresent()) {
 				Menu menu = op.get();
 				menu.setProductImg(fileByte);
 				menuRepo.save(menu);
+				
+				
+				byte[] menuByte = menu.getProductImg();
+				mediaType = getImageMediaType(menuByte);
+				HttpHeaders httpHeaders = new HttpHeaders();
+				httpHeaders.setContentType(mediaType);
+				return new ResponseEntity<byte[]>(menuByte, httpHeaders, HttpStatus.OK);
 			}
 			
 			return null;
