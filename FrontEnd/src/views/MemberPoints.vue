@@ -3,7 +3,6 @@
     <div>
       <BannerTop v-bind:title="'Point Shop'"></BannerTop>
     </div>
-    <!-- 登入顯示區塊 -->
 
     <!-- 未登入提示 -->
     <div

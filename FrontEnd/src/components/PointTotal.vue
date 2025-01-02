@@ -372,34 +372,27 @@ export default {
     white-space: nowrap;
     margin-bottom: 5px;
   }
+}
 
-  .coupon-name {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #2c3e50;
-  }
+.expiring-tag {
+  background: #FFE4E4; /* 淡紅色背景 */
+  color: #FF6B6B; /* 紅色文字 */
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.8rem; /* 縮小字體 */
+  font-weight: 500;
+}
 
-  .expiring-tag {
-    /* 移除漸變背景，使用與 coupon-name 一致的顏色 */
-    background: #2c3e50;
-    color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    font-size: 1.1rem; /* 與 coupon-name 一致 */
-    font-weight: 500; /* 與 coupon-name 一致 */
-  }
+.expiration-date {
+  color: #FF6B6B; /* 紅色文字 */
+  font-size: 0.8rem; /* 縮小字體 */
+  font-weight: 400;
+}
 
-  .expiration-date {
-    color: #2c3e50; /* 也改為相同顏色 */
-    font-size: 1.1rem; /* 與其他一致 */
-    font-weight: 500;
-  }
-
-  .expiration-info {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-top: 0.2rem;
-  }
+.expiration-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.2rem;
 }
 </style>
