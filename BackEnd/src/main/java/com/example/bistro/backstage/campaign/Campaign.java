@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.bistro.backstage.campaignPrize.CampaignPrizes;
+import com.example.bistro.backstage.lotteryChance.LotteryChance;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -75,6 +76,9 @@ public class Campaign {
 	
 	@OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CampaignPrizes> campaignPrizes = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<LotteryChance> lotteryChances = new ArrayList<>();
 	
 	@PrePersist 
 	public void onCreate() {
