@@ -14,8 +14,7 @@ public class OrdersService {
 
     @Autowired
     private OrdersRepository ordersRepository;
-    @Autowired
-    private MembersRepository membersRepositoryDao;
+
 
 //訂單邏輯
     //前台：使用者

@@ -54,15 +54,12 @@ public class Cart {
 	@JsonIgnore
 	private Members members;
 
-
 	// 多對一：多個產品可以同時出現在一台購物車中
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("menuId")
 	@JoinColumn(name = "menuId", referencedColumnName = "ID", nullable = false)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private Menu menu; // 與 Menu 表的多對一關係，不允許為 NULL
-
-
 
 	public Cart() {
 	}

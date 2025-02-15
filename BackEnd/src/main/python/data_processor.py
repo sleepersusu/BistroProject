@@ -15,7 +15,7 @@ class DataProcessor:
         )
 
     def extract_and_process_data(self):
-        """提取和處理數據"""
+        """處理數據"""
         query = """
         SELECT 
             o.memberId,

@@ -207,7 +207,6 @@ export default {
   methods: {
     ...mapActions(cartStore, ['getCart', 'CountCart', 'MinusCart', 'removeItem']),
     ...mapActions(pointStore, ['removePointPrize']), // 確保從 pointStore 映射此方法
-
     ...mapActions(useNotificationStore, ['showNotification', 'success', 'error', 'info', 'warn']),
 
     //all

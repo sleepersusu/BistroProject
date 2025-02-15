@@ -33,9 +33,6 @@ public class OrdersFrontService {
     private MembersRepository membersRepository;
 
     @Autowired
-    private SeatsRepository seatsRepository;
-
-    @Autowired
     private OrdersDetailsRepository ordersDetailsRepository;
 
     @Autowired
@@ -44,9 +41,6 @@ public class OrdersFrontService {
     @Autowired
     private MenuRepository menuRepository;
 
-    @Autowired
-    private CartRepository cartRepository;
-    
     @Autowired
     private CartService cartService;
 
